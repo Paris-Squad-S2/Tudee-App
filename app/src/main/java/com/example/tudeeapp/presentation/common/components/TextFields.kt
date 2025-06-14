@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,15 +36,14 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomInputField(
+fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
@@ -65,6 +63,7 @@ fun CustomInputField(
 
 
     val showAsFocused = isFocused || value.isNotEmpty()
+
     val borderColor = when {
         showAsFocused -> Theme.colors.primary
         else -> Theme.colors.surfaceColors.surfaceLow
@@ -209,9 +208,9 @@ private fun InputFieldContent(
     }
 }
 
-@Preview(showBackground = true)
+@PreviewMultiDevices
 @Composable
-fun PreviewCustomInputFields() {
+fun PreviewTextField() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -219,16 +218,16 @@ fun PreviewCustomInputFields() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var defaultText by remember { mutableStateOf("") }
-        CustomInputField(
+        TextField(
             value = defaultText,
             onValueChange = { defaultText = it },
             placeholder = "Full name",
-            leadingIcon = R.drawable.ic_cooking
+            leadingIcon = R.drawable.ic_profile
         )
 
 
         var multiLineText by remember { mutableStateOf("") }
-        CustomInputField(
+        TextField(
             value = multiLineText,
             onValueChange = { multiLineText = it },
             placeholder = "Description",
