@@ -180,7 +180,7 @@ private fun getBorderColor(variant: ButtonVariant, state: ButtonState): Color {
     val isError = state == ButtonState.Error
     return when (variant) {
         ButtonVariant.Outlined ->
-            if (!isError) Theme.colors.text.stroke
+            if (!isError) Theme.colors.text.disable
             else Theme.colors.status.error.copy(alpha = 0.12f)
         else -> Color.Transparent
     }
@@ -190,7 +190,7 @@ private fun getBorderColor(variant: ButtonVariant, state: ButtonState): Color {
 @Composable
 private fun getContentColor(state: ButtonState): Color {
     return when (state) {
-        ButtonState.Disabled -> Theme.colors.text.stroke
+        ButtonState.Disabled -> Theme.colors.text.disable
         ButtonState.Error -> Theme.colors.status.error
         else -> Theme.colors.surfaceColors.onPrimaryColors.onPrimary
     }

@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
@@ -37,9 +39,9 @@ fun CategoryItem(
         Box(
             modifier = Modifier.size(78.dp)
         ) {
-            when{
-                isSelected-> SelectedBadge(Modifier.align(Alignment.TopEnd))
-                count!= 0 -> NumBadge(count,Modifier.align(Alignment.TopEnd))
+            when {
+                isSelected -> SelectedBadge(Modifier.align(Alignment.TopEnd))
+                count != 0 -> NumBadge(count, Modifier.align(Alignment.TopEnd))
             }
 
             Icon(
@@ -62,9 +64,9 @@ fun CategoryItem(
 
 @Composable
 private fun NumBadge(
-    count:Int?,
-    modifier:Modifier
-){
+    count: Int?,
+    modifier: Modifier
+) {
     Box(
         modifier = modifier
             .background(
@@ -82,7 +84,7 @@ private fun NumBadge(
 }
 
 @Composable
-private fun SelectedBadge(modifier: Modifier){
+private fun SelectedBadge(modifier: Modifier) {
     Box(
         modifier = modifier
             .background(
@@ -99,15 +101,18 @@ private fun SelectedBadge(modifier: Modifier){
         )
     }
 }
-@Preview(showBackground = true)
+
+@PreviewMultiDevices
 @Composable
 fun PreviewCategoryItems() {
-    Column {
-        CategoryItem(
-            icon = painterResource(R.drawable.ic_education),
-            label = "Education",
-            iconColor = Color.Unspecified,
-            count = 23
-        )
+    BasePreview {
+        Column {
+            CategoryItem(
+                icon = painterResource(R.drawable.ic_education),
+                label = "Education",
+                iconColor = Color.Unspecified,
+                count = 23
+            )
+        }
     }
 }

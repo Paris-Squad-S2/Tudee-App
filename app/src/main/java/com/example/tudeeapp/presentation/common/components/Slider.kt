@@ -16,6 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
@@ -25,7 +27,7 @@ fun Slider(
     image: Painter,
     modifier: Modifier = Modifier,
     titleIcon: Painter
-){
+) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
@@ -66,7 +68,7 @@ fun Slider(
                     .offset(y = 6.dp)
                     .clip(CircleShape)
                     .background(color = Theme.colors.primary)
-                    )
+            )
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -84,13 +86,15 @@ fun Slider(
     }
 }
 
-@Preview(showBackground = true)
+@PreviewMultiDevices
 @Composable
 fun SliderPreview() {
-    Slider(
-        title = "Stay working!",
-        description = "You've completed 3 out of 10 tasks Keep going!",
-        image = painterResource(id = R.drawable.ropot1),
-        titleIcon = painterResource(id = R.drawable.good)
-    )
+    BasePreview {
+        Slider(
+            title = "Stay working!",
+            description = "You've completed 3 out of 10 tasks Keep going!",
+            image = painterResource(id = R.drawable.ropot1),
+            titleIcon = painterResource(id = R.drawable.good)
+        )
+    }
 }

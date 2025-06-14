@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,21 +37,20 @@ fun TopAppBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = { onClickBack },
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                contentDescription = "Back",
-                tint = Theme.colors.stroke
-            )
-        }
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_back),
+            contentDescription = "Back",
+            tint = Theme.colors.stroke,
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { onClickBack() }
+        )
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 8.dp),
+                .padding(start = 12.dp, end = 8.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
@@ -86,15 +85,15 @@ fun OptionsButton(
     showIndicator: Boolean = false
 ) {
     Box(modifier = modifier) {
-        IconButton(
-            onClick = onClick,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_options),
-                contentDescription = "Options",
-                tint = Theme.colors.stroke
-            )
-        }
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_options),
+            contentDescription = "Options",
+            tint = Theme.colors.stroke,
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { onClick() }
+        )
+
         if (showIndicator) {
             Box(
                 modifier = Modifier
@@ -116,7 +115,7 @@ private fun TopAppBarPreview() {
             onclickOption = {},
             modifier = Modifier,
             withOption = true,
-            showIndicator = true,
+            showIndicator = false,
             title = "Tasks",
             label = "32 Task"
         )

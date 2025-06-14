@@ -20,9 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
@@ -55,18 +56,19 @@ fun TaskCard(
                     modifier = Modifier.size(24.dp)
                 )
             }
-            Row (
+            Row(
                 modifier = Modifier.weight(1f),
                 Arrangement.End
-            ){
+            ) {
                 when {
                     isDated -> DateCard()
                 }
-                Spacer(modifier= Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 PriorityButton(
                     text = priorityLabel,
                     icon = priorityIcon,
-                    backgroundColor = priorityColor) { }
+                    backgroundColor = priorityColor
+                ) { }
             }
         }
 
@@ -120,17 +122,19 @@ private fun DateCard() {
     }
 }
 
-@Preview
+@PreviewMultiDevices
 @Composable
 fun TaskCardPreview() {
-    TaskCard(
-        icon = painterResource(R.drawable.ic_education),
-        iconColor = Color.Unspecified,
-        title = "Organize Study Desk",
-        subtitle = "Review cell structure and functions for tomorrow...",
-        priorityLabel = "Medium",
-        priorityIcon = painterResource(R.drawable.ic_alert),
-        priorityColor = Theme.colors.status.yellowAccent,
-        isDated = true
-    )
+    BasePreview {
+        TaskCard(
+            icon = painterResource(R.drawable.ic_education),
+            iconColor = Color.Unspecified,
+            title = "Organize Study Desk",
+            subtitle = "Review cell structure and functions for tomorrow...",
+            priorityLabel = "Medium",
+            priorityIcon = painterResource(R.drawable.ic_alert),
+            priorityColor = Theme.colors.status.yellowAccent,
+            isDated = true
+        )
+    }
 }

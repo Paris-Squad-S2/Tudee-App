@@ -12,6 +12,7 @@ val darkThemeColors = TudeeColors(
         title = Color(0xDEFFFFFF),
         body = Color(0x99FFFFFF),
         hint = Color(0x61FFFFFF),
+        disable = Color(0xE0FFFFFF)
     ),
     surfaceColors = SurfaceColors(
         surfaceLow = Color(0xFF020108),
