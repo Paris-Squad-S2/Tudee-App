@@ -5,8 +5,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.example.tudeeapp.R
 
-val inter = FontFamily(
-    Font(R.font.inter_medium , FontWeight.Medium),
-    Font(R.font.inter , FontWeight.Normal),
-    Font(R.font.inter_semibold , FontWeight.SemiBold),
+val nunito = FontFamily(
+    Font(R.font.nunito_medium, FontWeight.Medium),
+    Font(R.font.nunito, FontWeight.Normal),
+    Font(R.font.nunito_semibold, FontWeight.SemiBold),
+)
+
+val cherryBomb = FontFamily(
+    Font(R.font.cherry_bomb_one, FontWeight.Normal)
 )

@@ -7,11 +7,11 @@ val darkThemeColors = TudeeColors(
     secondary = Color(0xFFCC7851),
     primaryVariant = Color(0xFF05202E),
     primaryGradient = PrimaryGradient(listOf(Color(0xFF3090BF), Color(0xFF3A9CCD))),
+    stroke = Color(0xE0FFFFFF),
     text = TudeeTextColors(
         title = Color(0xDEFFFFFF),
         body = Color(0x99FFFFFF),
         hint = Color(0x61FFFFFF),
-        stroke = Color(0x1FFFFFFF)
     ),
     surfaceColors = SurfaceColors(
         surfaceLow = Color(0xFF020108),

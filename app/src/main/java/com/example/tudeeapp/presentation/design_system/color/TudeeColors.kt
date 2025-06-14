@@ -10,14 +10,14 @@ data class TudeeColors(
     val primaryGradient: PrimaryGradient,
     val text: TudeeTextColors,
     val surfaceColors: SurfaceColors,
-    val status: Status
+    val status: Status,
+    val stroke: Color
 )
 
 data class TudeeTextColors(
     val title: Color,
     val body: Color,
     val hint: Color,
-    val stroke: Color
 )
 data class PrimaryGradient(
     val colors:List<Color>
