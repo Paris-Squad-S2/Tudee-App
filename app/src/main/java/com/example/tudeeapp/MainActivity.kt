@@ -8,8 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.tudeeapp.presentation.component.LocalNavController
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 
@@ -19,7 +22,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
+            val navController = rememberNavController()
+            CompositionLocalProvider(LocalNavController provides navController) {
+                AppNavGraph(navController)
+            }
         }
     }
 }
