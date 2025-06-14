@@ -79,7 +79,7 @@ fun TopAppBar(
 }
 
 @Composable
-fun OptionsButton(
+private fun OptionsButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     showIndicator: Boolean = false
