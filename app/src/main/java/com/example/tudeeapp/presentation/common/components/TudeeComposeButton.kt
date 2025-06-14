@@ -60,108 +60,51 @@ fun TudeeComposeButton(
     shape: Shape = RoundedCornerShape(100.dp),
     contentColor: Color = when (variant) {
         ButtonVariant.Outlined, ButtonVariant.TextOnly -> Theme.colors.primary
-        else -> Theme.colors.surfaceColors.onPrimaryColors.onPrimary
+        else -> getContentColor(state)
     },
     text: String? = null,
     icon: @Composable (() -> Unit)? = null,
     loadingIndicator: @Composable (() -> Unit) = {
-        RotatingIconLoadingIndicator(
-            modifier = Modifier.size(20.dp),
-        )
+        RotatingIconLoadingIndicator(modifier = Modifier.size(20.dp))
     },
     enabled: Boolean = state == ButtonState.Normal,
     textStyle: TextStyle = Theme.textStyle.label.large,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = icon,
     spacing: Dp = 8.dp,
-    contentPadding: PaddingValues = when (variant) {
-        ButtonVariant.TextOnly -> PaddingValues(horizontal = 0.dp, vertical = 0.dp)
-        ButtonVariant.FAB -> PaddingValues(horizontal = 18.dp, vertical = 18.dp)
-        else -> PaddingValues(horizontal = 24.dp, vertical = 16.dp)
-    },
+    contentPadding: PaddingValues = getContentPadding(variant),
     elevation: Dp = when (variant) {
         ButtonVariant.FAB -> 6.dp
         else -> 0.dp
     },
     backgroundBrush: Brush? = null
-
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
     val isLoading = state == ButtonState.Loading
-    val isError = state == ButtonState.Error
-    val isDisabled = state == ButtonState.Disabled
-
-    val backgroundColorBrush = when (variant) {
-        ButtonVariant.Filled, ButtonVariant.FAB -> when {
-            isDisabled -> Brush.verticalGradient(
-                colors = listOf(
-                    Theme.colors.surfaceColors.disable,
-                    Theme.colors.surfaceColors.disable
-                )
-            )
-
-            isError -> Brush.verticalGradient(
-                colors = listOf(
-                    Theme.colors.status.errorVariant,
-                    Theme.colors.status.errorVariant
-                )
-            )
-
-            else -> backgroundBrush ?: Brush.verticalGradient(
-                colors = Theme.colors.primaryGradient.colors,
-                startY = 0f,
-                endY = Float.POSITIVE_INFINITY
-            )
-        }
-
-        else -> backgroundBrush ?: Brush.verticalGradient(
-            colors = listOf(
-                Color.Transparent,
-                Color.Transparent
-            )
-        )
-    }
-
-    val borderColor = when (variant) {
-        ButtonVariant.Outlined -> if (!isError) Theme.colors.text.stroke else Theme.colors.status.error.copy(
-            alpha = 0.12f
-        )
-
-        else -> Color.Transparent
-    }
-
-    val textColor = when {
-        isDisabled -> Theme.colors.text.stroke
-        isError -> Theme.colors.status.error
-        else -> contentColor
-    }
 
     val emptyOnClick: () -> Unit = {}
 
-    Surface(
-        modifier = if (variant == ButtonVariant.FAB) {
-            modifier
-                .defaultMinSize(minWidth = 64.dp, minHeight = 40.dp)
-//                .padding(6.dp)
-                .shadow(elevation = elevation, shape = shape)
+    val backgroundColorBrush = getBackgroundBrush(variant, state, backgroundBrush)
+    val borderColor = getBorderColor(variant, state)
 
-        } else {
-            modifier.defaultMinSize(minWidth = 64.dp, minHeight = 40.dp)
-        },
+    Surface(
+        modifier = modifier
+            .defaultMinSize(minWidth = 64.dp, minHeight = 40.dp)
+            .applyElevationIfFAB(variant == ButtonVariant.FAB, elevation),
         shape = shape,
         color = Color.Transparent,
-        contentColor = textColor,
+        contentColor = contentColor,
         border = if (variant == ButtonVariant.Outlined) BorderStroke(1.dp, borderColor) else null,
         onClick = if (enabled && !isLoading) onClick else emptyOnClick,
         enabled = enabled && !isLoading,
         interactionSource = interactionSource
     ) {
-        CompositionLocalProvider(LocalContentColor provides textColor) {
+        CompositionLocalProvider(LocalContentColor provides contentColor) {
             ProvideTextStyle(textStyle) {
                 Row(
                     modifier = Modifier
-                        .background(brush = backgroundColorBrush)
+                        .background(backgroundColorBrush)
                         .padding(contentPadding),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -171,9 +114,7 @@ fun TudeeComposeButton(
                         if (text != null) Spacer(modifier = Modifier.width(spacing))
                     }
 
-                    text?.let {
-                        Text(text = it)
-                    }
+                    text?.let { Text(it) }
 
                     if (isLoading) {
                         if (text != null) Spacer(modifier = Modifier.width(spacing))
@@ -186,12 +127,89 @@ fun TudeeComposeButton(
                             it()
                         }
                     }
-
                 }
             }
         }
     }
 }
+
+@Composable
+private fun getBackgroundBrush(
+    variant: ButtonVariant,
+    state: ButtonState,
+    backgroundBrush: Brush?
+): Brush {
+    val isDisabled = state == ButtonState.Disabled
+    val isError = state == ButtonState.Error
+
+    return when (variant) {
+        ButtonVariant.Filled, ButtonVariant.FAB -> {
+            if (isDisabled) {
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Theme.colors.surfaceColors.disable,
+                        Theme.colors.surfaceColors.disable
+                    )
+                )
+            } else if (isError) {
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Theme.colors.status.errorVariant,
+                        Theme.colors.status.errorVariant
+                    )
+                )
+            } else {
+                backgroundBrush ?: Brush.verticalGradient(
+                    colors = Theme.colors.primaryGradient.colors
+                )
+            }
+        }
+
+        else -> {
+            backgroundBrush
+                ?: Brush.verticalGradient(
+                    colors = listOf(Color.Transparent, Color.Transparent)
+                )
+        }
+    }
+}
+
+
+@Composable
+private fun getBorderColor(variant: ButtonVariant, state: ButtonState): Color {
+    val isError = state == ButtonState.Error
+    return when (variant) {
+        ButtonVariant.Outlined ->
+            if (!isError) Theme.colors.text.stroke
+            else Theme.colors.status.error.copy(alpha = 0.12f)
+        else -> Color.Transparent
+    }
+}
+
+
+@Composable
+private fun getContentColor(state: ButtonState): Color {
+    return when (state) {
+        ButtonState.Disabled -> Theme.colors.text.stroke
+        ButtonState.Error -> Theme.colors.status.error
+        else -> Theme.colors.surfaceColors.onPrimaryColors.onPrimary
+    }
+}
+
+@Composable
+private fun getContentPadding(variant: ButtonVariant): PaddingValues {
+    return when (variant) {
+        ButtonVariant.TextOnly -> PaddingValues(horizontal = 0.dp, vertical = 0.dp)
+        ButtonVariant.FAB -> PaddingValues(horizontal = 18.dp, vertical = 18.dp)
+        else -> PaddingValues(horizontal = 24.dp, vertical = 16.dp)
+    }
+}
+
+private fun Modifier.applyElevationIfFAB(isFAB: Boolean, elevation: Dp): Modifier {
+    return if (isFAB) this.shadow(elevation = elevation) else this
+}
+
+
 
 @Composable
 @PreviewLightDark
