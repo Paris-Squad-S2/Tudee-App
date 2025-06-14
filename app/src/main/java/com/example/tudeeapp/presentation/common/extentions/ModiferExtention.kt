@@ -27,16 +27,12 @@ fun Modifier.innerShadow(
     drawIntoCanvas { canvas ->
         val shadowSize = Size(size.width + spread.toPx(), size.height + spread.toPx())
         val shadowOutline = shape.createOutline(shadowSize, layoutDirection, this)
-        // Initialize a Paint object
         val paint = Paint()
         paint.color = color
 
-// Save the current layer of the canvas
         canvas.saveLayer(size.toRect(), paint)
-// Draw the outline of the shadow onto the canvas
         canvas.drawOutline(shadowOutline, paint)
 
-// Configure the paint to act as an eraser to clip the shadow
         paint.asFrameworkPaint().apply {
             xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)
             if (blur.toPx() > 0) {
@@ -44,12 +40,9 @@ fun Modifier.innerShadow(
             }
         }
 
-// Set clipping color
         paint.color = Color(0xFFBFD2FF)
 
-// Translate the canvas to the offset position
         canvas.translate(offsetX.toPx(), offsetY.toPx())
-// Draw the outline again to clip the shadow
         canvas.drawOutline(shadowOutline, paint)
         canvas.restore()
     }
