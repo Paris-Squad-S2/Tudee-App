@@ -13,4 +13,11 @@ sealed class ScreenNav {
 
     @Serializable
     data class Second(val name: String) : ScreenNav()
+
+    @Serializable
+    data object TaskScreen : ScreenNav()
+
+    @Serializable
+    data object CategoryScreen : ScreenNav()
+
 }
