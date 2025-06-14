@@ -7,17 +7,17 @@ import kotlinx.serialization.Serializable
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
 
-sealed class ScreenNav {
+sealed class Screen {
     @Serializable
-    data object First : ScreenNav()
+    data object First : Screen()
 
     @Serializable
-    data class Second(val name: String) : ScreenNav()
+    data class Second(val name: String) : Screen()
 
     @Serializable
-    data object TaskScreen : ScreenNav()
+    data object TaskScreen : Screen()
 
     @Serializable
-    data object CategoryScreen : ScreenNav()
+    data object CategoryScreen : Screen()
 
 }

@@ -17,7 +17,9 @@ import com.example.tudeeapp.presentation.component.LocalNavController
 
 @Composable
 fun FirstScreen() {
+
     val navController = LocalNavController.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -31,7 +33,7 @@ fun FirstScreen() {
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
-                    navController.navigateToFirstScreen("gdfhfdh")
+                    navController.navigateToSecondScreen("gdfhfdh")
                 }
         ) {
             Text("Go to Second", modifier = Modifier.padding(16.dp))
