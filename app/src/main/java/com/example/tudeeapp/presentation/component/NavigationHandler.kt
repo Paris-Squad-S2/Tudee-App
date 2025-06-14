@@ -28,6 +28,18 @@ sealed class Screen {
     data class TaskScreen(val taskId : Int,val taskTitle : String) : Screen()
 
     @Serializable
+    data object TaskFormScreen : Screen()
+
+    @Serializable
+    data object TaskDetailsScreen : Screen()
+
+    @Serializable
     data object CategoryScreen : Screen()
+
+    @Serializable
+    data object CategoriesFormScreen : Screen()
+
+    @Serializable
+    data object CategoryDetailsScreen : Screen()
 
 }

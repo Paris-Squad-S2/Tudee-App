@@ -7,13 +7,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.component.Screen
-import com.example.tudeeapp.presentation.screen.category.CategoryScreen
-import com.example.tudeeapp.presentation.screen.category.navigateToCategoryScreen
+import com.example.tudeeapp.presentation.screen.categoriesFormScreen.addCategoriesFormScreenRoute
+import com.example.tudeeapp.presentation.screen.category.addCategoryScreenRoute
+import com.example.tudeeapp.presentation.screen.categoryDetailsScreen.addCategoryDetailsScreenRoute
 import com.example.tudeeapp.presentation.screen.firstScreen.navigateToFirst
 import com.example.tudeeapp.presentation.screen.homeScreen.addHomeScreenRoute
 import com.example.tudeeapp.presentation.screen.onBoardScreen.addOnBoardScreenRoute
 import com.example.tudeeapp.presentation.screen.secondScreen.SecondScreen
 import com.example.tudeeapp.presentation.screen.splashScreen.addSplashScreenRoute
+import com.example.tudeeapp.presentation.screen.taskDetailsScreen.addTaskDetailsScreenRoute
+import com.example.tudeeapp.presentation.screen.taskFormScreen.addTaskFormScreenRoute
 import com.example.tudeeapp.presentation.screen.taskScreen.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskScreen.addTaskScreenRoute
 
@@ -28,6 +31,12 @@ fun TudeeNavGraph(navController: NavHostController) {
         addTaskScreenRoute()
         navigateToCategoryScreen()
 
+        addTaskScreenRoute()
+        addCategoryScreenRoute()
+        addCategoriesFormScreenRoute()
+        addCategoryDetailsScreenRoute()
+        addTaskFormScreenRoute()
+        addTaskDetailsScreenRoute()
     }
 }
 
