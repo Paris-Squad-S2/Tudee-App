@@ -13,9 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.tudeeapp.presentation.component.LocalNavController
-import com.example.tudeeapp.presentation.component.ScreenNav
 
 @Composable
 fun FirstScreen() {
@@ -33,7 +31,7 @@ fun FirstScreen() {
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
-                    navController.navigate(ScreenNav.Second(name = "gdfhfdh"))
+                    navController.navigateToFirstScreen("gdfhfdh")
                 }
         ) {
             Text("Go to Second", modifier = Modifier.padding(16.dp))

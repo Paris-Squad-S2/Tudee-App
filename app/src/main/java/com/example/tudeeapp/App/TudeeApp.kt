@@ -9,6 +9,6 @@ import com.example.tudeeapp.presentation.component.LocalNavController
 fun TudeeApp() {
     val navController = rememberNavController()
     CompositionLocalProvider(LocalNavController provides navController) {
-        AppNavGraph(navController)
+        TudeeNavGraph(navController)
     }
 }
