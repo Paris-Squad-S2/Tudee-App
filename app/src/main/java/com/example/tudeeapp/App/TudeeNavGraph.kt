@@ -10,20 +10,25 @@ import com.example.tudeeapp.presentation.component.Screen
 import com.example.tudeeapp.presentation.screen.category.CategoryScreen
 import com.example.tudeeapp.presentation.screen.category.navigateToCategoryScreen
 import com.example.tudeeapp.presentation.screen.firstScreen.navigateToFirst
+import com.example.tudeeapp.presentation.screen.homeScreen.addHomeScreenRoute
+import com.example.tudeeapp.presentation.screen.onBoardScreen.addOnBoardScreenRoute
 import com.example.tudeeapp.presentation.screen.secondScreen.SecondScreen
+import com.example.tudeeapp.presentation.screen.splashScreen.addSplashScreenRoute
 import com.example.tudeeapp.presentation.screen.taskScreen.TaskScreen
 
 @Composable
 fun TudeeNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.First::class) {
+    NavHost(navController = navController, startDestination = Screen.Splash::class) {
         navigateToFirst()
         navigateToSecond()
+        addSplashScreenRoute()
+        addOnBoardScreenRoute()
+        addHomeScreenRoute()
         navigateToTaskScreen()
         navigateToCategoryScreen()
+
     }
 }
-
-
 
 fun NavGraphBuilder.navigateToSecond(){
     composable<Screen.Second> {

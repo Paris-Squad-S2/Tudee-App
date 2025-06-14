@@ -15,6 +15,15 @@ sealed class Screen {
     data class Second(val name: String) : Screen()
 
     @Serializable
+    data object Splash : Screen()
+
+    @Serializable
+    data object OnBoard : Screen()
+
+    @Serializable
+    data class Home(val userName :String) : Screen()
+
+    @Serializable
     data object TaskScreen : Screen()
 
     @Serializable
