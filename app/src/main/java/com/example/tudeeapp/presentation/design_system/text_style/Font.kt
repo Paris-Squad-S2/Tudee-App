@@ -5,13 +5,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.example.tudeeapp.R
 
-
-val ibm_plex_sans = FontFamily(
-    Font(R.font.bold , FontWeight.Bold),
-    Font(R.font.thin , FontWeight.Thin),
-    Font(R.font.medium , FontWeight.Medium),
-    Font(R.font.light , FontWeight.Light),
-    Font(R.font.regular , FontWeight.Normal),
-    Font(R.font.semi_bold , FontWeight.SemiBold),
-    Font(R.font.extra_light , FontWeight.ExtraLight)
+val inter = FontFamily(
+    Font(R.font.inter_medium , FontWeight.Medium),
+    Font(R.font.inter , FontWeight.Normal),
+    Font(R.font.inter_semibold , FontWeight.SemiBold),
 )
