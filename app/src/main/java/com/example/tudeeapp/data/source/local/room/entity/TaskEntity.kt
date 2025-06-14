@@ -9,7 +9,7 @@ data class TaskEntity(
     val id: Long = 0,
     val title: String,
     val description: String,
-    val date: Int,
+    val date: String,
     val status: String,
     val priority: String,
     val categoryId: Long
