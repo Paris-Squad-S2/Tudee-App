@@ -28,8 +28,8 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 fun TopAppBar(
     onClickBack: () -> Unit,
     title: String,
-    label: String?,
     modifier: Modifier = Modifier,
+    label: String? = null,
     withOption: Boolean = false,
     showIndicator: Boolean = false,
     onclickOption: () -> Unit = {}
