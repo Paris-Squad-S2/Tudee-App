@@ -27,6 +27,18 @@ sealed class Screen {
     data object TaskScreen : Screen()
 
     @Serializable
+    data object TaskFormScreen : Screen()
+
+    @Serializable
+    data object TaskDetailsScreen : Screen()
+
+    @Serializable
     data object CategoryScreen : Screen()
+
+    @Serializable
+    data object CategoriesFormScreen : Screen()
+
+    @Serializable
+    data object CategoryDetailsScreen : Screen()
 
 }

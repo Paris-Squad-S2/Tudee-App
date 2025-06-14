@@ -11,6 +11,6 @@ fun NavGraphBuilder.navigateToFirst(){
     }
 }
 
-fun NavController.navigateToSecondScreen(name:String){
-    navigate(Screen.Second(name =name))
+fun NavController.navigateToFirstScreen(name:String){
+    navigate(Screen.Second(name = name))
 }

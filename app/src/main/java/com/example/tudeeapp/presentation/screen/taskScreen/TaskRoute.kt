@@ -11,7 +11,7 @@ fun NavGraphBuilder.addTaskScreenRoute(){
     }
 }
 
-fun NavController.navigateToCategoryScreen(){
-    navigate(Screen.CategoryScreen)
+fun NavController.navigateToTaskScreen(){
+    navigate(Screen.TaskScreen)
 }
 
