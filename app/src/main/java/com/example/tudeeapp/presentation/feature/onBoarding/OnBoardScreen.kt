@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.homeScreen
+package com.example.tudeeapp.presentation.feature.onBoarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,28 +13,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.tudeeapp.presentation.component.LocalNavController
-import com.example.tudeeapp.presentation.screen.taskScreen.navigateToTaskScreen
+import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.Screens
 
 @Composable
-fun HomeScreen(userName: String) {
+fun OnBoardScreen() {
+
     val navController = LocalNavController.current
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+
+    Column (
+    modifier = Modifier
+    .fillMaxSize(),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Welcome To Home $userName", modifier = Modifier.padding(16.dp))
+        Text("On Board Screen", modifier = Modifier.padding(16.dp))
 
         Box(
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
-                    navController.navigateToTaskScreen(taskId=12,taskTitle="task name")
+                    navController.navigate(
+                        Screens.Home(
+                            userName = "user"
+                        ))
                 }
         ) {
-            Text("Go to task screen", modifier = Modifier.padding(16.dp))
+            Text("Go to Second", modifier = Modifier.padding(16.dp))
         }
     }
 }

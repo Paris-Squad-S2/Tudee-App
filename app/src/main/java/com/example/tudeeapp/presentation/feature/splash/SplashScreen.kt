@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.splashScreen
+package com.example.tudeeapp.presentation.feature.splash
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,8 +10,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.tudeeapp.presentation.component.LocalNavController
-import com.example.tudeeapp.presentation.screen.onBoardScreen.navigateToOnBoardScreen
+import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.Screens
 import kotlinx.coroutines.delay
 
 @Composable
@@ -19,7 +19,7 @@ fun SplashScreen() {
     val navController = LocalNavController.current
     LaunchedEffect(Unit) {
         delay(3000)
-        navController.navigateToOnBoardScreen()
+        navController.navigate(Screens.OnBoarding)
     }
     Column(
         modifier = Modifier

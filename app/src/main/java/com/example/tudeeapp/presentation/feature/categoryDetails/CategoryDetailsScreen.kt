@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskScreen
+package com.example.tudeeapp.presentation.feature.categoryDetails
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,18 +7,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.tudeeapp.presentation.component.LocalNavController
-
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 
 @Composable
-fun TaskScreen(taskId: Int, taskTitle: String) {
+fun CategoryDetailsScreen(){
     val navController = LocalNavController.current
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Task Screen id is : $taskId and task title $taskTitle")
+        Text(text = "Categories Form Screen")
 
     }
 }
