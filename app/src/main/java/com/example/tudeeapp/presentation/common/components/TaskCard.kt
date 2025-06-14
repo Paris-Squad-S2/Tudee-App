@@ -31,6 +31,7 @@ fun TaskCard(
     icon: Painter,
     iconColor: Color,
     title: String,
+    date: String,
     subtitle: String,
     priorityLabel: String,
     priorityIcon: Painter,
@@ -41,7 +42,10 @@ fun TaskCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.White, shape = RoundedCornerShape(12.dp))
+            .background(
+                Theme.colors.surfaceColors.surfaceHigh,
+                shape = RoundedCornerShape(12.dp)
+            )
             .padding(top = 4.dp, bottom = 12.dp, start = 4.dp, end = 12.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -61,7 +65,7 @@ fun TaskCard(
                 Arrangement.End
             ) {
                 when {
-                    isDated -> DateCard()
+                    isDated -> DateCard(date)
                 }
                 Spacer(modifier = Modifier.width(4.dp))
                 PriorityButton(
@@ -96,7 +100,7 @@ fun TaskCard(
 }
 
 @Composable
-private fun DateCard() {
+private fun DateCard(date: String) {
     Box(
         modifier = Modifier.background(
             color = Theme.colors.surfaceColors.surface,
@@ -110,11 +114,11 @@ private fun DateCard() {
             Icon(
                 painter = painterResource(R.drawable.ic_calender),
                 contentDescription = "Date",
-                tint = Color.Unspecified,
+                tint = Theme.colors.text.body,
                 modifier = Modifier.padding(end = 2.5.dp)
             )
             Text(
-                text = "12-03-2025",
+                text = date,
                 style = Theme.textStyle.label.small,
                 color = Theme.colors.text.body,
             )
@@ -130,6 +134,7 @@ fun TaskCardPreview() {
             icon = painterResource(R.drawable.ic_education),
             iconColor = Color.Unspecified,
             title = "Organize Study Desk",
+            date = "2023-10-15",
             subtitle = "Review cell structure and functions for tomorrow...",
             priorityLabel = "Medium",
             priorityIcon = painterResource(R.drawable.ic_alert),
