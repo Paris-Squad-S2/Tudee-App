@@ -8,6 +8,6 @@ data class Task(
     val description: String,
     val priority: TaskPriority,
     val status: TaskStatus,
-    val createdDate: LocalDate,
-    val category: TaskCategory
+    val createdDate: Int,
+    val category: Long
 )
