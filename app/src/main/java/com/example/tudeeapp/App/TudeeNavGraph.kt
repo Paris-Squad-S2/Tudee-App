@@ -15,6 +15,7 @@ import com.example.tudeeapp.presentation.screen.onBoardScreen.addOnBoardScreenRo
 import com.example.tudeeapp.presentation.screen.secondScreen.SecondScreen
 import com.example.tudeeapp.presentation.screen.splashScreen.addSplashScreenRoute
 import com.example.tudeeapp.presentation.screen.taskScreen.TaskScreen
+import com.example.tudeeapp.presentation.screen.taskScreen.addTaskScreenRoute
 
 @Composable
 fun TudeeNavGraph(navController: NavHostController) {
@@ -24,7 +25,7 @@ fun TudeeNavGraph(navController: NavHostController) {
         addSplashScreenRoute()
         addOnBoardScreenRoute()
         addHomeScreenRoute()
-        navigateToTaskScreen()
+        addTaskScreenRoute()
         navigateToCategoryScreen()
 
     }
@@ -34,12 +35,6 @@ fun NavGraphBuilder.navigateToSecond(){
     composable<Screen.Second> {
         val args = it.toRoute<Screen.Second>()
         SecondScreen(name = args.name)
-    }
-}
-
-fun NavGraphBuilder.navigateToTaskScreen(){
-    composable<Screen.TaskScreen> {
-        TaskScreen()
     }
 }
 

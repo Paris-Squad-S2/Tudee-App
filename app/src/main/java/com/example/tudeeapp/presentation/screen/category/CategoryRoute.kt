@@ -11,6 +11,7 @@ fun NavGraphBuilder.navigateToCategoryScreen(){
     }
 }
 
+/*
 fun NavController.navigateToTaskScreen(){
     navigate(Screen.TaskScreen)
-}
+}*/

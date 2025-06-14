@@ -14,15 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.component.LocalNavController
-import com.example.tudeeapp.presentation.screen.firstScreen.navigateToSecondScreen
+import com.example.tudeeapp.presentation.screen.taskScreen.navigateToTaskScreen
 
 @Composable
 fun HomeScreen(userName: String) {
     val navController = LocalNavController.current
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -32,10 +31,10 @@ fun HomeScreen(userName: String) {
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
-                    navController.navigateToSecondScreen("Mostafa")
+                    navController.navigateToTaskScreen(taskId=12,taskTitle="task name")
                 }
         ) {
-            Text("Go to Second", modifier = Modifier.padding(16.dp))
+            Text("Go to task screen", modifier = Modifier.padding(16.dp))
         }
     }
 }

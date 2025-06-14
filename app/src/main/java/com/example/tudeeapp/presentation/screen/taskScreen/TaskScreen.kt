@@ -11,14 +11,14 @@ import com.example.tudeeapp.presentation.component.LocalNavController
 
 
 @Composable
-fun TaskScreen(){
+fun TaskScreen(taskId: Int, taskTitle: String) {
     val navController = LocalNavController.current
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Task Screen")
+        Text(text = "Task Screen id is : $taskId and task title $taskTitle")
 
     }
 }

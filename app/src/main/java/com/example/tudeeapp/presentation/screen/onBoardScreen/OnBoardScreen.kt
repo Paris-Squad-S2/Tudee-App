@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.component.LocalNavController
 import com.example.tudeeapp.presentation.screen.firstScreen.navigateToSecondScreen
+import com.example.tudeeapp.presentation.screen.homeScreen.navigateToHomeScreen
 
 @Composable
 fun OnBoardScreen() {
@@ -23,8 +24,7 @@ fun OnBoardScreen() {
 
     Column (
     modifier = Modifier
-    .fillMaxSize()
-    .background(Color.Cyan),
+    .fillMaxSize(),
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -34,7 +34,7 @@ fun OnBoardScreen() {
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
-                    navController.navigateToSecondScreen("Mostafa")
+                    navController.navigateToHomeScreen("User")
                 }
         ) {
             Text("Go to Second", modifier = Modifier.padding(16.dp))

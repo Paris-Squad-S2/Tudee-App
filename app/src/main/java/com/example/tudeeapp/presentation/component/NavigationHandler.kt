@@ -3,6 +3,7 @@ package com.example.tudeeapp.presentation.component
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 import kotlinx.serialization.Serializable
+import kotlin.uuid.Uuid
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
@@ -24,7 +25,7 @@ sealed class Screen {
     data class Home(val userName :String) : Screen()
 
     @Serializable
-    data object TaskScreen : Screen()
+    data class TaskScreen(val taskId : Int,val taskTitle : String) : Screen()
 
     @Serializable
     data object CategoryScreen : Screen()
