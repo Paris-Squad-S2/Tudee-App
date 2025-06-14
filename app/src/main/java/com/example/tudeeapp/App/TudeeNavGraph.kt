@@ -1,4 +1,4 @@
-package com.example.tudeeapp
+package com.example.tudeeapp.App
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
