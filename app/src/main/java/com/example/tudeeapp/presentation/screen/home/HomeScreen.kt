@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.feature.onBoarding
+package com.example.tudeeapp.presentation.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,29 +17,29 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
 
 @Composable
-fun OnBoardScreen() {
-
+fun HomeScreen(userName: String) {
     val navController = LocalNavController.current
-
-    Column (
-    modifier = Modifier
-    .fillMaxSize(),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("On Board Screen", modifier = Modifier.padding(16.dp))
+        Text("Welcome To Home $userName", modifier = Modifier.padding(16.dp))
 
         Box(
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
                     navController.navigate(
-                        Screens.Home(
-                            userName = "user"
-                        ))
+                        Screens.Task(
+                            taskId = 12,
+                            taskTitle = "taskTitle"
+                        )
+                    )
                 }
         ) {
-            Text("Go to Second", modifier = Modifier.padding(16.dp))
+            Text("Go to task screen", modifier = Modifier.padding(16.dp))
         }
     }
 }

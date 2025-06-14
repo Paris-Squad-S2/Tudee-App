@@ -8,15 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.tudeeapp.presentation.feature.categoriesForm.CategoryFormScreen
-import com.example.tudeeapp.presentation.feature.category.CategoryScreen
-import com.example.tudeeapp.presentation.feature.categoryDetails.CategoryDetailsScreen
-import com.example.tudeeapp.presentation.feature.home.HomeScreen
-import com.example.tudeeapp.presentation.feature.onBoarding.OnBoardScreen
-import com.example.tudeeapp.presentation.feature.splash.SplashScreen
-import com.example.tudeeapp.presentation.feature.task.TaskScreen
-import com.example.tudeeapp.presentation.feature.taskDetails.TaskDetailsScreen
-import com.example.tudeeapp.presentation.feature.taskForm.TaskFormScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
+import com.example.tudeeapp.presentation.screen.category.CategoryScreen
+import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
+import com.example.tudeeapp.presentation.screen.home.HomeScreen
+import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
+import com.example.tudeeapp.presentation.screen.splash.SplashScreen
+import com.example.tudeeapp.presentation.screen.task.TaskScreen
+import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
+import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 

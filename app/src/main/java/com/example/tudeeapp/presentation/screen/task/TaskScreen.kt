@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.feature.category
+package com.example.tudeeapp.presentation.screen.task
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,15 +9,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 
+
 @Composable
-fun CategoryScreen(){
+fun TaskScreen(taskId: Int, taskTitle: String) {
     val navController = LocalNavController.current
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Category Screen")
+        Text(text = "Task Screen id is : $taskId and task title $taskTitle")
 
     }
 }

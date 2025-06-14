@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.feature.categoryDetails
+package com.example.tudeeapp.presentation.screen.taskForm
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 
 @Composable
-fun CategoryDetailsScreen(){
+fun TaskFormScreen(){
     val navController = LocalNavController.current
     Column(
         modifier = Modifier.fillMaxSize(),
