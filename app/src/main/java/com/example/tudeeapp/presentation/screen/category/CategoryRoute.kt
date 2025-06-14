@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.tudeeapp.presentation.component.Screen
 
-fun NavGraphBuilder.navigateToCategoryScreen(){
+fun NavGraphBuilder.addCategoryScreenRoute(){
     composable<Screen.CategoryScreen> {
         CategoryScreen()
     }
