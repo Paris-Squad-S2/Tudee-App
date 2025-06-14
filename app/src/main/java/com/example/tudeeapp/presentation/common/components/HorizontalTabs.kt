@@ -26,13 +26,11 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 
-
 data class Tab(
     val title: String,
     val count: Int = 0,
     val isSelected: Boolean = false
 )
-
 
 @Composable
 fun HorizontalTabs(

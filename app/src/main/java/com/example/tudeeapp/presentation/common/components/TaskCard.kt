@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,9 @@ fun TaskCard(
     priorityIcon: Painter,
     priorityColor: Color,
     isDated: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickPriority: () -> Unit = {},
+    onClickDate: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -65,14 +68,15 @@ fun TaskCard(
                 Arrangement.End
             ) {
                 when {
-                    isDated -> DateCard(date)
+                    isDated -> DateCard(date , onClick = { onClickDate })
                 }
                 Spacer(modifier = Modifier.width(4.dp))
                 PriorityButton(
                     text = priorityLabel,
                     icon = priorityIcon,
-                    backgroundColor = priorityColor
-                ) { }
+                    backgroundColor = priorityColor,
+                    onClick = { onClickPriority }
+                )
             }
         }
 
@@ -100,12 +104,14 @@ fun TaskCard(
 }
 
 @Composable
-private fun DateCard(date: String) {
+private fun DateCard(date: String, onClick: () -> Unit) {
     Box(
-        modifier = Modifier.background(
-            color = Theme.colors.surfaceColors.surface,
-            shape = RoundedCornerShape(50)
-        )
+        modifier = Modifier
+            .background(
+                color = Theme.colors.surfaceColors.surface,
+                shape = RoundedCornerShape(50),
+            )
+            .clickable { onClick() }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

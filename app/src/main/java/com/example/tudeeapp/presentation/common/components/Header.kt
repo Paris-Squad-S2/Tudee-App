@@ -1,10 +1,13 @@
 package com.example.tudeeapp.presentation.common.components
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
@@ -31,17 +34,21 @@ fun Header(modifier: Modifier = Modifier ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .background(Theme.colors.primary)
             .padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically
     ) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = Theme.colors.surfaceColors.surfaceHigh
+                containerColor = Color(0x66FFFFFF)
             ),
+            border = BorderStroke(1.dp, Color(0x66FFFFFF)),
             modifier = Modifier.size(48.dp)
         ) {
             Box {
                 Icon(
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier.align(Alignment.TopCenter)
+                        .offset(y = 6.dp)
+                    ,
                     imageVector = ImageVector.vectorResource(R.drawable.ic_tudee),
                     contentDescription = stringResource(R.string.app_name),
                     tint = Color.Unspecified
@@ -56,14 +63,14 @@ fun Header(modifier: Modifier = Modifier ) {
         ) {
             Text(
                 text = stringResource(R.string.app_name),
-                style = Theme.textStyle.title.large.copy(fontFamily = cherryBomb),
+                style = Theme.textStyle.title.large.copy(fontFamily = cherryBomb, color = Theme.colors.surfaceColors.onPrimaryColors.onPrimary),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
 
             Text(
                 text = stringResource(R.string.your_cute_helper_for_every_task),
-                style = Theme.textStyle.label.small,
+                style = Theme.textStyle.label.small.copy(color = Theme.colors.surfaceColors.onPrimaryColors.onPrimary),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

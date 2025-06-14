@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 
 @Composable
@@ -44,5 +45,7 @@ fun RotatingIconLoadingIndicator(
 @PreviewMultiDevices
 @Composable
 private fun RotatingIconLoadingIndicatorPreview() {
-    RotatingIconLoadingIndicator()
+    BasePreview {
+        RotatingIconLoadingIndicator()
+    }
 }

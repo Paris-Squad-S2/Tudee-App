@@ -19,6 +19,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.text_style.defaultTextStyle
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import androidx.compose.ui.res.painterResource
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 
 @Composable
 fun PriorityButton(
@@ -56,4 +59,15 @@ fun PriorityButton(
     }
 }
 
-
+@PreviewMultiDevices
+@Composable
+fun PriorityButtonPreview() {
+    BasePreview {
+        PriorityButton(
+            text = "High",
+            icon = painterResource(id = android.R.drawable.ic_dialog_alert),
+            backgroundColor = Color.Red,
+            onClick = {}
+        )
+    }
+}

@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 
@@ -63,8 +64,10 @@ fun SnackBar(
 @PreviewMultiDevices()
 @Composable
 fun SnackBarErrorPreview() {
-    SnackBar(
-        text = "Some error happened",
-        isSuccess = false
-    )
+    BasePreview {
+        SnackBar(
+            text = "Some error happened",
+            isSuccess = false
+        )
+    }
 }

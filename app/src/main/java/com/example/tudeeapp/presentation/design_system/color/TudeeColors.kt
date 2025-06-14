@@ -20,6 +20,7 @@ data class TudeeTextColors(
     val hint: Color,
     val disable: Color
 )
+
 data class PrimaryGradient(
     val colors:List<Color>
 )
