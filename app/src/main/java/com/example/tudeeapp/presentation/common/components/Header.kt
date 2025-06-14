@@ -35,7 +35,7 @@ fun Header(modifier: Modifier = Modifier ) {
         modifier = modifier
             .fillMaxWidth()
             .background(Theme.colors.primary)
-            .padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically
     ) {
         Card(
             colors = CardDefaults.cardColors(
@@ -47,8 +47,7 @@ fun Header(modifier: Modifier = Modifier ) {
             Box {
                 Icon(
                     modifier = Modifier.align(Alignment.TopCenter)
-                        .offset(y = 6.dp)
-                    ,
+                        .offset(y = 6.dp)   ,
                     imageVector = ImageVector.vectorResource(R.drawable.ic_tudee),
                     contentDescription = stringResource(R.string.app_name),
                     tint = Color.Unspecified
