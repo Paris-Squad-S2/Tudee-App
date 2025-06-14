@@ -52,7 +52,7 @@ sealed class ButtonVariant {
 }
 
 @Composable
-fun TudeeComposeButton(
+fun TudeeButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     state: ButtonState = ButtonState.Normal,
@@ -217,7 +217,7 @@ fun TextOnlyButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { }, text = "Submit"
             )
         }
@@ -230,7 +230,7 @@ fun IconOnlyButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 icon = { Icon(Icons.Default.Add, null) }
             )
@@ -244,7 +244,7 @@ fun FABButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 icon = { Icon(Icons.Default.Add, null) },
                 variant = ButtonVariant.FAB
@@ -259,7 +259,7 @@ fun OutlinedButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 variant = ButtonVariant.Outlined,
                 text = "Cancel"
@@ -274,7 +274,7 @@ fun TextButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 variant = ButtonVariant.TextOnly,
                 text = "Link"
@@ -289,7 +289,7 @@ fun ErrorStateButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 text = "Retry",
                 state = ButtonState.Error
@@ -305,7 +305,7 @@ fun DisabledStateButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 text = "Submit",
                 state = ButtonState.Disabled
@@ -317,14 +317,29 @@ fun DisabledStateButton() {
 
 @Composable
 @PreviewLightDark
-fun IconTextButton() {
+fun TrailingTextButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 text = "Upload",
-                icon = { Icon(Icons.Default.Add, null) },
+                trailingIcon = { Icon(Icons.Default.Add, null) },
+            )
+        }
+    }
+}
+
+@Composable
+@PreviewLightDark
+fun LeadingTextButton() {
+    TudeeTheme {
+        Surface(color = Theme.colors.surfaceColors.surface)
+        {
+            TudeeButton(
+                onClick = { },
+                text = "Upload",
+                leadingIcon = { Icon(Icons.Default.Add, null) },
             )
         }
     }
@@ -336,7 +351,7 @@ fun LoadingStateButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeComposeButton(
+            TudeeButton(
                 onClick = { },
                 text = "Processing",
                 state = ButtonState.Loading
