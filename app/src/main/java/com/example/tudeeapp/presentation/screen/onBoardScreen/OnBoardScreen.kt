@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.component.LocalNavController
-import com.example.tudeeapp.presentation.screen.firstScreen.navigateToSecondScreen
 import com.example.tudeeapp.presentation.screen.homeScreen.navigateToHomeScreen
 
 @Composable
