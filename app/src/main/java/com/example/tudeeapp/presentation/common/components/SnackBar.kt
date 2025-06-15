@@ -26,8 +26,8 @@ fun SnackBar(
     onClick: () -> Unit = {}
 ) {
     val iconContainerColor = if (isSuccess) Theme.colors.status.greenVariant else Theme.colors.status.errorVariant
-    val icon = if (isSuccess) painterResource(id = R.drawable.checkmark_badge)
-    else painterResource(id = R.drawable.information_diamond)
+    val icon = if (isSuccess) painterResource(id = R.drawable.ic_checkmark_badge)
+    else painterResource(id = R.drawable.ic_information_diamond)
 
     Row(
         modifier = modifier
