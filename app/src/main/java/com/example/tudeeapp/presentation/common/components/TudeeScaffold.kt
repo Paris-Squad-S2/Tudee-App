@@ -57,8 +57,8 @@ fun TudeeScaffold(
     showTopBar: Boolean = false,
     showFloatingActionButton: Boolean = false,
     showBottomBar: Boolean = false,
-    content: @Composable (snackBar: SnackBarState) -> Unit,
     contentBackground: Color = Theme.colors.surfaceColors.surface,
+    content: @Composable (snackBar: SnackBarState) -> Unit,
 ) {
     val snackBarState = remember { SnackBarState() }
 
