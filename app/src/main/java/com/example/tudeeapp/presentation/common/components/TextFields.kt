@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
@@ -92,7 +94,7 @@ fun TextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
-            .width(332.dp)
+            .fillMaxWidth().padding(horizontal = 16.dp)
             .height(if (singleLine) 56.dp else 168.dp)
             .background(Theme.colors.surfaceColors.surfaceHigh, shape)
             .border(BorderStroke(borderWidth, borderColor), shape),
@@ -138,9 +140,7 @@ private fun HandleLeadingIcon(
             contentDescription = "Leading Icon",
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(iconColor),
-            modifier = Modifier
-                .height(21.dp)
-                .width(17.dp)
+            modifier = Modifier.size(24.dp)
         )
     }
 
@@ -149,8 +149,8 @@ private fun HandleLeadingIcon(
         VerticalDivider(
             color = separatorColor,
             modifier = Modifier
-                .height(24.dp)
-                .width(1.dp)
+                .height(24.dp),
+            thickness = 1.dp
         )
         Spacer(Modifier.width(16.dp))
     } else {
@@ -211,31 +211,34 @@ private fun InputFieldContent(
 @PreviewMultiDevices
 @Composable
 fun PreviewTextField() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        var defaultText by remember { mutableStateOf("") }
-        TextField(
-            value = defaultText,
-            onValueChange = { defaultText = it },
-            placeholder = "Full name",
-            leadingIcon = R.drawable.ic_profile
-        )
+    BasePreview {
+
+        Column(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            var defaultText by remember { mutableStateOf("") }
+            TextField(
+                value = defaultText,
+                onValueChange = { defaultText = it },
+                placeholder = "Full name",
+                leadingIcon = R.drawable.ic_profile
+            )
 
 
-        var multiLineText by remember { mutableStateOf("") }
-        TextField(
-            value = multiLineText,
-            onValueChange = { multiLineText = it },
-            placeholder = "Description",
-            singleLine = false,
-            maxLines = 5,
-            leadingIcon = null
-        )
+            var multiLineText by remember { mutableStateOf("") }
+            TextField(
+                value = multiLineText,
+                onValueChange = { multiLineText = it },
+                placeholder = "Description",
+                singleLine = false,
+                maxLines = 5,
+                leadingIcon = null
+            )
 
+
+        }
 
     }
 }
