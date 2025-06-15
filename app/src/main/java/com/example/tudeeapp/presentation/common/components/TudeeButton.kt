@@ -89,7 +89,7 @@ fun TudeeButton(
         color = Color.Transparent,
         contentColor = contentColor,
         border = if (variant == ButtonVariant.OutlinedButton) BorderStroke(1.dp, borderColor) else null,
-        onClick = if (enabled) onClick else { {} },
+        onClick = { if (enabled) onClick() },
         enabled = enabled,
         interactionSource = interactionSource
     ) {
