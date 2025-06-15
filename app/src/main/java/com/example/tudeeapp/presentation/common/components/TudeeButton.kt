@@ -88,7 +88,7 @@ fun TudeeButton(
     Surface(
         modifier = modifier
             .defaultMinSize(minWidth = 64.dp, minHeight = 40.dp)
-            .applyElevationIfFAB(variant == ButtonVariant.FAB, elevation),
+            .applyElevationIfFAB(variant == ButtonVariant.FAB, elevation, shape),
         shape = shape,
         color = Color.Transparent,
         contentColor = contentColor,
@@ -202,9 +202,10 @@ private fun getContentPadding(variant: ButtonVariant): PaddingValues {
     }
 }
 
-private fun Modifier.applyElevationIfFAB(isFAB: Boolean, elevation: Dp): Modifier {
-    return if (isFAB) this.shadow(elevation = elevation) else this
+private fun Modifier.applyElevationIfFAB(isFAB: Boolean, elevation: Dp, shape: Shape): Modifier {
+    return if (isFAB) this.shadow(elevation = elevation, shape = shape) else this
 }
+
 
 
 
@@ -346,7 +347,7 @@ fun LeadingTextButton() {
 @PreviewLightDark
 fun LoadingStateButton() {
     TudeeTheme {
-        Surface(color = Theme.colors.surfaceColors.surface)
+        Surface(color = Theme.colors.surfaceColors.surfaceHigh)
         {
             TudeeButton(
                 onClick = { },
