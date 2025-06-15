@@ -6,10 +6,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,12 +17,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +37,7 @@ import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 enum class ButtonState {
     Normal,
     Disabled,
-    Loading,
-    Error
+    Loading
 }
 
 sealed class ButtonVariant {
@@ -58,68 +54,74 @@ fun TudeeButton(
     state: ButtonState = ButtonState.Normal,
     variant: ButtonVariant,
     shape: Shape = RoundedCornerShape(100.dp),
-    contentColor: Color = when (variant) {
-        ButtonVariant.OutlinedButton, ButtonVariant.TextButton -> Theme.colors.primary
-        else -> getContentColor(state)
-    },
+    isNegative: Boolean = false,
+    contentColor: Color? = null,
     text: String? = null,
     icon: @Composable (() -> Unit)? = null,
     textStyle: TextStyle = Theme.textStyle.label.large,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = icon,
     contentPadding: PaddingValues = getContentPadding(variant),
-    elevation: Dp = when (variant) {
-        ButtonVariant.FloatingActionButton -> 6.dp
-        else -> 0.dp
-    },
-    backgroundBrush: Brush? = null
+    elevation: Dp? = null,
+    backgroundBrush: Brush? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isLoading = (state == ButtonState.Loading)
-    val enabled = (state == ButtonState.Normal || state == ButtonState.Error)
+    val enabled = (state == ButtonState.Normal)
     val spacing = 8.dp
-    val backgroundColorBrush = getBackgroundBrush(variant, state, backgroundBrush)
-    val borderColor = getBorderColor(variant, state)
+    val backgroundColorBrush = getBackgroundBrush(
+        variant,
+        backgroundBrush,
+        isDisabled = (state == ButtonState.Disabled),
+        isNegative = isNegative,
+    )
+    val borderColor = getBorderColor(variant, isNegative)
+    val buttonContentColor = contentColor ?: getContentColor(state, variant, isNegative)
+    val buttonElevation = elevation ?: when (variant) {
+        ButtonVariant.FloatingActionButton -> 6.dp
+        else -> 0.dp
+    }
 
     Surface(
         modifier = modifier
-            .defaultMinSize(minWidth = 64.dp, minHeight = 40.dp)
-            .applyElevationIfFAB(variant == ButtonVariant.FloatingActionButton, elevation, shape),
+            .shadow(elevation = buttonElevation, shape = shape),
         shape = shape,
         color = Color.Transparent,
-        contentColor = contentColor,
-        border = if (variant == ButtonVariant.OutlinedButton) BorderStroke(1.dp, borderColor) else null,
+        contentColor = buttonContentColor,
+        border = if (variant == ButtonVariant.OutlinedButton) BorderStroke(
+            1.dp,
+            borderColor
+        ) else null,
         onClick = { if (enabled) onClick() },
         enabled = enabled,
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
     ) {
-        CompositionLocalProvider(LocalContentColor provides contentColor) {
-            ProvideTextStyle(textStyle) {
-                Row(
-                    modifier = Modifier
-                        .background(backgroundColorBrush)
-                        .padding(contentPadding),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (leadingIcon != null) {
-                        leadingIcon()
-                        if (text != null) Spacer(modifier = Modifier.width(spacing))
-                    }
+        Row(
+            modifier = Modifier
+                .background(backgroundColorBrush)
+                .padding(contentPadding),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (leadingIcon != null) {
+                leadingIcon()
+                if (text != null) Spacer(modifier = Modifier.width(spacing))
+            }
 
-                    text?.let { Text(it) }
+            text?.let { Text(it, style = textStyle, color = buttonContentColor) }
 
-                    if (isLoading) {
-                        if (text != null) Spacer(modifier = Modifier.width(spacing))
-                        AnimatedVisibility(visible = true, enter = fadeIn()) {
-                            RotatingIconLoadingIndicator(modifier = Modifier.size(20.dp))
-                        }
-                    } else {
-                        trailingIcon?.let {
-                            if (text != null) Spacer(modifier = Modifier.width(spacing))
-                            it()
-                        }
-                    }
+            if (isLoading) {
+                if (text != null) Spacer(modifier = Modifier.width(spacing))
+                AnimatedVisibility(visible = true, enter = fadeIn()) {
+                    RotatingIconLoadingIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = buttonContentColor
+                    )
+                }
+            } else {
+                trailingIcon?.let {
+                    if (text != null) Spacer(modifier = Modifier.width(spacing))
+                    it()
                 }
             }
         }
@@ -129,12 +131,10 @@ fun TudeeButton(
 @Composable
 private fun getBackgroundBrush(
     variant: ButtonVariant,
-    state: ButtonState,
-    backgroundBrush: Brush?
+    backgroundBrush: Brush?,
+    isDisabled: Boolean,
+    isNegative: Boolean
 ): Brush {
-    val isDisabled = state == ButtonState.Disabled
-    val isError = state == ButtonState.Error
-
     return when (variant) {
         ButtonVariant.FilledButton, ButtonVariant.FloatingActionButton -> {
             if (isDisabled) {
@@ -144,7 +144,7 @@ private fun getBackgroundBrush(
                         Theme.colors.surfaceColors.disable
                     )
                 )
-            } else if (isError) {
+            } else if (isNegative) {
                 Brush.verticalGradient(
                     colors = listOf(
                         Theme.colors.status.errorVariant,
@@ -169,11 +169,10 @@ private fun getBackgroundBrush(
 
 
 @Composable
-private fun getBorderColor(variant: ButtonVariant, state: ButtonState): Color {
-    val isError = state == ButtonState.Error
+private fun getBorderColor(variant: ButtonVariant, isNegative: Boolean): Color {
     return when (variant) {
         ButtonVariant.OutlinedButton ->
-            if (!isError) Theme.colors.text.disable
+            if (!isNegative) Theme.colors.text.disable
             else Theme.colors.status.error.copy(alpha = 0.12f)
 
         else -> Color.Transparent
@@ -182,10 +181,11 @@ private fun getBorderColor(variant: ButtonVariant, state: ButtonState): Color {
 
 
 @Composable
-private fun getContentColor(state: ButtonState): Color {
-    return when (state) {
-        ButtonState.Disabled -> Theme.colors.text.disable
-        ButtonState.Error -> Theme.colors.status.error
+private fun getContentColor(state: ButtonState, variant: ButtonVariant, isNegative: Boolean): Color {
+    return when {
+        state == ButtonState.Disabled -> Theme.colors.text.disable
+        isNegative -> Theme.colors.status.error
+        (variant == ButtonVariant.OutlinedButton || variant == ButtonVariant.TextButton) -> Theme.colors.primary
         else -> Theme.colors.surfaceColors.onPrimaryColors.onPrimary
     }
 }
@@ -199,37 +199,31 @@ private fun getContentPadding(variant: ButtonVariant): PaddingValues {
     }
 }
 
-private fun Modifier.applyElevationIfFAB(isFAB: Boolean, elevation: Dp, shape: Shape): Modifier {
-    return if (isFAB) this.shadow(elevation = elevation, shape = shape) else this
-}
-
 
 @Composable
 @PreviewLightDark
-fun TextOnlyButton() {
+fun PrimaryButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeButton(
-                onClick = { }, text = "Submit",
-                variant = ButtonVariant.FilledButton,
-            )
-        }
-    }
-}
-
-@Composable
-@PreviewLightDark
-fun IconOnlyButton() {
-    TudeeTheme {
-        Surface(color = Theme.colors.surfaceColors.surface)
-        {
-            TudeeButton(
-                onClick = { },
-                icon = { Icon(Icons.Default.Add, null) },
-                variant = ButtonVariant.FilledButton,
-
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.FilledButton,
                 )
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.FilledButton,
+                    state = ButtonState.Disabled
+                )
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.FilledButton,
+                    state = ButtonState.Loading
+                )
+            }
         }
     }
 }
@@ -240,11 +234,63 @@ fun FABButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeButton(
-                onClick = { },
-                icon = { Icon(Icons.Default.Add, null) },
-                variant = ButtonVariant.FloatingActionButton
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                TudeeButton(
+                    modifier = Modifier.size(64.dp),
+                    onClick = { },
+                    icon = {
+                        Icon(Icons.Default.Add, null)
+                    },
+                    variant = ButtonVariant.FloatingActionButton,
+                )
+                TudeeButton(
+                    modifier = Modifier.size(64.dp),
+                    onClick = { },
+                    icon = {
+                        Icon(Icons.Default.Add, null)
+                    },
+                    variant = ButtonVariant.FloatingActionButton,
+                    state = ButtonState.Disabled
+                )
+                TudeeButton(
+                    modifier = Modifier.size(64.dp),
+                    onClick = { },
+                    icon = { Icon(Icons.Default.Add, null) },
+                    variant = ButtonVariant.FloatingActionButton,
+                    state = ButtonState.Loading
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+@PreviewLightDark
+fun TextButton() {
+    TudeeTheme {
+        Surface(color = Theme.colors.surfaceColors.surface)
+        {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                TudeeButton(
+                    onClick = { }, text = "Cancel",
+                    variant = ButtonVariant.TextButton,
+                )
+                TudeeButton(
+                    onClick = { }, text = "Cancel",
+                    variant = ButtonVariant.TextButton,
+                    state = ButtonState.Disabled
+                )
+                TudeeButton(
+                    onClick = { }, text = "Cancel",
+                    variant = ButtonVariant.TextButton,
+                    state = ButtonState.Loading
+                )
+            }
         }
     }
 }
@@ -255,109 +301,87 @@ fun OutlinedButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeButton(
-                onClick = { },
-                variant = ButtonVariant.OutlinedButton,
-                text = "Cancel"
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.OutlinedButton,
+                )
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.OutlinedButton,
+                    state = ButtonState.Loading
+                )
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.OutlinedButton,
+                    state = ButtonState.Disabled
+                )
+            }
         }
     }
 }
 
+
 @Composable
 @PreviewLightDark
-fun TextButton() {
+fun PrimaryNegativeButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeButton(
-                onClick = { },
-                variant = ButtonVariant.TextButton,
-                text = "Link"
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.FilledButton,
+                    isNegative = true
+                )
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.FilledButton,
+                    isNegative = true,
+                    state = ButtonState.Disabled
+                )
+                TudeeButton(
+                    onClick = { }, text = "Submit",
+                    variant = ButtonVariant.FilledButton,
+                    isNegative = true,
+                    state = ButtonState.Loading
+                )
+            }
         }
     }
 }
 
 @Composable
 @PreviewLightDark
-fun ErrorStateButton() {
+fun TextNegativeButton() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
-            TudeeButton(
-                onClick = { },
-                text = "Retry",
-                state = ButtonState.Error,
-                variant = ButtonVariant.FilledButton,
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                TudeeButton(
+                    onClick = { }, text = "Cancel",
+                    variant = ButtonVariant.TextButton,
+                    isNegative = true
+                )
+                TudeeButton(
+                    onClick = { }, text = "Cancel",
+                    variant = ButtonVariant.TextButton,
+                    isNegative = true,
+                    state = ButtonState.Disabled
+                )
+                TudeeButton(
+                    onClick = { }, text = "Cancel",
+                    variant = ButtonVariant.TextButton,
+                    isNegative = true,
+                    state = ButtonState.Loading
+                )
+            }
         }
     }
 }
-
-
-@Composable
-@PreviewLightDark
-fun DisabledStateButton() {
-    TudeeTheme {
-        Surface(color = Theme.colors.surfaceColors.surface)
-        {
-            TudeeButton(
-                onClick = { },
-                text = "Submit",
-                state = ButtonState.Disabled,
-                variant = ButtonVariant.FilledButton,
-            )
-        }
-    }
-}
-
-
-@Composable
-@PreviewLightDark
-fun TrailingTextButton() {
-    TudeeTheme {
-        Surface(color = Theme.colors.surfaceColors.surface)
-        {
-            TudeeButton(
-                onClick = { },
-                text = "Upload",
-                trailingIcon = { Icon(Icons.Default.Add, null) },
-                variant = ButtonVariant.FilledButton,
-            )
-        }
-    }
-}
-
-@Composable
-@PreviewLightDark
-fun LeadingTextButton() {
-    TudeeTheme {
-        Surface(color = Theme.colors.surfaceColors.surface)
-        {
-            TudeeButton(
-                onClick = { },
-                text = "Upload",
-                leadingIcon = { Icon(Icons.Default.Add, null) }, variant = ButtonVariant.FilledButton,
-            )
-        }
-    }
-}
-
-@Composable
-@PreviewLightDark
-fun LoadingStateButton() {
-    TudeeTheme {
-        Surface(color = Theme.colors.surfaceColors.surfaceHigh)
-        {
-            TudeeButton(
-                onClick = { },
-                text = "Processing",
-                state = ButtonState.Loading,
-                variant = ButtonVariant.FilledButton,
-            )
-        }
-    }
-}
-
-
