@@ -61,7 +61,7 @@ fun PriorityButton(
 
 @PreviewMultiDevices
 @Composable
-fun PriorityButtonPreview() {
+private fun PriorityButtonPreview() {
     BasePreview {
         PriorityButton(
             text = "High",

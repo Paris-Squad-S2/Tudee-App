@@ -63,7 +63,7 @@ fun SnackBar(
 
 @PreviewMultiDevices()
 @Composable
-fun SnackBarErrorPreview() {
+private fun SnackBarErrorPreview() {
     BasePreview {
         SnackBar(
             text = "Some error happened",

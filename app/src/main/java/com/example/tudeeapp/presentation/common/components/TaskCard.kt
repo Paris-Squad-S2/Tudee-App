@@ -134,7 +134,7 @@ private fun DateCard(date: String, onClick: () -> Unit) {
 
 @PreviewMultiDevices
 @Composable
-fun TaskCardPreview() {
+private fun TaskCardPreview() {
     BasePreview {
         TaskCard(
             icon = painterResource(R.drawable.ic_education),

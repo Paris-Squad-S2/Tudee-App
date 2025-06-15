@@ -35,26 +35,25 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.innerShadow
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
-@Preview(showBackground = true)
 @Composable
-fun SwitchThemeButton(modifier: Modifier = Modifier) {
-    var toggled by remember { mutableStateOf(true) }
+fun SwitchThemeButton(
+    toggled: Boolean,
+    onToggle: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val iconRes = if (toggled) R.drawable.ellipse_1_night else R.drawable.ellipse_1_day
-
 
     val offsetX by animateDpAsState(
         targetValue = if (toggled) 28.dp else 0.dp, animationSpec = tween(
             durationMillis = 1000,
-
-            )
+        )
     )
-
 
     AnimatedContent(
         targetState = iconRes, transitionSpec = {
             fadeIn(animationSpec = tween(1000)) togetherWith fadeOut(animationSpec = tween(1000))
         },
-        modifier = Modifier
+        modifier = modifier
     ) { icon ->
         Box(
             modifier = Modifier
@@ -67,7 +66,7 @@ fun SwitchThemeButton(modifier: Modifier = Modifier) {
                     color = if (toggled) Color(0xFF151535) else Theme.colors.primary
                 )
                 .clickable {
-                    toggled = !toggled
+                    onToggle(!toggled)
                 }
                 .padding(2.dp),
 
@@ -112,17 +111,14 @@ fun SwitchThemeButton(modifier: Modifier = Modifier) {
             }
             Ellipse5CircleDay(toggled)
             MorphingCircle2(toggled)
-
-
             Ellipse14CircleDay(toggled)
-
         }
     }
 }
 
 
 @Composable
-fun MorphingCircle1(toggled: Boolean, modifier: Modifier = Modifier) {
+private fun MorphingCircle1(toggled: Boolean, modifier: Modifier = Modifier) {
     val size by animateDpAsState(
         targetValue = if (toggled) 8.dp else 29.dp,
         animationSpec = tween(1500)
@@ -158,7 +154,7 @@ fun MorphingCircle1(toggled: Boolean, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MorphingCircle2(toggled: Boolean, modifier: Modifier = Modifier) {
+private fun MorphingCircle2(toggled: Boolean, modifier: Modifier = Modifier) {
     val size by animateDpAsState(
         targetValue = if (toggled) 4.dp else 29.dp,
         animationSpec = tween(1500)
@@ -194,7 +190,7 @@ fun MorphingCircle2(toggled: Boolean, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Ellipse5CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
+private fun Ellipse5CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
     val offsetX by animateDpAsState(
         targetValue = if (toggled) 69.dp else 45.dp,
         animationSpec = tween(500)
@@ -220,7 +216,7 @@ fun Ellipse5CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Ellipse14CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
+private fun Ellipse14CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
     val offsetX by animateDpAsState(
         targetValue = if (toggled) (-20).dp else 35.5.dp,
         animationSpec = tween(1000)
@@ -243,7 +239,7 @@ fun Ellipse14CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Ellipse12CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
+private fun Ellipse12CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
 
 
     val offsetX by animateDpAsState(
@@ -266,7 +262,7 @@ fun Ellipse12CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Ellipse9CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
+private fun Ellipse9CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
 
     val offsetX by animateDpAsState(
         targetValue = if (toggled) 39.dp else 32.dp,
@@ -289,5 +285,15 @@ fun Ellipse9CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
                 offsetY = 0.dp,
                 offsetX = 0.dp,
             )
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SwitchThemeButtonPreview() {
+    var toggled by remember { mutableStateOf(false) }
+    SwitchThemeButton(
+        toggled = toggled,
+        onToggle = { toggled = it }
     )
 }

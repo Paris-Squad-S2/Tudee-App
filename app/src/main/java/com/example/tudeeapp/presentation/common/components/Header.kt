@@ -30,7 +30,7 @@ import com.example.tudeeapp.presentation.design_system.text_style.cherryBomb
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun Header(modifier: Modifier = Modifier ) {
+fun Header(isDarkMode: Boolean, onToggleTheme: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -46,8 +46,9 @@ fun Header(modifier: Modifier = Modifier ) {
         ) {
             Box {
                 Icon(
-                    modifier = Modifier.align(Alignment.TopCenter)
-                        .offset(y = 6.dp)   ,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .offset(y = 6.dp),
                     imageVector = ImageVector.vectorResource(R.drawable.ic_tudee),
                     contentDescription = stringResource(R.string.app_name),
                     tint = Color.Unspecified
@@ -76,7 +77,7 @@ fun Header(modifier: Modifier = Modifier ) {
 
         }
 
-        //ToDo add switch button here
+        SwitchThemeButton(toggled = isDarkMode, onToggle = { onToggleTheme }, modifier = Modifier)
     }
 }
 
@@ -84,6 +85,10 @@ fun Header(modifier: Modifier = Modifier ) {
 @Composable
 private fun HeaderPreview() {
     BasePreview {
-        Header()
+        Header(
+            isDarkMode = false,
+            onToggleTheme = {},
+            modifier = Modifier
+        )
     }
 }
