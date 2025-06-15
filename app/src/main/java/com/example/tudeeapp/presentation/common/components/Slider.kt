@@ -52,7 +52,8 @@ fun Slider(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = description,
-                style = Theme.textStyle.body.small
+                style = Theme.textStyle.body.small,
+                color = Theme.colors.text.body
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
@@ -67,7 +68,7 @@ fun Slider(
                     .size(65.dp)
                     .offset(y = 6.dp)
                     .clip(CircleShape)
-                    .background(color = Theme.colors.primary)
+                    .background(color = Theme.colors.primary.copy(alpha = 0.16f))
             )
             Box(
                 modifier = Modifier
