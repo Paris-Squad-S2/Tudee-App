@@ -46,7 +46,7 @@ fun TudeeScaffold(
                     contentDescription = null
                 )
             },
-            variant = ButtonVariant.FAB
+            variant = ButtonVariant.FloatingActionButton
         )
     },
     backgroundColor: Color = Theme.colors.primary,
