@@ -38,8 +38,17 @@ fun TaskEntity.toTask(): Task {
 }
 
 
-fun CategoryEntity.toTaskCategory(): Category {
+fun CategoryEntity.toCategory(): Category {
     return Category(
+        id = this.id,
+        title = this.title,
+        imageUri = this.imageUri,
+        isPredefined = this.isPredefined
+    )
+}
+
+fun Category.toCategoryEntity(): CategoryEntity {
+    return CategoryEntity(
         id = this.id,
         title = this.title,
         imageUri = this.imageUri,

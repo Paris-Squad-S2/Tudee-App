@@ -14,7 +14,7 @@ interface CategoryDao {
     fun insert(categoryEntity: CategoryEntity)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertList(categoryEntity: List<CategoryEntity>)
+    fun insertPredefinedCategories(categories: List<CategoryEntity>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(categoryEntity: CategoryEntity)
