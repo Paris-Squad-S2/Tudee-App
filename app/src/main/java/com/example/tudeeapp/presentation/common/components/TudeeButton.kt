@@ -64,7 +64,6 @@ fun TudeeButton(
     },
     text: String? = null,
     icon: @Composable (() -> Unit)? = null,
-    enabled: Boolean = state == ButtonState.Normal,
     textStyle: TextStyle = Theme.textStyle.label.large,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = icon,
@@ -77,9 +76,8 @@ fun TudeeButton(
     backgroundBrush: Brush? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-
-    val isLoading = state == ButtonState.Loading
-
+    val isLoading = (state == ButtonState.Loading)
+    val enabled = (state == ButtonState.Normal || state == ButtonState.Error)
     val emptyOnClick: () -> Unit = {}
 
     val backgroundColorBrush = getBackgroundBrush(variant, state, backgroundBrush)
@@ -93,8 +91,8 @@ fun TudeeButton(
         color = Color.Transparent,
         contentColor = contentColor,
         border = if (variant == ButtonVariant.Outlined) BorderStroke(1.dp, borderColor) else null,
-        onClick = if (enabled && !isLoading) onClick else emptyOnClick,
-        enabled = enabled && !isLoading,
+        onClick = if (enabled) onClick else emptyOnClick,
+        enabled = enabled,
         interactionSource = interactionSource
     ) {
         CompositionLocalProvider(LocalContentColor provides contentColor) {
