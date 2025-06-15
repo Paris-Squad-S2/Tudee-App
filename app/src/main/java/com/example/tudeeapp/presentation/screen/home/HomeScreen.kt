@@ -1,7 +1,6 @@
 package com.example.tudeeapp.presentation.screen.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,9 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +28,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 
 @Composable
 fun HomeScreen(userName: String) {
@@ -69,53 +65,61 @@ fun HomeScreen(userName: String) {
                         .padding(horizontal = 16.dp)
                 ) {
                     item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = Theme.colors.surfaceColors.surfaceHigh,
-                                    shape = RoundedCornerShape(size = 16.dp)
-                                )
-                                .padding(top = 8.dp, bottom = 12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(16.dp),
-                                    painter = painterResource(id = R.drawable.ic_date),
-                                    contentDescription = "Today Date",
-                                    tint = Theme.colors.text.body,
-                                )
-                                Text(
-                                    modifier = Modifier.padding(start = 8.dp),
-                                    text = "today, 22 Jun 2025",
-                                    style = Theme.textStyle.label.medium,
-                                    color = Theme.colors.text.body
-                                )
-                            }
-                            Slider(
-                                modifier = Modifier.padding(
-                                    bottom = 8.dp,
-                                    start = 6.dp,
-                                    end = 6.dp
-                                ),
-                                title = "Stay working!",
-                                description = "You've completed 3 out of 10 tasks Keep going!",
-                                image = painterResource(id = R.drawable.img_ropot1),
-                                titleIcon = painterResource(id = R.drawable.ic_good)
-                            )
-                            OverViewContainer()
+                        OverViewSection()
+                    }
+                    item {
 
-                        }
                     }
 
                 }
             }
         },
     )
+}
+
+
+@Composable
+private fun OverViewSection(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = Theme.colors.surfaceColors.surfaceHigh,
+                shape = RoundedCornerShape(size = 16.dp)
+            )
+            .padding(top = 8.dp, bottom = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier.size(16.dp),
+                painter = painterResource(id = R.drawable.ic_date),
+                contentDescription = "Today Date",
+                tint = Theme.colors.text.body,
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = "today, 22 Jun 2025",
+                style = Theme.textStyle.label.medium,
+                color = Theme.colors.text.body
+            )
+        }
+        Slider(
+            modifier = Modifier.padding(
+                bottom = 8.dp,
+                start = 6.dp,
+                end = 6.dp
+            ),
+            title = "Stay working!",
+            description = "You've completed 3 out of 10 tasks Keep going!",
+            image = painterResource(id = R.drawable.img_ropot1),
+            titleIcon = painterResource(id = R.drawable.ic_good)
+        )
+        OverViewContainer()
+    }
 }
 
 @Composable
@@ -128,13 +132,13 @@ fun OverViewContainer(modifier: Modifier = Modifier) {
             style = Theme.textStyle.title.large,
             color = Theme.colors.text.title
         )
-        OverViewCards()
+        OverViewCardsRow()
     }
 
 }
 
 @Composable
-fun OverViewCards() {
+private fun OverViewCardsRow() {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -162,74 +166,9 @@ fun OverViewCards() {
     }
 }
 
-@Composable
-fun OverviewCard(
-    modifier: Modifier,
-    color: Color,
-    painter: Painter,
-    stat: Int,
-    label: String,
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(size = 20.dp))
-            .background(color = color)
-    ) {
-        Icon(
-            modifier = Modifier
-                .size(78.dp)
-                .align(Alignment.TopEnd)
-                .offset(x = 39.dp, y = (-39).dp),
-            painter = painterResource(R.drawable.ic_overview_card_background),
-            contentDescription = "icon",
-            tint = Color.Unspecified,
-        )
-        Column(
-            modifier = Modifier
-                .padding(top = 12.dp, start = 12.dp, bottom = 12.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color(0x1FFFFFFF),
-                        shape = RoundedCornerShape(size = 12.dp)
-                    )
-                    .size(40.dp)
-                    .background(color = Color(0x3DFFFFFF), shape = RoundedCornerShape(size = 12.dp))
-                    .padding(8.dp)
-            ) {
-                Icon(
-                    painter = painter,
-                    contentDescription = "icon",
-                    tint = Color.Unspecified
-                )
-            }
-            Text(
-                modifier = Modifier.padding(top = 4.dp),
-                text = stat.toString(),
-                style = Theme.textStyle.headline.medium,
-                color = Theme.colors.surfaceColors.onPrimaryColors.onPrimary
-            )
-            Text(
-                text = label,
-                style = Theme.textStyle.label.small,
-                color = Theme.colors.surfaceColors.onPrimaryColors.onPrimaryCaption
-            )
-        }
-    }
-}
 
 @Composable
 @Preview
 fun HomeScreenPreview() {
     HomeScreen("userName")
 }
-
-
-//                    navController.navigate(
-//                        Screens.Task(
-//                            taskId = 12,
-//                            taskTitle = "taskTitle"
-//                        )
-//                    )

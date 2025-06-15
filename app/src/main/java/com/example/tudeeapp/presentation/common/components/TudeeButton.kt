@@ -228,7 +228,6 @@ fun IconOnlyButton() {
                 onClick = { },
                 icon = { Icon(Icons.Default.Add, null) },
                 variant = ButtonVariant.FilledButton,
-
                 )
         }
     }
@@ -241,6 +240,7 @@ fun FABButton() {
         Surface(color = Theme.colors.surfaceColors.surface)
         {
             TudeeButton(
+                modifier = Modifier.size(64.dp),
                 onClick = { },
                 icon = { Icon(Icons.Default.Add, null) },
                 variant = ButtonVariant.FloatingActionButton
