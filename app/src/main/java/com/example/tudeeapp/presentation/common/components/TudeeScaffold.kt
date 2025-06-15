@@ -52,12 +52,13 @@ fun TudeeScaffold(
     backgroundColor: Color = Theme.colors.primary,
     contentColor: Color = contentColorFor(backgroundColor),
     onToggleTheme: () -> Unit = {},
-    bottomBar: @Composable () -> Unit = {TudeeNavigationBar()},
+    bottomBar: @Composable () -> Unit = { TudeeNavigationBar() },
     isDarkMode: Boolean = false,
     showTopBar: Boolean = false,
     showFloatingActionButton: Boolean = false,
     showBottomBar: Boolean = false,
     content: @Composable (snackBar: SnackBarState) -> Unit,
+    contentBackground: Color = Theme.colors.surfaceColors.surface,
 ) {
     val snackBarState = remember { SnackBarState() }
 
@@ -90,7 +91,11 @@ fun TudeeScaffold(
             containerColor = backgroundColor,
             contentWindowInsets = WindowInsets(0.dp)
         ) { innerPadding ->
-            Box(modifier = Modifier.padding(innerPadding)) {
+            Box(
+                modifier = Modifier
+                    .background(contentBackground)
+                    .padding(innerPadding)
+            ) {
                 content(snackBarState)
             }
         }
@@ -125,8 +130,8 @@ private fun TudeeScaffoldPreview() {
         Surface(color = Theme.colors.surfaceColors.surface) {
             TudeeScaffold(
                 showTopBar = true,
-                showBottomBar = true,
                 showFloatingActionButton = true,
+                showBottomBar = true,
                 content = { snakeBar ->
                     Box(
                         modifier = Modifier
