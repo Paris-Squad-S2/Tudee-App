@@ -3,10 +3,11 @@ package com.example.tudeeapp.data.source.local.room.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "CATEGORY_TABLE")
 data class CategoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long =0,
+    val title: String,
     val imageUri: String,
     val isPredefined: Boolean
 )

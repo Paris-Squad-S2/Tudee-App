@@ -1,24 +1,28 @@
 package com.example.tudeeapp.data.mapper
 
 
+import com.example.tudeeapp.data.exception.DataException
+import com.example.tudeeapp.data.source.local.room.entity.CategoryEntity
 import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
 import com.example.tudeeapp.domain.models.Task
+import com.example.tudeeapp.domain.models.TaskCategory
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import kotlinx.datetime.LocalDate
 
 
-fun String.toTaskPriority(): TaskPriority = when(this.uppercase()) {
+fun String.toTaskPriority(): TaskPriority = when (this.uppercase()) {
     "LOW" -> TaskPriority.LOW
     "MEDIUM" -> TaskPriority.MEDIUM
     "HIGH" -> TaskPriority.HIGH
-    else -> TaskPriority.LOW
+    else -> throw DataException("error in mapping priority of task type string to taskPriority Enum Class")
 }
 
 fun String.toTaskStatus(): TaskStatus = when (this.uppercase()) {
-    "TO DO" -> TaskStatus.TO_DO
-    "IN PROGRESS" -> TaskStatus.IN_PROGRESS
+    "TODO" -> TaskStatus.TO_DO
+    "IN_PROGRESS" -> TaskStatus.IN_PROGRESS
     "DONE" -> TaskStatus.DONE
-    else -> TaskStatus.TO_DO
+    else -> throw DataException("error in mapping status of task type string to taskStatues Enum Class")
 }
 
 fun TaskEntity.toTask(): Task {
@@ -28,7 +32,30 @@ fun TaskEntity.toTask(): Task {
         description = this.description,
         priority = this.priority.toTaskPriority(),
         status = this.status.toTaskStatus(),
-        createdDate = this.date,
-        category = this.categoryId ,
+        createdDate = LocalDate.parse(this.date),
+        categoryId = this.categoryId,
+    ).also { if(it.createdDate.toString().isEmpty()) throw DataException("error in mapping date time of task entity to task") }
+}
+
+
+fun CategoryEntity.toTaskCategory(): TaskCategory {
+    return TaskCategory(
+        id = this.id,
+        title = this.title,
+        icon = this.imageUri,
+        isPredefined = this.isPredefined
+    )
+}
+
+
+fun Task.toTaskEntity(): TaskEntity {
+    return TaskEntity(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        priority = this.priority.name,
+        status = this.status.name,
+        date = this.createdDate.toString().substring(0,10),
+        categoryId = this.categoryId
     )
 }
