@@ -41,7 +41,7 @@ fun SwitchThemeButton(
     onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val iconRes = if (toggled) R.drawable.ellipse_1_night else R.drawable.ellipse_1_day
+    val iconRes = if (toggled) R.drawable.ic_ellipse_night else R.drawable.ic_ellipse_day
 
     val offsetX by animateDpAsState(
         targetValue = if (toggled) 28.dp else 0.dp, animationSpec = tween(
@@ -74,7 +74,7 @@ fun SwitchThemeButton(
 
             AnimatedVisibility(visible = toggled) {
                 Icon(
-                    painter = painterResource(R.drawable.moon_icon_bg), contentDescription = null,
+                    painter = painterResource(R.drawable.ic_moon_icon_bg), contentDescription = null,
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .size(29.dp)
