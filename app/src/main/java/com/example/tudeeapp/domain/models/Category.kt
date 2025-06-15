@@ -1,8 +1,8 @@
 package com.example.tudeeapp.domain.models
 
-data class TaskCategory(
+data class Category(
     val id: Long,
     val title: String,
-    val icon : String ,
+    val imageUri : String,
     val isPredefined: Boolean
 )

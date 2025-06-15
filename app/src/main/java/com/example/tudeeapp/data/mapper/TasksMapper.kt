@@ -5,7 +5,7 @@ import com.example.tudeeapp.data.exception.DataException
 import com.example.tudeeapp.data.source.local.room.entity.CategoryEntity
 import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
 import com.example.tudeeapp.domain.models.Task
-import com.example.tudeeapp.domain.models.TaskCategory
+import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import kotlinx.datetime.LocalDate
@@ -38,11 +38,11 @@ fun TaskEntity.toTask(): Task {
 }
 
 
-fun CategoryEntity.toTaskCategory(): TaskCategory {
-    return TaskCategory(
+fun CategoryEntity.toTaskCategory(): Category {
+    return Category(
         id = this.id,
         title = this.title,
-        icon = this.imageUri,
+        imageUri = this.imageUri,
         isPredefined = this.isPredefined
     )
 }
