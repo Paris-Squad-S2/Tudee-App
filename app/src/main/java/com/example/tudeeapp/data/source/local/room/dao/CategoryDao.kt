@@ -7,24 +7,25 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.tudeeapp.data.source.local.room.entity.CategoryEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(categoryEntity: CategoryEntity)
+    suspend fun insert(categoryEntity: CategoryEntity)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertPredefinedCategories(categories: List<CategoryEntity>)
+    suspend fun insertPredefinedCategories(categories: List<CategoryEntity>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(categoryEntity: CategoryEntity)
+    suspend fun update(categoryEntity: CategoryEntity)
 
     @Delete
-    fun delete(categoryEntity: CategoryEntity)
+    suspend fun delete(categoryEntity: CategoryEntity)
 
     @Query("SELECT * FROM category_table Where id = :categoryId")
-    fun findById(categoryId: Long): CategoryEntity
+    fun findById(categoryId: Long): Flow<CategoryEntity>
 
     @Query("SELECT * FROM CATEGORY_TABLE")
-    fun getAll(): List<CategoryEntity>
+    fun getAll(): Flow<List<CategoryEntity>>
 }

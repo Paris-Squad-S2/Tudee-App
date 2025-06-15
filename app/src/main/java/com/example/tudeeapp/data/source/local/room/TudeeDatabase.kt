@@ -12,7 +12,6 @@ import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
 @Database(
     entities = [TaskEntity::class, CategoryEntity::class],
     version = 1,
-    exportSchema = true,
 )
 abstract class TudeeDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
@@ -29,7 +28,7 @@ abstract class TudeeDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): TudeeDatabase {
-            return Room.databaseBuilder(context, TudeeDatabase::class.java, DATABASE_NAME).allowMainThreadQueries().build()
+            return Room.databaseBuilder(context, TudeeDatabase::class.java, DATABASE_NAME).build()
         }
     }
 }

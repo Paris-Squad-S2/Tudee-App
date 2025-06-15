@@ -7,24 +7,25 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(taskEntity: TaskEntity)
+    suspend fun insert(taskEntity: TaskEntity)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertList(taskEntity: List<TaskEntity>)
+    suspend fun insertList(taskEntity: List<TaskEntity>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(taskEntity: TaskEntity)
+    suspend fun update(taskEntity: TaskEntity)
 
     @Delete()
-    fun delete(taskEntity: TaskEntity)
+    suspend fun delete(taskEntity: TaskEntity)
 
     @Query("SELECT * FROM TASK_TABLE Where id = :taskId")
-    fun findById(taskId: Long): TaskEntity
+    fun findById(taskId: Long): Flow<TaskEntity>
 
     @Query("SELECT * FROM TASK_TABLE")
-    fun getAll(): List<TaskEntity>
+    fun getAll(): Flow<List<TaskEntity>>
 }

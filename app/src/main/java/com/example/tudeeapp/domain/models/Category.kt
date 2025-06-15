@@ -1,8 +1,9 @@
 package com.example.tudeeapp.domain.models
 
 data class Category(
-    val id: Long,
+    val id: Long=0L,
     val title: String,
-    val imageUri : String,
-    val isPredefined: Boolean
+    val imageUrl : String,
+    val isPredefined: Boolean = false,
+    val tasksCount:Int=0,
 )
