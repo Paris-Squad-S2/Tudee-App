@@ -52,7 +52,7 @@ fun DayItem(isSelected: Boolean, dayNumber: String, dayName: String, modifier: M
 
 @PreviewMultiDevices
 @Composable
-fun DayItemPreview() {
+private fun DayItemPreview() {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         DayItem(isSelected = true, dayNumber = "12", dayName = "Mon")
         DayItem(isSelected = false, dayNumber = "12", dayName = "Mon")

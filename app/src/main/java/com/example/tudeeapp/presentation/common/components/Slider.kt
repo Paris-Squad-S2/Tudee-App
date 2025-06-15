@@ -88,7 +88,7 @@ fun Slider(
 
 @PreviewMultiDevices
 @Composable
-fun SliderPreview() {
+private fun SliderPreview() {
     BasePreview {
         Slider(
             title = "Stay working!",
