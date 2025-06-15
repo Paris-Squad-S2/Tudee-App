@@ -104,8 +104,8 @@ fun HomeScreen(userName: String) {
                                 ),
                                 title = "Stay working!",
                                 description = "You've completed 3 out of 10 tasks Keep going!",
-                                image = painterResource(id = R.drawable.ropot1),
-                                titleIcon = painterResource(id = R.drawable.good)
+                                image = painterResource(id = R.drawable.img_ropot1),
+                                titleIcon = painterResource(id = R.drawable.ic_good)
                             )
                             OverViewContainer()
 
