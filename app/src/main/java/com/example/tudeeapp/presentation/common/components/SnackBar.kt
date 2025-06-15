@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -21,7 +22,8 @@ import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 fun SnackBar(
     modifier: Modifier = Modifier,
     text: String,
-    isSuccess: Boolean
+    isSuccess: Boolean,
+    onClick: () -> Unit = {}
 ) {
     val iconContainerColor = if (isSuccess) Theme.colors.status.greenVariant else Theme.colors.status.errorVariant
     val icon = if (isSuccess) painterResource(id = R.drawable.checkmark_badge)
@@ -33,6 +35,7 @@ fun SnackBar(
             .height(56.dp)
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(16.dp), clip = false)
             .background(Theme.colors.surfaceColors.surfaceHigh, RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

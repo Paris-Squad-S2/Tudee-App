@@ -64,9 +64,6 @@ fun TudeeButton(
     },
     text: String? = null,
     icon: @Composable (() -> Unit)? = null,
-    loadingIndicator: @Composable (() -> Unit) = {
-        RotatingIconLoadingIndicator(modifier = Modifier.size(20.dp))
-    },
     enabled: Boolean = state == ButtonState.Normal,
     textStyle: TextStyle = Theme.textStyle.label.large,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -119,7 +116,7 @@ fun TudeeButton(
                     if (isLoading) {
                         if (text != null) Spacer(modifier = Modifier.width(spacing))
                         AnimatedVisibility(visible = true, enter = fadeIn()) {
-                            loadingIndicator()
+                            RotatingIconLoadingIndicator(modifier = Modifier.size(20.dp))
                         }
                     } else {
                         trailingIcon?.let {
