@@ -7,14 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
-import com.example.tudeeapp.presentation.screen.category.CategoryScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
-import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
-import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
 
@@ -35,17 +31,8 @@ fun TudeeNavGraph() {
                 OnBoardScreen()
             }
 
-            composable<Screens.Home> {
-                val args = it.toRoute<Screens.Home>()
-                HomeScreen(userName = args.userName)
-            }
-
-            composable<Screens.Task> {
-                val args = it.toRoute<Screens.Task>()
-                TaskScreen(
-                    taskId = args.taskId,
-                    taskTitle = args.taskTitle
-                )
+            composable<Screens.MainNav> {
+                MainNavGraph()
             }
 
             composable<Screens.TaskForm> {
@@ -54,10 +41,6 @@ fun TudeeNavGraph() {
 
             composable<Screens.TaskDetails> {
                 TaskDetailsScreen()
-            }
-
-            composable<Screens.Category> {
-                CategoryScreen()
             }
 
             composable<Screens.CategoriesForm> {
@@ -71,5 +54,4 @@ fun TudeeNavGraph() {
         }
     }
 }
-
 

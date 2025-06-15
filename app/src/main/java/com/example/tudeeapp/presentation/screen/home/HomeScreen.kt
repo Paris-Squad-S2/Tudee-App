@@ -26,17 +26,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.Slider
+import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.Screens
 
 @Composable
 fun HomeScreen(userName: String) {
-//    val navController = LocalNavController.current
+    val navController = LocalNavController.current
     TudeeScaffold(
         showTopBar = true,
         showFloatingActionButton = true,
-        showBottomBar = true,
+        floatingActionButton = {
+            TudeeButton(
+                modifier = Modifier.size(64.dp),
+                onClick = { navController.navigate(Screens.TaskForm) },
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_note_add),
+                        contentDescription = null
+                    )
+                },
+                variant = ButtonVariant.FloatingActionButton
+            )
+        },
         contentBackground = Theme.colors.surfaceColors.surface,
         content = { snakeBar ->
             Box {
