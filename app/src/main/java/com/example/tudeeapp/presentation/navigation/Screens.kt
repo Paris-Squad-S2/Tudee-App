@@ -12,6 +12,9 @@ sealed class Screens {
     data object OnBoarding : Screens()
 
     @Serializable
+    data object MainNav : Screens()
+
+    @Serializable
     data class Home(val userName :String) : Screens()
 
     @Serializable
