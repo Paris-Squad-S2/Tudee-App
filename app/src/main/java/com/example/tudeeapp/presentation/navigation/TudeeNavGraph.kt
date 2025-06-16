@@ -45,8 +45,7 @@ fun TudeeNavGraph() {
                 )
             },
             contentBackground = Theme.colors.surfaceColors.surface
-        ) { snakeBar ->
-
+        ) {
             NavHost(
                 navController = navController,
                 startDestination = Screens.Splash,
