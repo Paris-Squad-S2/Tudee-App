@@ -15,10 +15,10 @@ sealed class Screens {
     data object MainNav : Screens()
 
     @Serializable
-    data class Home(val userName :String) : Screens()
+    data object Home : Screens()
 
     @Serializable
-    data class Task(val taskId : Int, val taskTitle : String) : Screens()
+    data object Task : Screens()
 
     @Serializable
     data object TaskForm : Screens()

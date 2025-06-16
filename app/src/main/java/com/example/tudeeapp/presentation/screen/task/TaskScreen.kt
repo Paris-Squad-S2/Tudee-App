@@ -28,7 +28,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 
 @Composable
-fun TaskScreen(taskId: Int, taskTitle: String) {
+fun TaskScreen() {
     val navController = LocalNavController.current
 
 //    Column(modifier = Modifier
@@ -131,7 +131,7 @@ fun TaskScreen(taskId: Int, taskTitle: String) {
 
 @PreviewMultiDevices
 @Composable
-fun TaskScreenPreview(){
+fun TaskScreenPreview() {
     BasePreview {
         Column {
 //            TaskScreen()

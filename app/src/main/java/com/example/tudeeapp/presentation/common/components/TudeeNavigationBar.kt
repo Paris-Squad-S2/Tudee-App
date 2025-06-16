@@ -90,16 +90,13 @@ val navItemList = listOf(
         unselectedIcon = R.drawable.ic_unselected_home,
         selectedIcon = R.drawable.ic_selected_home,
         label = "Home",
-        Screens.Home(userName = "ggg")
+        Screens.Home
     ),
     NavItem(
         unselectedIcon = R.drawable.ic_unselected_tasks,
         R.drawable.ic_selected_task,
         label = "Tasks",
-        Screens.Task(
-            taskId = 1,
-            taskTitle = "Jo"
-        )
+        Screens.Task
     ),
     NavItem(
         unselectedIcon = R.drawable.ic_unselected_categories,
