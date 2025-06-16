@@ -31,7 +31,7 @@ import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 
 @Composable
-fun HomeScreen(userName: String) {
+fun HomeScreen() {
     val navController = LocalNavController.current
     TudeeScaffold(
         showTopBar = true,
@@ -170,5 +170,5 @@ private fun OverViewCardsRow() {
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen("userName")
+    HomeScreen()
 }
