@@ -73,6 +73,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.navigation.compose)
+
+    //kotlinx date time
+    implementation(libs.kotlinx.datetime)
+    //kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
+
 }

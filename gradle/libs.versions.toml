@@ -19,6 +19,8 @@ composeBom = "2024.09.00"
 roomCompiler = "2.7.1"
 roomKtx = "`2.7.1"
 roomRuntime = "2.7.1"
+kotlinxDateTime = "0.5.0"
+navigationComposeJvmstubs = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,6 +49,9 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.9.0" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.6.3" }
+
+androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

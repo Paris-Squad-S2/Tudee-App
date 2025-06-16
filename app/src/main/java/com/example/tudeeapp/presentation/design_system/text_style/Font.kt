@@ -5,13 +5,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.example.tudeeapp.R
 
+val nunito = FontFamily(
+    Font(R.font.nunito_medium, FontWeight.Medium),
+    Font(R.font.nunito, FontWeight.Normal),
+    Font(R.font.nunito_semibold, FontWeight.SemiBold),
+)
 
-val ibm_plex_sans = FontFamily(
-    Font(R.font.bold , FontWeight.Bold),
-    Font(R.font.thin , FontWeight.Thin),
-    Font(R.font.medium , FontWeight.Medium),
-    Font(R.font.light , FontWeight.Light),
-    Font(R.font.regular , FontWeight.Normal),
-    Font(R.font.semi_bold , FontWeight.SemiBold),
-    Font(R.font.extra_light , FontWeight.ExtraLight)
+val cherryBomb = FontFamily(
+    Font(R.font.cherry_bomb_one, FontWeight.Normal)
 )
