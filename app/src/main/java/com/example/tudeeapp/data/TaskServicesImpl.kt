@@ -27,7 +27,9 @@ class TaskServicesImpl(
         try {
             return taskDao.getAll().map { it.map { it.toTask() } }
         } catch (e: DataException) {
-            throw TaskException(e.message.toString())
+            throw TaskException()
+        }catch (e: Exception){
+            throw TaskException()
         }
     }
 
@@ -35,7 +37,9 @@ class TaskServicesImpl(
         try {
             return categoryDao.getAll().map { it.map { it.toCategory() } }
         } catch (e: DataException) {
-            throw CategoryException(e.message.toString())
+            throw CategoryException()
+        }catch (e: Exception){
+            throw CategoryException()
         }
 
     }
@@ -46,7 +50,9 @@ class TaskServicesImpl(
             categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
             appPreferences.setAppLaunchIsDone()
         }}catch (e: DataException){
-            throw CategoryException(e.message.toString())
+            throw CategoryException()
+        }catch (e: Exception){
+            throw CategoryException()
         }
     }
 
