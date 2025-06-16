@@ -71,19 +71,22 @@ private fun NumBadge(
     count: Int?,
     modifier: Modifier
 ) {
-    Box(
-        modifier = modifier
-            .background(
-                color = Theme.colors.surfaceColors.surfaceLow,
-                shape = RoundedCornerShape(100.dp)
+    count?.let {
+        Box(
+            modifier = modifier
+                .background(
+                    color = Theme.colors.surfaceColors.surfaceLow,
+                    shape = RoundedCornerShape(100.dp)
+                )
+                .padding(horizontal = 10.5.dp, vertical = 2.dp)
+        ) {
+
+            Text(
+                text = it.toString(),
+                color = Theme.colors.text.hint,
+                fontSize = 12.sp
             )
-            .padding(horizontal = 10.5.dp, vertical = 2.dp)
-    ) {
-        Text(
-            text = "$count",
-            color = Theme.colors.text.hint,
-            fontSize = 12.sp
-        )
+        }
     }
 }
 

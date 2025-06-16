@@ -3,4 +3,6 @@
     <string name="your_cute_helper_for_every_task">Your cute Helper for Every Task</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="priority">Priority</string>
+    <string name="category">Category</string>
 </resources>
