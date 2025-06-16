@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormViewModel
 import com.example.tudeeapp.presentation.screen.category.CategoryScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
@@ -17,6 +18,7 @@ import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
@@ -61,7 +63,10 @@ fun TudeeNavGraph() {
             }
 
             composable<Screens.CategoriesForm> {
-                CategoryFormScreen()
+                val categoryFormViewModel : CategoryFormViewModel = koinViewModel()
+                CategoryFormScreen(
+                    categoryFormViewModel
+                )
             }
 
             composable<Screens.CategoryDetails> {
