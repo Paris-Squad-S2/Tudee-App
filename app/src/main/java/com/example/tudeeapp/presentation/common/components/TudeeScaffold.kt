@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -51,7 +51,7 @@ fun TudeeScaffold(
     },
     backgroundColor: Color = Theme.colors.primary,
     contentColor: Color = contentColorFor(backgroundColor),
-    onToggleTheme: () -> Unit = {},
+    onToggleTheme: (Boolean) -> Unit = {},
     bottomBar: @Composable () -> Unit = { TudeeNavigationBar() },
     isDarkMode: Boolean = false,
     showTopBar: Boolean = false,
@@ -124,7 +124,7 @@ fun TudeeScaffold(
 
 
 @Composable
-@Preview
+@PreviewLightDark
 private fun TudeeScaffoldPreview() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface) {

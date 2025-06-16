@@ -3,7 +3,6 @@ package com.example.tudeeapp.presentation.common.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +33,7 @@ import com.example.tudeeapp.presentation.design_system.text_style.cherryBomb
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun Header(isDarkMode: Boolean, onToggleTheme: () -> Unit, modifier: Modifier = Modifier) {
+fun Header(isDarkMode: Boolean, onToggleTheme: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -43,21 +42,18 @@ fun Header(isDarkMode: Boolean, onToggleTheme: () -> Unit, modifier: Modifier = 
     ) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = Color(0x66FFFFFF)
+                containerColor = Color.White.copy(alpha = 0.40f)
             ),
-            border = BorderStroke(1.dp, Color(0x66FFFFFF)),
+            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.40f)),
             modifier = Modifier.size(48.dp)
         ) {
-            Box {
                 Icon(
                     modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .offset(y = 6.dp),
+                        .offset(y = 5.dp),
                     imageVector = ImageVector.vectorResource(R.drawable.ic_tudee),
                     contentDescription = stringResource(R.string.app_name),
                     tint = Color.Unspecified
                 )
-            }
         }
         Column(
             modifier = Modifier
@@ -80,18 +76,19 @@ fun Header(isDarkMode: Boolean, onToggleTheme: () -> Unit, modifier: Modifier = 
             )
 
         }
-        var toggled by remember { mutableStateOf(false) }
-        SwitchThemeButton(toggled = toggled, onToggle = { toggled = it }, modifier = Modifier)
+        SwitchThemeButton(toggled = isDarkMode, onToggle = onToggleTheme, modifier = Modifier)
     }
 }
 
 @PreviewMultiDevices
 @Composable
 private fun HeaderPreview() {
+    var toggled by remember { mutableStateOf(false) }
+
     BasePreview {
         Header(
-            isDarkMode = false,
-            onToggleTheme = {},
+            isDarkMode = toggled,
+            onToggleTheme = {toggled = it},
             modifier = Modifier
         )
     }

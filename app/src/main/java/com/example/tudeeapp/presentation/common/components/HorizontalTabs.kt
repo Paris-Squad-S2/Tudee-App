@@ -45,33 +45,29 @@ fun HorizontalTabs(
     indicatorColor: Color = Theme.colors.secondary,
     indicatorHeight: Dp = 4.dp
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(backgroundColor)
-    ) {
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                tabs.forEachIndexed { index, tab ->
-                    TabItem(
-                        modifier = Modifier.weight(1f),
-                        tab = tab,
-                        isSelected = index == selectedTabIndex,
-                        onClick = { onTabSelected(index) },
-                        selectedTextColor = selectedTextColor,
-                        unselectedTextColor = unselectedTextColor,
-                        badgeColor = badgeColor,
-                        indicatorColor = indicatorColor,
-                        indicatorHeight = indicatorHeight
-                    )
-                }
+    Column (modifier = modifier){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(backgroundColor),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            tabs.forEachIndexed { index, tab ->
+                TabItem(
+                    modifier = Modifier.weight(1f),
+                    tab = tab,
+                    isSelected = index == selectedTabIndex,
+                    onClick = { onTabSelected(index) },
+                    selectedTextColor = selectedTextColor,
+                    unselectedTextColor = unselectedTextColor,
+                    badgeColor = badgeColor,
+                    indicatorColor = indicatorColor,
+                    indicatorHeight = indicatorHeight
+                )
             }
-            HorizontalDivider(color = Theme.colors.stroke)
         }
+        HorizontalDivider(color = Theme.colors.stroke)
     }
 }
 

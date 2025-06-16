@@ -30,7 +30,6 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 @Composable
 fun TaskCard(
     icon: Painter,
-    iconColor: Color,
     title: String,
     date: String,
     subtitle: String,
@@ -39,6 +38,7 @@ fun TaskCard(
     priorityColor: Color,
     isDated: Boolean,
     modifier: Modifier = Modifier,
+    iconColor: Color = Color.Unspecified,
     onClickPriority: () -> Unit = {},
     onClickDate: () -> Unit = {}
 ) {
@@ -138,7 +138,6 @@ private fun TaskCardPreview() {
     BasePreview {
         TaskCard(
             icon = painterResource(R.drawable.ic_education),
-            iconColor = Color.Unspecified,
             title = "Organize Study Desk",
             date = "2023-10-15",
             subtitle = "Review cell structure and functions for tomorrow...",

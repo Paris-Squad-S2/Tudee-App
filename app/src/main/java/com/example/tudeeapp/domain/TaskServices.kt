@@ -2,9 +2,10 @@ package com.example.tudeeapp.domain
 
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.Category
+import kotlinx.coroutines.flow.Flow
 
 interface TaskServices {
-    fun getAllTasks(): List<Task>
-    fun getAllCategories(): List<Category>
-    fun insertPredefinedCategories(predefinedCategories: List<Category>)
+    suspend fun getAllTasks(): Flow<List<Task>>
+    suspend fun getAllCategories(): Flow<List<Category>>
+    suspend fun loadPredefinedCategories()
 }

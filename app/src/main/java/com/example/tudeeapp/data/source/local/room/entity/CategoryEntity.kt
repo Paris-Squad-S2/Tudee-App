@@ -8,6 +8,7 @@ data class CategoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long =0,
     val title: String,
-    val imageUri: String,
-    val isPredefined: Boolean
+    val imageUrl: String,
+    val isPredefined: Boolean,
+    val tasksCount:Int
 )

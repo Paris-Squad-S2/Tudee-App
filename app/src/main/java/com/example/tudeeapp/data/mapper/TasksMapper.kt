@@ -1,7 +1,8 @@
 package com.example.tudeeapp.data.mapper
 
 
-import com.example.tudeeapp.data.exception.DataException
+import com.example.tudeeapp.data.MappingDateTimeException
+import com.example.tudeeapp.data.MappingException
 import com.example.tudeeapp.data.source.local.room.entity.CategoryEntity
 import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
 import com.example.tudeeapp.domain.models.Task
@@ -15,14 +16,14 @@ fun String.toTaskPriority(): TaskPriority = when (this.uppercase()) {
     "LOW" -> TaskPriority.LOW
     "MEDIUM" -> TaskPriority.MEDIUM
     "HIGH" -> TaskPriority.HIGH
-    else -> throw DataException("error in mapping priority of task type string to taskPriority Enum Class")
+    else -> throw MappingException(this.uppercase())
 }
 
 fun String.toTaskStatus(): TaskStatus = when (this.uppercase()) {
-    "TODO" -> TaskStatus.TO_DO
+    "TO_DO" -> TaskStatus.TO_DO
     "IN_PROGRESS" -> TaskStatus.IN_PROGRESS
     "DONE" -> TaskStatus.DONE
-    else -> throw DataException("error in mapping status of task type string to taskStatues Enum Class")
+    else -> throw MappingException(this.uppercase())
 }
 
 fun TaskEntity.toTask(): Task {
@@ -34,26 +35,7 @@ fun TaskEntity.toTask(): Task {
         status = this.status.toTaskStatus(),
         createdDate = LocalDate.parse(this.date),
         categoryId = this.categoryId,
-    ).also { if(it.createdDate.toString().isEmpty()) throw DataException("error in mapping date time of task entity to task") }
-}
-
-
-fun CategoryEntity.toCategory(): Category {
-    return Category(
-        id = this.id,
-        title = this.title,
-        imageUri = this.imageUri,
-        isPredefined = this.isPredefined
-    )
-}
-
-fun Category.toCategoryEntity(): CategoryEntity {
-    return CategoryEntity(
-        id = this.id,
-        title = this.title,
-        imageUri = this.imageUri,
-        isPredefined = this.isPredefined
-    )
+    ).also { if(it.createdDate.toString().isEmpty()) throw MappingDateTimeException("${it.createdDate}") }
 }
 
 
@@ -66,5 +48,26 @@ fun Task.toTaskEntity(): TaskEntity {
         status = this.status.name,
         date = this.createdDate.toString().substring(0,10),
         categoryId = this.categoryId
+    ).also { if(it.date.isEmpty()) throw MappingDateTimeException(it.date) }
+}
+
+
+fun CategoryEntity.toCategory(): Category {
+    return Category(
+        id = this.id,
+        title = this.title,
+        imageUrl = this.imageUrl,
     )
 }
+
+fun Category.toCategoryEntity(): CategoryEntity {
+    return CategoryEntity(
+        id = this.id,
+        title = this.title,
+        imageUrl = this.imageUrl,
+        tasksCount = this.tasksCount,
+        isPredefined = false
+    )
+}
+
+
