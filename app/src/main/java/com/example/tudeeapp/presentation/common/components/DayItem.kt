@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
@@ -23,7 +24,7 @@ fun DayItem(isSelected: Boolean, dayNumber: String, dayName: String, modifier: M
     val dayNumberTextColor = if (isSelected) Theme.colors.surfaceColors.onPrimaryColors.onPrimary else Theme.colors.text.body
     val dayNameTextColor = if (isSelected) Theme.colors.surfaceColors.onPrimaryColors.onPrimaryCaption else Theme.colors.text.hint
     val backgroundColor = if (isSelected) Brush.verticalGradient(Theme.colors.primaryGradient.colors)
-    else Brush.verticalGradient(listOf(Theme.colors.surfaceColors.surface, Theme.colors.surfaceColors.surface))
+    else SolidColor(Theme.colors.surfaceColors.surface)
 
     Box(
         modifier = modifier
