@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
+import com.example.tudeeapp.presentation.navigation.TudeeNavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,26 +21,8 @@ class MainActivity : ComponentActivity() {
         viewModel.loadPredefinedCategories()
         enableEdgeToEdge()
         setContent {
-
+            TudeeNavGraph()
         }
     }
 
-}
-
-@Composable
-fun TestPreview() {
-    Text(
-        text = "Hello World",
-        color = Theme.colors.text.title,
-        style = Theme.textStyle.headline.small,
-        modifier = Modifier.background(Theme.colors.primary)
-    )
-}
-
-@Preview
-@Composable
-fun Preview() {
-    TudeeTheme() {
-        TestPreview()
-    }
 }
