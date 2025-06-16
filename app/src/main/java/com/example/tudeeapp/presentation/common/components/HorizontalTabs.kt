@@ -69,6 +69,7 @@ fun HorizontalTabs(
         }
         HorizontalDivider(color = Theme.colors.stroke)
     }
+
 }
 
 @Composable
