@@ -36,7 +36,12 @@ fun CategoryItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier.size(78.dp)
+            modifier = Modifier
+                .size(78.dp)
+                .background(
+                    color = Theme.colors.surfaceColors.surfaceHigh,
+                    shape = CircleShape
+                )
         ) {
             when {
                 isSelected -> SelectedBadge(Modifier.align(Alignment.TopEnd))
@@ -105,13 +110,11 @@ private fun SelectedBadge(modifier: Modifier) {
 @Composable
 private fun PreviewCategoryItems() {
     BasePreview {
-        Column {
-            CategoryItem(
-                icon = painterResource(R.drawable.ic_education),
-                label = "Education",
-                iconColor = Color.Unspecified,
-                count = 23
-            )
-        }
+        CategoryItem(
+            icon = painterResource(R.drawable.ic_education),
+            label = "Education",
+            iconColor = Color.Unspecified,
+            count = 23
+        )
     }
 }
