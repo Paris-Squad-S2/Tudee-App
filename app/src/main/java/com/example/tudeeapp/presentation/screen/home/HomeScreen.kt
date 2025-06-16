@@ -10,11 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.common.components.Header
 import com.example.tudeeapp.presentation.common.components.Slider
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
@@ -33,9 +39,18 @@ import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 @Composable
 fun HomeScreen() {
     val navController = LocalNavController.current
+    var toggled by remember { mutableStateOf(false) }
+
     TudeeScaffold(
-        showTopBar = true,
-        showFloatingActionButton = true,
+        topBar = {
+            Header(
+                modifier = Modifier
+                    .background(Theme.colors.primary)
+                    .statusBarsPadding(),
+                isDarkMode = toggled,
+                onToggleTheme = { toggled = it },
+            )
+        },
         floatingActionButton = {
             TudeeButton(
                 modifier = Modifier.size(64.dp),
