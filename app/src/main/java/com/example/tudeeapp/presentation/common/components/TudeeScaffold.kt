@@ -20,7 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -126,12 +129,16 @@ fun TudeeScaffold(
 @Composable
 @PreviewLightDark
 private fun TudeeScaffoldPreview() {
+    var toggled by remember { mutableStateOf(false) }
+
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface) {
             TudeeScaffold(
                 showTopBar = true,
                 showFloatingActionButton = true,
                 showBottomBar = true,
+                isDarkMode = toggled,
+                onToggleTheme = { toggled = it },
                 content = { snakeBar ->
                     Box(
                         modifier = Modifier
