@@ -32,14 +32,11 @@ fun HomeScreen(userName: String) {
                 .background(Color.Green)
                 .clickable {
                     navController.navigate(
-                        Screens.Task(
-                            taskId = 12,
-                            taskTitle = "taskTitle"
-                        )
+                        Screens.TaskForm
                     )
                 }
         ) {
-            Text("Go to task screen", modifier = Modifier.padding(16.dp))
+            Text("Go to task Form screen", modifier = Modifier.padding(16.dp))
         }
     }
 }
