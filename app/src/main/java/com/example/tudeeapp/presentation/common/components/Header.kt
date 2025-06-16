@@ -14,6 +14,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +33,7 @@ import com.example.tudeeapp.presentation.design_system.text_style.cherryBomb
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun Header(isDarkMode: Boolean, onToggleTheme: () -> Unit, modifier: Modifier = Modifier) {
+fun Header(isDarkMode: Boolean, onToggleTheme: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -72,17 +76,19 @@ fun Header(isDarkMode: Boolean, onToggleTheme: () -> Unit, modifier: Modifier = 
             )
 
         }
-        SwitchThemeButton(toggled = isDarkMode, onToggle = {onToggleTheme}, modifier = Modifier)
+        SwitchThemeButton(toggled = isDarkMode, onToggle = onToggleTheme, modifier = Modifier)
     }
 }
 
 @PreviewMultiDevices
 @Composable
 private fun HeaderPreview() {
+    var toggled by remember { mutableStateOf(false) }
+
     BasePreview {
         Header(
-            isDarkMode = false,
-            onToggleTheme = {},
+            isDarkMode = toggled,
+            onToggleTheme = {toggled = it},
             modifier = Modifier
         )
     }
