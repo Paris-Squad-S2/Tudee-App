@@ -63,7 +63,6 @@ fun TextField(
         }
     }
 
-
     val showAsFocused = isFocused || value.isNotEmpty()
 
     val borderColor = when {
