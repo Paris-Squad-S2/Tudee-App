@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
@@ -53,8 +54,10 @@ fun DayItem(isSelected: Boolean, dayNumber: String, dayName: String, modifier: M
 @PreviewMultiDevices
 @Composable
 private fun DayItemPreview() {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        DayItem(isSelected = true, dayNumber = "12", dayName = "Mon")
-        DayItem(isSelected = false, dayNumber = "12", dayName = "Mon")
+    BasePreview{
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            DayItem(isSelected = true, dayNumber = "12", dayName = "Mon")
+            DayItem(isSelected = false, dayNumber = "12", dayName = "Mon")
+        }
     }
 }
