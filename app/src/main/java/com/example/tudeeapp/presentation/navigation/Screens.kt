@@ -12,9 +12,6 @@ sealed class Screens {
     data object OnBoarding : Screens()
 
     @Serializable
-    data object MainNav : Screens()
-
-    @Serializable
     data object Home : Screens()
 
     @Serializable
