@@ -6,9 +6,9 @@ import androidx.core.content.edit
 class AppPreferences(context: Context) {
     private val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
-    fun isFirstLaunch(): Boolean = prefs.getBoolean("first_launch", true)
+    fun isAppLaunchForFirstTime(): Boolean = prefs.getBoolean("first_launch", true)
 
-    fun setFirstLaunchDone() {
+    fun setAppLaunchIsDone() {
         prefs.edit { putBoolean("first_launch", false) }
     }
 }
