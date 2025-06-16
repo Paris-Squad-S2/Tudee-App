@@ -13,10 +13,13 @@ import com.example.tudeeapp.presentation.screen.category.CategoryScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
+import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
+import com.example.tudeeapp.presentation.screen.onBoarding.pages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
@@ -32,7 +35,11 @@ fun TudeeNavGraph() {
             }
 
             composable<Screens.OnBoarding> {
-                OnBoardScreen()
+                val onboardingViewModel : OnboardingViewModel = koinViewModel()
+                OnBoardScreen(
+                    viewModel = onboardingViewModel,
+                    pages = pages
+                )
             }
 
             composable<Screens.Home> {
