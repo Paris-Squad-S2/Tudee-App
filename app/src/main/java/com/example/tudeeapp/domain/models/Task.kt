@@ -10,7 +10,7 @@ data class Task(
     val priority: TaskPriority,
     val status: TaskStatus,
     val createdDate: LocalDate,
-    val categoryId: Long = Random.nextLong(1L, Long.MAX_VALUE)
+    val categoryId: Long,
 )
 enum class TaskPriority {
     HIGH,

@@ -1,12 +1,12 @@
 package com.example.tudeeapp.data.mapper
 
 
-import com.example.tudeeapp.data.MappingDateTimeException
-import com.example.tudeeapp.data.MappingException
+import com.example.tudeeapp.data.exception.MappingDateTimeException
+import com.example.tudeeapp.data.exception.MappingException
 import com.example.tudeeapp.data.source.local.room.entity.CategoryEntity
 import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
-import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.Category
+import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import kotlinx.datetime.LocalDate
@@ -35,7 +35,7 @@ fun TaskEntity.toTask(): Task {
         status = this.status.toTaskStatus(),
         createdDate = LocalDate.parse(this.date),
         categoryId = this.categoryId,
-    ).also { if(it.createdDate.toString().isEmpty()) throw MappingDateTimeException("${it.createdDate}") }
+    ).also { if(it.createdDate.toString().isEmpty()) throw MappingDateTimeException(it.createdDate.toString())}
 }
 
 
@@ -57,6 +57,8 @@ fun CategoryEntity.toCategory(): Category {
         id = this.id,
         title = this.title,
         imageUrl = this.imageUrl,
+        tasksCount = this.tasksCount,
+        isPredefined = this.isPredefined
     )
 }
 
@@ -66,7 +68,7 @@ fun Category.toCategoryEntity(): CategoryEntity {
         title = this.title,
         imageUrl = this.imageUrl,
         tasksCount = this.tasksCount,
-        isPredefined = false
+        isPredefined = this.isPredefined
     )
 }
 

@@ -1,5 +1,7 @@
 package com.example.tudeeapp.data
 
+import com.example.tudeeapp.data.exception.DataException
+import com.example.tudeeapp.data.mapper.DataConstant
 import com.example.tudeeapp.data.mapper.toCategory
 import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTask
@@ -21,7 +23,7 @@ class TaskServicesImpl(
     private val dataConstant: DataConstant
 ) : TaskServices {
 
-    override suspend fun getAllTasks(): Flow<List<Task>> {
+    override fun getAllTasks(): Flow<List<Task>> {
         try {
             return taskDao.getAll().map { it.map { it.toTask() } }
         } catch (e: DataException) {
@@ -29,7 +31,7 @@ class TaskServicesImpl(
         }
     }
 
-    override suspend fun getAllCategories(): Flow<List<Category>> {
+    override fun getAllCategories(): Flow<List<Category>> {
         try {
             return categoryDao.getAll().map { it.map { it.toCategory() } }
         } catch (e: DataException) {
@@ -39,9 +41,12 @@ class TaskServicesImpl(
     }
 
     override suspend fun loadPredefinedCategories() {
-        if (appPreferences.isFirstLaunch()) {
+        try {
+        if (appPreferences.isAppLaunchForFirstTime()) {
             categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
-            appPreferences.setFirstLaunchDone()
+            appPreferences.setAppLaunchIsDone()
+        }}catch (e: DataException){
+            throw CategoryException(e.message.toString())
         }
     }
 
