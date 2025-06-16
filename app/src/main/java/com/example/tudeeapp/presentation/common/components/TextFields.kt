@@ -63,7 +63,6 @@ fun TextField(
         }
     }
 
-
     val showAsFocused = isFocused || value.isNotEmpty()
 
     val borderColor = when {
@@ -110,7 +109,9 @@ fun TextField(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                HandleLeadingIcon(leadingIcon, iconColor, singleLine, separatorColor)
+                if (leadingIcon !=null) {
+                    HandleLeadingIcon(leadingIcon, iconColor, singleLine, separatorColor)
+                }
 
                 HandleInputText(
                     singleLine,
