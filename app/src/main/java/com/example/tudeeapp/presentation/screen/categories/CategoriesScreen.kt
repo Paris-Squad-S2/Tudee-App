@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.components.CategoryItem
+import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.categories.viewModel.CategoriesViewModel
@@ -33,25 +34,27 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
 @Composable
 fun CategoriesContent(state: CategoryUIState) {
     val navController = LocalNavController.current
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 20.dp)
-    ) {
-        Text(
-            text = "Categories",
-            style = Theme.textStyle.title.large,
-            color = Theme.colors.text.title,
+    TudeeScaffold(showFloatingActionButton = true) {
+        Column(
             modifier = Modifier
-                .statusBarsPadding()
-                .padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 20.dp)
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(count = 3),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+                .fillMaxSize()
+                .padding(top = 20.dp)
         ) {
-            items(state.categories) {
-                CategoryListItem(category = it)
+            Text(
+                text = "Categories",
+                style = Theme.textStyle.title.large,
+                color = Theme.colors.text.title,
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 20.dp)
+            )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(count = 3),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                items(state.categories) {
+                    CategoryListItem(category = it)
+                }
             }
         }
     }
