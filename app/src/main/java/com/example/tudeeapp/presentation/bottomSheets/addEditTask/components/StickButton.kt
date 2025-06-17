@@ -43,7 +43,7 @@ fun AddEditStickButtons(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 6.dp),
-            onClick = { onClickCancel },
+            onClick = { onClickCancel() },
             text = stringResource(R.string.cancel),
             variant = ButtonVariant.OutlinedButton,
             state = ButtonState.Normal,

@@ -73,7 +73,4 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
         }
     }
 
-    fun onCancelClicked() {
-        _state.update { it.copy(isSheetVisible = false)}
-    }
 }
