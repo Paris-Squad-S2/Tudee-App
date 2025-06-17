@@ -58,16 +58,16 @@ class TaskServicesImpl(
         }
     }
 
-    override suspend fun addCategory(id: Long, title: String, imageUrl: String) {
+    override suspend fun addCategory(title: String, imageUrl: String) {
 
         try{
-            val categoryEntity = CategoryEntity(
+            val category = Category(
                 title = title,
                 imageUrl = imageUrl,
                 tasksCount = 0,
                 isPredefined = false
-            )
-            categoryDao.insert(categoryEntity)
+            ).toCategoryEntity()
+            categoryDao.insert(category)
         }catch (e: DataException){
             throw CategoryException()
         }

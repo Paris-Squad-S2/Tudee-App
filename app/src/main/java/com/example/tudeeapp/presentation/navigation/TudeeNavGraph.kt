@@ -81,9 +81,9 @@ fun TudeeNavGraph() {
                     TaskDetailsScreen()
                 }
 
-                composable<Screens.CategoriesForm> {
-                    CategoryFormScreen()
-                }
+//                composable<Screens.CategoriesForm> {
+//                    CategoryFormScreen()
+//                }
 
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
