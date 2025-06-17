@@ -1,5 +1,8 @@
 package com.example.tudeeapp.presentation.screen.categoriesForm
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,6 +50,15 @@ fun CategoryFormEditScreen(viewModel: CategoryFormViewModel) {
     val state by viewModel.state.collectAsState()
     val navController = LocalNavController.current
 
+    // Image picker launcher
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.updateImage(it)
+        }
+    }
+
     CategoryFormEditContent(
         state = state,
         onCancel = {
@@ -57,7 +69,9 @@ fun CategoryFormEditScreen(viewModel: CategoryFormViewModel) {
             navController.popBackStack()
         },
         onTitleChange = viewModel::updateCategoryName,
-        onImageClick = {},
+        onImageClick = {
+            imagePickerLauncher.launch("image/*")
+        },
     )
 }
 
@@ -210,15 +224,3 @@ fun Modifier.dashedBorder(
         }
     }
 )
-
-
-//@Preview
-//@Composable
-//fun CategoryScreenPreview(){
-//    val cat = Category(
-//        title = "Education",
-//        imageUrl = "R.drawable.eduction",
-//        isPredefined = true,
-//    )
-//    val viewModel = CategoryFormViewModel(taskServices = TaskServicesImpl() , category = cat)
-//}
