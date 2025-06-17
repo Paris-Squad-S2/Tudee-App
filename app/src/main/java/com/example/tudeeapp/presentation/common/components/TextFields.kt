@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
@@ -43,60 +45,66 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-
 @Composable
 fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
-    modifier: Modifier = Modifier,
     leadingIcon: Int?,
+    modifier: Modifier = Modifier,
     singleLine: Boolean = true,
     maxLines: Int = 1,
+    enabled: Boolean = true,
+    onClick: () -> Unit = {}
 ) {
 
     var isFocused by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect { interaction ->
-            isFocused = interaction is FocusInteraction.Focus
+            when (interaction) {
+                is FocusInteraction.Focus -> isFocused = true
+                is FocusInteraction.Unfocus -> isFocused = false
+            }
         }
     }
 
-    val showAsFocused = isFocused || value.isNotEmpty()
-
     val borderColor = when {
-        showAsFocused -> Theme.colors.primary
+        isFocused -> Theme.colors.primary
         else -> Theme.colors.surfaceColors.surfaceLow
     }
 
-    val textColor = if (showAsFocused) {
+    val textColor = if (isFocused) {
         Theme.colors.text.body
-
     } else {
         Theme.colors.text.hint
     }
 
-    val textStyle = if (showAsFocused) {
+    val textStyle = if (isFocused) {
         Theme.textStyle.label.medium
-
     } else {
         Theme.textStyle.body.medium
     }
 
-    val iconColor = if (showAsFocused) Theme.colors.text.body else Theme.colors.text.hint
+    val iconColor = if (isFocused) Theme.colors.text.body else Theme.colors.text.hint
     val borderWidth = 1.dp
     val shape = RoundedCornerShape(16.dp)
     val separatorColor = Theme.colors.surfaceColors.surfaceLow
 
     BasicTextField(
         value = value,
+        enabled = enabled,
         onValueChange = onValueChange,
         modifier = modifier
-            .fillMaxWidth().padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
             .height(if (singleLine) 56.dp else 168.dp)
             .background(Theme.colors.surfaceColors.surfaceHigh, shape)
-            .border(BorderStroke(borderWidth, borderColor), shape),
+            .border(BorderStroke(borderWidth, borderColor), shape)
+            .clip(shape)
+            .clickable { onClick() }
+        ,
         singleLine = singleLine,
         maxLines = if (singleLine) 1 else maxLines,
         textStyle = textStyle,
@@ -109,7 +117,7 @@ fun TextField(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (leadingIcon !=null) {
+                if (leadingIcon != null) {
                     HandleLeadingIcon(leadingIcon, iconColor, singleLine, separatorColor)
                 }
 
@@ -224,6 +232,7 @@ fun PreviewTextField() {
                 value = defaultText,
                 onValueChange = { defaultText = it },
                 placeholder = "Full name",
+                enabled = false,
                 leadingIcon = R.drawable.ic_profile
             )
 
@@ -237,8 +246,6 @@ fun PreviewTextField() {
                 maxLines = 5,
                 leadingIcon = null
             )
-
-
         }
 
     }
