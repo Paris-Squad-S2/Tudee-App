@@ -2,10 +2,9 @@ package com.example.tudeeapp.presentation.bottomSheets.addEditTask.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,13 +14,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.bottomSheets.addEditTask.CategoryState
+import com.example.tudeeapp.presentation.bottomSheets.addEditTask.CategoryUiState
 import com.example.tudeeapp.presentation.common.components.CategoryItem
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun CategoryGrid(categories: List<CategoryState>, modifier: Modifier = Modifier) {
+fun CategoryGrid(
+    categories: List<CategoryUiState>,
+    modifier: Modifier = Modifier,
+    onCategoryClick: (Int) -> Unit = {}
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -30,22 +33,23 @@ fun CategoryGrid(categories: List<CategoryState>, modifier: Modifier = Modifier)
             text = stringResource(R.string.category),
             style = Theme.textStyle.title.medium,
         )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(25.dp)
+        FlowRow(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 13.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(25.dp),
+            maxItemsInEachRow = 3
         ) {
-            items(categories) { category ->
+            categories.forEachIndexed { index, category ->
                 CategoryItem(
                     icon = painterResource(category.image),
                     label = category.title,
                     iconColor = Color.Unspecified,
-                    isSelected = category.isSelected
+                    isSelected = category.isSelected,
+                    onClick = { onCategoryClick(index) }
                 )
             }
         }
     }
-
 }
 
 @PreviewLightDark
@@ -53,15 +57,15 @@ fun CategoryGrid(categories: List<CategoryState>, modifier: Modifier = Modifier)
 private fun CategoryGridPreview() {
     BasePreview {
         val sampleCategories = listOf(
-            CategoryState(image = R.drawable.ic_education, title = "Work"),
-            CategoryState(image = R.drawable.ic_adoration, title = "Personal" , isSelected = true),
-            CategoryState(image = R.drawable.ic_gym, title = "Shopping"),
-            CategoryState(image = R.drawable.ic_education, title = "Work"),
-            CategoryState(image = R.drawable.ic_adoration, title = "Personal"),
-            CategoryState(image = R.drawable.ic_gym, title = "Shopping"),
-            CategoryState(image = R.drawable.ic_education, title = "Work"),
-            CategoryState(image = R.drawable.ic_adoration, title = "Personal"),
-            CategoryState(image = R.drawable.ic_gym, title = "Shopping"),
+            CategoryUiState(image = R.drawable.ic_education, title = "Work"),
+            CategoryUiState(image = R.drawable.ic_adoration, title = "Personal" , isSelected = true),
+            CategoryUiState(image = R.drawable.ic_gym, title = "Shopping"),
+            CategoryUiState(image = R.drawable.ic_education, title = "Work"),
+            CategoryUiState(image = R.drawable.ic_adoration, title = "Personal"),
+            CategoryUiState(image = R.drawable.ic_gym, title = "Shopping"),
+            CategoryUiState(image = R.drawable.ic_education, title = "Work"),
+            CategoryUiState(image = R.drawable.ic_adoration, title = "Personal"),
+            CategoryUiState(image = R.drawable.ic_gym, title = "Shopping"),
         )
         CategoryGrid(categories = sampleCategories)
     }

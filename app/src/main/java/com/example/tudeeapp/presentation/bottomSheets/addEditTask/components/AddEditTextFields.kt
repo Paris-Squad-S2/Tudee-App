@@ -17,48 +17,58 @@ import com.example.tudeeapp.presentation.common.extentions.BasePreview
 
 @Composable
 fun AddEditTextFields(
+    title: String,
+    onTitleChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onDateClicked: () -> Unit,
+    description: String,
+    date: String,
     modifier: Modifier = Modifier,
-    title: String = "Task Title",
-    onValueChange: (String) -> Unit = {},
-    description: String = "Description",
 ) {
-    //To ask for
-    var value by remember { mutableStateOf("") }
-    var multiLineText by remember { mutableStateOf("") }
-
     Column(modifier = modifier.fillMaxWidth()) {
         TextField(
             modifier = Modifier.padding(top = 12.dp),
-            value = value,
-            onValueChange = onValueChange,
-            placeholder = title,
+            value = title,
+            onValueChange = onTitleChange,
+            placeholder = "Task Title",
             leadingIcon = R.drawable.ic_unselected_tasks,
         )
-
         TextField(
-            modifier = Modifier.padding(vertical = 16.dp),
-            value = multiLineText,
-            onValueChange = { multiLineText = it },
-            placeholder = description,
+            modifier = Modifier.padding(top = 16.dp),
+            value = description,
+            onValueChange = onDescriptionChange,
+            placeholder = "Description",
             singleLine = false,
             maxLines = 5,
             leadingIcon = null
         )
         TextField(
-            modifier = Modifier.padding(vertical = 16.dp),
-            value = multiLineText,
-            onValueChange = { multiLineText = it },
-            placeholder = "22-6-2025",
-            leadingIcon = R.drawable.ic_calendar_add
+            modifier = Modifier
+                .padding(top = 16.dp),
+            value = date,
+            enabled = false,
+            onClick =  {onDateClicked()},
+            onValueChange = { },
+            placeholder = date,
+            leadingIcon = R.drawable.ic_calendar_add,
         )
     }
-
 }
 
 @PreviewLightDark
 @Composable
 private fun AddEditTaskFieldsPreview() {
+    var title by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+
     BasePreview {
-        AddEditTextFields()
+        AddEditTextFields(
+            title = title,
+            onTitleChange = { title = it },
+            description = description,
+            onDescriptionChange = { description = it },
+            onDateClicked = { },
+            date = "2025-06-17",
+        )
     }
 }

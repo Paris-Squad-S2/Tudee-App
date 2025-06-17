@@ -6,4 +6,8 @@
     <string name="cancel">إلغاء</string>
     <string name="priority">الأولوية</string>
     <string name="category">الفئة</string>
+    <string name="save">حفظ</string>
+    <string name="add">إضافة</string>
+    <string name="add_task">إضافة مهمة</string>
+    <string name="edit_task">تعديل مهمة</string>
 </resources>

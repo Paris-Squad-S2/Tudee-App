@@ -6,21 +6,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
 fun AddEditStickButtons(
-    modifier: Modifier = Modifier,
-    buttonTitle: String,
-    onClick: () -> Unit,
+    isEditMode: Boolean,
+    isActionButtonDisabled: Boolean,
+    onClickActionButton: () -> Unit,
     onClickCancel: () -> Unit,
-    isCompleted: Boolean = false,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -32,17 +34,17 @@ fun AddEditStickButtons(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 6.dp),
-            onClick = { onClick },
-            text = buttonTitle,
+            onClick = { onClickActionButton },
+            text = if (isEditMode) stringResource(R.string.save) else stringResource(R.string.add),
             variant = ButtonVariant.FilledButton,
-            state = if (isCompleted) ButtonState.Normal else ButtonState.Disabled,
+            state = if (isActionButtonDisabled) ButtonState.Disabled else ButtonState.Normal,
         )
         TudeeButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 6.dp),
             onClick = { onClickCancel },
-            text = "Cancel",
+            text = stringResource(R.string.cancel),
             variant = ButtonVariant.OutlinedButton,
             state = ButtonState.Normal,
             contentColor = Theme.colors.primary,
@@ -50,16 +52,15 @@ fun AddEditStickButtons(
     }
 }
 
-
-@PreviewLightDark
+@PreviewMultiDevices
 @Composable
-fun AddEditUnStickButtonsPreview(modifier: Modifier = Modifier) {
+fun AddEditUnStickButtonsPreview() {
     BasePreview {
         AddEditStickButtons(
-            modifier = modifier,
-            buttonTitle = "Add",
-            onClick = {},
+            onClickActionButton = {},
             onClickCancel = {},
+            isEditMode = true,
+            isActionButtonDisabled = false,
         )
     }
 }

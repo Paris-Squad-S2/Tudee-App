@@ -52,9 +52,10 @@ fun TudeeDatePickerDialog(
         confirmButton = {
             ConfirmDateButton(
                 datePickerState = datePickerState,
-                onSelectDate = onSelectDate
+                onSelectDate = {
+                    onSelectDate
+                },
             )
-            onDismiss()
         },
         dismissButton = {
             TudeeDismissButton(onDismiss = onDismiss)

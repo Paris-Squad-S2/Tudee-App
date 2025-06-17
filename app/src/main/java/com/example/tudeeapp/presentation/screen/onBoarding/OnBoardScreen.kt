@@ -33,7 +33,7 @@ fun OnBoardScreen() {
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
-                    navController.navigate(Screens.Home)
+                    navController.navigate(Screens.TaskManagement)
                 }
         ) {
             Text("Go to Second", modifier = Modifier.padding(16.dp))

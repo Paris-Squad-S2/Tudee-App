@@ -7,7 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
+import com.example.tudeeapp.presentation.bottomSheets.addEditTask.TaskManagementBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -30,7 +32,6 @@ fun TudeeNavGraph() {
     val currentRoute = backStackEntry?.destination
 
     CompositionLocalProvider(LocalNavController provides navController) {
-
         TudeeScaffold(
             showBottomBar = (currentRoute?.route != null) && listOf(
                 Screens.Home::class.qualifiedName,
@@ -50,46 +51,17 @@ fun TudeeNavGraph() {
                 navController = navController,
                 startDestination = Screens.Splash,
             ) {
-
-                composable<Screens.Splash> {
-                    SplashScreen()
-                }
-
-                composable<Screens.OnBoarding> {
-                    OnBoardScreen()
-                }
-
-                composable<Screens.Home> {
-                    HomeScreen()
-                }
-
-                composable<Screens.Task> {
-                    TaskScreen()
-                }
-
-                composable<Screens.Category> {
-                    CategoryScreen()
-                }
-
-
-                composable<Screens.TaskForm> {
-                    TaskFormScreen()
-                }
-
-                composable<Screens.TaskDetails> {
-                    TaskDetailsScreen()
-                }
-
-                composable<Screens.CategoriesForm> {
-                    CategoryFormScreen()
-                }
-
-                composable<Screens.CategoryDetails> {
-                    CategoryDetailsScreen()
-                }
-
+                composable<Screens.Splash> { SplashScreen() }
+                composable<Screens.OnBoarding> { OnBoardScreen() }
+                composable<Screens.Home> { HomeScreen() }
+                composable<Screens.Task> { TaskScreen() }
+                composable<Screens.Category> { CategoryScreen() }
+                composable<Screens.TaskForm> { TaskFormScreen() }
+                composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                composable<Screens.CategoriesForm> { CategoryFormScreen() }
+                composable<Screens.CategoryDetails> { CategoryDetailsScreen() }
+                dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
             }
         }
     }
 }
-

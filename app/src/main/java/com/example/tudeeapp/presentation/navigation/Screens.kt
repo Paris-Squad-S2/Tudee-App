@@ -32,4 +32,7 @@ sealed class Screens {
     @Serializable
     data object CategoryDetails : Screens()
 
+    @Serializable
+    data object TaskManagement : Screens()
+
 }

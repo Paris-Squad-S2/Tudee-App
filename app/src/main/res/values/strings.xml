@@ -5,4 +5,8 @@
     <string name="cancel">Cancel</string>
     <string name="priority">Priority</string>
     <string name="category">Category</string>
+    <string name="save">Save</string>
+    <string name="add">Add</string>
+    <string name="add_task">Add Task</string>
+    <string name="edit_task">Edit task</string>
 </resources>
