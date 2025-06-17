@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.bottomSheets.addEditTask
 
-import androidx.annotation.DrawableRes
+
+import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.TaskPriority
 
 data class AddEditTaskUiState(
@@ -8,14 +9,20 @@ data class AddEditTaskUiState(
     val description: String = "",
     val dueDate: String = "",
     val dueTime: String = "",
-    val selectedPriority: TaskPriority,
-    val categories : List<Category>,
+    val selectedPriority: TaskPriority = TaskPriority.LOW,
+    val categories: List<CategoryState> = emptyList<CategoryState>(),
     val selectedCategoryId: Int = -1,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
 )
 
-data class Category(
-    val title: String="",
+data class CategoryState(
+    val title: String = "",
     val isSelected: Boolean = false,
-    @DrawableRes val image : Int = -1
+    val image: Int = -1,
+)
+
+fun Category.toCategoryState() = CategoryState(
+    title = this.title,
+    isSelected = false,
+    image = this.imageUrl.toInt()
 )

@@ -15,13 +15,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.bottomSheets.addEditTask.Category
+import com.example.tudeeapp.presentation.bottomSheets.addEditTask.CategoryState
 import com.example.tudeeapp.presentation.common.components.CategoryItem
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun CategoryGrid(categories: List<Category>, modifier: Modifier = Modifier) {
+fun CategoryGrid(categories: List<CategoryState>, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -53,15 +53,15 @@ fun CategoryGrid(categories: List<Category>, modifier: Modifier = Modifier) {
 private fun CategoryGridPreview() {
     BasePreview {
         val sampleCategories = listOf(
-            Category(image = R.drawable.ic_education, title = "Work"),
-            Category(image = R.drawable.ic_adoration, title = "Personal" , isSelected = true),
-            Category(image = R.drawable.ic_gym, title = "Shopping"),
-            Category(image = R.drawable.ic_education, title = "Work"),
-            Category(image = R.drawable.ic_adoration, title = "Personal"),
-            Category(image = R.drawable.ic_gym, title = "Shopping"),
-            Category(image = R.drawable.ic_education, title = "Work"),
-            Category(image = R.drawable.ic_adoration, title = "Personal"),
-            Category(image = R.drawable.ic_gym, title = "Shopping"),
+            CategoryState(image = R.drawable.ic_education, title = "Work"),
+            CategoryState(image = R.drawable.ic_adoration, title = "Personal" , isSelected = true),
+            CategoryState(image = R.drawable.ic_gym, title = "Shopping"),
+            CategoryState(image = R.drawable.ic_education, title = "Work"),
+            CategoryState(image = R.drawable.ic_adoration, title = "Personal"),
+            CategoryState(image = R.drawable.ic_gym, title = "Shopping"),
+            CategoryState(image = R.drawable.ic_education, title = "Work"),
+            CategoryState(image = R.drawable.ic_adoration, title = "Personal"),
+            CategoryState(image = R.drawable.ic_gym, title = "Shopping"),
         )
         CategoryGrid(categories = sampleCategories)
     }

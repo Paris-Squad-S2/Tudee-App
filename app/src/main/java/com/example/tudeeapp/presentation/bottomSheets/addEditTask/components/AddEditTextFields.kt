@@ -16,7 +16,7 @@ import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 
 @Composable
-fun AddEditTestFields(
+fun AddEditTextFields(
     modifier: Modifier = Modifier,
     title: String = "Task Title",
     onValueChange: (String) -> Unit = {},
@@ -59,6 +59,6 @@ fun AddEditTestFields(
 @Composable
 private fun AddEditTaskFieldsPreview() {
     BasePreview {
-        AddEditTestFields()
+        AddEditTextFields()
     }
 }
