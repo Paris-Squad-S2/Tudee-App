@@ -17,7 +17,7 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
 
 @Composable
-fun HomeScreen(userName: String) {
+fun HomeScreen() {
     val navController = LocalNavController.current
     Column(
         modifier = Modifier
@@ -25,21 +25,18 @@ fun HomeScreen(userName: String) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Welcome To Home $userName", modifier = Modifier.padding(16.dp))
+        Text("Welcome To Home userName", modifier = Modifier.padding(16.dp))
 
         Box(
             modifier = Modifier
                 .background(Color.Green)
                 .clickable {
                     navController.navigate(
-                        Screens.Task(
-                            taskId = 12,
-                            taskTitle = "taskTitle"
-                        )
+                        Screens.TaskForm
                     )
                 }
         ) {
-            Text("Go to task screen", modifier = Modifier.padding(16.dp))
+            Text("Go to task Form screen", modifier = Modifier.padding(16.dp))
         }
     }
 }
