@@ -8,6 +8,6 @@ interface TaskServices {
     fun getAllTasks(): Flow<List<Task>>
     fun getAllCategories(): Flow<List<Category>>
     suspend fun loadPredefinedCategories()
-    suspend fun addTask(task: Task): Boolean
-    suspend fun editTask(task: Task): Boolean
+    suspend fun addTask(task: Task)
+    suspend fun editTask(task: Task)
 }
