@@ -31,23 +31,20 @@ fun TudeeNavGraph() {
 
     CompositionLocalProvider(LocalNavController provides navController) {
 
+        val selectedRouteIndex: Int = listOf(
+            Screens.Home::class.qualifiedName,
+            Screens.Task::class.qualifiedName,
+            Screens.Category::class.qualifiedName
+        ).indexOf(currentRoute?.route?.split('?')[0])
+
         TudeeScaffold(
             bottomBar = {
-                if ((currentRoute?.route != null) && listOf(
-                        Screens.Home::class.qualifiedName,
-                        Screens.Task::class.qualifiedName,
-                        Screens.Category::class.qualifiedName
-                    ).contains(currentRoute.route)
-                )
+                if (selectedRouteIndex != -1)
                     TudeeNavigationBar(
                         onItemClick = { navItem ->
                             navController.navigate(navItem.screen)
                         },
-                        selected = listOf(
-                            Screens.Home::class.qualifiedName,
-                            Screens.Task::class.qualifiedName,
-                            Screens.Category::class.qualifiedName
-                        ).indexOf(currentRoute.route)
+                        selected = selectedRouteIndex
                     )
             },
             contentBackground = Theme.colors.surfaceColors.surface
