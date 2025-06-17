@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -27,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.CategoryItem
+import com.example.tudeeapp.presentation.common.components.TextTopBar
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -40,20 +39,22 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     CategoriesContent(
         state = state,
-        onClickCategory = {navController.navigate(Screens.CategoryDetails(it))}
+        onClickCategory = {navController.navigate(Screens.CategoryDetails(it))},
+        onClickAddCategory = {navController.navigate(Screens.CategoriesForm)}
         )
 }
 
 @Composable
 fun CategoriesContent(
     state: CategoryUIState,
-    onClickCategory: (Long) -> Unit
+    onClickCategory: (Long) -> Unit,
+    onClickAddCategory: () -> Unit
 ) {
     TudeeScaffold(
         floatingActionButton = {
             TudeeButton(
                 modifier = Modifier.size(64.dp)
-                , onClick = {},
+                , onClick = {onClickAddCategory()},
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
@@ -64,19 +65,7 @@ fun CategoriesContent(
                 )
         },
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Theme.colors.surfaceColors.surfaceHigh)
-                    .statusBarsPadding()
-                    .padding(vertical = 20.dp, horizontal = 16.dp)
-            ) {
-                Text(
-                    text = "Categories",
-                    style = Theme.textStyle.title.large,
-                    color = Theme.colors.text.title
-                )
-            }
+            TextTopBar()
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
