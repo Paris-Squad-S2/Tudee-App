@@ -114,7 +114,7 @@ fun TudeeNavGraph() {
                 }
             }
 
-            if (snackBarState.isVisible == true) {
+            if (snackBarState.isVisible) {
                 AnimatedVisibility(
                     visible = snackBarState.isVisible,
                     enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
