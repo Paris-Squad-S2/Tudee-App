@@ -34,8 +34,8 @@ fun TudeeBottomSheet(
     title: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    isScrollable: Boolean = false,
-    skipPartiallyExpanded: Boolean = false,
+    isScrollable: Boolean = true,
+    skipPartiallyExpanded: Boolean = true,
     stickyBottomContent: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -67,7 +67,6 @@ fun TudeeBottomSheet(
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp)
                 )
                 content()
             }
