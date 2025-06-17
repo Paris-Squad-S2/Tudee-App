@@ -4,4 +4,7 @@
     <string name="your_cute_helper_for_every_task">مساعدك اللطيف لإنجاز كل مهامك</string>
     <string name="ok">تأكيد</string>
     <string name="cancel">إلغاء</string>
+    <string name="move_to_done">Move to done</string>
+    <string name="move_to_in_progress">Move to in progress</string>
+    <string name="task_details">Task details</string>
 </resources>
