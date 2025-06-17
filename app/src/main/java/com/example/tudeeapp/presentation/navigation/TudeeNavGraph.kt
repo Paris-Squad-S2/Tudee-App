@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -86,7 +87,12 @@ fun TudeeNavGraph() {
                 }
 
                 composable<Screens.CategoryDetails> {
-                    CategoryDetailsScreen()
+                    val args = it.toRoute<Screens.CategoryDetails>()
+                    CategoryDetailsScreen(
+                        categoryId = args.categoryId,
+                        categoryTitle = args.categoryTitle,
+                        categoryImage = args.categoryImage
+                    )
                 }
 
             }

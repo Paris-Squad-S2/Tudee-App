@@ -1,5 +1,7 @@
 package com.example.tudeeapp.presentation.navigation
 
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.painter.Painter
 import kotlinx.serialization.Serializable
 
 
@@ -30,6 +32,10 @@ sealed class Screens {
     data object CategoriesForm : Screens()
 
     @Serializable
-    data object CategoryDetails : Screens()
+    data class CategoryDetails(
+        val categoryId: Long,
+        val categoryTitle: String ,
+        @DrawableRes val categoryImage: Int
+    ) : Screens()
 
 }
