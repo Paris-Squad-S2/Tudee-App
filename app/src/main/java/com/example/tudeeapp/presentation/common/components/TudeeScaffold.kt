@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -39,27 +38,11 @@ import kotlinx.coroutines.delay
 @Composable
 fun TudeeScaffold(
     modifier: Modifier = Modifier,
-    floatingActionButton: @Composable () -> Unit = {
-        TudeeButton(
-            modifier = Modifier.size(64.dp),
-            onClick = {},
-            icon = {
-                Icon(
-                    painter = painterResource(R.drawable.ic_note_add),
-                    contentDescription = null
-                )
-            },
-            variant = ButtonVariant.FloatingActionButton
-        )
-    },
+    floatingActionButton: @Composable () -> Unit = {},
     backgroundColor: Color = Theme.colors.primary,
     contentColor: Color = contentColorFor(backgroundColor),
-    onToggleTheme: (Boolean) -> Unit = {},
-    bottomBar: @Composable () -> Unit = { TudeeNavigationBar() },
-    isDarkMode: Boolean = false,
-    showTopBar: Boolean = false,
-    showFloatingActionButton: Boolean = false,
-    showBottomBar: Boolean = false,
+    bottomBar: @Composable () -> Unit = {},
+    topBar: @Composable () -> Unit = {},
     contentBackground: Color = Theme.colors.surfaceColors.surface,
     content: @Composable (snackBar: SnackBarState) -> Unit,
 ) {
@@ -67,29 +50,10 @@ fun TudeeScaffold(
 
     Box {
         Scaffold(
-            modifier = modifier
-                .background(backgroundColor)
-                .statusBarsPadding(),
-            topBar =
-                {
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        if (showTopBar) {
-                            Header(
-                                isDarkMode = isDarkMode,
-                                onToggleTheme = onToggleTheme,
-                            )
-                        }
-                    }
-                },
-            bottomBar = if (showBottomBar) {
-                bottomBar
-            } else {
-                { }
-            },
-            floatingActionButton = if (showFloatingActionButton)
-                floatingActionButton else {
-                { }
-            },
+            modifier = modifier,
+            topBar = { topBar() },
+            bottomBar = bottomBar,
+            floatingActionButton = floatingActionButton,
             contentColor = contentColor,
             containerColor = backgroundColor,
             contentWindowInsets = WindowInsets(0.dp)
@@ -134,11 +98,29 @@ private fun TudeeScaffoldPreview() {
     TudeeTheme {
         Surface(color = Theme.colors.surfaceColors.surface) {
             TudeeScaffold(
-                showTopBar = true,
-                showFloatingActionButton = true,
-                showBottomBar = true,
-                isDarkMode = toggled,
-                onToggleTheme = { toggled = it },
+                floatingActionButton = {
+                    TudeeButton(
+                        modifier = Modifier.size(64.dp),
+                        onClick = {},
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_note_add),
+                                contentDescription = null
+                            )
+                        },
+                        variant = ButtonVariant.FloatingActionButton
+                    )
+                },
+                bottomBar = { TudeeNavigationBar() },
+                topBar = {
+                    Header(
+                        modifier = Modifier
+                            .background(Theme.colors.primary)
+                            .statusBarsPadding(),
+                        isDarkMode = toggled,
+                        onToggleTheme = { toggled = it },
+                    )
+                },
                 content = { snakeBar ->
                     Box(
                         modifier = Modifier
