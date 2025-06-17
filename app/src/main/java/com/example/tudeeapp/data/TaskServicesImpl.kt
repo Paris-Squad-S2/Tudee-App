@@ -5,6 +5,7 @@ import com.example.tudeeapp.data.mapper.DataConstant
 import com.example.tudeeapp.data.mapper.toCategory
 import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTask
+import com.example.tudeeapp.data.mapper.toTaskEntity
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
@@ -13,6 +14,7 @@ import com.example.tudeeapp.domain.exception.CategoryException
 import com.example.tudeeapp.domain.exception.TaskException
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
+import com.example.tudeeapp.domain.models.TaskStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -28,7 +30,18 @@ class TaskServicesImpl(
             return taskDao.getAll().map { it.map { it.toTask() } }
         } catch (e: DataException) {
             throw TaskException()
-        }catch (e: Exception){
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
+    //TODO ASK If any one do it too
+    override fun getTaskById(id: Long): Flow<Task> {
+        try {
+            return taskDao.findById(id).map { it.toTask() }
+        } catch (e: DataException) {
+            throw TaskException()
+        } catch (e: Exception) {
             throw TaskException()
         }
     }
@@ -38,20 +51,45 @@ class TaskServicesImpl(
             return categoryDao.getAll().map { it.map { it.toCategory() } }
         } catch (e: DataException) {
             throw CategoryException()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             throw CategoryException()
         }
 
     }
 
+    //TODO ASK If any one do it too
+    override fun getCategoryById(id: Long): Flow<Category> {
+        try {
+            return categoryDao.findById(id).map { it.toCategory() }
+        } catch (e: DataException) {
+            throw TaskException()
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
     override suspend fun loadPredefinedCategories() {
         try {
-        if (appPreferences.isAppLaunchForFirstTime()) {
-            categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
-            appPreferences.setAppLaunchIsDone()
-        }}catch (e: DataException){
+            if (appPreferences.isAppLaunchForFirstTime()) {
+                categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
+                appPreferences.setAppLaunchIsDone()
+            }
+        } catch (e: DataException) {
             throw CategoryException()
-        }catch (e: Exception){
+        } catch (e: Exception) {
+            throw CategoryException()
+        }
+    }
+
+    override suspend fun updateTaskStatus(id: Long, newStatus: TaskStatus) {
+        try {
+            getTaskById(id).collect { task ->
+                val updatedTask = task.copy(status = newStatus)
+                taskDao.update(updatedTask.toTaskEntity())
+            }
+        } catch (e: DataException) {
+            throw CategoryException()
+        } catch (e: Exception) {
             throw CategoryException()
         }
     }
