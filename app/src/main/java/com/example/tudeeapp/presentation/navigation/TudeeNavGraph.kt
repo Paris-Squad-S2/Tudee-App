@@ -42,7 +42,12 @@ fun TudeeNavGraph() {
                     TudeeNavigationBar(
                         onItemClick = { navItem ->
                             navController.navigate(navItem.screen)
-                        }
+                        },
+                        selected = listOf(
+                            Screens.Home::class.qualifiedName,
+                            Screens.Task::class.qualifiedName,
+                            Screens.Category::class.qualifiedName
+                        ).indexOf(currentRoute.route)
                     )
             },
             contentBackground = Theme.colors.surfaceColors.surface
