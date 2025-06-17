@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.categories.viewModel.state
+package com.example.tudeeapp.presentation.screen.categories
 
 import androidx.annotation.DrawableRes
 
@@ -9,6 +9,7 @@ data class CategoryUIState(
 )
 
 data class CategoryItemUIState(
+    val id: Long,
     val name: String,
     @DrawableRes val imageResId: Int,
     val count: Int
