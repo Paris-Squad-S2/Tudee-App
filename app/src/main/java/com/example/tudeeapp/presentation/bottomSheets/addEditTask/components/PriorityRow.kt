@@ -40,7 +40,7 @@ fun PriorityRow(
                 text = "High",
                 icon = painterResource(R.drawable.ic_flag),
                 backgroundColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.HIGH)
-                    Theme.colors.primary else Theme.colors.surfaceColors.surfaceLow,
+                    Theme.colors.status.pinkAccent else Theme.colors.surfaceColors.surfaceLow,
                 contentColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.HIGH)
                     Color.White else Theme.colors.text.hint,
                 onClick = { onPrioritySelected(TaskPriority.HIGH) }
@@ -49,7 +49,7 @@ fun PriorityRow(
                 text = "Medium",
                 icon = painterResource(R.drawable.ic_worning),
                 backgroundColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.MEDIUM)
-                    Theme.colors.status.pinkAccent else Theme.colors.surfaceColors.surfaceLow,
+                    Theme.colors.status.yellowAccent else Theme.colors.surfaceColors.surfaceLow,
                 contentColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.MEDIUM)
                     Color.White else Theme.colors.text.hint,
                 onClick = { onPrioritySelected(TaskPriority.MEDIUM) }
