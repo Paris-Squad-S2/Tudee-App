@@ -2,5 +2,8 @@
     <string name="app_name">Tudee</string>
     <string name="your_cute_helper_for_every_task">Your cute Helper for Every Task</string>
     <string name="ok">OK</string>
+    <string name="save">Save</string>
+    <string name="editCategory">Edit Category</string>
+    <string name="categoryImage">Category image Category</string>
     <string name="cancel">Cancel</string>
 </resources>

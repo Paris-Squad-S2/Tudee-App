@@ -3,5 +3,8 @@
     <string name="app_name"> تودي</string>
     <string name="your_cute_helper_for_every_task">مساعدك اللطيف لإنجاز كل مهامك</string>
     <string name="ok">تأكيد</string>
+    <string name="save">حفظ</string>
+    <string name="editCategory">تعديل الفئة</string>
+    <string name="categoryImage">صورة الفئة</string>
     <string name="cancel">إلغاء</string>
 </resources>

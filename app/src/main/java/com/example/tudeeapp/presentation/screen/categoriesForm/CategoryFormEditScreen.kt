@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -93,7 +94,7 @@ fun CategoryFormEditContent(
     var isSheetOpen by remember { mutableStateOf(true) }
     TudeeBottomSheet(
         isVisible = isSheetOpen,
-        title = "Edit category",
+        title = stringResource(R.string.editCategory),
         isScrollable = true,
         skipPartiallyExpanded = true,
         onDismiss = { isSheetOpen = true },
@@ -115,7 +116,7 @@ fun CategoryFormEditContent(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "Category image",
+                        text = stringResource(R.string.categoryImage),
                         style = Theme.textStyle.title.medium,
                         modifier = Modifier.align(Alignment.Start),
                         color = Theme.colors.text.title
@@ -185,7 +186,7 @@ fun CategoryFormEditContent(
                                 onSubmitEdit()
                                 onSubmit()
                             },
-                            text = "Submit",
+                            text = stringResource(R.string.save),
                             variant = ButtonVariant.FilledButton,
                             modifier = Modifier.fillMaxWidth(),
                             state = if (state.isFormValid) ButtonState.Normal else ButtonState.Disabled
@@ -194,7 +195,7 @@ fun CategoryFormEditContent(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         TudeeButton(
-                            onClick = onCancel, text = "Cancel",
+                            onClick = onCancel, text = stringResource(R.string.cancel),
                             variant = ButtonVariant.TextButton,
                             modifier = Modifier.fillMaxWidth()
                         )
