@@ -4,6 +4,7 @@
     <string name="ok">OK</string>
     <string name="save">Save</string>
     <string name="editCategory">Edit Category</string>
-    <string name="categoryImage">Category image Category</string>
+    <string name="categoryImage">Category image</string>
+    <string name="categoryEditSnackBarSuccessfully">Category edited successfully</string>
     <string name="cancel">Cancel</string>
 </resources>

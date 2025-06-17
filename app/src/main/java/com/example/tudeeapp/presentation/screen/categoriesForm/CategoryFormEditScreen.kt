@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,11 +45,13 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.common.components.ButtonState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -202,6 +205,18 @@ fun CategoryFormEditContent(
                             variant = ButtonVariant.TextButton,
                             modifier = Modifier.fillMaxWidth()
                         )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        var showSnackBar by remember { mutableStateOf(false) }
+
+                        // When showSnackBar is true, hide it after 3 seconds
+                        LaunchedEffect(showSnackBar) {
+                            if (showSnackBar) {
+                                delay(1000) // duration in milliseconds
+                                showSnackBar = false
+                            }
+                        }
 
                     }
                 }

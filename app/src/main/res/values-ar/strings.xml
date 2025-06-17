@@ -6,5 +6,6 @@
     <string name="save">حفظ</string>
     <string name="editCategory">تعديل الفئة</string>
     <string name="categoryImage">صورة الفئة</string>
+    <string name="categoryEditSnackBarSuccessfully">تم تغيير الفئة بنجاح</string>
     <string name="cancel">إلغاء</string>
 </resources>
