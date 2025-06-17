@@ -104,9 +104,9 @@ private fun TaskManagementBottomSheetContent(
 @Composable
 private fun TaskManagementBottomSheetPreview() {
     val sampleCategories = listOf(
-        CategoryUiState(image = R.drawable.ic_education, title = "Work"),
-        CategoryUiState(image = R.drawable.ic_adoration, title = "Personal", isSelected = true),
-        CategoryUiState(image = R.drawable.ic_gym, title = "Shopping"),
+        CategoryUiState(image = "R.drawable.ic_education", title = "Work"),
+        CategoryUiState(image = "R.drawable.ic_adoration", title = "Personal", isSelected = true),
+        CategoryUiState(image = "R.drawable.ic_gym", title = "Shopping"),
     )
 
     val mockUiState = TaskManagementUiState(

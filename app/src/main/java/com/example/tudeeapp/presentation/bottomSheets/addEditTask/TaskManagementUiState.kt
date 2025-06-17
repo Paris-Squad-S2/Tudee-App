@@ -14,8 +14,8 @@ data class TaskManagementUiState(
     val selectedCategoryId: Int? = null,
     val isLoading: Boolean = false,
     val isEditMode: Boolean = false,
-    val error: String? = null
-){
+    val error: String? = null,
+) {
     val isInitialState: Boolean
         get() = title.isEmpty() ||
                 description.isEmpty() ||
@@ -28,16 +28,23 @@ data class TaskManagementUiState(
 data class CategoryUiState(
     val title: String = "",
     val isSelected: Boolean = false,
-    val image: Int = com.example.tudeeapp.R.drawable.ic_unselected_categories,
+    val image: String,
 )
 
 fun Category.toCategoryState() = CategoryUiState(
     title = this.title,
     isSelected = false,
-    //  image = this.imageUrl.toDrawableResourceId()
+    image = this.imageUrl
 )
 
 sealed class TaskPriorityUiState {
     object None : TaskPriorityUiState()
     data class Selected(val priority: TaskPriority) : TaskPriorityUiState()
+}
+
+fun TaskPriorityUiState.toDomain(): TaskPriority {
+    return when (this) {
+        is TaskPriorityUiState.Selected -> this.priority
+        TaskPriorityUiState.None -> TaskPriority.LOW
+    }
 }

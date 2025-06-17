@@ -3,15 +3,19 @@ package com.example.tudeeapp.presentation.bottomSheets.addEditTask
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tudeeapp.domain.TaskServices
+import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
+import com.example.tudeeapp.domain.models.TaskStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class TaskManagementViewModel(private val taskServices: TaskServices) : ViewModel() {
     private val _state = MutableStateFlow(
-        TaskManagementUiState(selectedPriority = TaskPriorityUiState.None, categories = emptyList()))
+        TaskManagementUiState(selectedPriority = TaskPriorityUiState.None, categories = emptyList())
+    )
     val state = _state.asStateFlow()
 
     init {
@@ -42,10 +46,13 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
 
     fun onPrioritySelected(priority: TaskPriority) {
         _state.update { currentState ->
-            val isCurrentlySelected = currentState.selectedPriority is TaskPriorityUiState.Selected &&
-                currentState.selectedPriority.priority == priority
+            val isCurrentlySelected =
+                currentState.selectedPriority is TaskPriorityUiState.Selected &&
+                        currentState.selectedPriority.priority == priority
             currentState.copy(
-                selectedPriority = if (isCurrentlySelected) TaskPriorityUiState.None else TaskPriorityUiState.Selected(priority)
+                selectedPriority = if (isCurrentlySelected) TaskPriorityUiState.None else TaskPriorityUiState.Selected(
+                    priority
+                )
             )
         }
     }
@@ -66,14 +73,28 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
     fun onActionButtonClicked() {
         viewModelScope.launch {
             try {
-             //todo add task services function
-             } catch (e: Exception) {
-                 _state.update { it.copy(error = e.message ?: "An error occurred") }
+                val currentState = _state.value
+
+                val createDate: LocalDate = LocalDate.parse(currentState.selectedDate)
+
+                taskServices.addTask(
+                    Task(
+                        title = currentState.title,
+                        description = currentState.description,
+                        priority = currentState.selectedPriority.toDomain(),
+                        status = TaskStatus.TO_DO,
+                        createdDate = createDate,
+                        categoryId = currentState.selectedCategoryId?.toLong()
+                            ?: throw IllegalArgumentException("Selected category ID is null")
+                    )
+                )
+            } catch (e: Exception) {
+                _state.update { it.copy(error = e.message ?: "An error occurred") }
             }
         }
     }
 
     fun onCancelClicked() {
-        _state.update { it.copy(isSheetVisible = false)}
+        _state.update { it.copy(isSheetVisible = false) }
     }
 }
