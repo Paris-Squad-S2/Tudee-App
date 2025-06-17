@@ -1,6 +1,5 @@
 package com.example.tudeeapp.presentation.screen.categoriesForm
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -42,20 +41,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.common.components.ButtonState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
-import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import kotlinx.coroutines.delay
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun CategoryFormEditScreen(viewModel: CategoryFormViewModel) {
+fun CategoryFormEditScreen(viewModel: CategoryFormViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     val navController = LocalNavController.current
 
@@ -80,7 +78,8 @@ fun CategoryFormEditScreen(viewModel: CategoryFormViewModel) {
         onImageClick = {
             imagePickerLauncher.launch("image/*")
         },
-        onSubmitEdit = viewModel::editCategory
+        onSubmitEdit = viewModel::editCategory,
+        onDismiss = { navController.popBackStack() }
     )
 }
 
@@ -92,15 +91,16 @@ fun CategoryFormEditContent(
     onSubmit: () -> Unit,
     onTitleChange: (String) -> Unit,
     onImageClick: () -> Unit,
-    onSubmitEdit: () -> Unit
+    onSubmitEdit: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     var isSheetOpen by remember { mutableStateOf(true) }
     TudeeBottomSheet(
-        isVisible = isSheetOpen,
+        isVisible = true,
         title = stringResource(R.string.editCategory),
         isScrollable = true,
         skipPartiallyExpanded = true,
-        onDismiss = { isSheetOpen = false },
+        onDismiss = onDismiss,
         content = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Column(
@@ -250,3 +250,9 @@ fun Modifier.dashedBorder(
         }
     }
 )
+
+@Composable
+@Preview
+fun CategoryFormEditScreenP(){
+    CategoryFormEditScreen()
+}
