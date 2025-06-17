@@ -52,6 +52,6 @@ class CategoryFormViewModel(val taskServices: TaskServices, category: Category) 
     }
 
     fun submitCategory() {
-        editCategory()
+
     }
 }

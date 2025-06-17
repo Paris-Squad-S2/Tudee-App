@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.screen.categoriesForm
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
@@ -32,10 +35,12 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil3.compose.rememberAsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
+import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.common.components.ButtonState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.TextField
@@ -65,13 +70,13 @@ fun CategoryFormEditScreen(viewModel: CategoryFormViewModel) {
             navController.popBackStack()
         },
         onSubmit = {
-            viewModel.submitCategory()
             navController.popBackStack()
         },
         onTitleChange = viewModel::updateCategoryName,
         onImageClick = {
             imagePickerLauncher.launch("image/*")
         },
+        onSubmitEdit = viewModel::editCategory
     )
 }
 
@@ -83,6 +88,7 @@ fun CategoryFormEditContent(
     onSubmit: () -> Unit,
     onTitleChange: (String) -> Unit,
     onImageClick: () -> Unit,
+    onSubmitEdit: () -> Unit
 ) {
     var isSheetOpen by remember { mutableStateOf(true) }
     TudeeBottomSheet(
@@ -92,7 +98,7 @@ fun CategoryFormEditContent(
         skipPartiallyExpanded = true,
         onDismiss = { isSheetOpen = true },
         content = {
-            Column() {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier
                         .padding(
@@ -111,7 +117,8 @@ fun CategoryFormEditContent(
                     Text(
                         text = "Category image",
                         style = Theme.textStyle.title.medium,
-                        modifier = Modifier.align(Alignment.Start)
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Theme.colors.text.title
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -126,30 +133,34 @@ fun CategoryFormEditContent(
                                 dashLength = 6.dp,
                                 gapLength = 4.dp
                             )
+                            .clip(RoundedCornerShape(16.dp))
                             .clickable { onImageClick() },
                         contentAlignment = Alignment.Center
                     ) {
-                        if (state.imageUri == null) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.image_add_02),
-                                    contentDescription = "Upload",
-                                    modifier = Modifier.padding(bottom = 12.dp)
-                                )
-                                Text("Upload", style = Theme.textStyle.label.medium)
-                            }
-                        } else {
-                            Image(
-                                painter = rememberAsyncImagePainter(state.imageUri),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
+                        Image(
+                            painter = rememberAsyncImagePainter(state.imageUri),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(RoundedCornerShape(40))
+                                .background(Theme.colors.surfaceColors.surfaceHigh),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.pencil_edit_01),
+                                contentDescription = "Edit",
+                                tint = Color.Unspecified,
+                                modifier = Modifier.size(20.dp)
                             )
                         }
-                    }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    }
                 }
+                Spacer(modifier = Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -171,6 +182,7 @@ fun CategoryFormEditContent(
 
                         TudeeButton(
                             onClick = {
+                                onSubmitEdit()
                                 onSubmit()
                             },
                             text = "Submit",
@@ -191,11 +203,6 @@ fun CategoryFormEditContent(
                 }
             }
         },
-//        stickyBottomContent = {
-//            Button(
-//                modifier = Modifier.fillMaxWidth(), onClick = { isSheetOpen = false },
-//            ) { Text(text = "Close") }
-//        }
     )
 
 }
