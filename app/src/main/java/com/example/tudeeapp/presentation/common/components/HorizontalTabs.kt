@@ -45,7 +45,9 @@ fun HorizontalTabs(
     indicatorColor: Color = Theme.colors.secondary,
     indicatorHeight: Dp = 4.dp
 ) {
-    Column {
+    Column(
+        modifier = modifier.height(50.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
