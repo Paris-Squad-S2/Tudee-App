@@ -4,13 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,30 +20,16 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
 fun DeleteTaskConfirmationBox(
-    modifier: Modifier = Modifier,
-    onDismiss: () -> Unit = {},
-    onConfirm: () -> Unit = {}
+    modifier: Modifier = Modifier, onDismiss: () -> Unit = {}, onConfirm: () -> Unit = {}
 
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(378.dp)
             .background(
                 Theme.colors.surfaceColors.surface,
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
             )
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_drag_handle),
-            contentDescription = "Icon Description",
-            tint = Theme.colors.text.body,
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .width(32.dp)
-                .height(4.dp)
-                .align(Alignment.CenterHorizontally)
-        )
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -56,20 +39,14 @@ fun DeleteTaskConfirmationBox(
                 )
         ) {
             Text(
-                text = "Delete task",
-                style = Theme.textStyle.title.large,
-                color = Theme.colors.text.title,
-            )
-            Text(
-                modifier = Modifier
-                    .padding(top = 12.dp),
+                modifier = Modifier.padding(top = 12.dp),
                 text = "Are you sure to continue?",
                 style = Theme.textStyle.body.large,
                 color = Theme.colors.text.body,
             )
             Image(
                 modifier = Modifier
-                    .padding(top = 12.dp)
+                    .padding(top = 12.dp, bottom = 24.dp)
                     .align(Alignment.CenterHorizontally)
                     .width(107.dp)
                     .height(100.dp),
@@ -79,8 +56,6 @@ fun DeleteTaskConfirmationBox(
 
                 )
         }
-
-        Spacer(modifier = Modifier.weight(1f))
 
         Column(
             modifier = Modifier
@@ -108,7 +83,6 @@ fun DeleteTaskConfirmationBox(
                     .height(56.dp),
                 text = "Cancel",
                 variant = ButtonVariant.OutlinedButton,
-                contentColor = Theme.colors.status.overlay,
             )
         }
     }
