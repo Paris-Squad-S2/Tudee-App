@@ -32,17 +32,18 @@ fun TudeeNavGraph() {
     CompositionLocalProvider(LocalNavController provides navController) {
 
         TudeeScaffold(
-            showBottomBar = (currentRoute?.route != null) && listOf(
-                Screens.Home::class.qualifiedName,
-                Screens.Task::class.qualifiedName,
-                Screens.Category::class.qualifiedName
-            ).contains(currentRoute.route),
             bottomBar = {
-                TudeeNavigationBar(
-                    onItemClick = { navItem ->
-                        navController.navigate(navItem.screen)
-                    }
+                if ((currentRoute?.route != null) && listOf(
+                        Screens.Home::class.qualifiedName,
+                        Screens.Task::class.qualifiedName,
+                        Screens.Category::class.qualifiedName
+                    ).contains(currentRoute.route)
                 )
+                    TudeeNavigationBar(
+                        onItemClick = { navItem ->
+                            navController.navigate(navItem.screen)
+                        }
+                    )
             },
             contentBackground = Theme.colors.surfaceColors.surface
         ) {
