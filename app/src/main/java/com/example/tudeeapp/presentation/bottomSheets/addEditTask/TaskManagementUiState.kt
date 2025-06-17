@@ -28,12 +28,14 @@ data class CategoryUiState(
     val title: String = "",
     val isSelected: Boolean = false,
     val image: String,
+    val isPredefined: Boolean = false,
 )
 
 fun Category.toCategoryState() = CategoryUiState(
     title = this.title,
     isSelected = false,
-    image = this.imageUrl
+    image = this.imageUrl,
+    isPredefined = this.isPredefined
 )
 
 sealed class TaskPriorityUiState {

@@ -20,19 +20,22 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.example.tudeeapp.R
+import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
 fun CategoryItem(
-    icon: Painter,
+    icon: String,
     label: String,
     iconColor: Color,
+    isPredefined: Boolean,
     count: Int? = null,
     isSelected: Boolean = true,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -42,8 +45,7 @@ fun CategoryItem(
             modifier = Modifier
                 .size(78.dp)
                 .background(
-                    color = Theme.colors.surfaceColors.surfaceHigh,
-                    shape = CircleShape
+                    color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape
                 )
         ) {
             Box(
@@ -57,20 +59,28 @@ fun CategoryItem(
                 count != null -> NumBadge(count, Modifier.align(Alignment.TopEnd))
             }
 
-            Icon(
-                painter = icon,
-                contentDescription = "$label Icon",
-                tint = iconColor,
-                modifier = Modifier
-                    .size(32.dp)
-                    .align(Alignment.Center)
-            )
+            if (isPredefined) {
+                Icon(
+                    painter = painterResource(icon.toResDrawables()),
+                    contentDescription = "$label Icon",
+                    tint = iconColor,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .align(Alignment.Center)
+                )
+            } else {
+                AsyncImage(
+                    model = icon,
+                    contentDescription = "$label Icon",
+                    modifier = Modifier
+                        .size(32.dp)
+                        .align(Alignment.Center)
+                )
+            }
         }
 
         Text(
-            text = label,
-            style = Theme.textStyle.label.small,
-            color = Theme.colors.text.body
+            text = label, style = Theme.textStyle.label.small, color = Theme.colors.text.body
         )
     }
 }
@@ -78,7 +88,7 @@ fun CategoryItem(
 @Composable
 private fun NumBadge(
     count: Int?,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     count?.let {
         Box(
@@ -91,9 +101,7 @@ private fun NumBadge(
         ) {
 
             Text(
-                text = it.toString(),
-                color = Theme.colors.text.hint,
-                fontSize = 12.sp
+                text = it.toString(), color = Theme.colors.text.hint, fontSize = 12.sp
             )
         }
     }
@@ -104,11 +112,9 @@ private fun SelectedBadge(modifier: Modifier) {
     Box(
         modifier = modifier
             .background(
-                color = Theme.colors.status.greenAccent,
-                shape = CircleShape
+                color = Theme.colors.status.greenAccent, shape = CircleShape
             )
-            .size(20.dp),
-        contentAlignment = Alignment.Center
+            .size(20.dp), contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_checkmark),
@@ -123,9 +129,10 @@ private fun SelectedBadge(modifier: Modifier) {
 private fun PreviewCategoryItems() {
     BasePreview {
         CategoryItem(
-            icon = painterResource(R.drawable.ic_education),
+            icon = "R.drawable.education",
             label = "Education",
             iconColor = Color.Unspecified,
+            isPredefined = true,
             count = 23
         )
     }

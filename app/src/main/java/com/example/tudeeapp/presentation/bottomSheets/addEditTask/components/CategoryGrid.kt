@@ -46,10 +46,11 @@ fun CategoryGrid(
         ) {
             categories.forEachIndexed { index, category ->
                 CategoryItem(
-                    icon = painterResource(category.image.toResDrawables()),
+                    icon = category.image,
                     label = category.title,
                     iconColor = Color.Unspecified,
                     isSelected = category.isSelected,
+                    isPredefined = category.isPredefined,
                     onClick = { onCategoryClick(index) }
                 )
             }
