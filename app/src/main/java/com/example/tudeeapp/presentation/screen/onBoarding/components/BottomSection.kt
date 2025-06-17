@@ -75,7 +75,7 @@ fun BottomSection(
             variant = ButtonVariant.FloatingActionButton,
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.arrow_right_double),
+                    painter = painterResource(id = R.drawable.ic_arrow_right_double),
                     contentDescription = "Next Page",
                     modifier = Modifier.size(28.dp)
                 )

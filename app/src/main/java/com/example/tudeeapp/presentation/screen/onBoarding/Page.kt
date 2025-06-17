@@ -15,17 +15,17 @@ data class Page(
 fun onboardingPages(): List<Page> {
     return listOf(
         Page(
-            image = R.drawable.robot4,
+            image = R.drawable.img_robot4,
             title = stringResource(id = R.string.onboarding1title),
             description = stringResource(id = R.string.onboarding1description)
         ),
         Page(
-            image = R.drawable.robot6,
+            image = R.drawable.img_robot6,
             title = stringResource(id = R.string.onboarding2title),
             description = stringResource(id = R.string.onboarding2description)
         ),
         Page(
-            image = R.drawable.robot5,
+            image = R.drawable.img_robot5,
             title = stringResource(id = R.string.onboarding3title),
             description = stringResource(id = R.string.onboarding3description)
         )
