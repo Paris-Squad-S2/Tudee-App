@@ -27,15 +27,15 @@ val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav C
 fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = backStackEntry?.destination
 
     CompositionLocalProvider(LocalNavController provides navController) {
 
-        val selectedRouteIndex: Int = listOf(
+        val currentRoute = backStackEntry?.destination?.route?.substringBefore('?')
+        val selectedRouteIndex = listOf(
             Screens.Home::class.qualifiedName,
             Screens.Task::class.qualifiedName,
             Screens.Category::class.qualifiedName
-        ).indexOf(currentRoute?.route?.split('?')[0])
+        ).indexOf(currentRoute)
 
         TudeeScaffold(
             bottomBar = {

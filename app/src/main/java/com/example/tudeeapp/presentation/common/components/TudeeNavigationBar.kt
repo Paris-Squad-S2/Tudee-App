@@ -32,7 +32,7 @@ fun TudeeNavigationBar(
     onItemClick: (NavItem) -> Unit = {},
     selected: Int = 0
 ) {
-    var selectedIndex by remember {
+    var selectedIndex by remember(selected) {
         mutableIntStateOf(selected)
     }
 
