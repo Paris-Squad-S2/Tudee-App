@@ -4,7 +4,6 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.TaskPriority
 
 data class TaskManagementUiState(
-    val isSheetVisible: Boolean = true,
     val isDatePickerVisible: Boolean = false,
     val title: String = "",
     val description: String = "",

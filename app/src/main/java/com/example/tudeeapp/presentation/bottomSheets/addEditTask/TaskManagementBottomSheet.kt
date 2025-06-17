@@ -18,6 +18,7 @@ import com.example.tudeeapp.presentation.bottomSheets.addEditTask.components.Pri
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -27,6 +28,8 @@ import org.koin.androidx.compose.koinViewModel
 fun TaskManagementBottomSheet(
     viewModel: TaskManagementViewModel = koinViewModel(),
 ) {
+    val navController = LocalNavController.current
+
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     TaskManagementBottomSheetContent(
@@ -37,7 +40,7 @@ fun TaskManagementBottomSheet(
         onPrioritySelected = viewModel::onPrioritySelected,
         onCategorySelected = viewModel::onCategorySelected,
         onActionButtonClicked = viewModel::onActionButtonClicked,
-        onCancelClicked = viewModel::onCancelClicked,
+        onCancelClicked ={navController.popBackStack()},
     )
 
     if (uiState.isDatePickerVisible) {
@@ -62,42 +65,41 @@ private fun TaskManagementBottomSheetContent(
     onActionButtonClicked: () -> Unit,
     onCancelClicked: () -> Unit,
 ) {
-    TudeeBottomSheet(
-        isVisible = uiState.isSheetVisible,
-        title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
-        onDismiss = {
-            onCancelClicked
-        },
-        isScrollable = true,
-        skipPartiallyExpanded = true,
-        stickyBottomContent = {
-            AddEditStickButtons(
-                isEditMode = uiState.isEditMode,
-                isActionButtonDisabled = uiState.isInitialState,
-                onClickActionButton = onActionButtonClicked,
-                onClickCancel = onCancelClicked,
+        TudeeBottomSheet(
+            isVisible = true,
+            title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
+            onDismiss = { onCancelClicked},
+            isScrollable = true,
+            skipPartiallyExpanded = true,
+            stickyBottomContent = {
+                AddEditStickButtons(
+                    isEditMode = uiState.isEditMode,
+                    isActionButtonDisabled = uiState.isInitialState,
+                    onClickActionButton = onActionButtonClicked,
+                    onClickCancel = onCancelClicked,
+                )
+            },
+        ) {
+            AddEditTextFields(
+                onTitleChange = onTitleChange,
+                onDescriptionChange = onDescriptionChange,
+                onDateClicked = { onDateClicked(true) },
+                title = uiState.title,
+                description = uiState.description,
+                date = uiState.selectedDate,
             )
-        },
-    ) {
-        AddEditTextFields(
-            onTitleChange = onTitleChange,
-            onDescriptionChange = onDescriptionChange,
-            onDateClicked = { onDateClicked(true) },
-            title = uiState.title,
-            description = uiState.description,
-            date = uiState.selectedDate,
-        )
-        PriorityRow(
-            modifier = Modifier.padding(16.dp),
-            selectedPriority = uiState.selectedPriority,
-            onPrioritySelected = onPrioritySelected
-        )
-        CategoryGrid(
-            categories = uiState.categories,
-            modifier = Modifier.padding(16.dp),
-            onCategoryClick = onCategorySelected,
-        )
-    }
+            PriorityRow(
+                modifier = Modifier.padding(16.dp),
+                selectedPriority = uiState.selectedPriority,
+                onPrioritySelected = onPrioritySelected
+            )
+            CategoryGrid(
+                categories = uiState.categories,
+                modifier = Modifier.padding(16.dp),
+                onCategoryClick = onCategorySelected,
+            )
+        }
+
 }
 
 @PreviewLightDark
@@ -122,7 +124,7 @@ private fun TaskManagementBottomSheetPreview() {
     BasePreview {
 
         TaskManagementBottomSheetContent(
-            uiState = mockUiState,{},{},{},{},{},{},{},
+            uiState = mockUiState, {}, {}, {}, {}, {}, {}, {},
         )
     }
 }
