@@ -97,6 +97,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
+                        .background(
+                            color = Theme.colors.surfaceColors.surfaceHigh,
+                            shape = RoundedCornerShape(size = 16.dp)
+                        )
                 ) {
                     item {
                         OverViewSection()
