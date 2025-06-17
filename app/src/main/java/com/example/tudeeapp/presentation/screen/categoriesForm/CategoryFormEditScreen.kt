@@ -97,7 +97,7 @@ fun CategoryFormEditContent(
         title = stringResource(R.string.editCategory),
         isScrollable = true,
         skipPartiallyExpanded = true,
-        onDismiss = { isSheetOpen = true },
+        onDismiss = { isSheetOpen = false },
         content = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Column(
@@ -108,6 +108,7 @@ fun CategoryFormEditContent(
                         )
                 )
                 {
+                    Spacer(modifier = Modifier.height(12.dp))
                     TextField(
                         value = state.categoryName,
                         onValueChange = onTitleChange,
@@ -141,7 +142,10 @@ fun CategoryFormEditContent(
                         Image(
                             painter = rememberAsyncImagePainter(state.imageUri),
                             contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(16.dp))
+                                .padding(1.dp),
                             contentScale = ContentScale.Crop
                         )
                         Box(
