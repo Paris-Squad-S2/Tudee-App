@@ -11,7 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.AddCategoryScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormViewModel
 import com.example.tudeeapp.presentation.screen.category.CategoryScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
@@ -20,6 +21,7 @@ import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
@@ -49,7 +51,7 @@ fun TudeeNavGraph() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = Screens.Splash,
+                startDestination = Screens.CategoriesForm,
             ) {
 
                 composable<Screens.Splash> {
@@ -82,7 +84,8 @@ fun TudeeNavGraph() {
                 }
 
                 composable<Screens.CategoriesForm> {
-                    CategoryFormScreen()
+                    val categoryFormViewModel : CategoryFormViewModel = koinViewModel()
+                    AddCategoryScreen(categoryFormViewModel)
                 }
 
                 composable<Screens.CategoryDetails> {
