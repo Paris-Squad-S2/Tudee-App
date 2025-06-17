@@ -19,6 +19,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.unit.Dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
@@ -32,7 +33,9 @@ fun TopAppBar(
     label: String? = null,
     withOption: Boolean = false,
     showIndicator: Boolean = false,
-    onclickOption: () -> Unit = {}
+    onclickOption: () -> Unit = {},
+    iconButton: ImageVector = ImageVector.vectorResource(R.drawable.ic_options),
+    iconSize: Dp = 40.dp
 ) {
     Row(
         modifier = modifier
@@ -72,7 +75,9 @@ fun TopAppBar(
         if (withOption) {
             OptionsButton(
                 onClick = onclickOption,
-                showIndicator = showIndicator
+                showIndicator = showIndicator,
+                iconButton = iconButton,
+                iconSize = iconSize
             )
         }
     }
@@ -81,16 +86,18 @@ fun TopAppBar(
 @Composable
 private fun OptionsButton(
     onClick: () -> Unit,
+    iconButton: ImageVector,
     modifier: Modifier = Modifier,
-    showIndicator: Boolean = false
+    showIndicator: Boolean = false,
+    iconSize: Dp = 40.dp
 ) {
     Box(modifier = modifier) {
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_options),
+            imageVector = iconButton,
             contentDescription = "Options",
             tint = Theme.colors.stroke,
             modifier = Modifier
-                .size(40.dp)
+                .size(iconSize)
                 .clickable { onClick() }
         )
 
