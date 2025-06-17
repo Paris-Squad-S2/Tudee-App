@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.screen.categoryDetails
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
@@ -87,7 +90,8 @@ fun CategoryDetailsContent(
     onStatusChange: (TaskStatus) -> Unit,
     onBack: () -> Unit,
     categoryTitle: String,
-    onOptionClick: () -> Unit = {}
+    onOptionClick: () -> Unit = {},
+    navController: NavHostController = LocalNavController.current
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         TopAppBar(
@@ -141,6 +145,9 @@ fun CategoryDetailsContent(
                     priorityIcon = task.priority.toIcon(),
                     priorityColor = task.priority.toColor(),
                     isDated = true,
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screens.TaskDetails(task.id))
+                    }
                 )
             }
         }
