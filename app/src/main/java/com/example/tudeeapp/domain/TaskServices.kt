@@ -10,4 +10,5 @@ interface TaskServices {
    suspend fun loadPredefinedCategories()
    suspend fun addCategory(title : String , imageUrl: String)
    suspend fun editCategory(id: Long,title : String , imageUrl: String)
+   suspend fun getCategoryById(id: Long): Category
 }

@@ -91,4 +91,7 @@ class TaskServicesImpl(
 
     }
 
+    override suspend fun getCategoryById(id: Long): Category = categoryDao.findById(id).first().toCategory()
+
+
 }

@@ -12,16 +12,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CategoryFormViewModel(val taskServices: TaskServices, category: Category) : ViewModel() {
+class CategoryFormViewModel(val taskServices: TaskServices,categoryId: Long) : ViewModel() {
 
-    private val _state = MutableStateFlow(
-        CategoryFormState(
-            categoryName = category.title,
-            categoryId = category.id,
-            imageUri = category.imageUrl.toUri()
-        )
-    )
+    private val _state = MutableStateFlow(CategoryFormState())
     val state: StateFlow<CategoryFormState> = _state.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val category = taskServices.getCategoryById(categoryId)
+            _state.update {
+                it.copy(
+                    categoryName = category.title,
+                    categoryId = category.id,
+                    imageUri = category.imageUrl.toUri()
+                )
+            }
+        }
+    }
 
     fun updateCategoryName(newCategoryName: String) {
         _state.update { it.copy(categoryName = newCategoryName) }
