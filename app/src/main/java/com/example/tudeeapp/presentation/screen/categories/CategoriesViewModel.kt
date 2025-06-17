@@ -2,9 +2,7 @@ package com.example.tudeeapp.presentation.screen.categories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.models.Category
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -34,14 +32,5 @@ class CategoriesViewModel(private val taskServices: TaskServices) : ViewModel() 
                 _state.update { it.copy(errorMessage = e.message) }
             }
         }
-    }
-
-    fun Category.toCategoryUIState(): CategoryItemUIState {
-        return CategoryItemUIState(
-            name = this.title,
-            imageResId = this.imageUrl.toResDrawables(),
-            count = this.tasksCount,
-            id = this.id
-        )
     }
 }
