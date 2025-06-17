@@ -5,6 +5,7 @@ import com.example.tudeeapp.data.mapper.DataConstant
 import com.example.tudeeapp.data.mapper.toCategory
 import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTask
+import com.example.tudeeapp.data.mapper.toTaskEntity
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
@@ -20,7 +21,7 @@ class TaskServicesImpl(
     private val taskDao: TaskDao,
     private val categoryDao: CategoryDao,
     private val appPreferences: AppPreferences,
-    private val dataConstant: DataConstant
+    private val dataConstant: DataConstant,
 ) : TaskServices {
 
     override fun getAllTasks(): Flow<List<Task>> {
@@ -28,7 +29,7 @@ class TaskServicesImpl(
             return taskDao.getAll().map { it.map { it.toTask() } }
         } catch (e: DataException) {
             throw TaskException()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             throw TaskException()
         }
     }
@@ -38,7 +39,7 @@ class TaskServicesImpl(
             return categoryDao.getAll().map { it.map { it.toCategory() } }
         } catch (e: DataException) {
             throw CategoryException()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             throw CategoryException()
         }
 
@@ -46,15 +47,32 @@ class TaskServicesImpl(
 
     override suspend fun loadPredefinedCategories() {
         try {
-        if (appPreferences.isAppLaunchForFirstTime()) {
-            categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
-            appPreferences.setAppLaunchIsDone()
-        }}catch (e: DataException){
+            if (appPreferences.isAppLaunchForFirstTime()) {
+                categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
+                appPreferences.setAppLaunchIsDone()
+            }
+        } catch (e: DataException) {
             throw CategoryException()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             throw CategoryException()
         }
     }
 
+    override suspend fun addTask(task: Task): Boolean {
+        return try {
+            taskDao.insert(task.toTaskEntity())
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 
+    override suspend fun editTask(task: Task): Boolean {
+        return try {
+            taskDao.update(task.toTaskEntity())
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 }
