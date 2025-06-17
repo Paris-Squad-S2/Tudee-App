@@ -37,12 +37,12 @@ class CategoryFormViewModel(val taskServices: TaskServices, category: Category) 
         }
     }
 
-    fun editCategory(title: String, imageUrl: String) {
+    fun editCategory() {
         viewModelScope.launch {
             taskServices.editCategory(
-                id = _state.value.categoryId,
-                title = title,
-                imageUrl = imageUrl
+                id = state.value.categoryId,
+                title = state.value.categoryName,
+                imageUrl = state.value.imageUri.toString()
             )
         }
     }
@@ -52,6 +52,6 @@ class CategoryFormViewModel(val taskServices: TaskServices, category: Category) 
     }
 
     fun submitCategory() {
-
+        editCategory()
     }
 }
