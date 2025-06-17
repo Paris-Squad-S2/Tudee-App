@@ -12,7 +12,10 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun TextTopBar(modifier: Modifier = Modifier) {
+fun TextTopBar(
+    modifier: Modifier = Modifier,
+    title: String
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -21,7 +24,7 @@ fun TextTopBar(modifier: Modifier = Modifier) {
             .padding(vertical = 20.dp, horizontal = 16.dp)
     ) {
         Text(
-            text = "Categories",
+            text = title,
             style = Theme.textStyle.title.large,
             color = Theme.colors.text.title
         )

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
@@ -65,7 +66,7 @@ fun CategoriesContent(
                 )
         },
         topBar = {
-            TextTopBar()
+            TextTopBar(title = stringResource(R.string.categories))
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
