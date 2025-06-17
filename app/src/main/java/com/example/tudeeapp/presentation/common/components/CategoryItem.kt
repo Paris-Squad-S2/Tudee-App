@@ -28,12 +28,14 @@ fun CategoryItem(
     icon: Painter,
     label: String,
     iconColor: Color,
+    modifier: Modifier = Modifier,
     count: Int? = null,
     isSelected: Boolean = true
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Box(
             modifier = Modifier
@@ -45,7 +47,7 @@ fun CategoryItem(
         ) {
             when {
                 isSelected -> SelectedBadge(Modifier.align(Alignment.TopEnd))
-                count != 0 -> NumBadge(count, Modifier.align(Alignment.TopEnd))
+                count != null -> NumBadge(count, Modifier.align(Alignment.TopEnd))
             }
 
             Icon(

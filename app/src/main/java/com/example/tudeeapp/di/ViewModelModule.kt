@@ -1,8 +1,7 @@
 package com.example.tudeeapp.di
 
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tudeeapp.MainViewModel
-import com.example.tudeeapp.presentation.screen.categories.viewModel.CategoriesViewModel
+import com.example.tudeeapp.presentation.screen.categories.CategoriesViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
