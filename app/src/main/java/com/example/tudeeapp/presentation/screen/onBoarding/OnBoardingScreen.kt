@@ -111,7 +111,7 @@ fun OnBoardingScreenContent(
 @Composable
 fun OnBoardingScreenPreview(){
     OnBoardingScreenContent(
-        pages = pages,
+        pages = onboardingPages(),
         onFinished = {},
         onPageChanged = {},
         state = OnboardingState()

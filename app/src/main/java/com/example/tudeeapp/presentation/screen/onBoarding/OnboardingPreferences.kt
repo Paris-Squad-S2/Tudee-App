@@ -6,15 +6,20 @@ import androidx.core.content.edit
 class OnboardingPreferences(private val context: Context) {
 
     fun isOnboardingCompleted(): Boolean {
-        return context.getSharedPreferences("onboarding", Context.MODE_PRIVATE)
-            .getBoolean("completed", false)
+        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .getBoolean(KEY_COMPLETED, false)
     }
 
     fun setOnboardingCompleted() {
-        context.getSharedPreferences("onboarding", Context.MODE_PRIVATE)
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .edit {
-                putBoolean("completed", true)
+                putBoolean(KEY_COMPLETED, true)
             }
+    }
+
+    companion object {
+        private const val PREF_NAME = "onboarding"
+        private const val KEY_COMPLETED = "completed"
     }
 
 }

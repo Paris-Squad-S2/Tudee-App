@@ -14,7 +14,7 @@ import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsS
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
-import com.example.tudeeapp.presentation.screen.onBoarding.pages
+import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
@@ -38,7 +38,7 @@ fun TudeeNavGraph() {
                 val onboardingViewModel : OnboardingViewModel = koinViewModel()
                 OnBoardScreen(
                     viewModel = onboardingViewModel,
-                    pages = pages
+                    pages = onboardingPages()
                 )
             }
 
