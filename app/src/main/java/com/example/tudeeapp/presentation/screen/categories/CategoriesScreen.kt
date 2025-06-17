@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.screen.categories
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,11 +10,14 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.components.CategoryItem
@@ -34,26 +38,58 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
 @Composable
 fun CategoriesContent(state: CategoryUIState) {
     val navController = LocalNavController.current
-    TudeeScaffold(showFloatingActionButton = true) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 20.dp)
-        ) {
-            Text(
-                text = "Categories",
-                style = Theme.textStyle.title.large,
-                color = Theme.colors.text.title,
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 20.dp)
-            )
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(count = 3),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                items(state.categories) {
-                    CategoryListItem(category = it)
+
+    TudeeScaffold(
+        showFloatingActionButton = true
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            when {
+                state.isLoading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+                state.errorMessage != null -> {
+                    Text(
+                        text = state.errorMessage,
+                        style = Theme.textStyle.body.medium,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(16.dp)
+                    )
+                }
+
+                else -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 20.dp)
+                    ) {
+                        Text(
+                            text = "Categories",
+                            style = Theme.textStyle.title.large,
+                            color = Theme.colors.text.title,
+                            modifier = Modifier
+                                .statusBarsPadding()
+                                .padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    bottom = 20.dp,
+                                    top = 20.dp
+                                )
+                        )
+
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(count = 3),
+                            verticalArrangement = Arrangement.spacedBy(24.dp),
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        ) {
+                            items(state.categories) {
+                                CategoryListItem(category = it)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -65,8 +101,8 @@ private fun CategoryListItem(category: CategoryItemUIState) {
     CategoryItem(
         icon = painterResource(category.imageResId),
         label = category.name,
-        count = category.count,
-        iconColor = Theme.colors.secondary,
+        count = 3,
+        iconColor = Color.Unspecified,
         isSelected = false
     )
 }

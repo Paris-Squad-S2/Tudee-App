@@ -1,14 +1,18 @@
 package com.example.tudeeapp.presentation.screen.categories.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.example.tudeeapp.R
+import androidx.lifecycle.viewModelScope
+import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
+import com.example.tudeeapp.domain.TaskServices
+import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.screen.categories.viewModel.state.CategoryItemUIState
 import com.example.tudeeapp.presentation.screen.categories.viewModel.state.CategoryUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class CategoriesViewModel(): ViewModel() {
+class CategoriesViewModel(private val taskServices: TaskServices) : ViewModel() {
     private val _state = MutableStateFlow(CategoryUIState())
     val state = _state.asStateFlow()
 
@@ -17,42 +21,28 @@ class CategoriesViewModel(): ViewModel() {
     }
 
     private fun getCategories() {
-        _state.update { it.copy(
-            categories = listOf(
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10),
-                CategoryItemUIState(name = "Education", imageResId = R.drawable.ic_education, count = 10)
-            )
-        ) }
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            try {
+                taskServices.getAllCategories().collect { categories ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            categories = categories.map { it.toCategoryUIState() }
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _state.update { it.copy(errorMessage = e.message) }
+            }
+        }
+    }
+
+    fun Category.toCategoryUIState(): CategoryItemUIState {
+        return CategoryItemUIState(
+            name = this.title,
+            imageResId = this.imageUrl.toResDrawables(),
+            count = this.tasksCount
+        )
     }
 }
