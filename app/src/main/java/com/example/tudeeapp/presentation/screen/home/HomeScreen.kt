@@ -350,21 +350,21 @@ private fun OverViewCardsRow(
             color = Theme.colors.status.greenAccent,
             painter = painterResource(id = R.drawable.ic_done),
             stat = doneTasksCount,
-            label = "Done"
+            label = stringResource(R.string.done)
         )
         OverviewCard(
             modifier = Modifier.weight(1f),
             color = Theme.colors.status.yellowAccent,
             painter = painterResource(id = R.drawable.ic_in_progress),
             stat = inProgressTasksCount,
-            label = "In Progress",
+            label = stringResource(R.string.in_progress),
         )
         OverviewCard(
             modifier = Modifier.weight(1f),
             color = Theme.colors.status.purpleAccent,
             painter = painterResource(id = R.drawable.ic_to_do),
             stat = toDoTasksCount,
-            label = "To-Do",
+            label = stringResource(R.string.to_do),
         )
     }
 }
