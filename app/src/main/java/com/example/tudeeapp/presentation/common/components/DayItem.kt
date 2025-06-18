@@ -25,7 +25,7 @@ fun DayItem(
     isSelected: Boolean,
     dayNumber: String,
     dayName: String,
-    onClick: () -> Unit,
+    onClick: ()->Unit,
     modifier: Modifier = Modifier
 ) {
     val dayNumberTextColor = if (isSelected) Theme.colors.surfaceColors.onPrimaryColors.onPrimary else Theme.colors.text.body
@@ -36,13 +36,14 @@ fun DayItem(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(brush = backgroundColor),
+            .background(brush = backgroundColor)
+            .clickable{onClick()},
         contentAlignment = Alignment.Center
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(horizontal = 16.dp , vertical = 12.dp).clickable { onClick() }
+            modifier = Modifier.padding(horizontal = 16.dp , vertical = 12.dp)
         ) {
             Text(
                 text = dayNumber,
