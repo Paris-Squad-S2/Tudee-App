@@ -46,8 +46,7 @@ fun TaskItemWithSwipe(
     isDated: Boolean,
     modifier: Modifier = Modifier,
     iconColor: Color = Color.Unspecified,
-    onClickPriority: () -> Unit = {},
-    onClickDate: () -> Unit = {},
+    onClickItem: () -> Unit = {},
     onDelete: () -> Unit = {}
 ) {
     SwipeToDeleteTaskItem(
@@ -64,8 +63,7 @@ fun TaskItemWithSwipe(
             priorityColor = priorityColor,
             isDated = isDated,
             iconColor = iconColor,
-            onClickPriority = onClickPriority,
-            onClickDate = onClickDate
+            onClickItem = onClickItem
         )
     }
 }
@@ -95,7 +93,6 @@ private fun SwipeToDeleteTaskItem(
                 resistance = null // Optional: remove resistance to make swipe natural
             )
     ) {
-        // Background (Delete Icon)
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -110,9 +107,7 @@ private fun SwipeToDeleteTaskItem(
                 tint = Theme.colors.status.error,
                 modifier = Modifier
                     .size(32.dp)
-                    .clickable {
-                        onDelete
-                    }
+                    .clickable { onDelete() }
             )
         }
 
