@@ -7,4 +7,10 @@
     <string name="tasks">المهام</string>
     <string name="no_tasks_here">لا توجد مهام هنا!</string>
     <string name="tap_the_button_to_add_your_first_one">اضغط على زر + لإضافة أول واحد.</string>
+    <string name="onboarding1title">تشعر بالإرهاق من كثرة المهام؟</string>
+    <string name="onboarding1description">لننظم الفوضى معًا. تودي هنا لمساعدتك في الترتيب والتخطيط لتتنفس بسهولة.</string>
+    <string name="onboarding2title">أوه لا! تماطل مرة أخرى؟</string>
+    <string name="onboarding2description">تودي ليس غاضبًا... فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
+    <string name="onboarding3title">لنُنجز المهام ونحتفل معًا.</string>
+    <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
 </resources>
