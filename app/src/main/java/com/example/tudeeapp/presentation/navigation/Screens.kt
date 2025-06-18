@@ -33,6 +33,6 @@ sealed class Screens {
     data object CategoryDetails : Screens()
 
     @Serializable
-    data object TaskManagement : Screens()
+    data class TaskManagement(val taskId: Int? = null) : Screens()
 
 }

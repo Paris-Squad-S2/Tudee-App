@@ -52,9 +52,8 @@ fun TudeeDatePickerDialog(
         confirmButton = {
             ConfirmDateButton(
                 datePickerState = datePickerState,
-                onSelectDate = {
-                    onSelectDate
-                },
+                onSelectDate = onSelectDate,
+                onDismiss = onDismiss
             )
         },
         dismissButton = {
@@ -68,7 +67,8 @@ fun TudeeDatePickerDialog(
 @Composable
 private fun ConfirmDateButton(
     datePickerState: DatePickerState,
-    onSelectDate: (LocalDate) -> Unit
+    onSelectDate: (LocalDate) -> Unit,
+    onDismiss: () -> Unit
 ) {
     TextButton(
         onClick = {
@@ -77,6 +77,7 @@ private fun ConfirmDateButton(
                     .toLocalDateTime(TimeZone.currentSystemDefault()).date
                 onSelectDate(localDate)
             }
+            onDismiss()
         }
     ) {
         Text(
