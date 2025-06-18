@@ -117,7 +117,7 @@ private fun CategoryListItem(
         count = category.count,
         iconColor = Color.Unspecified,
         isSelected = false,
-        modifier = Modifier.clickable { onClickItem(category.id) }
+        onClick = {onClickItem(category.id)}
     )
 }
 
