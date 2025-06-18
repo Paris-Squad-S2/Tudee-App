@@ -1,32 +1,43 @@
 package com.example.tudeeapp.presentation.common.components
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.tudeeapp.R
+import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.screen.home.mapTaskCountToSliderState
 
 @Composable
 fun Slider(
-    title: String,
-    description: String,
-    image: Painter,
     modifier: Modifier = Modifier,
-    titleIcon: Painter
+    taskCount: Map<TaskStatus, Int>,
 ) {
+    val state = mapTaskCountToSliderState(taskCount)
+
     Row(
         modifier = modifier
             .fillMaxWidth(),
@@ -38,19 +49,19 @@ fun Slider(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = title,
+                    text = state.title,
                     style = Theme.textStyle.title.small
                 )
                 Spacer(Modifier.width(8.dp))
                 Icon(
-                    painter = titleIcon,
+                    painter = painterResource(state.icon),
                     contentDescription = "",
                     tint = Color.Unspecified
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = description,
+                text = state.description,
                 style = Theme.textStyle.body.small,
                 color = Theme.colors.text.body
             )
@@ -76,13 +87,12 @@ fun Slider(
                     .clip(CircleShape)
             ) {
                 Image(
-                    painter = image,
+                    painter = painterResource(state.image),
                     contentDescription = "robot",
                     modifier = Modifier.fillMaxSize()
                 )
             }
         }
-
     }
 }
 
@@ -91,10 +101,11 @@ fun Slider(
 private fun SliderPreview() {
     BasePreview {
         Slider(
-            title = "Stay working!",
-            description = "You've completed 3 out of 10 tasks Keep going!",
-            image = painterResource(id = R.drawable.img_ropot1),
-            titleIcon = painterResource(id = R.drawable.ic_good)
+            taskCount = mapOf<TaskStatus, Int>(
+                TaskStatus.TO_DO to 0,
+                TaskStatus.IN_PROGRESS to 0,
+                TaskStatus.DONE to 0
+            )
         )
     }
 }

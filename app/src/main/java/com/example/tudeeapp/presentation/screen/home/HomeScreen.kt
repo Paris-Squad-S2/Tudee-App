@@ -290,10 +290,11 @@ private fun OverViewSection(
                 start = 6.dp,
                 end = 6.dp
             ),
-            title = "Stay working!",
-            description = "You've completed 3 out of 10 tasks Keep going!",
-            image = painterResource(id = R.drawable.img_ropot1),
-            titleIcon = painterResource(id = R.drawable.ic_good)
+            taskCount = mapOf<TaskStatus, Int>(
+                TaskStatus.TO_DO to toDoTasksCount,
+                TaskStatus.IN_PROGRESS to inProgressTasksCount,
+                TaskStatus.DONE to doneTasksCount
+            )
         )
         OverViewContainer(
             toDoTasksCount = toDoTasksCount,
