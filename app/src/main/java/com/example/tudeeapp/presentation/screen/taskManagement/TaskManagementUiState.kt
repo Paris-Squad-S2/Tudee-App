@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.TaskManagement
+package com.example.tudeeapp.presentation.screen.taskManagement
 
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.TaskPriority

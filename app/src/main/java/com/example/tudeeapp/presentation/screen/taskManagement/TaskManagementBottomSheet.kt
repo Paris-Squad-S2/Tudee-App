@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.TaskManagement
+package com.example.tudeeapp.presentation.screen.taskManagement
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -8,10 +8,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.screen.TaskManagement.components.AddEditStickButtons
-import com.example.tudeeapp.presentation.screen.TaskManagement.components.TaskManagementTextFields
-import com.example.tudeeapp.presentation.screen.TaskManagement.components.CategoryGrid
-import com.example.tudeeapp.presentation.screen.TaskManagement.components.PriorityRow
+import com.example.tudeeapp.presentation.screen.taskManagement.components.AddEditStickButtons
+import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
+import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
+import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.navigation.LocalNavController

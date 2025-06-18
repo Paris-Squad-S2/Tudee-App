@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.TaskManagement
+package com.example.tudeeapp.presentation.screen.taskManagement
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

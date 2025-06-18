@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.TaskManagement.components
+package com.example.tudeeapp.presentation.screen.taskManagement.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
