@@ -9,20 +9,17 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.Task
@@ -32,9 +29,11 @@ import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.common.components.TopAppBar
-import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryDetailsUiState
+import com.example.tudeeapp.presentation.screen.errorScreen.ErrorScreen
+import com.example.tudeeapp.presentation.screen.loadingScreen.LoadingScreen
 import com.example.tudeeapp.presentation.utils.toColor
 import com.example.tudeeapp.presentation.utils.toIcon
 import kotlinx.datetime.toLocalDate
@@ -42,40 +41,31 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoryDetailsScreen(
-    viewModel: CategoryDetailsViewModel = koinViewModel(),
-    categoryId: Long,
-    categoryTitle: String,
-    categoryImage: Int
+    viewModel: CategoryDetailsViewModel = koinViewModel()
 ) {
     val navController = LocalNavController.current
 
-    val uiState by viewModel.allTasksState.collectAsState()
+    val uiState by viewModel.category.collectAsState()
     val selectedState by viewModel.stateFilter.collectAsState()
 
-    LaunchedEffect(key1 = categoryId) {
-        viewModel.loadTasks(categoryId)
-    }
-
-    when (uiState) {
-        is CategoryDetailsUiState.Loading -> {
+    when {
+        uiState.isLoading -> {
             LoadingScreen()
         }
 
-        is CategoryDetailsUiState.Error -> {
-            val message = (uiState as CategoryDetailsUiState.Error).message
-            ErrorScreen(message = message)
+        uiState.errorMessage.isNotEmpty() -> {
+            ErrorScreen(message = uiState.errorMessage)
         }
 
-        is CategoryDetailsUiState.Success -> {
-            val tasks = (uiState as CategoryDetailsUiState.Success).data
+        uiState.category != null -> {
             CategoryDetailsContent(
-                tasks = tasks,
+                tasks = uiState.tasks,
                 selectedState = selectedState,
                 onStatusChange = viewModel::setStatus,
                 onBack = { navController.popBackStack() },
-                categoryTitle = categoryTitle,
+                categoryTitle = uiState.category!!.title,
                 onOptionClick = { navController.navigate(Screens.CategoriesForm) },
-                categoryImage = categoryImage
+                categoryImage = uiState.category!!.imageUrl.toInt()
             )
         }
     }
@@ -93,7 +83,7 @@ fun CategoryDetailsContent(
     onOptionClick: () -> Unit = {},
     navController: NavHostController = LocalNavController.current
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize().statusBarsPadding()) {
         TopAppBar(
             modifier = Modifier,
             onClickBack = onBack,
@@ -111,9 +101,9 @@ fun CategoryDetailsContent(
 
         HorizontalTabs(
             tabs = listOf(
-                Tab(title = "In progress", count = inProgressCount),
-                Tab(title = "To Do", count = toDoCount),
-                Tab(title = "Done", count = doneCount)
+                Tab(title = stringResource(R.string.in_progress), count = inProgressCount),
+                Tab(title = stringResource(R.string.to_do), count = toDoCount),
+                Tab(title = stringResource(R.string.done), count = doneCount)
             ),
             selectedTabIndex = when (selectedState) {
                 TaskStatus.IN_PROGRESS -> 0
@@ -151,33 +141,6 @@ fun CategoryDetailsContent(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun LoadingScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        androidx.compose.material3.CircularProgressIndicator()
-    }
-}
-
-@Composable
-fun ErrorScreen(message: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        androidx.compose.material3.Text(
-            text = "Error: $message",
-            color = Color.Red
-        )
     }
 }
 
