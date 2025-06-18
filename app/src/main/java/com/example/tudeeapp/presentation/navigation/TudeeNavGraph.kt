@@ -1,5 +1,7 @@
 package com.example.tudeeapp.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -12,17 +14,21 @@ import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
-import com.example.tudeeapp.presentation.screen.category.CategoryScreen
+import com.example.tudeeapp.presentation.screen.category.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
+import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
+import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TudeeNavGraph() {
     val navController = rememberNavController()
@@ -59,7 +65,11 @@ fun TudeeNavGraph() {
                 }
 
                 composable<Screens.OnBoarding> {
-                    OnBoardScreen()
+                    val onboardingViewModel : OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
+                    )
                 }
 
                 composable<Screens.Home> {
@@ -71,7 +81,7 @@ fun TudeeNavGraph() {
                 }
 
                 composable<Screens.Category> {
-                    CategoryScreen()
+                    CategoriesScreen()
                 }
 
 
@@ -95,4 +105,3 @@ fun TudeeNavGraph() {
         }
     }
 }
-
