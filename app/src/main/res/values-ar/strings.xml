@@ -15,4 +15,6 @@
     <string name="onboarding2description">تودي ليس غاضبًا... فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
     <string name="onboarding3title">لنُنجز المهام ونحتفل معًا.</string>
     <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
+    <string name="date_format_today">اليوم</string>
+    <string name="date_format_medium">%s, %d %s %d</string>
 </resources>

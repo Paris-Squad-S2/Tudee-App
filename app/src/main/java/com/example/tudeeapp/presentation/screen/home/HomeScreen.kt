@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +48,8 @@ import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.home.composable.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
+import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
+import kotlinx.datetime.LocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -257,6 +260,12 @@ private fun OverViewSection(
     inProgressTasksCount: Int,
     toDoTasksCount: Int
 ) {
+    val todayText = stringResource(id = R.string.date_format_today)
+
+    val formattedDate = remember {
+        getLocalizedToday()
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -274,12 +283,12 @@ private fun OverViewSection(
             Icon(
                 modifier = Modifier.size(16.dp),
                 painter = painterResource(id = R.drawable.ic_date),
-                contentDescription = "Today Date",
-                tint = Theme.colors.text.body,
+                contentDescription = todayText,
+                tint = Theme.colors.text.body
             )
             Text(
                 modifier = Modifier.padding(start = 8.dp),
-                text = "today, 22 Jun 2025",
+                text = "$todayText, $formattedDate",
                 style = Theme.textStyle.label.medium,
                 color = Theme.colors.text.body
             )

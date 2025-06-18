@@ -41,7 +41,7 @@ fun OverviewCard(
                 .align(Alignment.Companion.TopEnd)
                 .offset(x = 39.dp, y = (-39).dp),
             painter = painterResource(R.drawable.ic_overview_card_background),
-            contentDescription = "icon",
+            contentDescription = null,
             tint = Color.Companion.Unspecified,
         )
         Column(
@@ -61,7 +61,7 @@ fun OverviewCard(
             ) {
                 Icon(
                     painter = painter,
-                    contentDescription = "icon",
+                    contentDescription = null,
                     tint = Color.Companion.Unspecified
                 )
             }
