@@ -1,6 +1,5 @@
 package com.example.tudeeapp.data
 
-import com.example.tudeeapp.data.exception.DataException
 import com.example.tudeeapp.data.mapper.DataConstant
 import com.example.tudeeapp.data.mapper.toCategory
 import com.example.tudeeapp.data.mapper.toCategoryEntity
@@ -26,8 +25,6 @@ class TaskServicesImpl(
     override fun getAllTasks(): Flow<List<Task>> {
         try {
             return taskDao.getAll().map { it.map { it.toTask() } }
-        } catch (e: DataException) {
-            throw TaskException()
         }catch (e: Exception){
             throw TaskException()
         }
@@ -36,8 +33,6 @@ class TaskServicesImpl(
     override fun getAllCategories(): Flow<List<Category>> {
         try {
             return categoryDao.getAll().map { it.map { it.toCategory() } }
-        } catch (e: DataException) {
-            throw CategoryException()
         }catch (e: Exception){
             throw CategoryException()
         }
@@ -49,9 +44,7 @@ class TaskServicesImpl(
         if (appPreferences.isAppLaunchForFirstTime()) {
             categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
             appPreferences.setAppLaunchIsDone()
-        }}catch (e: DataException){
-            throw CategoryException()
-        }catch (e: Exception){
+        }}catch (e: Exception){
             throw CategoryException()
         }
     }
