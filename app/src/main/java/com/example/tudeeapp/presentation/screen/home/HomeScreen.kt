@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -217,19 +219,86 @@ private fun HomeContent(
 
 @Composable
 fun HomeErrorScreen(error: String) {
-    Column(
+    Box(
         modifier = Modifier
+            .background(Theme.colors.surfaceColors.surface)
             .fillMaxSize()
-            .background(Theme.colors.surfaceColors.surface),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(end = 40.dp)
+        ,
+        contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(R.drawable.img_ropo_cry),
-            contentDescription = null,
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(error, fontSize = 22.sp, color = Theme.colors.text.title)
+
+        Box(
+            modifier = Modifier
+                .size(144.dp)
+                .align(Alignment.CenterEnd)
+        ) {
+
+            Image(
+                painter = painterResource(R.drawable.task_card_ropo_background),
+                contentDescription = "ropo",
+                modifier = Modifier
+                    .size(136.dp)
+                    .align(Alignment.TopEnd)
+            )
+
+
+            Image(
+                painter = painterResource(R.drawable.task_card_ropo_container),
+                contentDescription = "ropo",
+                modifier = Modifier
+                    .size(144.dp)
+                    .offset(x = (-4).dp, y = (-9).dp)
+            )
+
+            Image(
+                painter = painterResource(R.drawable.task_card_dots),
+                contentDescription = "ropo2",
+                modifier = Modifier
+                    .size(54.dp)
+                    .align(Alignment.CenterStart)
+                    .offset(x = (-2).dp, y = (10).dp)
+
+            )
+
+            Image(
+                painter = painterResource(R.drawable.img_ropo_cry),
+                contentDescription = "ropo4",
+                modifier = Modifier
+                    .width(107.dp)
+                    .height(100.dp)
+                    .align(Alignment.BottomEnd)
+                    .offset(x = 0.dp, y = (-11).dp)
+
+            )
+        }
+        Column(
+            modifier = Modifier
+                .padding(top = 222.dp, end = 90.dp)
+                .width(203.dp)
+                .height(74.dp)
+                .offset(x = 0.dp)
+                .background(
+                    color = Theme.colors.surfaceColors.surfaceHigh,
+                    shape = RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp,
+                        bottomStart = 16.dp,
+                        bottomEnd = 2.dp
+                    )
+                )
+                .padding(vertical = 8.dp, horizontal = 12.dp)
+                .align(Alignment.TopCenter),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = error,
+                style = Theme.textStyle.title.small,
+                color = Theme.colors.text.hint
+            )
+        }
+
     }
 }
 
