@@ -1,5 +1,7 @@
 package com.example.tudeeapp.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -25,21 +27,25 @@ import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
-import com.example.tudeeapp.presentation.screen.category.CategoryScreen
+import com.example.tudeeapp.presentation.screen.category.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
+import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
+import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
 import kotlinx.coroutines.delay
+import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 val LocalSnackBarState = compositionLocalOf<SnackBarState> {
     error("No SnackBarState provided")
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TudeeNavGraph() {
     val navController = rememberNavController()
@@ -78,9 +84,13 @@ fun TudeeNavGraph() {
                         SplashScreen()
                     }
 
-                    composable<Screens.OnBoarding> {
-                        OnBoardScreen()
-                    }
+                composable<Screens.OnBoarding> {
+                    val onboardingViewModel : OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
+                    )
+                }
 
                     composable<Screens.Home> {
                         HomeScreen()
@@ -90,9 +100,9 @@ fun TudeeNavGraph() {
                         TaskScreen()
                     }
 
-                    composable<Screens.Category> {
-                        CategoryScreen()
-                    }
+                composable<Screens.Category> {
+                    CategoriesScreen()
+                }
 
 
                     composable<Screens.TaskForm> {
@@ -137,4 +147,3 @@ fun TudeeNavGraph() {
         }
     }
 }
-
