@@ -1,12 +1,8 @@
 package com.example.tudeeapp.presentation.common.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,7 +14,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
-import kotlinx.coroutines.delay
 
 
 @Composable
@@ -44,47 +38,23 @@ fun TudeeScaffold(
     bottomBar: @Composable () -> Unit = {},
     topBar: @Composable () -> Unit = {},
     contentBackground: Color = Theme.colors.surfaceColors.surface,
-    content: @Composable (snackBar: SnackBarState) -> Unit,
+    content: @Composable () -> Unit,
 ) {
-    val snackBarState = remember { SnackBarState() }
-
-    Box {
-        Scaffold(
-            modifier = modifier,
-            topBar = { topBar() },
-            bottomBar = bottomBar,
-            floatingActionButton = floatingActionButton,
-            contentColor = contentColor,
-            containerColor = backgroundColor,
-            contentWindowInsets = WindowInsets(0.dp)
-        ) { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .background(contentBackground)
-                    .padding(innerPadding)
-            ) {
-                content(snackBarState)
-            }
-        }
-        if (snackBarState.isVisible == true) {
-            AnimatedVisibility(
-                visible = snackBarState.isVisible,
-                enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
-                exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
-            ) {
-                SnackBar(
-                    modifier
-                        .statusBarsPadding()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                    text = snackBarState.message,
-                    isSuccess = snackBarState.isSuccess,
-                    onClick = { snackBarState.hide() }
-                )
-            }
-            LaunchedEffect(Unit) {
-                delay(snackBarState.durationMillis.toLong())
-                snackBarState.hide()
-            }
+    Scaffold(
+        modifier = modifier,
+        topBar = { topBar() },
+        bottomBar = bottomBar,
+        floatingActionButton = floatingActionButton,
+        contentColor = contentColor,
+        containerColor = backgroundColor,
+        contentWindowInsets = WindowInsets(0.dp)
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .background(contentBackground)
+                .padding(innerPadding)
+        ) {
+            content()
         }
     }
 }
@@ -121,13 +91,10 @@ private fun TudeeScaffoldPreview() {
                         onToggleTheme = { toggled = it },
                     )
                 },
-                content = { snakeBar ->
+                content = {
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                snakeBar.show("Hello World")
-                            },
+                            .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(text = "Hello World")
