@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,9 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
@@ -48,6 +49,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.home.composable.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskCard
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
@@ -84,7 +86,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             )
         },
         contentBackground = Theme.colors.surfaceColors.surface,
-        content = { snakeBar ->
+        content = {
             Box {
                 Box(
                     modifier = Modifier
@@ -93,112 +95,158 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
                         .background(Theme.colors.primary)
                         .align(Alignment.TopCenter)
                 )
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    item {
-                        OverViewSection()
+
+                when {
+                    state.isLoading -> {
+                        HomeLoadingScreen()
                     }
-                    item {
-                        AnimatedVisibility(
-                            visible = state.isTasksEmpty,
-                            enter = fadeIn(),
-                            exit = fadeOut()
+
+                    state.error != null -> {
+                        HomeErrorScreen(state.error.toString())
+                    }
+
+                    state.isSuccess -> {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp)
                         ) {
-                            EmptyTasksSection(
-                                Modifier
-                                    .padding(top = 58.dp, bottom = 27.dp)
-                                    .fillMaxWidth()
-                                    .height(160.dp)
-                            )
-                        }
-                    }
-                    item {
-                        if (state.inProgressTasks.isNotEmpty()) {
-                            HomeTaskSection(
-                                tasks = state.inProgressTasks,
-                                tasksType = TaskStatus.IN_PROGRESS,
-                                onTasksCount = {} // handle the tasks count
-                            )
-                        }
-                    }
-                    item {
-                        FlowRow(
-                            modifier = Modifier.horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            maxItemsInEachRow = 2,
-                            maxLines = 2
-                        ) {
-                            state.inProgressTasks.forEach { task ->
-                                HomeTaskCard(
-                                    modifier = Modifier
-                                        .width(320.dp)
-                                        .height(111.dp)
-                                        .clickable { /* TudeeBottomSheet details */ },
-                                    onPriorityClick = { /*  priorityBottomSheet */ },
-                                    task = task
-                                )
+                            item {
+                                OverViewSection()
                             }
-                        }
-                    }
-                    item {
-                        if (state.toDoTasks.isNotEmpty()) {
-                            HomeTaskSection(
-                                tasks = state.toDoTasks,
-                                tasksType = TaskStatus.TO_DO,
-                                onTasksCount = { } // handle the tasks count
-                            )
-                        }
-                    }
-                    item {
-                        FlowRow(
-                            modifier = Modifier.horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            maxItemsInEachRow = 2,
-                            maxLines = 2
-                        ) {
-                            state.toDoTasks.forEach { task ->
-                                HomeTaskCard(
-                                    modifier = Modifier
-                                        .width(320.dp)
-                                        .height(111.dp)
-                                        .clickable { /* TudeeBottomSheet details */ },
-                                    onPriorityClick = { /*  priorityBottomSheet */ },
-                                    task = task
-                                )
+                            item {
+                                AnimatedVisibility(
+                                    visible = state.isTasksEmpty,
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
+                                    EmptyTasksSection(
+                                        Modifier
+                                            .padding(top = 58.dp, bottom = 27.dp)
+                                            .fillMaxWidth()
+                                            .height(160.dp)
+                                    )
+                                }
                             }
-                        }
-                    }
-                    item {
-                        if (state.doneTasks.isNotEmpty()) {
-                            HomeTaskSection(
-                                tasks = state.doneTasks,
-                                tasksType = TaskStatus.DONE,
-                                onTasksCount = { } // handle the tasks count
-                            )
-                        }
-                    }
-                    item {
-                        FlowRow(
-                            modifier = Modifier.horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            maxItemsInEachRow = 2,
-                            maxLines = 2
-                        ) {
-                            state.doneTasks.forEach { task ->
-                                HomeTaskCard(
-                                    modifier = Modifier
-                                        .width(320.dp)
-                                        .height(111.dp)
-                                        .clickable { /* TudeeBottomSheet details */ },
-                                    onPriorityClick = { /*  priorityBottomSheet */ },
-                                    task = task
-                                )
+                            item {
+                                if (state.inProgressTasks.isNotEmpty()) {
+                                    HomeTaskSection(
+                                        tasks = state.inProgressTasks,
+                                        tasksType = TaskStatus.IN_PROGRESS,
+                                        onTasksCount = {
+                                            navController.navigate(
+                                                Screens.Task(
+                                                    TaskStatus.IN_PROGRESS.name
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            item {
+                                FlowRow(
+                                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    maxItemsInEachRow = 2,
+                                    maxLines = 2
+                                ) {
+                                    state.inProgressTasks.forEach { task ->
+                                        HomeTaskCard(
+                                            modifier = Modifier
+                                                .width(320.dp)
+                                                .height(111.dp)
+                                                .clickable {
+                                                    navController.navigate(
+                                                        Screens.TaskDetails(
+                                                            taskId = task.id
+                                                        )
+                                                    )
+                                                },
+                                            task = task
+                                        )
+                                    }
+                                }
+                            }
+                            item {
+                                if (state.toDoTasks.isNotEmpty()) {
+                                    HomeTaskSection(
+                                        tasks = state.toDoTasks,
+                                        tasksType = TaskStatus.TO_DO,
+                                        onTasksCount = {
+                                            navController.navigate(
+                                                Screens.Task(
+                                                    TaskStatus.TO_DO.name
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            item {
+                                FlowRow(
+                                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    maxItemsInEachRow = 2,
+                                    maxLines = 2
+                                ) {
+                                    state.toDoTasks.forEach { task ->
+                                        HomeTaskCard(
+                                            modifier = Modifier
+                                                .width(320.dp)
+                                                .height(111.dp)
+                                                .clickable {
+                                                    navController.navigate(
+                                                        Screens.TaskDetails(
+                                                            task.id
+                                                        )
+                                                    )
+                                                },
+                                            task = task
+                                        )
+                                    }
+                                }
+                            }
+                            item {
+                                if (state.doneTasks.isNotEmpty()) {
+                                    HomeTaskSection(
+                                        tasks = state.doneTasks,
+                                        tasksType = TaskStatus.DONE,
+                                        onTasksCount = {
+                                            navController.navigate(
+                                                Screens.Task(
+                                                    TaskStatus.DONE.name
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            item {
+                                FlowRow(
+                                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    maxItemsInEachRow = 2,
+                                    maxLines = 2
+                                ) {
+                                    state.doneTasks.forEach { task ->
+                                        HomeTaskCard(
+                                            modifier = Modifier
+                                                .width(320.dp)
+                                                .height(111.dp)
+                                                .clickable {
+                                                    navController.navigate(
+                                                        Screens.TaskDetails(
+                                                            task.id
+                                                        )
+                                                    )
+                                                },
+                                            task = task
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -208,88 +256,39 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     )
 }
 
+@Composable
+fun HomeErrorScreen(error: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Theme.colors.surfaceColors.surface),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(R.drawable.img_ropo_cry),
+            contentDescription = null,
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(error, fontSize = 22.sp, color = Theme.colors.text.title)
+    }
+}
 
 @Composable
-fun EmptyTasksSection(modifier: Modifier) {
-    Box(
-        modifier = modifier,
+fun HomeLoadingScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Theme.colors.surfaceColors.surface),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Box(
+        CircularProgressIndicator(
             modifier = Modifier
-                .size(144.dp)
-                .align(Alignment.CenterEnd)
-        ) {
-
-            Image(
-                painter = painterResource(R.drawable.task_card_ropo_background),
-                contentDescription = "ropo",
-                modifier = Modifier
-                    .size(136.dp)
-                    .align(Alignment.TopEnd)
-            )
-
-
-            Image(
-                painter = painterResource(R.drawable.task_card_ropo_container),
-                contentDescription = "ropo",
-                modifier = Modifier
-                    .size(144.dp)
-                    .offset(x = (-4).dp, y = (-9).dp)
-            )
-
-            Image(
-                painter = painterResource(R.drawable.task_card_dots),
-                contentDescription = "ropo2",
-                modifier = Modifier
-                    .size(54.dp)
-                    .align(Alignment.CenterStart)
-                    .offset(x = (-2).dp, y = (10).dp)
-
-            )
-
-            Image(
-                painter = painterResource(R.drawable.img_ropot4),
-                contentDescription = "ropo4",
-                modifier = Modifier
-                    .width(107.dp)
-                    .height(100.dp)
-                    .align(Alignment.BottomEnd)
-                    .offset(x = 0.dp, y = (-11).dp)
-
-            )
-        }
-        Column(
-            modifier = Modifier
-                .padding(end = 100.dp)
-                .width(203.dp)
-                .height(74.dp)
-                .offset(x = 0.dp, y = (-10).dp)
-                .background(
-                    color = Theme.colors.surfaceColors.surfaceHigh,
-                    shape = RoundedCornerShape(
-                        topStart = 16.dp,
-                        topEnd = 16.dp,
-                        bottomStart = 16.dp,
-                        bottomEnd = 2.dp
-                    )
-                )
-                .padding(vertical = 8.dp, horizontal = 12.dp)
-                .align(Alignment.TopCenter),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.no_tasks_for_today),
-                style = Theme.textStyle.title.small,
-                color = Theme.colors.text.hint
-            )
-            Text(
-                text = stringResource(R.string.tap_the_button_to_add_your_first_one),
-                style = Theme.textStyle.body.small,
-                color = Theme.colors.text.hint
-            )
-        }
-
+                .padding(bottom = 10.dp)
+                .size(40.dp)
+        )
+        Text("Loading..", fontSize = 12.sp)
     }
 }
 
