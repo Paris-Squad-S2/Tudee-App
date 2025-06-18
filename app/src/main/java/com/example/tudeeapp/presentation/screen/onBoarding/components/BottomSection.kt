@@ -2,6 +2,7 @@ package com.example.tudeeapp.presentation.screen.onBoarding.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,34 +18,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.TudeeButton
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.onBoarding.Page
+
 
 @Composable
 fun BottomSection(
     page: Page,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(
-                bottom = 32.dp,
-                top = 32.dp
-            )
+    Box(
+        modifier = modifier.padding(top = 32.dp , bottom = 64.dp)
     ) {
         Surface(
             shape = RoundedCornerShape(32.dp),
             color = Theme.colors.surfaceColors.onPrimaryColors.onPrimaryCard,
             modifier = Modifier
-                .height(192.dp)
                 .padding(horizontal = 24.dp)
                 .fillMaxWidth()
+                .align(Alignment.BottomCenter)
                 .border(
                     width = 1.dp,
                     color = Theme.colors.surfaceColors.onPrimaryColors.onPrimaryStroke,
@@ -56,40 +57,58 @@ fun BottomSection(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.padding(
                     top = 24.dp,
-                    bottom = 48.dp,
+                    bottom = 40.dp,
                     start = 16.dp,
-                    end = 16.dp
+                    end = 16.dp,
                 )
             ) {
                 Text(
                     text = page.title,
                     color = Theme.colors.text.title,
                     style = Theme.textStyle.title.medium,
-                    modifier = Modifier.height(44.dp),
+                    modifier = Modifier,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = page.description,
                     color = Theme.colors.text.body,
-                    style = Theme.textStyle.body.medium,
+                    style = Theme.textStyle.body.small,
                     textAlign = TextAlign.Center
-                )
+                    )
             }
         }
+
         TudeeButton(
             onClick = onNextClick,
             variant = ButtonVariant.FloatingActionButton,
             modifier = Modifier
+                .align(Alignment.BottomCenter)
                 .size(64.dp)
-                .offset(y = (-32).dp),
+                .offset(y= (28).dp)
+            ,
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_right_double),
                     contentDescription = "Next Page",
-                    modifier = Modifier.size(28.dp)
                 )
             }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun BottomSheetPreview() {
+    val page = Page(
+        image = R.drawable.img_robot4,
+        title = stringResource(id = R.string.onboarding1title),
+        description = stringResource(id = R.string.onboarding1description)
+    )
+    BasePreview {
+        BottomSection(
+            page = page,
+            onNextClick = {}
         )
     }
 }
