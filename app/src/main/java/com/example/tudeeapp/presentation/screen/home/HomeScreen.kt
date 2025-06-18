@@ -49,7 +49,6 @@ import com.example.tudeeapp.presentation.screen.home.composable.EmptyTasksSectio
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
-import kotlinx.datetime.LocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -324,7 +323,7 @@ fun OverViewContainer(
         modifier.padding(horizontal = 12.dp)
     ) {
         Text(
-            text = "Overview", modifier = Modifier.padding(bottom = 8.dp),
+            text = stringResource(R.string.overview), modifier = Modifier.padding(bottom = 8.dp),
             style = Theme.textStyle.title.large,
             color = Theme.colors.text.title
         )

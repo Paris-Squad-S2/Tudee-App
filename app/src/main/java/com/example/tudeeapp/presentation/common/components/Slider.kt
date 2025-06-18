@@ -23,7 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
@@ -49,19 +51,19 @@ fun Slider(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = state.title,
+                    text = stringResource(state.titleRes),
                     style = Theme.textStyle.title.small
                 )
                 Spacer(Modifier.width(8.dp))
                 Icon(
-                    painter = painterResource(state.icon),
+                    painter = painterResource(state.iconRes),
                     contentDescription = "",
                     tint = Color.Unspecified
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = state.description,
+                text = LocalContext.current.getString(state.descriptionRes, *state.formatArgs),
                 style = Theme.textStyle.body.small,
                 color = Theme.colors.text.body
             )
@@ -87,7 +89,7 @@ fun Slider(
                     .clip(CircleShape)
             ) {
                 Image(
-                    painter = painterResource(state.image),
+                    painter = painterResource(state.imageRes),
                     contentDescription = "robot",
                     modifier = Modifier.fillMaxSize()
                 )
@@ -100,12 +102,35 @@ fun Slider(
 @Composable
 private fun SliderPreview() {
     BasePreview {
-        Slider(
-            taskCount = mapOf<TaskStatus, Int>(
-                TaskStatus.TO_DO to 0,
-                TaskStatus.IN_PROGRESS to 0,
-                TaskStatus.DONE to 0
+        Column {
+            Slider(
+                taskCount = mapOf<TaskStatus, Int>(
+                    TaskStatus.TO_DO to 0,
+                    TaskStatus.IN_PROGRESS to 0,
+                    TaskStatus.DONE to 0
+                )
             )
-        )
+            Slider(
+                taskCount = mapOf<TaskStatus, Int>(
+                    TaskStatus.TO_DO to 0,
+                    TaskStatus.IN_PROGRESS to 0,
+                    TaskStatus.DONE to 5
+                )
+            )
+            Slider(
+                taskCount = mapOf<TaskStatus, Int>(
+                    TaskStatus.TO_DO to 5,
+                    TaskStatus.IN_PROGRESS to 0,
+                    TaskStatus.DONE to 0
+                )
+            )
+            Slider(
+                taskCount = mapOf<TaskStatus, Int>(
+                    TaskStatus.TO_DO to 2,
+                    TaskStatus.IN_PROGRESS to 3,
+                    TaskStatus.DONE to 1
+                )
+            )
+        }
     }
 }

@@ -17,4 +17,17 @@
     <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
     <string name="date_format_today">اليوم</string>
     <string name="date_format_medium">%s, %d %s %d</string>
+
+    <string name="slider_title_nothing">لا شيء في قائمتك…</string>
+    <string name="slider_description_nothing">املأ يومك بشيء رائع.</string>
+
+    <string name="slider_title_tadaa">تا دا!</string>
+    <string name="slider_description_tadaa">أنت تقوم بعمل رائع!!!\nتودي فخورة بك.</string>
+
+    <string name="slider_title_zero_progress">لا تقدم؟!</string>
+    <string name="slider_description_zero_progress">أنت فقط تتصفح، لا تعمل. تودي تراقبك. عودة إلى العمل!!!</string>
+
+    <string name="slider_title_stay_working">استمر في العمل!</string>
+    <string name="slider_description_stay_working">لقد أكملت %d من أصل %d من المهام. استمر!</string>
+    <string name="overview">نظرة عامة</string>
 </resources>

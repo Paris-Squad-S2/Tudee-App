@@ -1,41 +1,44 @@
 package com.example.tudeeapp.presentation.screen.home
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 
 sealed class SliderViewState(
-    val title: String,
-    @DrawableRes val icon: Int,
-    @DrawableRes val image: Int,
-    val description: String
+    @StringRes val titleRes: Int,
+    @DrawableRes val iconRes: Int,
+    @DrawableRes val imageRes: Int,
+    @StringRes val descriptionRes: Int,
+    val formatArgs: Array<Any> = emptyArray()
 ) {
     object Nothing : SliderViewState(
-        title = "Nothing on your list…",
-        icon = R.drawable.ic_poor,
-        image = R.drawable.img_ropot1,
-        description = "Fill your day with something awesome."
+        titleRes = R.string.slider_title_nothing,
+        iconRes = R.drawable.ic_poor,
+        imageRes = R.drawable.img_ropot1,
+        descriptionRes = R.string.slider_description_nothing
     )
 
     data class Tadaa(val count: Int, val total: Int) : SliderViewState(
-        title = "Tadaa!",
-        icon = R.drawable.ic_good,
-        image = R.drawable.img_ropot2,
-        description = "You’re doing amazing!!!\nTudee is proud of you."
+        titleRes = R.string.slider_title_tadaa,
+        iconRes = R.drawable.ic_good,
+        imageRes = R.drawable.img_ropot2,
+        descriptionRes = R.string.slider_description_tadaa
     )
 
     data class ZeroProgress(val count: Int, val total: Int) : SliderViewState(
-        title = "Zero progress?!",
-        icon = R.drawable.ic_bad,
-        image = R.drawable.img_ropot3,
-        description = "You just scrolling, not working. Tudee is watching. Back to work!!!"
+        titleRes = R.string.slider_title_zero_progress,
+        iconRes = R.drawable.ic_bad,
+        imageRes = R.drawable.img_ropot3,
+        descriptionRes = R.string.slider_description_zero_progress
     )
 
     data class StayWorking(val done: Int, val total: Int) : SliderViewState(
-        title = "Stay working!",
-        icon = R.drawable.ic_okay,
-        image = R.drawable.img_ropot1,
-        description = "You've completed $done out of $total tasks. Keep going!"
+        titleRes = R.string.slider_title_stay_working,
+        iconRes = R.drawable.ic_okay,
+        imageRes = R.drawable.img_ropot1,
+        descriptionRes = R.string.slider_description_stay_working,
+        formatArgs = arrayOf(done, total)
     )
 }
 
