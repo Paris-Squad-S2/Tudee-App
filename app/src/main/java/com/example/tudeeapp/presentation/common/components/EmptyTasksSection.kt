@@ -95,7 +95,7 @@ fun EmptyTasksSection(
             Text(
                 text = title,
                 style = Theme.textStyle.title.small,
-                color = Theme.colors.text.hint
+                color = Theme.colors.text.body
             )
             Text(
                 text = stringResource(R.string.tap_the_button_to_add_your_first_one),
