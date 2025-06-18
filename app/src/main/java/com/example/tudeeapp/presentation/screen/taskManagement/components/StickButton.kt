@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.bottomSheets.addEditTask.components
+package com.example.tudeeapp.presentation.screen.taskManagement.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -34,7 +34,7 @@ fun AddEditStickButtons(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 6.dp),
-            onClick = { onClickActionButton },
+            onClick = { onClickActionButton() },
             text = if (isEditMode) stringResource(R.string.save) else stringResource(R.string.add),
             variant = ButtonVariant.FilledButton,
             state = if (isActionButtonDisabled) ButtonState.Disabled else ButtonState.Normal,
