@@ -60,8 +60,4 @@ class CategoryDetailsViewModel(
     fun setStatus(status: TaskStatus) {
         _stateFilter.value = status
     }
-
-    fun getFilteredTasksByStatus(): List<TaskUiState> {
-        return uiState.value.taskUiState.filter { it.status == stateFilter.value.name }
-    }
 }
