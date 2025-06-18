@@ -1,7 +1,6 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,13 +32,15 @@ fun CategoryItem(
     label: String,
     iconColor: Color,
     isPredefined: Boolean,
+    modifier: Modifier = Modifier,
     count: Int? = null,
     isSelected: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Box(
             modifier = Modifier
