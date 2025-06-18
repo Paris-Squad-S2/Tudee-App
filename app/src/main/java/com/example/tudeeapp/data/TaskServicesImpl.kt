@@ -15,6 +15,7 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 
 class TaskServicesImpl(
     private val taskDao: TaskDao,
@@ -56,5 +57,6 @@ class TaskServicesImpl(
         }
     }
 
+    override suspend fun getCategoryById(id: Long): Category = categoryDao.findById(id).first().toCategory()
 
 }

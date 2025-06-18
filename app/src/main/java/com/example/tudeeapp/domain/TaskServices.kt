@@ -8,4 +8,5 @@ interface TaskServices {
    fun getAllTasks(): Flow<List<Task>>
    fun getAllCategories(): Flow<List<Category>>
    suspend fun loadPredefinedCategories()
+   suspend fun getCategoryById(id: Long): Category
 }
