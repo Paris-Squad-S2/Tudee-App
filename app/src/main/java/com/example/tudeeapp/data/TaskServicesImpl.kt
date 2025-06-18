@@ -11,7 +11,10 @@ import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.exception.CategoryException
+import com.example.tudeeapp.domain.exception.GetCategoryByIdException
+import com.example.tudeeapp.domain.exception.GetTaskByIdException
 import com.example.tudeeapp.domain.exception.TaskException
+import com.example.tudeeapp.domain.exception.UpdateTaskStatusException
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskStatus
@@ -39,10 +42,8 @@ class TaskServicesImpl(
     override fun getTaskById(id: Long): Flow<Task> {
         try {
             return taskDao.findById(id).map { it.toTask() }
-        } catch (e: DataException) {
-            throw TaskException()
-        } catch (e: Exception) {
-            throw TaskException()
+        }  catch (e: Exception) {
+            throw GetTaskByIdException()
         }
     }
 
@@ -61,10 +62,8 @@ class TaskServicesImpl(
     override fun getCategoryById(id: Long): Flow<Category> {
         try {
             return categoryDao.findById(id).map { it.toCategory() }
-        } catch (e: DataException) {
-            throw TaskException()
-        } catch (e: Exception) {
-            throw TaskException()
+        }  catch (e: Exception) {
+            throw GetCategoryByIdException()
         }
     }
 
@@ -87,10 +86,8 @@ class TaskServicesImpl(
                 val updatedTask = task.copy(status = newStatus)
                 taskDao.update(updatedTask.toTaskEntity())
             }
-        } catch (e: DataException) {
-            throw CategoryException()
         } catch (e: Exception) {
-            throw CategoryException()
+            throw UpdateTaskStatusException()
         }
     }
 
