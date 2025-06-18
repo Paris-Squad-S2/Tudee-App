@@ -22,12 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.screen.home.TaskUi
 
 @Composable
-fun HomeTaskSection(tasks: List<Task>,tasksType: TaskStatus, onTasksCount: () -> Unit) {
+fun HomeTaskSection(tasks: List<TaskUi>, tasksType: TaskStatus, onTasksCount: () -> Unit) {
 
 
     val sectionTitle = when (tasksType) {
