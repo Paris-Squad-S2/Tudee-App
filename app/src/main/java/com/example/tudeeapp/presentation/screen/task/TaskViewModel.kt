@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.presentation.screen.task.mapper.toTasksUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,116 +21,128 @@ import kotlinx.datetime.toLocalDateTime
 class TaskViewModel(
     private val taskServices: TaskServices
 ) :ViewModel() {
-    private val _uiState = MutableStateFlow<TaskUiState>(TaskUiState.isLoading)
+    private val _uiState = MutableStateFlow(TaskUiState())
     val uiState: StateFlow<TaskUiState> = _uiState.asStateFlow()
 
-    private val today: LocalDate = getCurrentDate()
+    private var allTasks: List<TaskItemUiState> = emptyList()
+    private var currentSelectedDate: LocalDate = getCurrentDate()
+    private var currentSelectedStatus: TaskStatusUi = TaskStatusUi.TO_DO
 
     init {
-        loadInitialState()
+        loadTasks()
     }
 
-    private fun loadInitialState() {
-        val initialState = TasksUi(
-            selectedDate = today,
-            daysOfMonth = getAllDaysOfCurrentMonth(today),
-            currentMonthYear = getCurrentMonthYear(today),
-            todayIndex = getTodayIndex(today)
-        )
-        _uiState.value = TaskUiState.success(initialState)
-
-        getAllTasks()
+    fun onTabSelected(selectedStatus: TaskStatusUi) {
+        currentSelectedStatus = selectedStatus
+        updateUiStateWithFilters()
     }
 
-    fun onTabSelected(status: TaskStatusUi) {
-        updateUiState { it.copy(selectedStatus = status) }
-        getAllTasks()
+    fun onDateSelected(selectedDate: LocalDate) {
+        currentSelectedDate = selectedDate
+        updateUiStateWithFilters()
     }
 
-    fun onDateSelected(date: LocalDate) {
-        updateUiState {
-            it.copy(
-                selectedDate = date,
-                daysOfMonth = getAllDaysOfCurrentMonth(date),
-                currentMonthYear = getCurrentMonthYear(date),
-                todayIndex = getTodayIndex(date)
+    fun onDatePickerVisibilityChanged() {
+        _uiState.value = _uiState.value.copy(
+            data = _uiState.value.data.copy(
+                showDatePicker = !_uiState.value.data.showDatePicker
             )
-        }
-        getAllTasks()
-    }
-
-    fun onDatePickerVisibilityChanged(show: Boolean) {
-        updateUiState { it.copy(showDatePicker = show) }
+        )
     }
 
     fun goToPreviousMonth() {
-        val currentDate = currentUiData().selectedDate.minus(DatePeriod(months = 1))
+        val currentDate = currentSelectedDate.minus(DatePeriod(months = 1))
         onDateSelected(currentDate)
     }
 
     fun goToNextMonth() {
-        val currentDate = currentUiData().selectedDate.plus(DatePeriod(months = 1))
+        val currentDate = currentSelectedDate.plus(DatePeriod(months = 1))
         onDateSelected(currentDate)
     }
 
-    fun formatDayName(date: LocalDate): String {
-        return date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)
-    }
-
-    private fun getAllTasks() {
+    private fun loadTasks() {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
             try {
-                taskServices.getAllTasks().collect { allTasks ->
-                    val selectedDate = getSelectedDate()
-                    val selectedStatus = getSelectedStatus()
-
-                    val filteredTasks = allTasks
-                        .toTasksUi()
-                        .filter { it.status == selectedStatus && it.createdDate == selectedDate }
-
-                    val daysOfMonth = getAllDaysOfCurrentMonth(selectedDate)
-                    val currentMonthYear = getCurrentMonthYear(selectedDate)
-                    val todayIndex = daysOfMonth.indexOfFirst { it == selectedDate }
-
-                    _uiState.value = TaskUiState.success(
-                        TasksUi(
-                            tasks = filteredTasks,
-                            selectedStatus = selectedStatus,
-                            selectedDate = selectedDate,
-                            daysOfMonth = daysOfMonth,
-                            currentMonthYear = currentMonthYear,
-                            todayIndex = todayIndex,
-                            showDatePicker = false,
-                        )
-                    )
+                taskServices.getAllTasks().collect{tasks->
+                    allTasks = tasks.toTasksUi()
+                    updateUiStateWithFilters()
                 }
             } catch (e: Exception) {
-                _uiState.value = TaskUiState.error(e.message ?: "Unknown error")
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Unknown error occurred"
+                )
             }
         }
     }
 
-    private fun getSelectedDate(): LocalDate {
-        return (uiState.value as? TaskUiState.success)?.data?.selectedDate
-            ?: getCurrentDate()
+    private fun updateUiStateWithFilters() {
+        val filteredTasks = filterTasks(
+            tasks = allTasks,
+            selectedDate = currentSelectedDate,
+            selectedStatus = currentSelectedStatus
+        )
+
+        val status = calculateStatusUiList(allTasks, currentSelectedDate, currentSelectedStatus)
+
+        _uiState.value = TaskUiState(
+            data = TasksUi(
+                calender = currentSelectedDate.createCalendarUi(
+                    getCurrentMonthYear(currentSelectedDate),
+                    daysOfMonth = formatDailyDate(
+                        getAllDaysOfCurrentMonth(currentSelectedDate)
+                    )
+                ),
+                status = status,
+                selectedStatus = currentSelectedStatus,
+                tasks = filteredTasks,
+                showDatePicker = _uiState.value.data.showDatePicker,
+                todayIndex = getSelectedDayIndex(currentSelectedDate)
+            ),
+            isLoading = false,
+            errorMessage = null
+        )
     }
 
-    private fun getSelectedStatus(): TaskStatusUi {
-        return (uiState.value as? TaskUiState.success)?.data?.selectedStatus
-            ?: TaskStatusUi.TO_DO
+    private fun filterTasks(
+        tasks: List<TaskItemUiState>,
+        selectedDate: LocalDate,
+        selectedStatus: TaskStatusUi
+    ): List<TaskItemUiState> {
+        return tasks.filter { task ->
+            val matchesDate = task.createdDate == selectedDate
+            val matchesStatus = task.status == selectedStatus
+            matchesDate && matchesStatus
+        }
     }
 
-    private fun updateUiState(transform: (TasksUi) -> TasksUi) {
-        val current = currentUiDataOrNull() ?: return
-        _uiState.value = TaskUiState.success(transform(current))
+    private fun calculateStatusUiList(
+        tasks: List<TaskItemUiState>,
+        selectedDate: LocalDate,
+        selectedStatus: TaskStatusUi
+    ): List<StatusUi> {
+        val tasksForDate = tasks.filter { it.createdDate == selectedDate }
+        val groupedByStatus = tasksForDate.groupingBy { it.status }.eachCount()
+
+        return TaskStatusUi.entries.map { status ->
+            StatusUi(
+                name = status.status,
+                count = groupedByStatus[status] ?: 0,
+                isSelected = status == selectedStatus
+            )
+        }
     }
 
-    private fun currentUiDataOrNull(): TasksUi? {
-        return (_uiState.value as? TaskUiState.success)?.data
-    }
-
-    private fun currentUiData(): TasksUi {
-        return currentUiDataOrNull() ?: TasksUi()
+    private fun formatDailyDate(daysOfMonth: List<LocalDate>): List<DayUi> {
+        return daysOfMonth.map{ date->
+            DayUi(
+                name = date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }.take(3),
+                num = date.dayOfMonth,
+                date = date
+            )
+        }
     }
 
     private fun getCurrentDate(): LocalDate {
@@ -142,8 +153,8 @@ class TaskViewModel(
         return "${date.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)}, ${date.year}"
     }
 
-    private fun getTodayIndex(date: LocalDate): Int {
-        return getAllDaysOfCurrentMonth(date).indexOfFirst { it == today }
+    private fun getSelectedDayIndex(date: LocalDate): Int {
+        return getAllDaysOfCurrentMonth(date).indexOfFirst { it == currentSelectedDate }
     }
 
     private fun getAllDaysOfCurrentMonth(date: LocalDate): List<LocalDate> {
