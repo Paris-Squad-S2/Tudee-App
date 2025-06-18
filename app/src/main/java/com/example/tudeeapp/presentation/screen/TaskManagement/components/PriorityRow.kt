@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.bottomSheets.addEditTask.components
+package com.example.tudeeapp.presentation.screen.TaskManagement.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,17 +12,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.bottomSheets.addEditTask.TaskPriorityUiState
+import com.example.tudeeapp.presentation.screen.TaskManagement.TaskPriorityUiState
 import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices  
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.domain.models.TaskPriority
 
 @Composable
 fun PriorityRow(
     selectedPriority: TaskPriorityUiState,
-    onPrioritySelected: (TaskPriority) -> Unit,
+    onPrioritySelected: (TaskPriorityUiState) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -37,31 +36,43 @@ fun PriorityRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             PriorityButton(
-                text = "High",
+                text = stringResource(R.string.high),
                 icon = painterResource(R.drawable.ic_flag),
-                backgroundColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.HIGH)
+                backgroundColor = if (selectedPriority == TaskPriorityUiState.HIGH)
                     Theme.colors.status.pinkAccent else Theme.colors.surfaceColors.surfaceLow,
-                contentColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.HIGH)
+                contentColor = if (selectedPriority == TaskPriorityUiState.HIGH)
                     Color.White else Theme.colors.text.hint,
-                onClick = { onPrioritySelected(TaskPriority.HIGH) }
+                onClick = {
+                    onPrioritySelected(
+                        if (selectedPriority == TaskPriorityUiState.HIGH) TaskPriorityUiState.NONE else TaskPriorityUiState.HIGH
+                    )
+                }
             )
             PriorityButton(
-                text = "Medium",
+                text = stringResource(R.string.medium),
                 icon = painterResource(R.drawable.ic_worning),
-                backgroundColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.MEDIUM)
+                backgroundColor = if (selectedPriority == TaskPriorityUiState.MEDIUM)
                     Theme.colors.status.yellowAccent else Theme.colors.surfaceColors.surfaceLow,
-                contentColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.MEDIUM)
+                contentColor = if (selectedPriority == TaskPriorityUiState.MEDIUM)
                     Color.White else Theme.colors.text.hint,
-                onClick = { onPrioritySelected(TaskPriority.MEDIUM) }
+                onClick = {
+                    onPrioritySelected(
+                        if (selectedPriority == TaskPriorityUiState.MEDIUM) TaskPriorityUiState.NONE else TaskPriorityUiState.MEDIUM
+                    )
+                }
             )
             PriorityButton(
-                text = "Low",
+                text = stringResource(R.string.low),
                 icon = painterResource(R.drawable.ic_low),
-                backgroundColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.LOW)
+                backgroundColor = if (selectedPriority == TaskPriorityUiState.LOW)
                     Theme.colors.status.greenAccent else Theme.colors.surfaceColors.surfaceLow,
-                contentColor = if (selectedPriority is TaskPriorityUiState.Selected && selectedPriority.priority == TaskPriority.LOW)
+                contentColor = if (selectedPriority == TaskPriorityUiState.LOW)
                     Color.White else Theme.colors.text.hint,
-                onClick = { onPrioritySelected(TaskPriority.LOW) }
+                onClick = {
+                    onPrioritySelected(
+                        if (selectedPriority == TaskPriorityUiState.LOW) TaskPriorityUiState.NONE else TaskPriorityUiState.LOW
+                    )
+                }
             )
         }
     }
@@ -72,7 +83,7 @@ fun PriorityRow(
 private fun PriorityRowPreview() {
     BasePreview {
         PriorityRow(
-            selectedPriority = TaskPriorityUiState.Selected(TaskPriority.HIGH),
+            selectedPriority = TaskPriorityUiState.NONE,
             onPrioritySelected = {}
         )
     }
