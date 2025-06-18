@@ -4,4 +4,7 @@
     <string name="your_cute_helper_for_every_task">مساعدك اللطيف لإنجاز كل مهامك</string>
     <string name="ok">تأكيد</string>
     <string name="cancel">إلغاء</string>
+    <string name="tasks">المهام</string>
+    <string name="no_tasks_here">لا توجد مهام هنا!</string>
+    <string name="tap_the_button_to_add_your_first_one">اضغط على زر + لإضافة أول واحد.</string>
 </resources>
