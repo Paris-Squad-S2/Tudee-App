@@ -10,4 +10,7 @@
     <string name="add">إضافة</string>
     <string name="add_task">إضافة مهمة</string>
     <string name="edit_task">تعديل مهمة</string>
+    <string name="high">عالي</string>
+    <string name="medium">متوسط</string>
+    <string name="low">منخفض</string>
 </resources>
