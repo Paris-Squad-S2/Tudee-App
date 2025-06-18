@@ -18,13 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.Screens
 
-@Preview
 @Composable
 fun TudeeNavigationBar(
     modifier: Modifier = Modifier,
@@ -35,7 +33,10 @@ fun TudeeNavigationBar(
         mutableIntStateOf(0)
     }
 
-    NavigationBar(modifier = modifier.background(Theme.colors.surfaceColors.surfaceHigh)) {
+    NavigationBar(
+        modifier = modifier,
+        containerColor = Theme.colors.surfaceColors.surfaceHigh
+    ) {
         itemList.forEachIndexed { index, navItem ->
             val isSelected = selectedIndex == index
             NavigationBarItem(
@@ -71,8 +72,7 @@ fun TudeeNavigationBar(
                         )
                     }
                 },
-
-                )
+            )
         }
 
     }

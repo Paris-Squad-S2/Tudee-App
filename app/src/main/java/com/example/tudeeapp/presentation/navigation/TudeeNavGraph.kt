@@ -51,6 +51,27 @@ fun TudeeNavGraph() {
                 navController = navController,
                 startDestination = "TestCategoryDetails",
             ) {
+        Box {
+            TudeeScaffold(
+                bottomBar = {
+                    if ((currentRoute?.route != null) && listOf(
+                            Screens.Home::class.qualifiedName,
+                            Screens.Task::class.qualifiedName,
+                            Screens.Category::class.qualifiedName
+                        ).contains(currentRoute.route)
+                    )
+                        TudeeNavigationBar(
+                            onItemClick = { navItem ->
+                                navController.navigate(navItem.screen)
+                            }
+                        )
+                },
+                contentBackground = Theme.colors.surfaceColors.surface
+            ) {
+                NavHost(
+                    navController = navController,
+                    startDestination = Screens.Splash,
+                ) {
 
                 composable<Screens.Splash> {
                     SplashScreen()
@@ -84,6 +105,7 @@ fun TudeeNavGraph() {
                 composable<Screens.CategoriesForm> {
                     CategoryFormScreen()
                 }
+
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
                 }
