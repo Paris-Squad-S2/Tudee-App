@@ -4,8 +4,11 @@ package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,9 +36,10 @@ fun TudeeBottomSheet(
     isVisible: Boolean,
     title: String,
     onDismiss: () -> Unit,
+    headerEnd: @Composable () -> Unit = {},
     modifier: Modifier = Modifier,
-    isScrollable: Boolean = false,
-    skipPartiallyExpanded: Boolean = false,
+    isScrollable: Boolean = true,
+    skipPartiallyExpanded: Boolean = true,
     stickyBottomContent: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -62,13 +66,19 @@ fun TudeeBottomSheet(
     ) {
         Column {
             Column(modifier = scrollModifier.weight(weight = 1f, fill = false)) {
-                Text(
-                    text = title, style = Theme.textStyle.title.large,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp)
-                )
+                Row(){
+                    Text(
+                        text = title, style = Theme.textStyle.title.large,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    headerEnd()
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                }
                 content()
             }
             stickyBottomContent()

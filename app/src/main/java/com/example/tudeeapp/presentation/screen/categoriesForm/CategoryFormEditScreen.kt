@@ -98,6 +98,7 @@ fun CategoryFormEditContent(
     TudeeBottomSheet(
         isVisible = true,
         title = stringResource(R.string.editCategory),
+        headerEnd = { DeleteButton(modifier = Modifier.padding(end = 16.dp)) },
         isScrollable = true,
         skipPartiallyExpanded = true,
         onDismiss = onDismiss,
@@ -210,20 +211,6 @@ fun CategoryFormEditContent(
                                 )
                             }
 
-                            var showSnackBar by remember { mutableStateOf(false) }
-
-                            LaunchedEffect(showSnackBar) {
-                                if (showSnackBar) {
-                                    delay(1000)
-                                    showSnackBar = false
-                                }
-                            }
-
-                            SnackBar(
-                                text = "Some error happened",
-                                isSuccess = false,
-                                modifier = Modifier.align(Alignment.BottomCenter)
-                            )
                         }
 
                     }
