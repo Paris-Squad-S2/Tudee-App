@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.models.TaskPriority
@@ -88,8 +89,17 @@ fun TaskDetailsContent(
     categoryUiState: CategoryUiState,
     onStatusChange: (TaskStatus) -> Unit
 ) {
-    //TODO Ask If category icon only from drawable
-    //val painter = rememberAsyncImagePainter(categoryUiState.imageUrl)
+
+
+    val painter = if (categoryUiState.isPredefined) {
+        painterResource(
+            categoryUiState.imageUrl.toResDrawables()
+        )
+    } else {
+        rememberAsyncImagePainter(categoryUiState.imageUrl)
+    }
+
+
     val iconPriority = when (taskUiState.priority) {
         TaskPriority.LOW -> painterResource(id = R.drawable.ic_trade_down)
         TaskPriority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
@@ -119,7 +129,7 @@ fun TaskDetailsContent(
                 )
         ) {
             Icon(
-                painter = painterResource(categoryUiState.imageUrl.toResDrawables()),
+                painter = painter,
                 contentDescription = "task category icon",
                 tint = Color.Unspecified,
                 modifier = Modifier
