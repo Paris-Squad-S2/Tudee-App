@@ -45,11 +45,12 @@ fun HorizontalTabs(
     indicatorColor: Color = Theme.colors.secondary,
     indicatorHeight: Dp = 4.dp
 ) {
-    Column {
+    Column(
+        modifier = modifier
+        .height(48.dp)){
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(backgroundColor),
+                .fillMaxWidth().background(backgroundColor),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -87,8 +88,7 @@ fun TaskTrackerScreen() {
         Surface(color = Theme.colors.surfaceColors.surface) {
             Column(modifier = Modifier.fillMaxSize()) {
                 HorizontalTabs(
-                    modifier = Modifier
-                        .height(48.dp),
+                    modifier = Modifier,
                     tabs = tabs,
                     selectedTabIndex = selectedTabIndex,
                     onTabSelected = { index ->

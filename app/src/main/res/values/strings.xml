@@ -3,6 +3,8 @@
     <string name="your_cute_helper_for_every_task">Your cute Helper for Every Task</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="no_tasks_here">No tasks here!</string>
+    <string name="tap_the_button_to_add_your_first_one">Tap the + button to add your first one.</string>
     <string name="move_to_done">Move to done</string>
     <string name="move_to_in_progress">Move to in progress</string>
     <string name="task_details">Task details</string>

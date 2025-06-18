@@ -39,8 +39,7 @@ fun TaskCard(
     isDated: Boolean,
     modifier: Modifier = Modifier,
     iconColor: Color = Color.Unspecified,
-    onClickPriority: () -> Unit = {},
-    onClickDate: () -> Unit = {}
+    onClickItem: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -50,6 +49,7 @@ fun TaskCard(
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(top = 4.dp, bottom = 12.dp, start = 4.dp, end = 12.dp)
+            .clickable{onClickItem()}
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -68,14 +68,14 @@ fun TaskCard(
                 Arrangement.End
             ) {
                 when {
-                    isDated -> DateCard(date , onClick = { onClickDate })
+                    isDated -> DateCard(date)
                 }
                 Spacer(modifier = Modifier.width(4.dp))
                 PriorityButton(
                     text = priorityLabel,
                     icon = priorityIcon,
                     backgroundColor = priorityColor,
-                    onClick = { onClickPriority }
+                    onClick = { }
                 )
             }
         }
@@ -104,14 +104,13 @@ fun TaskCard(
 }
 
 @Composable
-private fun DateCard(date: String, onClick: () -> Unit) {
+private fun DateCard(date: String) {
     Box(
         modifier = Modifier
             .background(
                 color = Theme.colors.surfaceColors.surface,
                 shape = RoundedCornerShape(50),
             )
-            .clickable { onClick() }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

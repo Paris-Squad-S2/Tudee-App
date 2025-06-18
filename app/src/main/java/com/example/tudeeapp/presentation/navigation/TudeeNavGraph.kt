@@ -12,7 +12,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
-import com.example.tudeeapp.presentation.screen.category.CategoryScreen
+import com.example.tudeeapp.presentation.screen.category.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
@@ -32,17 +32,18 @@ fun TudeeNavGraph() {
     CompositionLocalProvider(LocalNavController provides navController) {
 
         TudeeScaffold(
-            showBottomBar = (currentRoute?.route != null) && listOf(
-                Screens.Home::class.qualifiedName,
-                Screens.Task::class.qualifiedName,
-                Screens.Category::class.qualifiedName
-            ).contains(currentRoute.route),
             bottomBar = {
-                TudeeNavigationBar(
-                    onItemClick = { navItem ->
-                        navController.navigate(navItem.screen)
-                    }
+                if ((currentRoute?.route != null) && listOf(
+                        Screens.Home::class.qualifiedName,
+                        Screens.Task::class.qualifiedName,
+                        Screens.Category::class.qualifiedName
+                    ).contains(currentRoute.route)
                 )
+                    TudeeNavigationBar(
+                        onItemClick = { navItem ->
+                            navController.navigate(navItem.screen)
+                        }
+                    )
             },
             contentBackground = Theme.colors.surfaceColors.surface
         ) {
@@ -68,7 +69,7 @@ fun TudeeNavGraph() {
                 }
 
                 composable<Screens.Category> {
-                    CategoryScreen()
+                    CategoriesScreen()
                 }
 
 
