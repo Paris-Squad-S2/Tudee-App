@@ -30,7 +30,7 @@ fun PriorityButton(
     icon: Painter,
     backgroundColor: Color,
     contentColor: Color = Theme.colors.surfaceColors.onPrimaryColors.onPrimary,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
@@ -48,13 +48,14 @@ fun PriorityButton(
             Icon(
                 painter = icon,
                 contentDescription = "$text priority",
-                modifier = Modifier.size(12.dp)
+                modifier = Modifier.size(12.dp),
+                tint = contentColor
             )
             Spacer(modifier = Modifier.width(2.dp))
-                Text(
-                    text = text,
-                    style = defaultTextStyle.label.small
-                )
+            Text(
+                text = text,
+                style = defaultTextStyle.label.small
+            )
         }
     }
 }
