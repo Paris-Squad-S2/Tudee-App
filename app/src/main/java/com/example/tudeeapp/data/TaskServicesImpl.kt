@@ -8,11 +8,12 @@ import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.exception.CategoryException
-import com.example.tudeeapp.domain.exception.TaskException
+import com.example.tudeeapp.domain.exception.NoCategoriesFoundException
+import com.example.tudeeapp.domain.exception.NoTasksFoundException
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class TaskServicesImpl(
@@ -23,29 +24,25 @@ class TaskServicesImpl(
 ) : TaskServices {
 
     override fun getAllTasks(): Flow<List<Task>> {
-        try {
-            return taskDao.getAll().map { it.map { it.toTask() } }
-        }catch (e: Exception){
-            throw TaskException()
-        }
+        return taskDao.getAll()
+            .map { list -> list.map { it.toTask() } }
+            .catch { throw NoTasksFoundException()  }
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
-        try {
-            return categoryDao.getAll().map { it.map { it.toCategory() } }
-        }catch (e: Exception){
-            throw CategoryException()
-        }
-
+        return categoryDao.getAll()
+            .map { list -> list.map { it.toCategory() } }
+            .catch { throw NoCategoriesFoundException() }
     }
 
     override suspend fun loadPredefinedCategories() {
         try {
-        if (appPreferences.isAppLaunchForFirstTime()) {
-            categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
-            appPreferences.setAppLaunchIsDone()
-        }}catch (e: Exception){
-            throw CategoryException()
+            if (appPreferences.isAppLaunchForFirstTime()) {
+                categoryDao.insertPredefinedCategories(dataConstant.predefinedCategories.map { it.toCategoryEntity() })
+                appPreferences.setAppLaunchIsDone()
+            }
+        } catch (e: Exception) {
+            throw NoCategoriesFoundException()
         }
     }
 
