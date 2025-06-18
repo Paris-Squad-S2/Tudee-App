@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.screen.onBoarding.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,12 +32,17 @@ fun BottomSection(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(bottom = 32.dp, top = 37.dp)
+        modifier = Modifier
+            .padding(
+                bottom = 32.dp,
+                top = 37.dp
+            )
     ) {
         Surface(
             shape = RoundedCornerShape(32.dp),
             color = Theme.colors.surfaceColors.onPrimaryColors.onPrimaryCard,
             modifier = Modifier
+                .height(192.dp)
                 .padding(horizontal = 24.dp)
                 .fillMaxWidth()
                 .border(
@@ -47,6 +53,7 @@ fun BottomSection(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.padding(
                     top = 24.dp,
                     bottom = 48.dp,
@@ -82,7 +89,7 @@ fun BottomSection(
             },
             modifier = Modifier
                 .size(64.dp)
-                .offset(y = (-28).dp)
+                .offset(y = (-32).dp),
         )
     }
 }

@@ -52,14 +52,28 @@ fun OnBoardingPage(
                     )
                 }
             }
-            Image(
-                painter = painterResource(id = page.image),
-                contentDescription = "Onboarding robot",
+            Spacer(modifier = Modifier.height(188.dp))
+            Box(
                 modifier = Modifier
-                    .padding(top = 250.dp)
-                    .weight(1f, fill = false)
-                    .padding(horizontal = 32.dp)
-            )
+                    .fillMaxWidth()
+                    .height(260.dp)
+            ){
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            vertical = 5.dp,
+                            horizontal = 32.dp
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = page.image),
+                        contentDescription = "Onboarding robot",
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
             BottomSection(
                 page = page,
                 onNextClick = onNextClick

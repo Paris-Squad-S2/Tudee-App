@@ -43,7 +43,6 @@ fun OnBoardScreen(
             state = state,
             onFinished = {
                 viewModel.setOnboardingCompleted()
-                navController.navigate(Screens.Home("UserName"))
             },
             onPageChanged = { viewModel.updateCurrentPage(it) }
         )
@@ -95,7 +94,7 @@ fun OnBoardingScreenContent(
             modifier = Modifier
                 .background(Theme.colors.status.overlay)
                 .fillMaxWidth()
-                .padding(bottom = 24.dp),
+                .padding(bottom = 60.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
