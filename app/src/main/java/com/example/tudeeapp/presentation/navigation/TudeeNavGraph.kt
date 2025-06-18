@@ -84,13 +84,13 @@ fun TudeeNavGraph() {
                         SplashScreen()
                     }
 
-                composable<Screens.OnBoarding> {
-                    val onboardingViewModel : OnboardingViewModel = koinViewModel()
-                    OnBoardScreen(
-                        onboardingViewModel,
-                        onboardingPages()
-                    )
-                }
+                    composable<Screens.OnBoarding> {
+                        val onboardingViewModel: OnboardingViewModel = koinViewModel()
+                        OnBoardScreen(
+                            onboardingViewModel,
+                            onboardingPages()
+                        )
+                    }
 
                     composable<Screens.Home> {
                         HomeScreen()
@@ -100,9 +100,9 @@ fun TudeeNavGraph() {
                         TaskScreen()
                     }
 
-                composable<Screens.Category> {
-                    CategoriesScreen()
-                }
+                    composable<Screens.Category> {
+                        CategoriesScreen()
+                    }
 
 
                     composable<Screens.TaskForm> {
