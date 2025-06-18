@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 
 @Composable
-fun CategoryScreen(){
+fun CategoriesScreen(){
     val navController = LocalNavController.current
     Column(
         modifier = Modifier.fillMaxSize(),
