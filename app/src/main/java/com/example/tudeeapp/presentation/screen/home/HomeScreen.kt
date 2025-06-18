@@ -52,7 +52,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val navController = LocalNavController.current
-    var toggled by remember { mutableStateOf(false) }
+    var toggled by remember { mutableStateOf(false) } //TODO
     val state by homeViewModel.homeState.collectAsStateWithLifecycle()
 
     TudeeScaffold(
@@ -61,8 +61,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
                 modifier = Modifier
                     .background(Theme.colors.primary)
                     .statusBarsPadding(),
-                isDarkMode = toggled,
-                onToggleTheme = { toggled = it },
+                isDarkMode = toggled, //TODO
+                onToggleTheme = { toggled = it }, //TODO
             )
         },
         floatingActionButton = {
