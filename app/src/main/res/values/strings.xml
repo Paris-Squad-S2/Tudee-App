@@ -3,6 +3,7 @@
     <string name="your_cute_helper_for_every_task">Your cute Helper for Every Task</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="categories">Categories</string>
     <string name="no_tasks_for_today">No tasks for today!</string>
     <string name="tap_the_button_to_add_your_first_one">Tap the + button to add your \nfirst one.</string>
     <string name="in_progress">In progress</string>
