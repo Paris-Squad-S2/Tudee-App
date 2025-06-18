@@ -1,25 +1,39 @@
-package com.example.tudeeapp.presentation.bottomSheets.addEditTask
+package com.example.tudeeapp.presentation.screen.TaskManagement
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
-class TaskManagementViewModel(private val taskServices: TaskServices) : ViewModel() {
+class TaskManagementViewModel(
+    private val taskServices: TaskServices,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    val taskId = savedStateHandle.toRoute<Screens.TaskManagement>().taskId
+
     private val _state = MutableStateFlow(
-        TaskManagementUiState(selectedPriority = TaskPriorityUiState.None, categories = emptyList())
+        TaskManagementUiState(
+            selectedPriority = TaskPriorityUiState.NONE, categories = emptyList(),isEditMode = taskId != null)
     )
+
     val state = _state.asStateFlow()
 
     init {
         getAllCategories()
+       taskId?.let {
+           getTaskById(it)
+       }
     }
 
     private fun getAllCategories() {
@@ -30,6 +44,10 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
                 }
             }
         }
+    }
+
+    private fun getTaskById(id:Int){
+        //todo
     }
 
     fun onTitleChange(title: String) {
@@ -44,16 +62,13 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
         _state.update { it.copy(isDatePickerVisible = isVisible) }
     }
 
-    fun onPrioritySelected(priority: TaskPriority) {
+    fun onDateSelected(date: LocalDate) {
+        _state.update { it.copy(selectedDate = date.toString(), isDatePickerVisible = false) }
+    }
+
+    fun onPrioritySelected(priorityUiState: TaskPriorityUiState) {
         _state.update { currentState ->
-            val isCurrentlySelected =
-                currentState.selectedPriority is TaskPriorityUiState.Selected &&
-                        currentState.selectedPriority.priority == priority
-            currentState.copy(
-                selectedPriority = if (isCurrentlySelected) TaskPriorityUiState.None else TaskPriorityUiState.Selected(
-                    priority
-                )
-            )
+            currentState.copy(selectedPriority = priorityUiState)
         }
     }
 
@@ -61,7 +76,7 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
         _state.update { currentState ->
             val isCurrentlySelected = currentState.selectedCategoryId == categoryId
             val updatedCategories = currentState.categories.mapIndexed { index, category ->
-                category.copy(isSelected = if (isCurrentlySelected) false else index == categoryId)
+                category.copy(isSelected = !isCurrentlySelected && index == categoryId)
             }
             currentState.copy(
                 categories = updatedCategories,
@@ -81,7 +96,7 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
                     Task(
                         title = currentState.title,
                         description = currentState.description,
-                        priority = currentState.selectedPriority.toDomain(),
+                        priority = currentState.selectedPriority.toDomain() ?: TaskPriority.LOW,
                         status = TaskStatus.TO_DO,
                         createdDate = createDate,
                         categoryId = currentState.selectedCategoryId?.toLong()
@@ -93,5 +108,4 @@ class TaskManagementViewModel(private val taskServices: TaskServices) : ViewMode
             }
         }
     }
-
 }
