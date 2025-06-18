@@ -31,11 +31,10 @@ import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.common.components.TopAppBar
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryDetailsUiState
 import com.example.tudeeapp.presentation.screen.errorScreen.ErrorScreen
 import com.example.tudeeapp.presentation.screen.loadingScreen.LoadingScreen
-import com.example.tudeeapp.presentation.utils.toColor
-import com.example.tudeeapp.presentation.utils.toIcon
+import com.example.tudeeapp.presentation.utills.toStyle
+import com.example.tudeeapp.presentation.utills.toUi
 import kotlinx.datetime.toLocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -126,14 +125,15 @@ fun CategoryDetailsContent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(tasks.filter { it.status == selectedState }) { task ->
+                val style = task.priority.toUi().toStyle()
                 TaskCard(
                     icon = painterResource(categoryImage) ,
                     title = task.title,
                     date = task.createdDate.toString(),
                     subtitle = task.description,
                     priorityLabel = task.priority.name,
-                    priorityIcon = task.priority.toIcon(),
-                    priorityColor = task.priority.toColor(),
+                    priorityIcon = painterResource(id = style.iconRes),
+                    priorityColor = style.backgroundColor,
                     isDated = true,
                     modifier = Modifier.clickable {
                         navController.navigate(Screens.TaskDetails(task.id))
