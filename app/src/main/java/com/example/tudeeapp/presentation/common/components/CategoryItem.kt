@@ -30,13 +30,15 @@ fun CategoryItem(
     icon: Painter,
     label: String,
     iconColor: Color,
+    modifier: Modifier = Modifier,
     count: Int? = null,
     isSelected: Boolean = true,
     onClick: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Box(
             modifier = Modifier
