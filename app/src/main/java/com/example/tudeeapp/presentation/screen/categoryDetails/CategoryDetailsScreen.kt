@@ -21,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
@@ -31,6 +32,7 @@ import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.common.components.TopAppBar
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
 import com.example.tudeeapp.presentation.screen.errorScreen.ErrorScreen
 import com.example.tudeeapp.presentation.screen.loadingScreen.LoadingScreen
 import com.example.tudeeapp.presentation.utills.toStyle
@@ -44,27 +46,21 @@ fun CategoryDetailsScreen(
 ) {
     val navController = LocalNavController.current
 
-    val uiState by viewModel.category.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val selectedState by viewModel.stateFilter.collectAsState()
 
     when {
-        uiState.isLoading -> {
-            LoadingScreen()
-        }
-
-        uiState.errorMessage.isNotEmpty() -> {
-            ErrorScreen(message = uiState.errorMessage)
-        }
-
-        uiState.category != null -> {
+        uiState.isLoading -> LoadingScreen()
+        uiState.errorMessage.isNotEmpty() -> ErrorScreen(message = uiState.errorMessage)
+        uiState.categoryUiState != null -> {
             CategoryDetailsContent(
-                tasks = uiState.tasks,
+                tasks = uiState.taskUiState,
                 selectedState = selectedState,
                 onStatusChange = viewModel::setStatus,
                 onBack = { navController.popBackStack() },
-                categoryTitle = uiState.category!!.title,
+                categoryTitle = uiState.categoryUiState!!.title,
                 onOptionClick = { navController.navigate(Screens.CategoriesForm) },
-                categoryImage = uiState.category!!.imageUrl.toInt()
+                categoryImage = uiState.categoryUiState!!.imageUrl.toInt() // إذا imageUrl عبارة عن resource id كـ String
             )
         }
     }
@@ -72,7 +68,7 @@ fun CategoryDetailsScreen(
 
 @Composable
 fun CategoryDetailsContent(
-    tasks: List<Task>,
+    tasks: List<TaskUiState>,
     selectedState: TaskStatus,
     categoryImage: Int,
     modifier: Modifier = Modifier,
@@ -84,19 +80,17 @@ fun CategoryDetailsContent(
 ) {
     Column(modifier = modifier.fillMaxSize().statusBarsPadding()) {
         TopAppBar(
-            modifier = Modifier,
             onClickBack = onBack,
             title = categoryTitle,
             withOption = true,
             showIndicator = false,
             onclickOption = onOptionClick,
-            iconButton = ImageVector.vectorResource(R.drawable.ic_pencil_edit),
-            iconSize = 20.dp
+            iconButton = ImageVector.vectorResource(R.drawable.ic_pencil_edit)
         )
 
-        val inProgressCount = tasks.count { it.status == TaskStatus.IN_PROGRESS }
-        val toDoCount = tasks.count { it.status == TaskStatus.TO_DO }
-        val doneCount = tasks.count { it.status == TaskStatus.DONE }
+        val inProgressCount = tasks.count { it.status == TaskStatus.IN_PROGRESS.name }
+        val toDoCount = tasks.count { it.status == TaskStatus.TO_DO.name }
+        val doneCount = tasks.count { it.status == TaskStatus.DONE.name }
 
         HorizontalTabs(
             tabs = listOf(
@@ -119,25 +113,23 @@ fun CategoryDetailsContent(
                 onStatusChange(selectedStatus)
             }
         )
-
+        val filteredTasks = tasks.filter { it.status == selectedState.name }
         LazyColumn(
             modifier = Modifier.padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(tasks.filter { it.status == selectedState }) { task ->
-                val style = task.priority.toUi().toStyle()
+            items(filteredTasks) { task ->
+                val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
                 TaskCard(
-                    icon = painterResource(categoryImage) ,
+                    icon = painterResource(categoryImage),
                     title = task.title,
-                    date = task.createdDate.toString(),
+                    date = task.createdDate,
                     subtitle = task.description,
-                    priorityLabel = task.priority.name,
+                    priorityLabel = task.priority,
                     priorityIcon = painterResource(id = style.iconRes),
                     priorityColor = style.backgroundColor,
                     isDated = true,
-                    modifier = Modifier.clickable {
-                        navController.navigate(Screens.TaskDetails(task.id))
-                    }
+                    onClickItem = { navController.navigate(Screens.TaskDetails(task.id)) }
                 )
             }
         }
@@ -147,119 +139,58 @@ fun CategoryDetailsContent(
 @Preview(showBackground = true)
 @Composable
 fun CategoryDetailsPreview() {
-
     val fakeTasks = listOf(
-        Task(
+        TaskUiState(
             id = 1,
             title = "Study Kotlin",
             description = "Read about coroutines and Flow",
-            createdDate = "2025-06-16".toLocalDate(),
-            status = TaskStatus.IN_PROGRESS,
-            priority = TaskPriority.HIGH,
+            createdDate = "2025-06-16",
+            status = TaskStatus.IN_PROGRESS.name,
+            priority = TaskPriority.HIGH.name,
             categoryId = 1L
         ),
-        Task(
+        TaskUiState(
             id = 2,
             title = "Write Report",
             description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.IN_PROGRESS,
-            priority = TaskPriority.MEDIUM,
+            createdDate = "2025-06-14",
+            status = TaskStatus.DONE.name,
+            priority = TaskPriority.MEDIUM.name,
             categoryId = 1L
         ),
-        Task(
+        TaskUiState(
             id = 2,
             title = "Write Report",
             description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.TO_DO,
-            priority = TaskPriority.LOW,
+            createdDate = "2025-06-14",
+            status = TaskStatus.DONE.name,
+            priority = TaskPriority.MEDIUM.name,
             categoryId = 1L
         ),
-        Task(
-            id = 1,
+        TaskUiState(
+            id = 3,
             title = "Study Kotlin",
             description = "Read about coroutines and Flow",
-            createdDate = "2025-06-16".toLocalDate(),
-            status = TaskStatus.TO_DO,
-            priority = TaskPriority.HIGH,
+            createdDate = "2025-06-16",
+            status = TaskStatus.IN_PROGRESS.name,
+            priority = TaskPriority.HIGH.name,
             categoryId = 1L
         ),
-        Task(
-            id = 2,
+        TaskUiState(
+            id = 4,
             title = "Write Report",
             description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
+            createdDate = "2025-06-14",
+            status = TaskStatus.TO_DO.name,
+            priority = TaskPriority.MEDIUM.name,
             categoryId = 1L
-        ),
-        Task(
-            id = 2,
-            title = "Write Report",
-            description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
-            categoryId = 1L
-        ),
-        Task(
-            id = 2,
-            title = "Write Report",
-            description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
-            categoryId = 1L
-        ),
-        Task(
-            id = 2,
-            title = "Write Report",
-            description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
-            categoryId = 1L
-        ),
-        Task(
-            id = 2,
-            title = "Write Report",
-            description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
-            categoryId = 1L
-        ),
-        Task(
-            id = 2,
-            title = "Write Report",
-            description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
-            categoryId = 1L
-        ),
-        Task(
-            id = 2,
-            title = "Write Report",
-            description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
-            categoryId = 1L
-        ),
-        Task(
-            id = 2,
-            title = "Write Report",
-            description = "Project update",
-            createdDate = "2025-06-14".toLocalDate(),
-            status = TaskStatus.DONE,
-            priority = TaskPriority.MEDIUM,
-            categoryId = 1L
-        ),
+        )
     )
 
-    val selectedStatus = remember { mutableStateOf(TaskStatus.IN_PROGRESS) }
+    val selectedStatus = remember { mutableStateOf(TaskStatus.TO_DO) }
+
+    val fakeNavController = rememberNavController()
+
     CategoryDetailsContent(
         modifier = Modifier.statusBarsPadding(),
         tasks = fakeTasks,
@@ -269,6 +200,7 @@ fun CategoryDetailsPreview() {
         },
         onBack = {},
         categoryTitle = "Coding",
-        categoryImage = R.drawable.ic_education
+        categoryImage = R.drawable.ic_education,
+        navController = fakeNavController
     )
 }

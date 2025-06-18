@@ -21,65 +21,45 @@ import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
 
-val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
+val LocalNavController = compositionLocalOf<NavHostController> {
+    error("No Nav Controller Found")
+}
 
 @Composable
 fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = backStackEntry?.destination
+    val currentRoute = backStackEntry?.destination?.route
 
     CompositionLocalProvider(LocalNavController provides navController) {
-
         TudeeScaffold(
             bottomBar = {
-                if ((currentRoute?.route != null) && listOf(
+                if (currentRoute != null && listOf(
                         Screens.Home::class.qualifiedName,
                         Screens.Task::class.qualifiedName,
                         Screens.Category::class.qualifiedName
-                    ).contains(currentRoute.route)
-                )
+                    ).contains(currentRoute)
+                ) {
                     TudeeNavigationBar(
                         onItemClick = { navItem ->
                             navController.navigate(navItem.screen)
                         }
                     )
+                }
             },
             contentBackground = Theme.colors.surfaceColors.surface
         ) {
             NavHost(
                 navController = navController,
-                startDestination = "TestCategoryDetails",
+                startDestination = Screens.Splash
             ) {
-        Box {
-            TudeeScaffold(
-                bottomBar = {
-                    if ((currentRoute?.route != null) && listOf(
-                            Screens.Home::class.qualifiedName,
-                            Screens.Task::class.qualifiedName,
-                            Screens.Category::class.qualifiedName
-                        ).contains(currentRoute.route)
-                    )
-                        TudeeNavigationBar(
-                            onItemClick = { navItem ->
-                                navController.navigate(navItem.screen)
-                            }
-                        )
-                },
-                contentBackground = Theme.colors.surfaceColors.surface
-            ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = Screens.Splash,
-                ) {
-
                 composable<Screens.Splash> {
                     SplashScreen()
                 }
 
-//                composable<Screens.OnBoarding> {
-//                    OnBoardScreen()
-//                }
+                // composable<Screens.OnBoarding> {
+                //     OnBoardScreen()
+                // }
 
                 composable<Screens.Home> {
                     HomeScreen()
@@ -92,7 +72,6 @@ fun TudeeNavGraph() {
                 composable<Screens.Category> {
                     CategoriesScreen()
                 }
-
 
                 composable<Screens.TaskForm> {
                     TaskFormScreen()
@@ -109,12 +88,7 @@ fun TudeeNavGraph() {
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
                 }
-
             }
         }
     }
 }
-        }
-    }
-}
-

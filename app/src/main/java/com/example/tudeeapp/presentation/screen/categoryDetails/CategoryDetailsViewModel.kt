@@ -8,19 +8,24 @@ import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryDetailsUiState
+import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
+import com.example.tudeeapp.presentation.screen.categoryDetails.state.toCategoryUiState
+import com.example.tudeeapp.presentation.screen.categoryDetails.state.toTaskUiState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class CategoryDetailsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val taskServices: TaskServices,
+    private val taskService: TaskServices,
 ) : ViewModel() {
 
     private val categoryId: Long = savedStateHandle.toRoute<Screens.CategoryDetails>().categoryId
 
-    private val _category = MutableStateFlow(CategoryDetailsUiState())
-    val category = _category.asStateFlow()
+    private val _uiState = MutableStateFlow(CategoryDetailsUiState())
+    val uiState: StateFlow<CategoryDetailsUiState> = _uiState.asStateFlow()
 
 
     init {
@@ -30,23 +35,23 @@ class CategoryDetailsViewModel(
     private val _stateFilter = MutableStateFlow(TaskStatus.IN_PROGRESS)
     val stateFilter = _stateFilter.asStateFlow()
 
-    private fun loadCategory(categoryId: Long){
+    private fun loadCategory(categoryId: Long) {
         viewModelScope.launch {
-            _category.value = _category.value.copy(isLoading = true, errorMessage = "")
             try {
-                val category = taskServices.getCategoryById(categoryId)
-                taskServices.getAllTasks().collect { tasks ->
-                    val filtered = tasks.filter { it.categoryId == categoryId }
-                    _category.value = CategoryDetailsUiState(
-                        isLoading = false,
-                        tasks = filtered,
-                        category = category
-                    )
-                }
-            } catch (e: Exception) {
-                _category.value = CategoryDetailsUiState(
+                val category = taskService.getCategoryById(categoryId)
+                val tasks = taskService.getAllTasks().first()
+                    .filter { it.categoryId == categoryId }
+
+                _uiState.value = CategoryDetailsUiState(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unknown error"
+                    taskUiState = tasks.map { it.toTaskUiState() },
+                    categoryUiState = category.toCategoryUiState()
+                )
+
+            } catch (e: Exception) {
+                _uiState.value = CategoryDetailsUiState(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Unexpected Error"
                 )
             }
         }
@@ -54,5 +59,9 @@ class CategoryDetailsViewModel(
 
     fun setStatus(status: TaskStatus) {
         _stateFilter.value = status
+    }
+
+    fun getFilteredTasksByStatus(): List<TaskUiState> {
+        return uiState.value.taskUiState.filter { it.status == stateFilter.value.name }
     }
 }

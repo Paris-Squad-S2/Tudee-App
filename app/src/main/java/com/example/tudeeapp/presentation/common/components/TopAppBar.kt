@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
@@ -35,7 +38,6 @@ fun TopAppBar(
     showIndicator: Boolean = false,
     onclickOption: () -> Unit = {},
     iconButton: ImageVector = ImageVector.vectorResource(R.drawable.ic_options),
-    iconSize: Dp = 40.dp
 ) {
     Row(
         modifier = modifier
@@ -48,6 +50,7 @@ fun TopAppBar(
             tint = Theme.colors.stroke,
             modifier = Modifier
                 .size(40.dp)
+                .clip(CircleShape)
                 .clickable { onClickBack() }
         )
         Column(
@@ -76,8 +79,7 @@ fun TopAppBar(
             OptionsButton(
                 onClick = onclickOption,
                 showIndicator = showIndicator,
-                iconButton = iconButton,
-                iconSize = iconSize
+                iconButton = iconButton
             )
         }
     }
@@ -88,16 +90,19 @@ private fun OptionsButton(
     onClick: () -> Unit,
     iconButton: ImageVector,
     modifier: Modifier = Modifier,
-    showIndicator: Boolean = false,
-    iconSize: Dp = 40.dp
+    showIndicator: Boolean = false
 ) {
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier
+    ) {
+
         Icon(
             imageVector = iconButton,
             contentDescription = "Options",
             tint = Theme.colors.stroke,
             modifier = Modifier
-                .size(iconSize)
+                .size(40.dp)
+                .clip(CircleShape)
                 .clickable { onClick() }
         )
 
