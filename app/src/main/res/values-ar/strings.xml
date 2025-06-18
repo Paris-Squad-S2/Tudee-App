@@ -7,5 +7,6 @@
     <string name="editCategory">تعديل الفئة</string>
     <string name="categoryImage">صورة الفئة</string>
     <string name="categoryEditSnackBarSuccessfully">تم تغيير الفئة بنجاح</string>
+    <string name="delete">حذف</string>
     <string name="cancel">إلغاء</string>
 </resources>

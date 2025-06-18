@@ -6,5 +6,6 @@
     <string name="editCategory">Edit Category</string>
     <string name="categoryImage">Category image</string>
     <string name="categoryEditSnackBarSuccessfully">Category edited successfully</string>
+    <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 </resources>

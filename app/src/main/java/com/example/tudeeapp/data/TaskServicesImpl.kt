@@ -16,6 +16,7 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 class TaskServicesImpl(
@@ -77,7 +78,7 @@ class TaskServicesImpl(
     override suspend fun editCategory(id: Long, title: String, imageUrl: String) {
 
         try {
-            val currentCategory: CategoryEntity = categoryDao.findById(id).first()
+            val currentCategory: CategoryEntity = categoryDao.findById(id).firstOrNull() ?: throw CategoryException()
 
             val updatedCategory = currentCategory.copy(
                 title = title,

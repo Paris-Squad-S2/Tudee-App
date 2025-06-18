@@ -43,6 +43,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
@@ -57,7 +58,6 @@ fun CategoryFormEditScreen(viewModel: CategoryFormViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     val navController = LocalNavController.current
 
-    // Image picker launcher
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -187,35 +187,43 @@ fun CategoryFormEditContent(
                             .padding(horizontal = 16.dp)
                     ) {
 
-                        TudeeButton(
-                            onClick = {
-                                onSubmitEdit()
-                                onSubmit()
-                            },
-                            text = stringResource(R.string.save),
-                            variant = ButtonVariant.FilledButton,
-                            modifier = Modifier.fillMaxWidth(),
-                            state = if (state.isFormValid) ButtonState.Normal else ButtonState.Disabled
-                        )
+                        Box(Modifier.fillMaxSize()) {
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                            Column {
+                                TudeeButton(
+                                    onClick = {
+                                        onSubmitEdit()
+                                        onSubmit()
+                                    },
+                                    text = stringResource(R.string.save),
+                                    variant = ButtonVariant.FilledButton,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    state = if (state.isFormValid) ButtonState.Normal else ButtonState.Disabled
+                                )
 
-                        TudeeButton(
-                            onClick = onCancel, text = stringResource(R.string.cancel),
-                            variant = ButtonVariant.TextButton,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                                Spacer(modifier = Modifier.height(12.dp))
 
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        var showSnackBar by remember { mutableStateOf(false) }
-
-                        // When showSnackBar is true, hide it after 3 seconds
-                        LaunchedEffect(showSnackBar) {
-                            if (showSnackBar) {
-                                delay(1000) // duration in milliseconds
-                                showSnackBar = false
+                                TudeeButton(
+                                    onClick = onCancel, text = stringResource(R.string.cancel),
+                                    variant = ButtonVariant.TextButton,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
                             }
+
+                            var showSnackBar by remember { mutableStateOf(false) }
+
+                            LaunchedEffect(showSnackBar) {
+                                if (showSnackBar) {
+                                    delay(1000)
+                                    showSnackBar = false
+                                }
+                            }
+
+                            SnackBar(
+                                text = "Some error happened",
+                                isSuccess = false,
+                                modifier = Modifier.align(Alignment.BottomCenter)
+                            )
                         }
 
                     }
@@ -253,6 +261,15 @@ fun Modifier.dashedBorder(
 
 @Composable
 @Preview
-fun CategoryFormEditScreenP(){
+fun CategoryFormEditScreenP() {
     CategoryFormEditScreen()
+}
+
+@Composable
+fun DeleteButton(modifier: Modifier = Modifier){
+    TudeeButton(
+        onClick = { }, text = stringResource(R.string.delete),
+        variant = ButtonVariant.TextButton,
+        isNegative = true
+    )
 }

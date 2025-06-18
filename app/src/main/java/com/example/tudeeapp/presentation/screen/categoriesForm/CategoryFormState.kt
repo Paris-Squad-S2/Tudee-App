@@ -4,12 +4,10 @@ import android.net.Uri
 
 data class CategoryFormState(
     val categoryName: String = "",
-    val categoryId : Long  = 0,
-   // val bottomText: String = "",
+    val categoryId: Long = 0,
     val imageUri: Uri? = null,
     val isVisible: Boolean = false,
-  //  val isEdit: Boolean = false,
-){
+) {
     val isFormValid: Boolean
         get() = categoryName.isNotBlank() && imageUri != null
 }
