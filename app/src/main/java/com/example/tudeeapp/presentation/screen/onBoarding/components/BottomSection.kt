@@ -35,7 +35,7 @@ fun BottomSection(
         modifier = Modifier
             .padding(
                 bottom = 32.dp,
-                top = 37.dp
+                top = 32.dp
             )
     ) {
         Surface(
@@ -80,16 +80,16 @@ fun BottomSection(
         TudeeButton(
             onClick = onNextClick,
             variant = ButtonVariant.FloatingActionButton,
+            modifier = Modifier
+                .size(64.dp)
+                .offset(y = (-32).dp),
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_right_double),
                     contentDescription = "Next Page",
                     modifier = Modifier.size(28.dp)
                 )
-            },
-            modifier = Modifier
-                .size(64.dp)
-                .offset(y = (-32).dp),
+            }
         )
     }
 }

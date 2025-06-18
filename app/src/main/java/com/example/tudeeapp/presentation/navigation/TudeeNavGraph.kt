@@ -1,5 +1,7 @@
 package com.example.tudeeapp.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -26,6 +28,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TudeeNavGraph() {
     val navController = rememberNavController()
@@ -59,13 +62,13 @@ fun TudeeNavGraph() {
                     SplashScreen()
                 }
 
-            composable<Screens.OnBoarding> {
-                val onboardingViewModel : OnboardingViewModel = koinViewModel()
-                OnBoardScreen(
-                    viewModel = onboardingViewModel,
-                    pages = onboardingPages()
-                )
-            }
+                composable<Screens.OnBoarding> {
+                    val onboardingViewModel : OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
+                    )
+                }
 
                 composable<Screens.Home> {
                     HomeScreen()
@@ -100,4 +103,3 @@ fun TudeeNavGraph() {
         }
     }
 }
-

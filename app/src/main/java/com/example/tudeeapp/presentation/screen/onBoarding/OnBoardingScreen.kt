@@ -34,7 +34,7 @@ fun OnBoardScreen(
 
     LaunchedEffect(state.isCompleted) {
         if (state.isCompleted) {
-            navController.navigate(Screens.Home("UserName"))
+            navController.navigate(Screens.Home)
         }
     }
     if (!state.isCompleted) {
