@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -50,7 +49,6 @@ val LocalSnackBarState = compositionLocalOf<SnackBarState> {
 fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = backStackEntry?.destination
     val snackBarState = remember { SnackBarState() }
 
     CompositionLocalProvider(
@@ -82,69 +80,68 @@ fun TudeeNavGraph() {
                 startDestination = Screens.Splash,
             ) {
 
-                    composable<Screens.Splash> {
-                        SplashScreen()
-                    }
-
-                    composable<Screens.OnBoarding> {
-                        val onboardingViewModel: OnboardingViewModel = koinViewModel()
-                        OnBoardScreen(
-                            onboardingViewModel,
-                            onboardingPages()
-                        )
-                    }
-
-                    composable<Screens.Home> {
-                        HomeScreen()
-                    }
-
-                    composable<Screens.Task> {
-                        TaskScreen()
-                    }
-
-                    composable<Screens.Category> {
-                        CategoriesScreen()
-                    }
-
-
-                    composable<Screens.TaskForm> {
-                        TaskFormScreen()
-                    }
-
-                    composable<Screens.TaskDetails> {
-                        TaskDetailsScreen()
-                    }
-
-                    composable<Screens.CategoriesForm> {
-                        CategoryFormScreen()
-                    }
-
-                    composable<Screens.CategoryDetails> {
-                        CategoryDetailsScreen()
-                    }
-
+                composable<Screens.Splash> {
+                    SplashScreen()
                 }
-            }
 
-            if (snackBarState.isVisible) {
-                AnimatedVisibility(
-                    visible = snackBarState.isVisible,
-                    enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
-                    exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
-                ) {
-                    SnackBar(
-                        Modifier
-                            .statusBarsPadding()
-                            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                        text = snackBarState.message,
-                        isSuccess = snackBarState.isSuccess,
-                        onClick = { snackBarState.hide() }
+                composable<Screens.OnBoarding> {
+                    val onboardingViewModel: OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
                     )
                 }
-                LaunchedEffect(Unit) {
-                    delay(snackBarState.durationMillis.toLong())
-                    snackBarState.hide()
+
+                composable<Screens.Home> {
+                    HomeScreen()
                 }
+
+                composable<Screens.Task> {
+                    TaskScreen()
+                }
+
+                composable<Screens.Category> {
+                    CategoriesScreen()
+                }
+
+
+                composable<Screens.TaskForm> {
+                    TaskFormScreen()
+                }
+
+                composable<Screens.TaskDetails> {
+                    TaskDetailsScreen()
+                }
+
+                composable<Screens.CategoriesForm> {
+                    CategoryFormScreen()
+                }
+
+                composable<Screens.CategoryDetails> {
+                    CategoryDetailsScreen()
+                }
+
+            }
+        }
+
+        if (snackBarState.isVisible) {
+            AnimatedVisibility(
+                visible = snackBarState.isVisible,
+                enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
+                exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+            ) {
+                SnackBar(
+                    Modifier
+                        .statusBarsPadding()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                    text = snackBarState.message,
+                    isSuccess = snackBarState.isSuccess,
+                    onClick = { snackBarState.hide() }
+                )
+            }
+            LaunchedEffect(Unit) {
+                delay(snackBarState.durationMillis.toLong())
+                snackBarState.hide()
             }
         }
     }
