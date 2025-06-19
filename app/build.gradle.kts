@@ -42,6 +42,11 @@ android {
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -75,6 +80,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.kotlinx.serialization.json)
 
+    testImplementation(libs.mockk)
+    testImplementation(libs.truth)
+    testImplementation(libs.kotlinx.coroutines.test.v173)
+
+    // JUnit 5 core + runner
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.params)
+
 
     //Splash Api
     implementation (libs.androidx.core.splashscreen)
@@ -88,5 +102,9 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     //kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+
+    implementation(libs.coil3.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 }

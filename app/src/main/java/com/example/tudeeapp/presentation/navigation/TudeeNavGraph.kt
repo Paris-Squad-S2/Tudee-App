@@ -95,29 +95,30 @@ fun TudeeNavGraph() {
                     composable<Screens.TaskDetails> { TaskDetailsScreen() }
                     composable<Screens.CategoriesForm> { CategoryFormScreen() }
 
-                composable<Screens.CategoryDetails> {
-                    CategoryDetailsScreen()
+                    composable<Screens.CategoryDetails> {
+                        CategoryDetailsScreen()
+                    }
                 }
-            }
 
-            if (snackBarState.isVisible) {
-                AnimatedVisibility(
-                    visible = snackBarState.isVisible,
-                    enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
-                    exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
-                ) {
-                    SnackBar(
-                        Modifier
-                            .statusBarsPadding()
-                            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                        text = snackBarState.message,
-                        isSuccess = snackBarState.isSuccess,
-                        onClick = { snackBarState.hide() }
-                    )
-                }
-                LaunchedEffect(Unit) {
-                    delay(snackBarState.durationMillis.toLong())
-                    snackBarState.hide()
+                if (snackBarState.isVisible) {
+                    AnimatedVisibility(
+                        visible = snackBarState.isVisible,
+                        enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
+                        exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+                    ) {
+                        SnackBar(
+                            Modifier
+                                .statusBarsPadding()
+                                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            text = snackBarState.message,
+                            isSuccess = snackBarState.isSuccess,
+                            onClick = { snackBarState.hide() }
+                        )
+                    }
+                    LaunchedEffect(Unit) {
+                        delay(snackBarState.durationMillis.toLong())
+                        snackBarState.hide()
+                    }
                 }
             }
         }
