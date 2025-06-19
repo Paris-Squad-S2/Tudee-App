@@ -13,4 +13,13 @@
     <string name="onboarding2description">تودي ليس غاضبًا... فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
     <string name="onboarding3title">لنُنجز المهام ونحتفل معًا.</string>
     <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
+    <string name="priority">الأولوية</string>
+    <string name="category">الفئة</string>
+    <string name="save">حفظ</string>
+    <string name="add">إضافة</string>
+    <string name="add_task">إضافة مهمة</string>
+    <string name="edit_task">تعديل مهمة</string>
+    <string name="high">عالي</string>
+    <string name="medium">متوسط</string>
+    <string name="low">منخفض</string>
 </resources>
