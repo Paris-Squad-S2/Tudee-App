@@ -1,5 +1,6 @@
 [versions]
 agp = "8.10.1"
+coilCompose = "3.2.0"
 coreSplashscreen = "1.0.1"
 koinAndroid = "4.0.2"
 koinCompose = "4.0.2"
@@ -8,7 +9,6 @@ koinCore = "4.0.2"
 kotlin = "2.0.21"
 ksp  = "2.0.21-1.0.27"
 coreKtx = "1.16.0"
-coilCompose = "3.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -25,6 +25,7 @@ kotlinxDateTime = "0.5.0"
 navigationComposeJvmstubs = "2.9.0"
 serializationJson ="1.6.3"
 navigationCompose ="2.9.0"
+composeMaterial = "1.4.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,7 +60,7 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
 
 androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
-
+androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -48,7 +48,6 @@ val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarS
 fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = backStackEntry?.destination
     val snackBarState = remember { SnackBarState() }
 
     CompositionLocalProvider(

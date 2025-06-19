@@ -4,12 +4,14 @@
     <string name="your_cute_helper_for_every_task">مساعدك اللطيف لإنجاز كل مهامك</string>
     <string name="ok">تأكيد</string>
     <string name="cancel">إلغاء</string>
+    <string name="tasks">المهام</string>
+    <string name="categories">الفئات</string>
+    <string name="no_tasks_here">لا توجد مهام هنا!</string>
     <string name="no_tasks_for_today">لا توجد مهام يومية!</string>
     <string name="tap_the_button_to_add_your_first_one">اضغط علي الزر + حتي تضيف مهمة  اخري</string>
     <string name="in_progress_text">قيد التنفيذ</string>
     <string name="to_do">للقيام به</string>
     <string name="done">تم</string>
-    <string name="categories">الفئات</string>
     <string name="onboarding1title">تشعر بالإرهاق من كثرة المهام؟</string>
     <string name="onboarding1description">لننظم الفوضى معًا. تودي هنا لمساعدتك في الترتيب والتخطيط لتتنفس بسهولة.</string>
     <string name="onboarding2title">أوه لا! تماطل مرة أخرى؟</string>
@@ -40,9 +42,11 @@
     <string name="slider_title_stay_working">استمر في العمل!</string>
     <string name="slider_description_stay_working">لقد أكملت %d من أصل %d من المهام. استمر!</string>
     <string name="overview">نظرة عامة</string>
-    <string name="no_tasks_here">لا توجد مهام هنا!</string>
     <string name="move_to_done">نقل إلى تم</string>
     <string name="move_to_in_progress">نقل إلى قيد التنفيذ</string>
-    <string name="task_details">تفاصيل المهمة
-</string>
+    <string name="task_details">تفاصيل المهمة</string>
+    <string name="are_you_sure_to_continue">هل أنت متأكد من الاستمرار؟</string>
+    <string name="delete">حذف</string>
+    <string name="deleted_task_successfully">تم حذف المهمة بنجاح</string>
+    <string name="delete_task">حذف مهمة</string>
 </resources>

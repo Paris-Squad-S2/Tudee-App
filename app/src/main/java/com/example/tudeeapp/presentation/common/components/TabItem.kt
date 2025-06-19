@@ -53,7 +53,7 @@ fun TabItem(
                     style = Theme.textStyle.label.medium,
                     color = if (isSelected) selectedTextColor else unselectedTextColor
                 )
-                if (tab.count > 0 && isSelected) {
+                if (tab.count >= 0 && isSelected) {
                     Box(
                         modifier = Modifier
                             .clip(CircleShape)
