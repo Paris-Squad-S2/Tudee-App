@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.screen.categoryDetails
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -51,7 +53,10 @@ fun CategoryDetailsScreen(
     val selectedState by viewModel.stateFilter.collectAsState()
 
     when {
-        uiState.isLoading -> CircularProgressIndicator()
+        uiState.isLoading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }}
         uiState.errorMessage.isNotEmpty() -> Text(text = "error ${uiState.errorMessage}")
         uiState.categoryUiState != null -> {
             CategoryDetailsContent(
