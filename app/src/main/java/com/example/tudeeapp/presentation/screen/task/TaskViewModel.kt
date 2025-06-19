@@ -60,6 +60,23 @@ class TaskViewModel(
         onDateSelected(currentDate)
     }
 
+    fun deleteTask(taskId: Long) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
+            try {
+                taskServices.deleteTask(taskId)
+                updateUiStateWithFilters()
+
+            }catch (e: Exception){
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Unknown error occurred"
+                )
+            }
+        }
+    }
+
     private fun loadTasks() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
