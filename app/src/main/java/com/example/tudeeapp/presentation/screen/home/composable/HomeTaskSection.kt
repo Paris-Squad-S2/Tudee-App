@@ -37,8 +37,8 @@ fun HomeTaskSection(
     modifier: Modifier = Modifier,
     tasks: List<TaskUi>,
     tasksType: TaskStatus,
-    onTasksCountClick: () -> Unit,
-    onTaskClick: (Long) -> Unit,
+    onTasksCountClick: (String) -> Unit,
+    onTaskClick: (Long) -> Unit
 ) {
 
 
@@ -47,6 +47,7 @@ fun HomeTaskSection(
         TaskStatus.TO_DO -> stringResource(R.string.to_do)
         TaskStatus.DONE -> stringResource(R.string.done)
     }
+
 
     Column(
         modifier = modifier
@@ -75,7 +76,7 @@ fun HomeTaskSection(
                         shape = RoundedCornerShape(100.dp)
                     )
                     .clip(RoundedCornerShape(100.dp))
-                    .clickable { onTasksCountClick() }
+                    .clickable { onTasksCountClick(tasksType.name) }
 
             ) {
                 Row(
@@ -112,11 +113,9 @@ fun HomeTaskSection(
                 HomeTaskCard(
                     modifier = Modifier
                         .width(320.dp)
-                        .height(111.dp)
-                        .clickable {
-                            onTaskClick(task.id)
-                        },
-                    task = task
+                        .height(111.dp),
+                    task = task,
+                    onClickItem = { onTaskClick(task.id) }
                 )
             }
         }
