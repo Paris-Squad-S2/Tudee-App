@@ -163,6 +163,10 @@ class TaskViewModel(
     }
 
     private fun isLeapYear(year: Int): Boolean {
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+        val divisibleBy4 = year % 4 == 0
+        val divisibleBy100 = year % 100 == 0
+        val divisibleBy400 = year % 400 == 0
+
+        return (divisibleBy4 && !divisibleBy100) || divisibleBy400
     }
 }
