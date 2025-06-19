@@ -1,21 +1,23 @@
 package com.example.tudeeapp.presentation.common.extentions
 
-import android.content.Context
 import android.graphics.BlurMaskFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.tudeeapp.R
 
 fun Modifier.innerShadow(
     shape: Shape,
@@ -50,3 +52,28 @@ fun Modifier.innerShadow(
     }
 }
 
+
+fun Modifier.dashedBorder(
+    strokeWidth: Dp,
+    color: Color,
+    cornerRadius: Dp = 0.dp,
+    dashLength: Dp = 10.dp,
+    gapLength: Dp = 10.dp
+): Modifier = this.then(
+    Modifier.drawWithCache {
+        val stroke = Stroke(
+            width = strokeWidth.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                floatArrayOf(dashLength.toPx(), gapLength.toPx()), 0f
+            )
+        )
+        onDrawBehind {
+            drawRoundRect(
+                color = color,
+                size = size,
+                style = stroke,
+                cornerRadius = CornerRadius(cornerRadius.toPx())
+            )
+        }
+    }
+)
