@@ -50,7 +50,7 @@ fun PriorityRow(
             )
             PriorityButton(
                 text = stringResource(R.string.medium),
-                icon = painterResource(R.drawable.ic_worning),
+                icon = painterResource(R.drawable.ic_warning),
                 backgroundColor = if (selectedPriority == TaskPriorityUiState.MEDIUM)
                     Theme.colors.status.yellowAccent else Theme.colors.surfaceColors.surfaceLow,
                 contentColor = if (selectedPriority == TaskPriorityUiState.MEDIUM)

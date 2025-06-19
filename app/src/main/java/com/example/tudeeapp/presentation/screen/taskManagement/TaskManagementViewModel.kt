@@ -23,7 +23,8 @@ class TaskManagementViewModel(
 
     val taskId = savedStateHandle.toRoute<Screens.TaskManagement>().taskId
 
-    private val _state = MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
+    private val _state =
+        MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
 
     val state = _state.asStateFlow()
 
@@ -36,7 +37,10 @@ class TaskManagementViewModel(
             try {
                 taskServices.getAllCategories().collect { categories ->
                     _state.update {
-                        it.copy(categories = categories.map { category -> category.toCategoryState() }, isLoading = false)
+                        it.copy(
+                            categories = categories.map { category -> category.toCategoryState() },
+                            isLoading = false
+                        )
                     }
                 }
             } catch (_: Exception) {
@@ -123,7 +127,7 @@ class TaskManagementViewModel(
                     categoryId = currentState.selectedCategoryId ?: 0L
                 )
 
-                if (currentState.isEditMode) editTask(task) else addTask(task)
+                if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(task)
 
                 _state.update { it.copy(isLoading = false) }
             } catch (_: Exception) {
@@ -132,23 +136,12 @@ class TaskManagementViewModel(
         }
     }
 
-    private suspend fun addTask(task: Task) {
-        try {
-            taskServices.addTask(task)
-        } catch (e: Exception) {
-            throw e
-        }
-    }
-
-    private suspend fun editTask(task: Task) {
-        try {
-            taskServices.editTask(task)
-        } catch (e: Exception) {
-            throw e
-        }
-    }
-
     private fun handleException() {
-        _state.update { it.copy(isLoading = false, error = "There was an error processing your request. Please try again later.") }
+        _state.update {
+            it.copy(
+                isLoading = false,
+                error = "There was an error processing your request. Please try again later."
+            )
+        }
     }
 }
