@@ -42,6 +42,7 @@ import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUi
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun CategoryDetailsScreen(
@@ -49,8 +50,8 @@ fun CategoryDetailsScreen(
 ) {
     val navController = LocalNavController.current
 
-    val uiState by viewModel.uiState.collectAsState()
-    val selectedState by viewModel.stateFilter.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val selectedState by viewModel.stateFilter.collectAsStateWithLifecycle()
 
     when {
         uiState.isLoading -> {
