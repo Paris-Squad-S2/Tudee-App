@@ -15,9 +15,10 @@ espressoCore = "3.6.1"
 kotlinxCoroutinesCore = "1.10.1"
 kotlinxCoroutinesTest = "1.10.1"
 kotlinxDatetime = "0.6.2"
+lifecycleRuntimeCompose = "2.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.06.00"
+composeBom = "2024.09.00"
 roomCompiler = "2.7.1"
 roomKtx = "`2.7.1"
 roomRuntime = "2.7.1"
@@ -29,6 +30,7 @@ composeMaterial = "1.4.1"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-runtime-compose-v261 = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
