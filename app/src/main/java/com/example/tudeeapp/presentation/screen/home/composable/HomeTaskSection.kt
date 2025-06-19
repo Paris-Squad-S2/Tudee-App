@@ -43,7 +43,7 @@ fun HomeTaskSection(
 
 
     val sectionTitle = when (tasksType) {
-        TaskStatus.IN_PROGRESS -> stringResource(R.string.in_progress)
+        TaskStatus.IN_PROGRESS -> stringResource(R.string.in_progress_text)
         TaskStatus.TO_DO -> stringResource(R.string.to_do)
         TaskStatus.DONE -> stringResource(R.string.done)
     }
