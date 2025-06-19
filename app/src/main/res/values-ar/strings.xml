@@ -49,4 +49,6 @@
     <string name="delete">حذف</string>
     <string name="deleted_task_successfully">تم حذف المهمة بنجاح</string>
     <string name="delete_task">حذف مهمة</string>
+    <string name="task_title">عنوان المهمه</string>
+    <string name="description">الوصف</string>
 </resources>

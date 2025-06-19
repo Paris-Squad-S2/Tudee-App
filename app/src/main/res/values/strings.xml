@@ -48,5 +48,7 @@
     <string name="delete">Delete</string>
     <string name="deleted_task_successfully">Deleted task successfully</string>
     <string name="delete_task">Delete task</string>
+    <string name="task_title">Task Title</string>
+    <string name="description">Description</string>
 
 </resources>
