@@ -9,8 +9,8 @@ import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.exception.CategoryException
-import com.example.tudeeapp.domain.exception.TaskException
+import com.example.tudeeapp.domain.exception.NoCategoriesFoundException
+import com.example.tudeeapp.domain.exception.NoTasksFoundException
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow

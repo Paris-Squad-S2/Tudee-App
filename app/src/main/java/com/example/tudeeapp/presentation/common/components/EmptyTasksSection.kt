@@ -63,7 +63,7 @@ fun EmptyTasksSection(
             )
 
             Image(
-                painter = painterResource(R.drawable.img_ropot4),
+                painter = painterResource(R.drawable.img_robot4),
                 contentDescription = "ropo4",
                 modifier = Modifier
                     .width(107.dp)
