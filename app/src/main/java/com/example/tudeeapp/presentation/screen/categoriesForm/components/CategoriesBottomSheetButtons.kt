@@ -17,7 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormState
 
@@ -81,7 +83,7 @@ fun CategoriesBottomSheetButtons(
                     )
             ) {
                 Text(
-                    "Cancel",
+                    stringResource(id = R.string.cancel),
                     style = Theme.textStyle.label.large,
                     color = Theme.colors.primary
                 )

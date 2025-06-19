@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
@@ -69,17 +70,9 @@ fun AddCategoryScreen(
         }
     }
 
-    formState.errorMessage?.let {
-        Text(
-            text = it,
-            color = Color.Red,
-            style = Theme.textStyle.body.medium,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-        )
-    }
     TudeeBottomSheet(
         isVisible = showSheet,
-        title = "Add new Category",
+        title = stringResource(id = R.string.addnewCategory),
         onDismiss = {
             showSheet = false
             navController.popBackStack()
@@ -119,7 +112,7 @@ fun AddCategoryScreenContent(
             TextField(
                 value = state.categoryName,
                 onValueChange = onValueChange,
-                placeholder = "Category title",
+                placeholder = stringResource(id = R.string.categoryTitle),
                 leadingIcon = R.drawable.ic_menu_circle,
                 modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
             )
@@ -129,7 +122,7 @@ fun AddCategoryScreenContent(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Category image",
+                    text = stringResource(id = R.string.categoryImage),
                     style = Theme.textStyle.title.medium,
                     modifier = Modifier.align(Alignment.Start),
                     color = Theme.colors.text.title
@@ -185,7 +178,7 @@ fun AddCategoryScreenContent(
                                     .padding(bottom = 12.dp)
                             )
                             Text(
-                                "Upload",
+                                stringResource(id = R.string.categoryImage),
                                 style = Theme.textStyle.label.medium,
                                 color = Theme.colors.text.hint
                             )
@@ -198,7 +191,7 @@ fun AddCategoryScreenContent(
                 state = state,
                 onSubmit = onSubmit,
                 onCancel = onCancel,
-                buttonText = "Add"
+                buttonText = stringResource(id = R.string.add)
             )
         }
 }
