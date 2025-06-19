@@ -4,6 +4,11 @@
     <string name="your_cute_helper_for_every_task">مساعدك اللطيف لإنجاز كل مهامك</string>
     <string name="ok">تأكيد</string>
     <string name="cancel">إلغاء</string>
+    <string name="no_tasks_for_today">لا توجد مهام يومية!</string>
+    <string name="tap_the_button_to_add_your_first_one">اضغط علي الزر + حتي تضيف مهمة  اخري</string>
+    <string name="in_progress">قيد التنفيذ</string>
+    <string name="to_do">للقيام به</string>
+    <string name="done">تم</string>
     <string name="categories">الفئات</string>
     <string name="onboarding1title">تشعر بالإرهاق من كثرة المهام؟</string>
     <string name="onboarding1description">لننظم الفوضى معًا. تودي هنا لمساعدتك في الترتيب والتخطيط لتتنفس بسهولة.</string>
@@ -11,6 +16,30 @@
     <string name="onboarding2description">تودي ليس غاضبًا… فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
     <string name="onboarding3title">لنُنجز المهام ونحتفل معًا.</string>
     <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
+    <string name="priority">الأولوية</string>
+    <string name="category">الفئة</string>
+    <string name="save">حفظ</string>
+    <string name="add">إضافة</string>
+    <string name="add_task">إضافة مهمة</string>
+    <string name="edit_task">تعديل مهمة</string>
+    <string name="high">عالي</string>
+    <string name="medium">متوسط</string>
+    <string name="low">منخفض</string>
+    <string name="date_format_today">اليوم</string>
+    <string name="date_format_medium">%s, %d %s %d</string>
+
+    <string name="slider_title_nothing">لا شيء في قائمتك…</string>
+    <string name="slider_description_nothing">املأ يومك بشيء رائع.</string>
+
+    <string name="slider_title_tadaa">تا دا!</string>
+    <string name="slider_description_tadaa">أنت تقوم بعمل رائع!!!\nتودي فخورة بك.</string>
+
+    <string name="slider_title_zero_progress">لا تقدم؟!</string>
+    <string name="slider_description_zero_progress">أنت فقط تتصفح، لا تعمل. تودي تراقبك. عودة إلى العمل!!!</string>
+
+    <string name="slider_title_stay_working">استمر في العمل!</string>
+    <string name="slider_description_stay_working">لقد أكملت %d من أصل %d من المهام. استمر!</string>
+    <string name="overview">نظرة عامة</string>
     <string name="no_tasks_here">لا توجد مهام هنا!</string>
     <string name="tap_the_button_to_add_your_first_one">اضغط على زر + لإضافة أول مهمة لك.</string>
     <string name="move_to_done">نقل إلى تم</string>

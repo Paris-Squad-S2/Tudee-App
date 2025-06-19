@@ -47,7 +47,7 @@ fun PageIndicator(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview()
 @Composable
 fun PageIndicatorPreview()
 {

@@ -29,10 +29,11 @@ import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.onBoarding.components.OnBoardingPage
 import com.example.tudeeapp.presentation.screen.onBoarding.components.PageIndicator
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OnBoardScreen(
-    viewModel: OnboardingViewModel,
+    viewModel: OnboardingViewModel = koinViewModel(),
     pages: List<Page>,
 ) {
     val navController = LocalNavController.current
@@ -82,29 +83,23 @@ fun OnBoardingScreenContent(
                         if (pagerState.currentPage == pages.lastIndex) {
                             onFinished()
                         } else {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index + 1)
-                            }
+                            coroutineScope.launch { pagerState.animateScrollToPage(index + 1) }
                         }
                     },
                     onSkipClick = {
                         onFinished()
-                    }
+                    },
+                    isLastPage = index == 2
                 )
             }
             Row(
                 modifier = Modifier
                     .background(Theme.colors.status.overlay)
                     .fillMaxWidth()
-                    .padding(bottom = 60.dp),
+                    .padding(bottom = 24.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.Bottom
-            ) {
-                PageIndicator(
-                    pageSize = pages.size,
-                    currentPage = state.currentPage
-                )
-            }
+            ) { PageIndicator(pageSize = pages.size, currentPage = state.currentPage) }
         }
         Image(
             painter = painterResource(id = R.drawable.background_vectors),
