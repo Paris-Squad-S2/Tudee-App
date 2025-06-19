@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.common.components.SnackBar
@@ -42,9 +43,7 @@ import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
-val LocalSnackBarState = compositionLocalOf<SnackBarState> {
-    error("No SnackBarState provided")
-}
+val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -81,10 +80,7 @@ fun TudeeNavGraph() {
                     startDestination = Screens.Splash,
                 ) {
 
-                    composable<Screens.Splash> {
-                        SplashScreen()
-                    }
-
+                    composable<Screens.Splash> { SplashScreen() }
                     composable<Screens.OnBoarding> {
                         val onboardingViewModel: OnboardingViewModel = koinViewModel()
                         OnBoardScreen(
@@ -92,37 +88,15 @@ fun TudeeNavGraph() {
                             onboardingPages()
                         )
                     }
+                    composable<Screens.Home> { HomeScreen() }
+                    composable<Screens.Task> { TaskScreen() }
+                    composable<Screens.Category> { CategoriesScreen() }
+                    composable<Screens.TaskForm> { TaskFormScreen() }
+                    composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                    composable<Screens.CategoriesForm> { CategoryFormScreen() }
 
-                    composable<Screens.Home> {
-                        HomeScreen()
-                    }
-
-                    composable<Screens.Task> {
-                        TaskScreen()
-                    }
-
-                    composable<Screens.Category> {
-                        CategoriesScreen()
-                    }
-
-
-                    composable<Screens.TaskForm> {
-                        TaskFormScreen()
-                    }
-
-                    composable<Screens.TaskDetails> {
-                        TaskDetailsScreen()
-                    }
-
-                    composable<Screens.CategoriesForm> {
-                        CategoryFormScreen()
-                    }
-
-                    composable<Screens.CategoryDetails> {
-                        val args = it.toRoute<Screens.CategoryDetails>()
-                        CategoryDetailsScreen(args.id)
-                    }
-
+                composable<Screens.CategoryDetails> {
+                    CategoryDetailsScreen()
                 }
             }
 

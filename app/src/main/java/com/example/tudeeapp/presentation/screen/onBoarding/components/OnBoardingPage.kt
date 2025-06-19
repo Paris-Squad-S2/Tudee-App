@@ -17,13 +17,13 @@ import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.onBoarding.Page
 
-
 @Composable
 fun OnBoardingPage(
     modifier: Modifier = Modifier,
     page: Page,
+    isLastPage: Boolean,
     onNextClick: () -> Unit,
-    onSkipClick: () -> Unit
+    onSkipClick: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -31,23 +31,25 @@ fun OnBoardingPage(
             .background(Theme.colors.status.overlay)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .statusBarsPadding()
             ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            TextButton(
-                modifier = Modifier.align(Alignment.Start),
-                onClick = onSkipClick
-            ) {
-                Text(
-                    text = "Skip",
-                    color = Theme.colors.primary,
-                    style = Theme.textStyle.label.large
-                )
+            if (!isLastPage) {
+                TextButton(
+                    modifier = Modifier.align(Alignment.Start),
+                    onClick = onSkipClick
+                ) {
+                    Text(
+                        text = "Skip",
+                        color = Theme.colors.primary,
+                        style = Theme.textStyle.label.large
+                    )
+                }
             }
-
             Spacer(modifier = Modifier.weight(1f))
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -65,17 +67,21 @@ fun OnBoardingPage(
     }
 }
 
-@Preview
+@Preview(
+    name = "Galaxy J5 Prime",
+    device = "spec:width=360dp,height=640dp,dpi=320"
+)
 @Composable
 private fun onBoardingPagePreview() {
     BasePreview {
         val page = Page(
-            image = R.drawable.img_robot4,
-            title = stringResource(id = R.string.onboarding1title),
-            description = stringResource(id = R.string.onboarding1description)
+            image = R.drawable.img_robot5,
+            title = stringResource(id = R.string.onboarding3title),
+            description = stringResource(id = R.string.onboarding3description)
         )
         OnBoardingPage(
             page = page,
+            isLastPage = true,
             onNextClick = {},
             onSkipClick = {}
         )
