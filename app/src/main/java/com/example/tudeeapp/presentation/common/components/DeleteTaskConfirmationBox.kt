@@ -2,7 +2,6 @@ package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +19,9 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
 fun DeleteTaskConfirmationBox(
-    modifier: Modifier = Modifier, onDismiss: () -> Unit = {}, onConfirm: () -> Unit = {}
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
+    onConfirm: () -> Unit = {}
 
 ) {
     Column(
@@ -34,9 +35,6 @@ fun DeleteTaskConfirmationBox(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .clickable(
-                    onClick = onConfirm
-                )
         ) {
             Text(
                 modifier = Modifier.padding(top = 12.dp),
