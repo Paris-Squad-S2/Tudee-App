@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -28,12 +30,15 @@ fun CategoryItem(
     icon: Painter,
     label: String,
     iconColor: Color,
+    modifier: Modifier = Modifier,
     count: Int? = null,
-    isSelected: Boolean = true
+    isSelected: Boolean = true,
+    onClick: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Box(
             modifier = Modifier
@@ -43,9 +48,15 @@ fun CategoryItem(
                     shape = CircleShape
                 )
         ) {
+            Box(
+                modifier = Modifier
+                    .size(78.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = onClick)
+            )
             when {
                 isSelected -> SelectedBadge(Modifier.align(Alignment.TopEnd))
-                count != 0 -> NumBadge(count, Modifier.align(Alignment.TopEnd))
+                count != null -> NumBadge(count, Modifier.align(Alignment.TopEnd))
             }
 
             Icon(
@@ -71,19 +82,22 @@ private fun NumBadge(
     count: Int?,
     modifier: Modifier
 ) {
-    Box(
-        modifier = modifier
-            .background(
-                color = Theme.colors.surfaceColors.surfaceLow,
-                shape = RoundedCornerShape(100.dp)
+    count?.let {
+        Box(
+            modifier = modifier
+                .background(
+                    color = Theme.colors.surfaceColors.surfaceLow,
+                    shape = RoundedCornerShape(100.dp)
+                )
+                .padding(horizontal = 10.5.dp, vertical = 2.dp)
+        ) {
+
+            Text(
+                text = it.toString(),
+                color = Theme.colors.text.hint,
+                fontSize = 12.sp
             )
-            .padding(horizontal = 10.5.dp, vertical = 2.dp)
-    ) {
-        Text(
-            text = "$count",
-            color = Theme.colors.text.hint,
-            fontSize = 12.sp
-        )
+        }
     }
 }
 
