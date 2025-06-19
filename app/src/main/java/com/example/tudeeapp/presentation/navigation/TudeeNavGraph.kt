@@ -118,11 +118,6 @@ fun TudeeNavGraph() {
                     dialog<Screens.AddCategoryScreen> {
                         AddCategoryScreen()
                     }
-                   /* composable<Screens.AddCategoryScreen> {
-                        AddCategoryScreen()
-                    }*/
-
-
 
                     composable<Screens.CategoryDetails> {
                         val args = it.toRoute<Screens.CategoryDetails>()
