@@ -18,15 +18,6 @@
     <string name="add">Add</string>
     <string name="add_task">Add Task</string>
     <string name="edit_task">Edit task</string>
-    <string name="categories">Categories</string>
-    <string name="no_tasks_here">No tasks here!</string>
-    <string name="tap_the_button_to_add_your_first_one">Tap the + button to add your first one.</string>
-    <string name="onboarding1title">Overwhelmed with tasks?</string>
-    <string name="onboarding1description">Let’s bring some order to the chaos. Tudee is here to help you sort, plan, and breathe easier.</string>
-    <string name="onboarding2title">Uh-oh! Procrastinating again</string>
-    <string name="onboarding2description">Tudee not mad… just a little disappointed, Let’s get back on track together.</string>
-    <string name="onboarding3title">"Let’s complete task and celebrate\n together."</string>
-    <string name="onboarding3description">Progress is progress. Tudee will celebrate you on for every win, big or small.</string>
     <string name="high">High</string>
     <string name="medium">Medium</string>
     <string name="low">Low</string>
