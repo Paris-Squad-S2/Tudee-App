@@ -15,6 +15,7 @@ import com.example.tudeeapp.presentation.screen.taskDetails.state.toTaskUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class TaskDetailsViewModel(
@@ -58,13 +59,16 @@ class TaskDetailsViewModel(
         }
     }
 
-    fun updateTaskStatus(newStatus: TaskStatus) {
+    fun onUpdateTaskStatus(newStatus: TaskStatus) {
         val currentTaskUiState = _uiState.value.taskUiState
         if (currentTaskUiState != null) {
             viewModelScope.launch {
                 try {
 
-                    taskServices.updateTaskStatus(currentTaskUiState.id, newStatus)
+                    val task = taskServices.getTaskById(currentTaskUiState.id).first()
+                    val updateTaskState = task.copy(status = newStatus)
+
+                    taskServices.editTask(updateTaskState)
 
                     val updatedTask = currentTaskUiState.copy(status = newStatus)
 

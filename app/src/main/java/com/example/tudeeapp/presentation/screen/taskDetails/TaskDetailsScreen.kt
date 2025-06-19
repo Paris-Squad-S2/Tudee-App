@@ -16,7 +16,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,10 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
@@ -48,7 +49,7 @@ fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = koinViewModel()
 ) {
 
-    val taskDetailsUiState by viewModel.uiState.collectAsState()
+    val taskDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isSheetOpen by remember { mutableStateOf(true) }
 
     TudeeBottomSheet(
@@ -59,19 +60,19 @@ fun TaskDetailsScreen(
         onDismiss = { isSheetOpen = true },
         content = {
 
-            if (taskDetailsUiState.isLoading) {
-                LoadingView()
-            } else if (taskDetailsUiState.errorMessage.isNotEmpty()) {
-                ErrorView(message = taskDetailsUiState.errorMessage)
-            } else {
-                val taskUiState = taskDetailsUiState.taskUiState
-                val categoryUiState = taskDetailsUiState.categoryUiState
-                if (taskUiState != null && categoryUiState != null) {
-                    TaskDetailsContent(
-                        taskUiState = taskUiState,
-                        categoryUiState = categoryUiState,
-                        onStatusChange = { newStatus -> viewModel.updateTaskStatus(newStatus) }
-                    )
+            when {
+                taskDetailsUiState.isLoading -> LoadingView()
+                taskDetailsUiState.errorMessage.isNotEmpty() -> ErrorView(message = taskDetailsUiState.errorMessage)
+                else -> {
+                    val taskUiState = taskDetailsUiState.taskUiState
+                    val categoryUiState = taskDetailsUiState.categoryUiState
+                    if (taskUiState != null && categoryUiState != null) {
+                        TaskDetailsContent(
+                            taskUiState = taskUiState,
+                            categoryUiState = categoryUiState,
+                            onStatusChange = { newStatus -> viewModel.onUpdateTaskStatus(newStatus) }
+                        )
+                    }
                 }
             }
         },
@@ -79,38 +80,25 @@ fun TaskDetailsScreen(
 }
 
 @Composable
-fun LoadingView() {
+private fun LoadingView() {
     CircularProgressIndicator()
 }
 
 @Composable
-fun TaskDetailsContent(
+private fun ErrorView(message: String) {
+    //TODO add snack bar component
+}
+
+@Composable
+private fun TaskDetailsContent(
     taskUiState: TaskUiState,
     categoryUiState: CategoryUiState,
     onStatusChange: (TaskStatus) -> Unit
 ) {
 
-
-    val painter = if (categoryUiState.isPredefined) {
-        painterResource(
-            categoryUiState.imageUrl.toResDrawables()
-        )
-    } else {
-        rememberAsyncImagePainter(categoryUiState.imageUrl)
-    }
-
-
-    val iconPriority = when (taskUiState.priority) {
-        TaskPriority.LOW -> painterResource(id = R.drawable.ic_trade_down)
-        TaskPriority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
-        TaskPriority.HIGH -> painterResource(id = R.drawable.ic_flag)
-    }
-
-    val backgroundPriorityColor = when (taskUiState.priority) {
-        TaskPriority.LOW -> Theme.colors.status.greenAccent
-        TaskPriority.MEDIUM -> Theme.colors.status.yellowAccent
-        TaskPriority.HIGH -> Theme.colors.status.pinkAccent
-    }
+    val painter = rememberCategoryPainter(categoryUiState)
+    val iconPriority = getPriorityIcon(taskUiState.priority)
+    val backgroundPriorityColor = getPriorityBackgroundColor(taskUiState.priority)
 
     Column(
         modifier = Modifier
@@ -119,44 +107,9 @@ fun TaskDetailsContent(
             .padding()
             .padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
     ) {
-        Box(
-            modifier = Modifier
-                .size(56.dp)
-                .padding(top = 12.dp)
-                .background(
-                    color = Theme.colors.surfaceColors.surfaceHigh,
-                    shape = CircleShape
-                )
-        ) {
-            Icon(
-                painter = painter,
-                contentDescription = "task category icon",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(32.dp)
-                    .align(Alignment.Center)
-            )
-        }
-
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = taskUiState.title,
-            style = Theme.textStyle.title.medium,
-            color = Theme.colors.text.title
-        )
-
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = taskUiState.description,
-            style = Theme.textStyle.body.medium,
-            color = Theme.colors.text.body
-        )
-        Spacer(
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .height(1.dp)
-                .background(Theme.colors.stroke)
-        )
+        CategoryIcon(painter)
+        TaskTexts(taskUiState)
+        HorizontalLine1Dp()
         Row {
             BoxTaskStatus(taskUiState)
             PriorityButton(
@@ -169,45 +122,97 @@ fun TaskDetailsContent(
             )
         }
         if (taskUiState.status != TaskStatus.DONE)
-            Row(modifier = Modifier.padding(top = 24.dp)) {
-                TudeeButton(
-                    onClick = {
-                        val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
-                            TaskStatus.DONE
-                        } else {
-                            TaskStatus.IN_PROGRESS
-                        }
-                        onStatusChange(newStatus)
-                    },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_pencil_edit),
-                            null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    variant = ButtonVariant.OutlinedButton,
-                )
-                Spacer(Modifier.width(4.dp))
-                TudeeButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = { },
-                    text = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
-                        stringResource(R.string.move_to_done)
-                    } else {
-                        stringResource(R.string.move_to_in_progress)
-                    },
-
-                    variant = ButtonVariant.OutlinedButton,
-                )
-            }
+            StatusActionButtons(taskUiState, onStatusChange)
     }
 }
 
 @Composable
-private fun ErrorView(message: String) {
-    //TODO add snack bar component
+private fun HorizontalLine1Dp() {
+    Spacer(
+        modifier = Modifier
+            .padding(vertical = 12.dp)
+            .height(1.dp)
+            .background(Theme.colors.stroke)
+    )
 }
+
+@Composable
+private fun CategoryIcon(painter: Painter) {
+    Box(
+        modifier = Modifier
+            .size(56.dp)
+            .padding(top = 12.dp)
+            .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = "task category icon",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .size(32.dp)
+                .align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+private fun TaskTexts(taskUiState: TaskUiState) {
+    Text(
+        modifier = Modifier.padding(top = 8.dp),
+        text = taskUiState.title,
+        style = Theme.textStyle.title.medium,
+        color = Theme.colors.text.title
+    )
+    Text(
+        modifier = Modifier.padding(top = 8.dp),
+        text = taskUiState.description,
+        style = Theme.textStyle.body.medium,
+        color = Theme.colors.text.body
+    )
+}
+
+@Composable
+private fun StatusActionButtons(taskUiState: TaskUiState, onStatusChange: (TaskStatus) -> Unit) {
+    Row(modifier = Modifier.padding(top = 24.dp)) {
+        TudeeButton(
+            onClick = {
+                val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
+                    TaskStatus.DONE
+                } else {
+                    TaskStatus.IN_PROGRESS
+                }
+                onStatusChange(newStatus)
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_pencil_edit),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            },
+            variant = ButtonVariant.OutlinedButton,
+        )
+        Spacer(Modifier.width(4.dp))
+        TudeeButton(
+            modifier = Modifier.weight(1f),
+            onClick = { },
+            text = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
+                stringResource(R.string.move_to_done)
+            } else {
+                stringResource(R.string.move_to_in_progress)
+            },
+            variant = ButtonVariant.OutlinedButton,
+        )
+    }
+}
+
+@Composable
+private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
+    if (categoryUiState.isPredefined) {
+        painterResource(categoryUiState.imageUrl.toResDrawables())
+    } else {
+        rememberAsyncImagePainter(categoryUiState.imageUrl)
+    }
 
 @Composable
 private fun BoxTaskStatus(taskUiState: TaskUiState) {
@@ -247,9 +252,23 @@ private fun BoxTaskStatus(taskUiState: TaskUiState) {
     }
 }
 
+@Composable
+private fun getPriorityIcon(priority: TaskPriority) = when (priority) {
+    TaskPriority.LOW -> painterResource(id = R.drawable.ic_trade_down)
+    TaskPriority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
+    TaskPriority.HIGH -> painterResource(id = R.drawable.ic_flag)
+}
+
+@Composable
+private fun getPriorityBackgroundColor(priority: TaskPriority) = when (priority) {
+    TaskPriority.LOW -> Theme.colors.status.greenAccent
+    TaskPriority.MEDIUM -> Theme.colors.status.yellowAccent
+    TaskPriority.HIGH -> Theme.colors.status.pinkAccent
+}
+
 
 @Preview
 @Composable
 private fun TaskDetailsScreenPreview() {
-    // TaskDetailsScreen(123123)
+    TaskDetailsScreen()
 }
