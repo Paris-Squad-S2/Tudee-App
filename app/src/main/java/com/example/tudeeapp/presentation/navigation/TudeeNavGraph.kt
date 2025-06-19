@@ -1,5 +1,14 @@
 package com.example.tudeeapp.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -19,7 +28,6 @@ import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
@@ -105,9 +113,9 @@ fun TudeeNavGraph() {
                         TaskDetailsScreen()
                     }
 
-                    composable<Screens.CategoriesForm> {
+                    /*composable<Screens.CategoriesForm> {
                         CategoryFormScreen()
-                    }
+                    }*/
 
                     composable<Screens.CategoryDetails> {
                         val args = it.toRoute<Screens.CategoryDetails>()

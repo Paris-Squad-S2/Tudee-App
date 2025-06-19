@@ -91,4 +91,12 @@ class TaskServicesImpl(
         }
     }
 
+    override suspend fun addCategory(category:Category) {
+        try {
+            categoryDao.insertCategory(category.toCategoryEntity())
+        } catch (e: Exception) {
+            throw CategoryException()
+        }
+    }
+
 }
