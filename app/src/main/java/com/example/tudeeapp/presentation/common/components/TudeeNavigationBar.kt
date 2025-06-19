@@ -27,10 +27,11 @@ import com.example.tudeeapp.presentation.navigation.Screens
 fun TudeeNavigationBar(
     modifier: Modifier = Modifier,
     itemList: List<NavItem> = navItemList,
-    onItemClick: (NavItem) -> Unit = {}
+    onItemClick: (NavItem) -> Unit = {},
+    selected: Int = 0
 ) {
-    var selectedIndex by remember {
-        mutableIntStateOf(0)
+    var selectedIndex by remember(selected) {
+        mutableIntStateOf(selected)
     }
 
     NavigationBar(
@@ -96,7 +97,7 @@ val navItemList = listOf(
         unselectedIcon = R.drawable.ic_unselected_tasks,
         R.drawable.ic_selected_task,
         label = "Tasks",
-        Screens.Task
+        Screens.Task()
     ),
     NavItem(
         unselectedIcon = R.drawable.ic_unselected_categories,

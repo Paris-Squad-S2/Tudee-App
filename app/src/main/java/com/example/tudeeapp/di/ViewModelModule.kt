@@ -2,6 +2,7 @@ package com.example.tudeeapp.di
 
 import com.example.tudeeapp.MainViewModel
 import com.example.tudeeapp.presentation.screen.categories.CategoriesViewModel
+import com.example.tudeeapp.presentation.screen.home.HomeViewModel
 import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
 import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -10,6 +11,7 @@ import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsV
 
 val viewModelModule = module {
     viewModelOf(::MainViewModel)
+    viewModelOf(::HomeViewModel)
     viewModelOf(::CategoriesViewModel)
     viewModelOf(::OnboardingViewModel)
     viewModelOf(::TaskManagementViewModel)
