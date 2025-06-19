@@ -67,7 +67,7 @@ fun CategoryDetailsScreen(
                 onStatusChange = viewModel::setStatus,
                 onBack = { navController.popBackStack() },
                 categoryTitle = uiState.categoryUiState!!.title,
-                onOptionClick = { navController.navigate(Screens.CategoriesForm) },
+                onOptionClick = { navController.navigate(Screens.AddCategoryScreen) },
                 categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
                 topBarOption = editableCategory(uiState.categoryUiState!!)
             )
