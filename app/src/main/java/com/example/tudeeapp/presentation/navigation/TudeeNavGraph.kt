@@ -42,16 +42,13 @@ import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
-val LocalSnackBarState = compositionLocalOf<SnackBarState> {
-    error("No SnackBarState provided")
-}
+val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = backStackEntry?.destination
     val snackBarState = remember { SnackBarState() }
 
     CompositionLocalProvider(
@@ -59,71 +56,50 @@ fun TudeeNavGraph() {
         LocalSnackBarState provides snackBarState
     ) {
 
-        Box {
-            TudeeScaffold(
-                bottomBar = {
-                    if ((currentRoute?.route != null) && listOf(
-                            Screens.Home::class.qualifiedName,
-                            Screens.Task::class.qualifiedName,
-                            Screens.Category::class.qualifiedName
-                        ).contains(currentRoute.route)
+        val currentRoute = backStackEntry?.destination?.route?.substringBefore('?')
+        val selectedRouteIndex = listOf(
+            Screens.Home::class.qualifiedName,
+            Screens.Task::class.qualifiedName,
+            Screens.Category::class.qualifiedName
+        ).indexOf(currentRoute)
+
+        TudeeScaffold(
+            bottomBar = {
+                if (selectedRouteIndex != -1)
+                    TudeeNavigationBar(
+                        onItemClick = { navItem ->
+                            navController.navigate(navItem.screen)
+                        },
+                        selected = selectedRouteIndex
                     )
-                        TudeeNavigationBar(
-                            onItemClick = { navItem ->
-                                navController.navigate(navItem.screen)
-                            }
-                        )
-                },
-                contentBackground = Theme.colors.surfaceColors.surface
+            },
+            contentBackground = Theme.colors.surfaceColors.surface
+        ) {
+            NavHost(
+                navController = navController,
+                startDestination = Screens.Splash,
             ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = Screens.Splash,
-                ) {
 
-                    composable<Screens.Splash> {
-                        SplashScreen()
-                    }
+                composable<Screens.Splash> { SplashScreen() }
+                composable<Screens.OnBoarding> {
+                    val onboardingViewModel: OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
+                    )
+                }
+                composable<Screens.Home> { HomeScreen() }
+                composable<Screens.Task> { TaskScreen() }
+                composable<Screens.Category> { CategoriesScreen() }
+                composable<Screens.TaskForm> { TaskFormScreen() }
+                composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                composable<Screens.CategoriesForm> { CategoryFormScreen() }
 
-                    composable<Screens.OnBoarding> {
-                        val onboardingViewModel: OnboardingViewModel = koinViewModel()
-                        OnBoardScreen(
-                            onboardingViewModel,
-                            onboardingPages()
-                        )
-                    }
-
-                    composable<Screens.Home> {
-                        HomeScreen()
-                    }
-
-                    composable<Screens.Task> {
-                        TaskScreen()
-                    }
-
-                    composable<Screens.Category> {
-                        CategoriesScreen()
-                    }
-
-
-                    composable<Screens.TaskForm> {
-                        TaskFormScreen()
-                    }
-
-                    composable<Screens.TaskDetails> {
-                        TaskDetailsScreen()
-                    }
-
-                    composable<Screens.CategoryFormEditScreen> {
-                        CategoryFormEditScreen()
-                    }
-
-
-                    composable<Screens.CategoryDetails> {
-                        val args = it.toRoute<Screens.CategoryDetails>()
-                        CategoryDetailsScreen(args.id)
-                    }
-
+                composable<Screens.CategoryDetails> {
+                    CategoryDetailsScreen()
+                }
+                composable<Screens.CategoryFormEditScreen> {
+                    CategoryFormEditScreen()
                 }
             }
 

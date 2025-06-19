@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.domain.models.TaskPriority
 
 enum class TaskPriorityUi {
     HIGH,
@@ -31,5 +32,14 @@ fun TaskPriorityUi.toStyle(): PriorityStyle {
             iconRes = R.drawable.ic_trade_down,
             backgroundColor = Theme.colors.status.greenAccent
         )
+    }
+}
+
+
+fun TaskPriority.toUi(): TaskPriorityUi {
+    return when (this) {
+        TaskPriority.HIGH -> TaskPriorityUi.HIGH
+        TaskPriority.MEDIUM -> TaskPriorityUi.MEDIUM
+        TaskPriority.LOW -> TaskPriorityUi.LOW
     }
 }
