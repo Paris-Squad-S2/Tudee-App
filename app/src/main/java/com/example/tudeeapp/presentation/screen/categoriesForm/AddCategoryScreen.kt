@@ -1,6 +1,9 @@
 
 package com.example.tudeeapp.presentation.screen.categoriesForm
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +19,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -33,7 +42,70 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.categoriesForm.components.CategoriesBottomSheetButtons
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun AddCategoryScreen(
+    viewModel: CategoryFormViewModel = koinViewModel()
+) {
+
+    val formState by viewModel.state.collectAsState()
+    var showSheet by remember { mutableStateOf(true) }
+    val navController = LocalNavController.current
+    val context = LocalContext.current
+
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let {
+            context.contentResolver.takePersistableUriPermission(
+                it,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+            viewModel.updateImage(it)
+        }
+    }
+
+    formState.errorMessage?.let {
+        Text(
+            text = it,
+            color = Color.Red,
+            style = Theme.textStyle.body.medium,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+        )
+    }
+    TudeeBottomSheet(
+        isVisible = showSheet,
+        title = "Add new Category",
+        onDismiss = {
+            showSheet = false
+            navController.popBackStack()
+        },
+        isScrollable = true,
+        skipPartiallyExpanded = true
+    ) {
+        AddCategoryScreenContent(
+            state = formState,
+            onCancel = {
+                showSheet = false
+                navController.popBackStack()
+            },
+            onSubmit = {
+                viewModel.addCategory()
+                showSheet = false
+                navController.popBackStack()
+            },
+            onValueChange = { viewModel.updateCategoryName(it) },
+            onImageClick = {
+                imagePickerLauncher.launch(arrayOf("image/*"))
+            }
+        )
+    }
+}
+
 
 @Composable
 fun AddCategoryScreenContent(
@@ -41,17 +113,8 @@ fun AddCategoryScreenContent(
     onCancel: () -> Unit,
     onSubmit: () -> Unit,
     onValueChange: (String) -> Unit,
-    onImageClick: () -> Unit,
-    showSheet: Boolean,
-    onDismissSheet: () -> Unit
+    onImageClick: () -> Unit
 ) {
-    TudeeBottomSheet(
-        isVisible = showSheet,
-        title = "Add new Category",
-        onDismiss = onDismissSheet,
-        isScrollable = true,
-        skipPartiallyExpanded = true,
-    ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             TextField(
                 value = state.categoryName,
@@ -88,7 +151,7 @@ fun AddCategoryScreenContent(
                 ) {
                     if (state.imageUri != null) {
                         Image(
-                            painter = rememberAsyncImagePainter(state.imageUri),
+                            painter = rememberAsyncImagePainter(model = state.imageUri),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
@@ -138,7 +201,6 @@ fun AddCategoryScreenContent(
                 buttonText = "Add"
             )
         }
-    }
 }
 
 

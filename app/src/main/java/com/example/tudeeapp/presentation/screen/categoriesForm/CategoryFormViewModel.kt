@@ -29,22 +29,21 @@ class CategoryFormViewModel(val taskServices: TaskServices, savedStateHandle: Sa
 
     fun addCategory() {
         viewModelScope.launch {
-            val category = Category(
-                title=  state.value.categoryName,
-                imageUrl = state.value.imageUri.toString(),
-                tasksCount = 0,
-                isPredefined = false
-            )
-            taskServices.addCategory(category)
-        }
-    }
+            try {
+                val category = Category(
+                    title=  state.value.categoryName,
+                    imageUrl = state.value.imageUri.toString(),
+                    tasksCount = 0,
+                    isPredefined = false
+                )
+                taskServices.addCategory(category)
+            }
+            catch (e: Exception){
+                _state.update {
+                    it.copy(errorMessage = e.message ?: "Unexpected error")
+                }
+            }
 
-    fun resetForm() {
-        _state.update {
-            it.copy(
-                categoryName = "",
-                imageUri = null
-            )
         }
     }
 

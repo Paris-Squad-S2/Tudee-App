@@ -13,15 +13,26 @@ data class CategoryUIState(
 data class CategoryItemUIState(
     val id: Long,
     val name: String,
-    @DrawableRes val imageResId: Int,
-    val count: Int
+    val count: Int,
+    val imageUrl: String? = null,
+    @DrawableRes val imageResId: Int? = null,
 )
 
 fun Category.toCategoryUIState(): CategoryItemUIState {
-    return CategoryItemUIState(
-        name = this.title,
-        imageResId = this.imageUrl.toResDrawables(),
-        count = this.tasksCount,
-        id = this.id
-    )
+    val isPredefined = this.isPredefined
+    return if (isPredefined) {
+        CategoryItemUIState(
+            id = this.id,
+            name = this.title,
+            count = this.tasksCount,
+            imageResId = this.imageUrl.toResDrawables()
+        )
+    } else {
+        CategoryItemUIState(
+            id = this.id,
+            name = this.title,
+            count = this.tasksCount,
+            imageUrl = this.imageUrl
+        )
+    }
 }

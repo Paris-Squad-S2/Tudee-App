@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.common.components.SnackBar
@@ -28,6 +29,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.AddCategoryScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
@@ -113,9 +115,14 @@ fun TudeeNavGraph() {
                         TaskDetailsScreen()
                     }
 
-                    /*composable<Screens.CategoriesForm> {
-                        CategoryFormScreen()
+                    dialog<Screens.AddCategoryScreen> {
+                        AddCategoryScreen()
+                    }
+                   /* composable<Screens.AddCategoryScreen> {
+                        AddCategoryScreen()
                     }*/
+
+
 
                     composable<Screens.CategoryDetails> {
                         val args = it.toRoute<Screens.CategoryDetails>()

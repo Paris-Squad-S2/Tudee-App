@@ -19,9 +19,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.CategoryItem
@@ -40,7 +42,9 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     CategoriesContent(
         state = state,
         onClickCategory = {navController.navigate(Screens.CategoryDetails(it))},
-        onClickAddCategory = {navController.navigate(Screens.CategoriesForm)}
+        onClickAddCategory = {
+            navController.navigate(Screens.AddCategoryScreen)
+        }
         )
 }
 
@@ -110,8 +114,14 @@ private fun CategoryListItem(
     category: CategoryItemUIState,
     onClickItem: (id: Long) -> Unit
 ) {
+    val painter: Painter = when {
+        category.imageResId != null -> painterResource(id = category.imageResId)
+        category.imageUrl != null -> rememberAsyncImagePainter(model = category.imageUrl)
+        else -> painterResource(id = R.drawable.ic_add_category)
+    }
+
     CategoryItem(
-        icon = painterResource(category.imageResId),
+        icon = painter,
         label = category.name,
         count = category.count,
         iconColor = Color.Unspecified,
