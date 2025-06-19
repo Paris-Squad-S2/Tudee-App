@@ -112,7 +112,8 @@ fun TaskScreenContent(
             when {
                 uiState.isLoading -> {
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Theme.colors.primary
                     )
                 }
 
@@ -210,7 +211,7 @@ fun TaskContent(
 
         val tabs = data.status.map { status ->
             Tab(
-                title = status.name,
+                title = stringResource(id = status.name.stringResId),
                 count = status.count,
                 isSelected = status.isSelected
             )

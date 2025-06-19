@@ -15,6 +15,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlinx.datetime.toLocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -138,14 +140,14 @@ class TaskViewModel(
     private fun calculateStatusUiList(
         tasks: List<TaskItemUiState>,
         selectedDate: LocalDate,
-        selectedStatus: TaskStatusUi
+        selectedStatus: TaskStatusUi,
     ): List<StatusUi> {
         val tasksForDate = tasks.filter { it.createdDate == selectedDate }
         val groupedByStatus = tasksForDate.groupingBy { it.status }.eachCount()
 
         return TaskStatusUi.entries.map { status ->
             StatusUi(
-                name = status.status,
+                name = status,
                 count = groupedByStatus[status] ?: 0,
                 isSelected = status == selectedStatus
             )
@@ -155,7 +157,7 @@ class TaskViewModel(
     private fun formatDailyDate(daysOfMonth: List<LocalDate>): List<DayUi> {
         return daysOfMonth.map{ date->
             DayUi(
-                name = date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }.take(3),
+                name = getShortDayName(date),
                 num = date.dayOfMonth,
                 date = date
             )
@@ -167,7 +169,13 @@ class TaskViewModel(
     }
 
     private fun getCurrentMonthYear(date: LocalDate): String {
-        return "${date.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)}, ${date.year}"
+        val formatter = DateTimeFormatter.ofPattern("MMM, yyyy", Locale.getDefault())
+        return java.time.LocalDate.of(date.year, date.monthNumber, date.dayOfMonth).format(formatter)
+    }
+
+    private fun getShortDayName(date: LocalDate): String {
+        val javaDate = java.time.LocalDate.of(date.year, date.monthNumber, date.dayOfMonth)
+        return javaDate.format(DateTimeFormatter.ofPattern("EEE", Locale.getDefault()))
     }
 
     private fun getSelectedDayIndex(date: LocalDate): Int {
