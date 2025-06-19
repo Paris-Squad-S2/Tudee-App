@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,18 +24,19 @@ class CategoryFormViewModel(val taskServices: TaskServices, savedStateHandle: Sa
 
     init {
         viewModelScope.launch {
-            val category = taskServices.getCategoryById(args.categoryId)
-            _state.update {
-                it.copy(
-                    categoryName = category.title,
-                    categoryId = category.id,
-                    imageUri = if (category.imageUrl.startsWith("R.drawable.")) {
-                        val resourceId = category.imageUrl.toResDrawables()
-                        "android.resource://com.example.tudeeapp/$resourceId".toUri()
-                    } else {
-                        category.imageUrl.toUri()
-                    }
-                )
+            taskServices.getCategoryById(args.categoryId).collect { category ->
+                _state.update {
+                    it.copy(
+                        categoryName = category.title,
+                        categoryId = category.id,
+                        imageUri = if (category.imageUrl.startsWith("R.drawable.")) {
+                            val resourceId = category.imageUrl.toResDrawables()
+                            "android.resource://com.example.tudeeapp/$resourceId".toUri()
+                        } else {
+                            category.imageUrl.toUri()
+                        }
+                    )
+                }
             }
         }
     }

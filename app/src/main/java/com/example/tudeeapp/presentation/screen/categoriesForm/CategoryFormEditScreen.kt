@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,13 +42,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
-import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
 
