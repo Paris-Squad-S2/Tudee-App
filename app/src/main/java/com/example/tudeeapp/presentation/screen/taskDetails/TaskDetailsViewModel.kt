@@ -12,10 +12,13 @@ import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskDetailsUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.toCategoryUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.toTaskUiState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class TaskDetailsViewModel(
@@ -32,17 +35,22 @@ class TaskDetailsViewModel(
         loadTaskDetails()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun loadTaskDetails() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
-                taskServices.getTaskById(taskId).collect { task ->
-                    taskServices.getCategoryById(task.categoryId).collect { category ->
-                        _uiState.value = _uiState.value.copy(
-                            taskUiState = task.toTaskUiState(),
-                            categoryUiState = category.toCategoryUiState()
-                        )
-                    }
+                val taskFlow = taskServices.getTaskById(taskId)
+                val categoryFlow = taskFlow.flatMapLatest { task ->
+                    taskServices.getCategoryById(task.categoryId)
+                }
+                combine(taskFlow, categoryFlow) { task, category ->
+                    Pair(task, category)
+                }.collect { (task, category) ->
+                    _uiState.value = _uiState.value.copy(
+                        taskUiState = task.toTaskUiState(),
+                        categoryUiState = category.toCategoryUiState()
+                    )
                 }
             } catch (e: TaskException) {
                 _uiState.value = _uiState.value.copy(

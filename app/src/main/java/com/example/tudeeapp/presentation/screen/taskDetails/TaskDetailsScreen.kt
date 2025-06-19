@@ -40,6 +40,7 @@ import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskUiState
 import org.koin.compose.viewmodel.koinViewModel
@@ -62,7 +63,10 @@ fun TaskDetailsScreen(
 
             when {
                 taskDetailsUiState.isLoading -> LoadingView()
-                taskDetailsUiState.errorMessage.isNotEmpty() -> ErrorView(message = taskDetailsUiState.errorMessage)
+                taskDetailsUiState.errorMessage.isNotEmpty() ->{
+                    LocalSnackBarState.current.show(taskDetailsUiState.errorMessage, isSuccess = false)
+                    isSheetOpen = false
+                }
                 else -> {
                     val taskUiState = taskDetailsUiState.taskUiState
                     val categoryUiState = taskDetailsUiState.categoryUiState
@@ -82,11 +86,6 @@ fun TaskDetailsScreen(
 @Composable
 private fun LoadingView() {
     CircularProgressIndicator()
-}
-
-@Composable
-private fun ErrorView(message: String) {
-    //TODO add snack bar component
 }
 
 @Composable
@@ -185,7 +184,7 @@ private fun StatusActionButtons(taskUiState: TaskUiState, onStatusChange: (TaskS
             },
             icon = {
                 Icon(
-                    painter = painterResource(R.drawable.ic_pencil_edit),
+                    painter = painterResource(R.drawable.ic_pencil_edit_24),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
