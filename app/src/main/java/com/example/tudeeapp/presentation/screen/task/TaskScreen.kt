@@ -25,6 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,11 +37,13 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.DayItem
+import com.example.tudeeapp.presentation.common.components.DeleteTaskConfirmationBox
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
 import com.example.tudeeapp.presentation.common.components.TextTopBar
+import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
@@ -82,7 +87,7 @@ fun TaskScreenContent(
     onTabSelected: (selectedStatus: TaskStatusUi) -> Unit,
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
-    onclickTaskItem: (id:Long) -> Unit,
+    onclickTaskItem: (id: Long) -> Unit,
 ) {
     TudeeScaffold(
         floatingActionButton = {
@@ -146,9 +151,11 @@ fun TaskContent(
     onTabSelected: (selectedStatus: TaskStatusUi) -> Unit,
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
-    onclickTaskItem: (id:Long) -> Unit,
+    onclickTaskItem: (id: Long) -> Unit,
 ) {
     val statusList = TaskStatusUi.entries
+    var isSheetOpen by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -260,9 +267,25 @@ fun TaskContent(
                     priorityColor = task.priority.toStyle().backgroundColor,
                     isDated = false,
                     onClickItem = { onclickTaskItem(task.id) },
-                    onDelete = { onClickDeleteIcon(task.id) }
+                    onDelete = { isSheetOpen = true }
+                )
+                TudeeBottomSheet(
+                    isVisible = isSheetOpen,
+                    title = "Delete task",
+                    isScrollable = true,
+                    skipPartiallyExpanded = true,
+                    onDismiss = { isSheetOpen = false },
+                    content = {
+                        DeleteTaskConfirmationBox(
+                            onConfirm = {
+                                onClickDeleteIcon(task.id)
+                                isSheetOpen = false
+                            },
+                            onDismiss = { isSheetOpen = false })
+                    },
                 )
             }
         }
     }
+
 }
