@@ -111,7 +111,8 @@ fun TudeeNavGraph() {
                     }
 
                     composable<Screens.TaskDetails> {
-                        TaskDetailsScreen()
+                        val args = it.toRoute<Screens.TaskDetails>()
+                        TaskDetailsScreen(args.id)
                     }
 
                     composable<Screens.CategoriesForm> {
