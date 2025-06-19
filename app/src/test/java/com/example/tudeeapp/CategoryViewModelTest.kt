@@ -1,7 +1,7 @@
 package com.example.tudeeapp
 
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.exception.NoCategoriesFoundException
+import com.example.tudeeapp.domain.exception.CategoriesNotFoundException
 import com.example.tudeeapp.presentation.screen.categories.CategoriesViewModel
 import com.example.tudeeapp.presentation.screen.categories.CategoryUIState
 import com.example.tudeeapp.presentation.screen.categories.toCategoryUIState
@@ -77,7 +77,7 @@ class CategoryViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `getCategories should emits error state when TaskServices fail`() = runTest {
-        coEvery { taskServices.getAllCategories() } throws NoCategoriesFoundException()
+        coEvery { taskServices.getAllCategories() } throws CategoriesNotFoundException()
 
         viewModel = CategoriesViewModel(taskServices)
         advanceUntilIdle()
@@ -87,7 +87,7 @@ class CategoryViewModelTest {
             state == CategoryUIState(
                 isLoading = true,
                 categories = emptyList(),
-                errorMessage = "No Categories Found Exception"
+                errorMessage = "The category that you are looking for not found"
             )
         )
     }

@@ -5,8 +5,8 @@ import com.example.tudeeapp.data.mapper.DataConstant
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
-import com.example.tudeeapp.domain.exception.NoCategoriesFoundException
-import com.example.tudeeapp.domain.exception.NoTasksFoundException
+import com.example.tudeeapp.domain.exception.CategoriesNotFoundException
+import com.example.tudeeapp.domain.exception.TasksNotFoundException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
@@ -36,7 +36,7 @@ class TaskServicesImplTest {
 
     @Test
     fun `getTasks should return tasks when getAll in TaskDao called successfully`() = runTest {
-        coEvery { taskDao.getAll() } returns flowOf(dummyTaskEntities)
+        coEvery { taskDao.getAllTasks() } returns flowOf(dummyTaskEntities)
 
         val result = taskServices.getAllTasks().first()
 
@@ -45,16 +45,16 @@ class TaskServicesImplTest {
 
     @Test
     fun `getTasks should throw exception when TaskDao fails`() = runTest {
-        coEvery { taskDao.getAll() } returns flowOf(emptyList())
+        coEvery { taskDao.getAllTasks() } returns flowOf(emptyList())
 
-        assertThrows< NoTasksFoundException > {
+        assertThrows< TasksNotFoundException > {
             taskServices.getAllTasks().toList()
         }
     }
 
     @Test
     fun `getCategories should return categories when getAll in CategoryDao called successfully`() = runTest {
-        coEvery { categoryDao.getAll() } returns flowOf(dummyCategoryEntities)
+        coEvery { categoryDao.getAllCategories() } returns flowOf(dummyCategoryEntities)
 
         val result = taskServices.getAllCategories().first()
 
@@ -63,9 +63,9 @@ class TaskServicesImplTest {
 
     @Test
     fun `getCategories should throw exception when CategoryDao fails`() = runTest {
-        coEvery { categoryDao.getAll() } returns flowOf(emptyList())
+        coEvery { categoryDao.getAllCategories() } returns flowOf(emptyList())
 
-        assertThrows<NoCategoriesFoundException> {
+        assertThrows<CategoriesNotFoundException> {
             taskServices.getAllCategories().toList()
         }
     }
