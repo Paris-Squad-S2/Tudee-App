@@ -1,7 +1,7 @@
 package com.example.tudeeapp.domain.exception
 
 abstract class TudeeException(message: String) : Exception(message)
-class TaskException() : TudeeException("Task exception")
-class AddTaskException() : TudeeException("Could not add task")
-class EditTaskException() : TudeeException("Could not edit task")
-class CategoryException() : TudeeException("Task exception")
+class TaskException(message: String? = null) : TudeeException(message ?: "Task exception")
+class AddTaskException(message: String? = null) : TudeeException(message ?: "Could not add task")
+class EditTaskException(message: String? = null) : TudeeException(message ?: "Could not edit task")
+class CategoryException(message: String? = null) : TudeeException(message ?: "Category exception")
