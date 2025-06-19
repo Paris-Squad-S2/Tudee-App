@@ -11,7 +11,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.onBoarding.Page
 
@@ -28,56 +30,54 @@ fun OnBoardingPage(
             .fillMaxSize()
             .background(Theme.colors.status.overlay)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.background_vectors),
-            contentDescription = "Background Pattern",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .statusBarsPadding()
+            ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.Start
+
+            TextButton(
+                modifier = Modifier.align(Alignment.Start),
+                onClick = onSkipClick
             ) {
-                TextButton(onClick = onSkipClick){
-                    Text(
-                        text = "Skip",
-                        color = Theme.colors.primary,
-                        style = Theme.textStyle.label.large
-                    )
-                }
+                Text(
+                    text = "Skip",
+                    color = Theme.colors.primary,
+                    style = Theme.textStyle.label.large
+                )
             }
-            Spacer(modifier = Modifier.height(188.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(260.dp)
-            ){
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            vertical = 5.dp,
-                            horizontal = 32.dp
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = page.image),
-                        contentDescription = "Onboarding robot",
-                        contentScale = ContentScale.Crop
-                    )
-                }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(id = page.image),
+                    contentDescription = "Onboarding robot",
+                    contentScale = ContentScale.FillBounds
+                )
+                BottomSection(
+                    page = page,
+                    onNextClick = onNextClick,
+                )
             }
-            BottomSection(
-                page = page,
-                onNextClick = onNextClick
-            )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun onBoardingPagePreview() {
+    BasePreview {
+        val page = Page(
+            image = R.drawable.img_robot4,
+            title = stringResource(id = R.string.onboarding1title),
+            description = stringResource(id = R.string.onboarding1description)
+        )
+        OnBoardingPage(
+            page = page,
+            onNextClick = {},
+            onSkipClick = {}
+        )
     }
 }
