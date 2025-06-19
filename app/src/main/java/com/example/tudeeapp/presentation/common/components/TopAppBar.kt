@@ -19,6 +19,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
@@ -29,6 +31,7 @@ fun TopAppBar(
     onClickBack: () -> Unit,
     title: String,
     modifier: Modifier = Modifier,
+    icon: Painter = painterResource(R.drawable.ic_options),
     label: String? = null,
     withOption: Boolean = false,
     showIndicator: Boolean = false,
@@ -72,7 +75,8 @@ fun TopAppBar(
         if (withOption) {
             OptionsButton(
                 onClick = onclickOption,
-                showIndicator = showIndicator
+                showIndicator = showIndicator,
+                icon = icon
             )
         }
     }
@@ -82,11 +86,12 @@ fun TopAppBar(
 private fun OptionsButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    icon: Painter,
     showIndicator: Boolean = false
 ) {
     Box(modifier = modifier) {
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_options),
+            painter = icon,
             contentDescription = "Options",
             tint = Theme.colors.stroke,
             modifier = Modifier

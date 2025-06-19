@@ -9,4 +9,10 @@
     <string name="categoryEditSnackBarSuccessfully">تم تغيير الفئة بنجاح</string>
     <string name="delete">حذف</string>
     <string name="cancel">إلغاء</string>
+    <string name="onboarding1title">تشعر بالإرهاق من كثرة المهام؟</string>
+    <string name="onboarding1description">لننظم الفوضى معًا. تودي هنا لمساعدتك في الترتيب والتخطيط لتتنفس بسهولة.</string>
+    <string name="onboarding2title">أوه لا! تماطل مرة أخرى؟</string>
+    <string name="onboarding2description">تودي ليس غاضبًا... فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
+    <string name="onboarding3title">لنُنجز المهام ونحتفل معًا.</string>
+    <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
 </resources>

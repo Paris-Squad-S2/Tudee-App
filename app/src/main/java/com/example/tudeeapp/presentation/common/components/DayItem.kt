@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,13 @@ import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun DayItem(isSelected: Boolean, dayNumber: String, dayName: String, modifier: Modifier = Modifier) {
+fun DayItem(
+    isSelected: Boolean,
+    dayNumber: String,
+    dayName: String,
+    onClick: ()->Unit,
+    modifier: Modifier = Modifier
+) {
     val dayNumberTextColor = if (isSelected) Theme.colors.surfaceColors.onPrimaryColors.onPrimary else Theme.colors.text.body
     val dayNameTextColor = if (isSelected) Theme.colors.surfaceColors.onPrimaryColors.onPrimaryCaption else Theme.colors.text.hint
     val backgroundColor = if (isSelected) Brush.verticalGradient(Theme.colors.primaryGradient.colors)
@@ -29,7 +36,8 @@ fun DayItem(isSelected: Boolean, dayNumber: String, dayName: String, modifier: M
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(brush = backgroundColor),
+            .background(brush = backgroundColor)
+            .clickable{onClick()},
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -57,8 +65,8 @@ fun DayItem(isSelected: Boolean, dayNumber: String, dayName: String, modifier: M
 private fun DayItemPreview() {
     BasePreview{
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            DayItem(isSelected = true, dayNumber = "12", dayName = "Mon")
-            DayItem(isSelected = false, dayNumber = "12", dayName = "Mon")
+            DayItem(isSelected = true, dayNumber = "12", dayName = "Mon", {})
+            DayItem(isSelected = false, dayNumber = "12", dayName = "Mon", {})
         }
     }
 }
