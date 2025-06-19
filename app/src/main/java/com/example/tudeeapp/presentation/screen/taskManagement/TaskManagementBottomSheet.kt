@@ -69,6 +69,7 @@ private fun TaskManagementBottomSheetContent(
                 isActionButtonDisabled = uiState.isInitialState,
                 onClickActionButton = {
                     viewModel.onActionButtonClicked()
+                    onCancelClicked()
                 },
                 onClickCancel = onCancelClicked,
                 isLoading = uiState.isLoading,
