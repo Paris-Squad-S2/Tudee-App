@@ -9,10 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
+import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.presentation.screen.taskManagement.CategoryUiState
 import com.example.tudeeapp.presentation.common.components.CategoryItem
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
@@ -22,7 +26,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 fun CategoryGrid(
     categories: List<CategoryUiState>,
     modifier: Modifier = Modifier,
-    onCategoryClick: (Int) -> Unit = {},
+    onCategoryClick: (Long) -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -40,14 +44,18 @@ fun CategoryGrid(
             verticalArrangement = Arrangement.spacedBy(25.dp),
             maxItemsInEachRow = 3
         ) {
-            categories.forEachIndexed { index, category ->
+            categories.forEach { category ->
+                val painter = if (category.isPredefined)
+                    painterResource(category.image.toResDrawables())
+                else
+                    rememberAsyncImagePainter(model = category.image.toUri())
+
                 CategoryItem(
-                    icon = category.image,
+                    icon = painter,
                     label = category.title,
                     iconColor = Color.Unspecified,
                     isSelected = category.isSelected,
-                    isPredefined = category.isPredefined,
-                    onClick = { onCategoryClick(index) }
+                    onClick = { onCategoryClick(category.id) }
                 )
             }
         }
