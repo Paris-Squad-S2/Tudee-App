@@ -4,12 +4,13 @@ import com.example.tudeeapp.data.mapper.DataConstant
 import com.example.tudeeapp.data.mapper.toCategory
 import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTask
+import com.example.tudeeapp.data.mapper.toTaskEntity
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.exception.NoCategoriesFoundException
-import com.example.tudeeapp.domain.exception.NoTasksFoundException
+import com.example.tudeeapp.domain.exception.CategoryException
+import com.example.tudeeapp.domain.exception.TaskException
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow
@@ -24,15 +25,59 @@ class TaskServicesImpl(
 ) : TaskServices {
 
     override fun getAllTasks(): Flow<List<Task>> {
-        return taskDao.getAll()
-            .map { list -> list.map { it.toTask() } }
-            .catch { throw NoTasksFoundException()  }
+        return taskDao.getAllTasks()
+            .map { tasks -> tasks.map { it.toTask() } }
+            .catch { throw TaskException() }
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
-        return categoryDao.getAll()
-            .map { list -> list.map { it.toCategory() } }
-            .catch { throw NoCategoriesFoundException() }
+        return categoryDao.getCategories()
+            .map { categories -> categories.map { it.toCategory() } }
+            .catch { throw CategoryException() }
+    }
+
+    override suspend fun addTask(task: Task) {
+        try {
+            taskDao.addTask(task.toTaskEntity())
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
+    override suspend fun editTask(task: Task) {
+        try {
+            taskDao.editTask(task.toTaskEntity())
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
+    override suspend fun deleteTask(taskId: Long) {
+        try {
+            taskDao.deleteTask(taskId)
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
+    override fun getTaskById(taskId: Long): Flow<Task> {
+        return taskDao.getTaskById(taskId)
+            .map { it.toTask() }
+            .catch { throw TaskException() }
+    }
+
+    override suspend fun deleteCategory(categoryId: Long) {
+        try {
+            categoryDao.deleteCategory(categoryId)
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
+    override fun getCategoryById(categoryId: Long): Flow<Category> {
+        return categoryDao.getCategoryById(categoryId)
+            .map { it.toCategory() }
+            .catch { throw CategoryException() }
     }
 
     override suspend fun loadPredefinedCategories() {
@@ -42,9 +87,8 @@ class TaskServicesImpl(
                 appPreferences.setAppLaunchIsDone()
             }
         } catch (e: Exception) {
-            throw NoCategoriesFoundException()
+            throw CategoryException()
         }
     }
-
 
 }
