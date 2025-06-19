@@ -2,17 +2,15 @@ package com.example.tudeeapp.presentation.screen.home.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.presentation.common.components.TaskCard
-import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.screen.home.TaskUi
+import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
+import com.example.tudeeapp.presentation.screen.home.utils.getPriorityColor
 
 @Composable
 fun HomeTaskCard(
     modifier: Modifier = Modifier,
-    task: TaskUi,
+    task: TaskUiState,
     onClickItem: () -> Unit
 ) {
     TaskCard(
@@ -29,11 +27,3 @@ fun HomeTaskCard(
     )
 }
 
-@Composable
-fun getPriorityColor(priority: TaskPriority): Color {
-    return when (priority) {
-        TaskPriority.LOW -> Theme.colors.status.greenAccent
-        TaskPriority.MEDIUM -> Theme.colors.status.yellowAccent
-        TaskPriority.HIGH -> Theme.colors.status.pinkAccent
-    }
-}
