@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +33,7 @@ import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
@@ -78,7 +80,7 @@ private fun SwipeToDeleteTaskItem(
 ) {
     val maxSwipePx = with(LocalDensity.current) { maxSwipeDistance.toPx() }
     val swipeableState = rememberSwipeableState(initialValue = SwipeState.DEFAULT)
-
+    val coroutineScope = rememberCoroutineScope()
     val anchors = mapOf(0f to SwipeState.DEFAULT, -maxSwipePx to SwipeState.SWIPED)
 
     Box(
@@ -90,7 +92,7 @@ private fun SwipeToDeleteTaskItem(
                 thresholds = { _, _ -> FractionalThreshold(0.5f) },
                 orientation = Orientation.Horizontal,
                 reverseDirection = false,
-                resistance = null // Optional: remove resistance to make swipe natural
+                resistance = null
             )
     ) {
         Box(
@@ -107,7 +109,12 @@ private fun SwipeToDeleteTaskItem(
                 tint = Theme.colors.status.error,
                 modifier = Modifier
                     .size(32.dp)
-                    .clickable { onDelete() }
+                    .clickable {
+                        onDelete()
+                        coroutineScope.launch {
+                            swipeableState.animateTo(SwipeState.DEFAULT)
+                        }
+                    }
             )
         }
 
@@ -126,13 +133,6 @@ private fun SwipeToDeleteTaskItem(
             taskCardContent()
         }
     }
-
-    /*LaunchedEffect(swipeableState.currentValue) {
-        if (swipeableState.currentValue == SwipeState.SWIPED) {
-            onDelete
-            swipeableState.snapTo(SwipeState.DEFAULT)
-        }
-    }*/
 }
 
 private enum class SwipeState {
