@@ -17,4 +17,13 @@
     <string name="status_in_progress">قيد التنفيذ</string>
     <string name="status_to_do">للقيام به</string>
     <string name="status_done">تم</string>
+    <string name="priority">الأولوية</string>
+    <string name="category">الفئة</string>
+    <string name="save">حفظ</string>
+    <string name="add">إضافة</string>
+    <string name="add_task">إضافة مهمة</string>
+    <string name="edit_task">تعديل مهمة</string>
+    <string name="high">عالي</string>
+    <string name="medium">متوسط</string>
+    <string name="low">منخفض</string>
 </resources>

@@ -61,9 +61,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
-    implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.android)
-    implementation(libs.kotlinx.datetime)
+    implementation(libs.koin.compose.viewmodel)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.test)
 
@@ -89,5 +88,8 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     //kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //Coil
+    implementation(libs.coil.compose)
 
 }
