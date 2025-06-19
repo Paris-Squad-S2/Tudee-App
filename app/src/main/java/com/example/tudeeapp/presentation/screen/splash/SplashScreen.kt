@@ -34,7 +34,7 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(3000)
         navController.navigate(Screens.OnBoarding) {
-            popUpTo(0) { inclusive = true }
+            popUpTo(Screens.Splash) { inclusive = true }
         }
     }
     Box(
