@@ -29,7 +29,7 @@ fun TabItem(
     onClick: () -> Unit,
     selectedTextColor: Color,
     unselectedTextColor: Color,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     badgeColor: Color = Theme.colors.surfaceColors.surface,
     indicatorColor: Color = Theme.colors.secondary,
     indicatorHeight: Dp = 4.dp
@@ -53,7 +53,7 @@ fun TabItem(
                     style = Theme.textStyle.label.medium,
                     color = if (isSelected) selectedTextColor else unselectedTextColor
                 )
-                if (tab.count > 0 && isSelected) {
+                if (tab.count >= 0 && isSelected) {
                     Box(
                         modifier = Modifier.Companion
                             .clip(CircleShape)

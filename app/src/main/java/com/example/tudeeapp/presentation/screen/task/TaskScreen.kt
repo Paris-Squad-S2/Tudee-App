@@ -3,6 +3,7 @@ package com.example.tudeeapp.presentation.screen.task
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,23 +55,18 @@ import org.koin.compose.viewmodel.koinViewModel
 fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     val uiState by viewModel.uiState.collectAsState()
-    val listState = rememberLazyListState()
-    val addTask = { navController.navigate(Screens.TaskForm) }
-    val onCLickDatePicker = viewModel::onDatePickerVisibilityChanged
-    val onClickPreviousMonth = viewModel::goToPreviousMonth
-    val onClickNextMonth = viewModel::goToNextMonth
-    val onTabSelected = viewModel::onTabSelected
-    val onDateSelected = viewModel::onDateSelected
 
     TaskScreenContent(
-        uiState,
-        listState,
-        addTask,
-        onCLickDatePicker,
-        onClickPreviousMonth,
-        onClickNextMonth,
-        onTabSelected,
-        onDateSelected
+        uiState = uiState,
+        listState = rememberLazyListState(),
+        addTask = { navController.navigate(Screens.TaskForm) },
+        onCLickDatePicker = viewModel::onDatePickerVisibilityChanged,
+        onClickPreviousMonth = viewModel::goToPreviousMonth,
+        onClickNextMonth = viewModel::goToNextMonth,
+        onTabSelected = viewModel::onTabSelected,
+        onDateSelected = viewModel::onDateSelected,
+        onClickDeleteIcon = viewModel::deleteTask,
+        onclickTaskItem = { navController.navigate(Screens.TaskDetails(it)) }
     )
 }
 
@@ -85,8 +81,9 @@ fun TaskScreenContent(
     onClickNextMonth: () -> Unit,
     onTabSelected: (selectedStatus: TaskStatusUi) -> Unit,
     onDateSelected: (selectedDate: LocalDate) -> Unit,
-
-    ) {
+    onClickDeleteIcon: (taskId: Long) -> Unit,
+    onclickTaskItem: (id:Long) -> Unit,
+) {
     TudeeScaffold(
         floatingActionButton = {
             TudeeButton(
@@ -102,7 +99,7 @@ fun TaskScreenContent(
             )
         },
         topBar = {
-            TextTopBar(title = stringResource(R.string.categories))
+            TextTopBar(title = stringResource(R.string.tasks))
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -129,7 +126,9 @@ fun TaskScreenContent(
                         onClickPreviousMonth,
                         onClickNextMonth,
                         onTabSelected,
-                        onDateSelected
+                        onDateSelected,
+                        onClickDeleteIcon,
+                        onclickTaskItem
                     )
                 }
             }
@@ -146,6 +145,8 @@ fun TaskContent(
     onClickNextMonth: () -> Unit,
     onTabSelected: (selectedStatus: TaskStatusUi) -> Unit,
     onDateSelected: (selectedDate: LocalDate) -> Unit,
+    onClickDeleteIcon: (taskId: Long) -> Unit,
+    onclickTaskItem: (id:Long) -> Unit,
 ) {
     val statusList = TaskStatusUi.entries
     Column(
@@ -153,8 +154,6 @@ fun TaskContent(
             .fillMaxWidth()
             .background(Theme.colors.surfaceColors.surfaceHigh)
     ) {
-        TextTopBar(title = stringResource(R.string.tasks))
-
         if (data.showDatePicker) {
             TudeeDatePickerDialog(
                 initialDate = data.calender.selectedDate,
@@ -173,16 +172,19 @@ fun TaskContent(
         )
 
         LaunchedEffect(data.todayIndex) {
-            if (data.todayIndex > 0) {
-                listState.scrollToItem(data.todayIndex)
-            } else if (data.todayIndex == 0) {
-                listState.scrollToItem(0)
+            val targetIndex = (data.todayIndex - 1)
+                .coerceAtLeast(0)
+            val visibleItems = listState.layoutInfo.visibleItemsInfo
+                .map { it.index }
+
+            if (targetIndex !in visibleItems) {
+                listState.animateScrollToItem(targetIndex)
             }
         }
 
         LazyRow(
             state = listState,
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 18.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(data.calender.daysOfMonth) { day ->
@@ -209,7 +211,16 @@ fun TaskContent(
             selectedTabIndex = statusList.indexOf(data.selectedStatus),
             onTabSelected = { index ->
                 onTabSelected(statusList[index])
-            },
+            }
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Theme.colors.stroke
+                ),
         )
 
         if (data.tasks.isEmpty()) {
@@ -248,8 +259,8 @@ fun TaskContent(
                     priorityIcon = painterResource(task.priority.toStyle().iconRes),
                     priorityColor = task.priority.toStyle().backgroundColor,
                     isDated = false,
-                    onClickItem = {},
-                    onDelete = {}
+                    onClickItem = { onclickTaskItem(task.id) },
+                    onDelete = { onClickDeleteIcon(task.id) }
                 )
             }
         }
