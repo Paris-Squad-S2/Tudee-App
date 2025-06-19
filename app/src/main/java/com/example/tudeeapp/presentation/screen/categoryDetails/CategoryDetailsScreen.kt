@@ -67,11 +67,13 @@ fun CategoryDetailsScreen(
                 onBack = { navController.popBackStack() },
                 categoryTitle = uiState.categoryUiState!!.title,
                 onOptionClick = { navController.navigate(Screens.CategoriesForm) },
-                categoryImage = rememberCategoryPainter(uiState.categoryUiState!!)
+                categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
+                topBarOption = editableCategory(uiState.categoryUiState!!)
             )
         }
     }
 }
+
 @Composable
 private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
     if (categoryUiState.isPredefined) {
@@ -79,11 +81,16 @@ private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
     } else {
         rememberAsyncImagePainter(categoryUiState.imageUrl)
     }
+
+@Composable
+private fun editableCategory(categoryUiState: CategoryUiState) = categoryUiState.isPredefined
+
 @Composable
 fun CategoryDetailsContent(
     tasks: List<TaskUiState>,
     selectedState: TaskStatus,
     categoryImage: Painter,
+    topBarOption: Boolean,
     modifier: Modifier = Modifier,
     onStatusChange: (TaskStatus) -> Unit,
     onBack: () -> Unit,
@@ -95,7 +102,7 @@ fun CategoryDetailsContent(
         TopAppBar(
             onClickBack = onBack,
             title = categoryTitle,
-            withOption = true,
+            withOption = topBarOption,
             showIndicator = false,
             onclickOption = onOptionClick,
             iconButton = ImageVector.vectorResource(R.drawable.ic_pencil_edit)
@@ -214,6 +221,7 @@ fun CategoryDetailsPreview() {
         onBack = {},
         categoryTitle = "Coding",
         categoryImage = painterResource(R.drawable.ic_education),
-        navController = fakeNavController
+        navController = fakeNavController,
+        topBarOption = true
     )
 }
