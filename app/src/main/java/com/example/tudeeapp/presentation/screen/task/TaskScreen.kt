@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,6 +46,7 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toStyle
+import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -53,26 +55,62 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
+    val addTask = { navController.navigate(Screens.TaskForm) }
+    val onCLickDatePicker = viewModel::onDatePickerVisibilityChanged
+    val onClickPreviousMonth = viewModel::goToPreviousMonth
+    val onClickNextMonth = viewModel::goToNextMonth
+    val onTabSelected = viewModel::onTabSelected
+    val onDateSelected = viewModel::onDateSelected
 
+    TaskScreenContent(
+        uiState,
+        listState,
+        addTask,
+        onCLickDatePicker,
+        onClickPreviousMonth,
+        onClickNextMonth,
+        onTabSelected,
+        onDateSelected
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun TaskScreenContent(
+    uiState: TaskUiState,
+    listState: LazyListState,
+    addTask: () -> Unit,
+    onCLickDatePicker: () -> Unit,
+    onClickPreviousMonth: () -> Unit,
+    onClickNextMonth: () -> Unit,
+    onTabSelected: (selectedStatus: TaskStatusUi) -> Unit,
+    onDateSelected: (selectedDate: LocalDate) -> Unit,
+
+    ) {
     TudeeScaffold(
         floatingActionButton = {
             TudeeButton(
                 modifier = Modifier.size(64.dp),
-                onClick = { Screens.TaskForm::class.qualifiedName?.let { navController.navigate(it) } },
+                onClick = { addTask() },
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_note_add),
-                        contentDescription = null)
+                        contentDescription = null
+                    )
                 },
                 variant = ButtonVariant.FloatingActionButton,
             )
         },
-        content = {
-            when{
-                uiState.isLoading->{
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
+        topBar = {
+            TextTopBar(title = stringResource(R.string.categories))
+        }
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            when {
+                uiState.isLoading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
 
                 uiState.errorMessage != null -> {
@@ -83,18 +121,32 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
                     )
                 }
 
-                else ->{
-                    TaskScreenContent(uiState.data, viewModel, listState)
+                else -> {
+                    TaskContent(
+                        uiState.data,
+                        listState,
+                        onCLickDatePicker,
+                        onClickPreviousMonth,
+                        onClickNextMonth,
+                        onTabSelected,
+                        onDateSelected
+                    )
                 }
             }
-
         }
-    )
+    }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TaskScreenContent(data: TasksUi, viewModel: TaskViewModel, listState: LazyListState) {
+fun TaskContent(
+    data: TasksUi,
+    listState: LazyListState,
+    onCLickDatePicker: () -> Unit,
+    onClickPreviousMonth: () -> Unit,
+    onClickNextMonth: () -> Unit,
+    onTabSelected: (selectedStatus: TaskStatusUi) -> Unit,
+    onDateSelected: (selectedDate: LocalDate) -> Unit,
+) {
     val statusList = TaskStatusUi.entries
     Column(
         modifier = Modifier
@@ -106,32 +158,31 @@ fun TaskScreenContent(data: TasksUi, viewModel: TaskViewModel, listState: LazyLi
         if (data.showDatePicker) {
             TudeeDatePickerDialog(
                 initialDate = data.calender.selectedDate,
-                onDismiss = { viewModel.onDatePickerVisibilityChanged() },
+                onDismiss = { onCLickDatePicker() },
                 onSelectDate = { date ->
-                    viewModel.onDateSelected(date)
+                    onDateSelected(date)
                 }
             )
         }
 
         DateHeader(
             data.calender.currentMonthYear,
-            onClickNext = viewModel::goToPreviousMonth,
-            onClickPrevious = viewModel::goToNextMonth,
-            onClickPickDate = { viewModel.onDatePickerVisibilityChanged() }
+            onClickNext = onClickNextMonth,
+            onClickPrevious = onClickPreviousMonth,
+            onClickPickDate = { onCLickDatePicker() }
         )
 
         LaunchedEffect(data.todayIndex) {
             if (data.todayIndex > 0) {
                 listState.scrollToItem(data.todayIndex)
-            }else if (data.todayIndex == 0){
+            } else if (data.todayIndex == 0) {
                 listState.scrollToItem(0)
             }
         }
 
         LazyRow(
             state = listState,
-            modifier = Modifier
-                .padding(vertical = 8.dp, horizontal = 16.dp),
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(data.calender.daysOfMonth) { day ->
@@ -139,7 +190,8 @@ fun TaskScreenContent(data: TasksUi, viewModel: TaskViewModel, listState: LazyLi
                     isSelected = data.calender.selectedDate.dayOfMonth == day.num,
                     dayNumber = day.num.toString(),
                     dayName = day.name,
-                    onClick = {viewModel.onDateSelected(day.date)}
+                    onClick = { onDateSelected(day.date) },
+                    modifier = Modifier.width(56.dp)
                 )
             }
         }
@@ -156,7 +208,7 @@ fun TaskScreenContent(data: TasksUi, viewModel: TaskViewModel, listState: LazyLi
             tabs = tabs,
             selectedTabIndex = statusList.indexOf(data.selectedStatus),
             onTabSelected = { index ->
-                viewModel.onTabSelected(statusList[index])
+                onTabSelected(statusList[index])
             },
         )
 
@@ -170,7 +222,10 @@ fun TaskScreenContent(data: TasksUi, viewModel: TaskViewModel, listState: LazyLi
             ) {
                 EmptyTasksSection(
                     stringResource(R.string.no_tasks_here),
-                    Modifier.fillMaxWidth().padding(start = 10.dp, end = 20.dp))
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 20.dp)
+                )
             }
         }
 
@@ -193,7 +248,8 @@ fun TaskScreenContent(data: TasksUi, viewModel: TaskViewModel, listState: LazyLi
                     priorityIcon = painterResource(task.priority.toStyle().iconRes),
                     priorityColor = task.priority.toStyle().backgroundColor,
                     isDated = false,
-                    onClickItem = {}
+                    onClickItem = {},
+                    onDelete = {}
                 )
             }
         }
