@@ -30,7 +30,6 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
 import com.example.tudeeapp.presentation.screen.categoriesForm.AddCategoryScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
@@ -95,7 +94,9 @@ fun TudeeNavGraph() {
                     composable<Screens.Category> { CategoriesScreen() }
                     composable<Screens.TaskForm> { TaskFormScreen() }
                     composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                    composable<Screens.CategoriesForm> { CategoryFormScreen() }
+                    dialog<Screens.AddCategoryScreen> {
+                        AddCategoryScreen()
+                    }
 
                     composable<Screens.CategoryDetails> {
                         val args = it.toRoute<Screens.CategoryDetails>()

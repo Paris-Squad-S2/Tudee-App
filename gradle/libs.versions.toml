@@ -2,7 +2,6 @@
 agp = "8.10.1"
 coilCompose = "3.2.0"
 coreSplashscreen = "1.0.1"
-coilCompose = "3.2.0"
 koinAndroid = "4.0.2"
 koinCompose = "4.0.2"
 koinComposeViewmodel = "4.0.2"
