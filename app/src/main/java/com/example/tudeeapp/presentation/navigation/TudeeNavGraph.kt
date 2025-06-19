@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -27,7 +26,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.AddCategoryScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
@@ -56,28 +55,43 @@ fun TudeeNavGraph() {
         LocalSnackBarState provides snackBarState
     ) {
 
-        Box {
-            TudeeScaffold(
-                bottomBar = {
-                    if ((currentRoute?.route != null) && listOf(
-                            Screens.Home::class.qualifiedName,
-                            Screens.Task::class.qualifiedName,
-                            Screens.Category::class.qualifiedName
-                        ).contains(currentRoute.route)
-                    )
-                        TudeeNavigationBar(
-                            onItemClick = { navItem ->
-                                navController.navigate(navItem.screen)
-                            }
-                        )
-                },
-                contentBackground = Theme.colors.surfaceColors.surface
-            ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = Screens.Splash,
-                ) {
+        val currentRoute = backStackEntry?.destination?.route?.substringBefore('?')
+        val selectedRouteIndex = listOf(
+            Screens.Home::class.qualifiedName,
+            Screens.Task::class.qualifiedName,
+            Screens.Category::class.qualifiedName
+        ).indexOf(currentRoute)
 
+        TudeeScaffold(
+            bottomBar = {
+                if (selectedRouteIndex != -1)
+                    TudeeNavigationBar(
+                        onItemClick = { navItem ->
+                            navController.navigate(navItem.screen)
+                        },
+                        selected = selectedRouteIndex
+                    )
+            },
+            contentBackground = Theme.colors.surfaceColors.surface
+        ) {
+            NavHost(
+                navController = navController,
+                startDestination = Screens.Splash,
+            ) {
+
+                composable<Screens.Splash> { SplashScreen() }
+                composable<Screens.OnBoarding> {
+                    val onboardingViewModel: OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
+                    )
+                }
+                composable<Screens.Home> { HomeScreen() }
+                composable<Screens.Task> { TaskScreen() }
+                composable<Screens.Category> { CategoriesScreen() }
+                composable<Screens.TaskForm> { TaskFormScreen() }
+                composable<Screens.TaskDetails> { TaskDetailsScreen() }
                     composable<Screens.Splash> { SplashScreen() }
                     composable<Screens.OnBoarding> {
                         val onboardingViewModel: OnboardingViewModel = koinViewModel()
@@ -91,7 +105,9 @@ fun TudeeNavGraph() {
                     composable<Screens.Category> { CategoriesScreen() }
                     composable<Screens.TaskForm> { TaskFormScreen() }
                     composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                    composable<Screens.CategoriesForm> { CategoryFormScreen() }
+                    dialog<Screens.AddCategoryScreen> {
+                        AddCategoryScreen()
+                    }
 
                     composable<Screens.CategoryDetails> {
                         CategoryDetailsScreen()
@@ -122,3 +138,4 @@ fun TudeeNavGraph() {
         }
     }
 }
+

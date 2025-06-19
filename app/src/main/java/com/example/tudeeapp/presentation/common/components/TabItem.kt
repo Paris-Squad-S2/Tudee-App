@@ -38,14 +38,14 @@ fun TabItem(
         modifier = modifier
             .fillMaxSize()
             .clickable(onClick = onClick),
-        contentAlignment = Alignment.Companion.Center
+        contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.Companion.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
-                modifier = Modifier.Companion.weight(1f),
-                verticalAlignment = Alignment.Companion.CenterVertically,
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
@@ -55,13 +55,13 @@ fun TabItem(
                 )
                 if (tab.count >= 0 && isSelected) {
                     Box(
-                        modifier = Modifier.Companion
+                        modifier = Modifier
                             .clip(CircleShape)
                             .background(badgeColor),
-                        contentAlignment = Alignment.Companion.Center
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            modifier = Modifier.Companion.padding(
+                            modifier = Modifier.padding(
                                 horizontal = 4.dp,
                                 vertical = 3.dp
                             ),
@@ -74,7 +74,7 @@ fun TabItem(
             }
             if (isSelected)
                 Box(
-                    modifier = Modifier.Companion
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = indicatorHeight)
                         .height(4.dp)

@@ -14,4 +14,5 @@ interface TaskServices {
     suspend fun deleteCategory(categoryId: Long)
     fun getCategoryById(categoryId: Long): Flow<Category>
     suspend fun loadPredefinedCategories()
+    suspend fun addCategory(category:Category)
 }
