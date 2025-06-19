@@ -41,7 +41,9 @@ fun OnBoardScreen(
 
     LaunchedEffect(state.isCompleted) {
         if (state.isCompleted) {
-            navController.navigate(Screens.Home)
+            navController.navigate(Screens.Home){
+                popUpTo(Screens.OnBoarding) { inclusive = true }
+            }
         }
     }
     if (!state.isCompleted) {
