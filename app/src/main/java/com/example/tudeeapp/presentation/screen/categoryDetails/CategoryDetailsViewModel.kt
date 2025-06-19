@@ -45,7 +45,7 @@ class CategoryDetailsViewModel(
                 _uiState.value = CategoryDetailsUiState(
                     isLoading = false,
                     taskUiState = tasks.map { it.toTaskUiState() },
-                    categoryUiState = category.toCategoryUiState()
+                    categoryUiState = category.first().toCategoryUiState()
                 )
 
             } catch (e: Exception) {

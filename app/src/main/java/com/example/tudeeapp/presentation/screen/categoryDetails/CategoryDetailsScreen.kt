@@ -1,44 +1,45 @@
 package com.example.tudeeapp.presentation.screen.categoryDetails
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.domain.models.Task
+import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.common.components.TopAppBar
-import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
-import com.example.tudeeapp.presentation.screen.errorScreen.ErrorScreen
-import com.example.tudeeapp.presentation.screen.loadingScreen.LoadingScreen
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
-import kotlinx.datetime.toLocalDate
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoryDetailsScreen(
@@ -50,8 +51,8 @@ fun CategoryDetailsScreen(
     val selectedState by viewModel.stateFilter.collectAsState()
 
     when {
-        uiState.isLoading -> LoadingScreen()
-        uiState.errorMessage.isNotEmpty() -> ErrorScreen(message = uiState.errorMessage)
+        uiState.isLoading -> CircularProgressIndicator()
+        uiState.errorMessage.isNotEmpty() -> Text(text = "error ${uiState.errorMessage}")
         uiState.categoryUiState != null -> {
             CategoryDetailsContent(
                 tasks = uiState.taskUiState,
@@ -60,17 +61,23 @@ fun CategoryDetailsScreen(
                 onBack = { navController.popBackStack() },
                 categoryTitle = uiState.categoryUiState!!.title,
                 onOptionClick = { navController.navigate(Screens.CategoriesForm) },
-                categoryImage = uiState.categoryUiState!!.imageUrl.toInt() // إذا imageUrl عبارة عن resource id كـ String
+                categoryImage = rememberCategoryPainter(uiState.categoryUiState!!)
             )
         }
     }
 }
-
+@Composable
+private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
+    if (categoryUiState.isPredefined) {
+        painterResource(categoryUiState.imageUrl.toResDrawables())
+    } else {
+        rememberAsyncImagePainter(categoryUiState.imageUrl)
+    }
 @Composable
 fun CategoryDetailsContent(
     tasks: List<TaskUiState>,
     selectedState: TaskStatus,
-    categoryImage: Int,
+    categoryImage: Painter,
     modifier: Modifier = Modifier,
     onStatusChange: (TaskStatus) -> Unit,
     onBack: () -> Unit,
@@ -121,7 +128,7 @@ fun CategoryDetailsContent(
             items(filteredTasks) { task ->
                 val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
                 TaskCard(
-                    icon = painterResource(categoryImage),
+                    icon = categoryImage,
                     title = task.title,
                     date = task.createdDate,
                     subtitle = task.description,
@@ -200,7 +207,7 @@ fun CategoryDetailsPreview() {
         },
         onBack = {},
         categoryTitle = "Coding",
-        categoryImage = R.drawable.ic_education,
+        categoryImage = painterResource(R.drawable.ic_education),
         navController = fakeNavController
     )
 }
