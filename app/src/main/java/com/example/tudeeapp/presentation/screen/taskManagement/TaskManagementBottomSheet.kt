@@ -55,7 +55,7 @@ fun TaskManagementBottomSheet(
 private fun TaskManagementBottomSheetContent(
     uiState: TaskManagementUiState,
     viewModel: TaskManagementViewModel,
-    onCancelClicked: () -> Unit
+    onCancelClicked: () -> Unit,
 ) {
     TudeeBottomSheet(
         isVisible = true,
@@ -68,7 +68,7 @@ private fun TaskManagementBottomSheetContent(
                 isEditMode = uiState.isEditMode,
                 isActionButtonDisabled = uiState.isInitialState,
                 onClickActionButton = {
-                    viewModel::onActionButtonClicked
+                    viewModel.onActionButtonClicked()
                 },
                 onClickCancel = onCancelClicked,
                 isLoading = uiState.isLoading,

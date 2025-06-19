@@ -27,20 +27,20 @@ class TaskServicesImpl(
     override fun getAllTasks(): Flow<List<Task>> {
         return taskDao.getAllTasks()
             .map { tasks -> tasks.map { it.toTask() } }
-            .catch { throw TaskException(it.message) }
+            .catch { throw TaskException() }
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
         return categoryDao.getCategories()
             .map { categories -> categories.map { it.toCategory() } }
-            .catch { throw CategoryException(it.message) }
+            .catch { throw CategoryException() }
     }
 
     override suspend fun addTask(task: Task) {
         try {
             taskDao.addTask(task.toTaskEntity())
         } catch (e: Exception) {
-            throw TaskException(e.message)
+            throw TaskException()
         }
     }
 
@@ -48,7 +48,7 @@ class TaskServicesImpl(
         try {
             taskDao.editTask(task.toTaskEntity())
         } catch (e: Exception) {
-            throw TaskException(e.message)
+            throw TaskException()
         }
     }
 
@@ -56,28 +56,28 @@ class TaskServicesImpl(
         try {
             taskDao.deleteTask(taskId)
         } catch (e: Exception) {
-            throw TaskException(e.message)
+            throw TaskException()
         }
     }
 
     override fun getTaskById(taskId: Long): Flow<Task> {
         return taskDao.getTaskById(taskId)
             .map { it.toTask() }
-            .catch { throw TaskException(it.message) }
+            .catch { throw TaskException() }
     }
 
     override suspend fun deleteCategory(categoryId: Long) {
         try {
             categoryDao.deleteCategory(categoryId)
         } catch (e: Exception) {
-            throw TaskException(e.message)
+            throw TaskException()
         }
     }
 
     override fun getCategoryById(categoryId: Long): Flow<Category> {
         return categoryDao.getCategoryById(categoryId)
             .map { it.toCategory() }
-            .catch { throw CategoryException(it.message) }
+            .catch { throw CategoryException() }
     }
 
     override suspend fun loadPredefinedCategories() {
@@ -87,7 +87,7 @@ class TaskServicesImpl(
                 appPreferences.setAppLaunchIsDone()
             }
         } catch (e: Exception) {
-            throw CategoryException(e.message)
+            throw CategoryException()
         }
     }
 

@@ -59,7 +59,7 @@ enum class TaskPriorityUiState {
     }
 }
 
-fun TaskPriorityUiState.toDomain(): TaskPriority? {
+fun TaskPriorityUiState.toTaskPriority(): TaskPriority? {
     return when (this) {
         TaskPriorityUiState.LOW -> TaskPriority.LOW
         TaskPriorityUiState.MEDIUM -> TaskPriority.MEDIUM

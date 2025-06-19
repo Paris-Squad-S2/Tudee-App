@@ -117,7 +117,7 @@ class TaskManagementViewModel(
                     id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
                     title = currentState.title,
                     description = currentState.description,
-                    priority = currentState.selectedPriority.toDomain() ?: TaskPriority.LOW,
+                    priority = currentState.selectedPriority.toTaskPriority() ?: TaskPriority.LOW,
                     status = if (currentState.isEditMode) currentState.taskStatus else TaskStatus.TO_DO,
                     createdDate = LocalDate.parse(currentState.selectedDate),
                     categoryId = currentState.selectedCategoryId ?: 0L
