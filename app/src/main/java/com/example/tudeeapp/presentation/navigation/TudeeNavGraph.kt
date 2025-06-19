@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.SnackBarState
@@ -47,7 +48,6 @@ val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarS
 fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = backStackEntry?.destination
     val snackBarState = remember { SnackBarState() }
 
     CompositionLocalProvider(
@@ -92,47 +92,46 @@ fun TudeeNavGraph() {
                 composable<Screens.Category> { CategoriesScreen() }
                 composable<Screens.TaskForm> { TaskFormScreen() }
                 composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                    composable<Screens.Splash> { SplashScreen() }
-                    composable<Screens.OnBoarding> {
-                        val onboardingViewModel: OnboardingViewModel = koinViewModel()
-                        OnBoardScreen(
-                            onboardingViewModel,
-                            onboardingPages()
-                        )
-                    }
-                    composable<Screens.Home> { HomeScreen() }
-                    composable<Screens.Task> { TaskScreen() }
-                    composable<Screens.Category> { CategoriesScreen() }
-                    composable<Screens.TaskForm> { TaskFormScreen() }
-                    composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                    dialog<Screens.AddCategoryScreen> {
-                        AddCategoryScreen()
-                    }
-
-                    composable<Screens.CategoryDetails> {
-                        CategoryDetailsScreen()
-                    }
+                composable<Screens.Splash> { SplashScreen() }
+                composable<Screens.OnBoarding> {
+                    val onboardingViewModel: OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
+                    )
+                }
+                composable<Screens.Home> { HomeScreen() }
+                composable<Screens.Task> { TaskScreen() }
+                composable<Screens.Category> { CategoriesScreen() }
+                composable<Screens.TaskForm> { TaskFormScreen() }
+                composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                dialog<Screens.AddCategoryScreen> {
+                    AddCategoryScreen()
                 }
 
-                if (snackBarState.isVisible) {
-                    AnimatedVisibility(
-                        visible = snackBarState.isVisible,
-                        enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
-                        exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
-                    ) {
-                        SnackBar(
-                            Modifier
-                                .statusBarsPadding()
-                                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                            text = snackBarState.message,
-                            isSuccess = snackBarState.isSuccess,
-                            onClick = { snackBarState.hide() }
-                        )
-                    }
-                    LaunchedEffect(Unit) {
-                        delay(snackBarState.durationMillis.toLong())
-                        snackBarState.hide()
-                    }
+                composable<Screens.CategoryDetails> {
+                    CategoryDetailsScreen()
+                }
+            }
+
+            if (snackBarState.isVisible) {
+                AnimatedVisibility(
+                    visible = snackBarState.isVisible,
+                    enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
+                    exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+                ) {
+                    SnackBar(
+                        Modifier
+                            .statusBarsPadding()
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        text = snackBarState.message,
+                        isSuccess = snackBarState.isSuccess,
+                        onClick = { snackBarState.hide() }
+                    )
+                }
+                LaunchedEffect(Unit) {
+                    delay(snackBarState.durationMillis.toLong())
+                    snackBarState.hide()
                 }
             }
         }

@@ -56,9 +56,9 @@ data class StatusUi(
 )
 
 enum class TaskStatusUi(val stringResId: Int) {
-    IN_PROGRESS(R.string.status_in_progress),
-    TO_DO(R.string.status_to_do),
-    DONE(R.string.status_done)
+    IN_PROGRESS(R.string.in_progress_text),
+    TO_DO(R.string.to_do),
+    DONE(R.string.done)
 }
 
 fun Task.toTaskUiState(): TaskItemUiState {

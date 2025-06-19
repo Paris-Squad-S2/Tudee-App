@@ -19,7 +19,7 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun DeleteTaskConfirmationBox(
+fun ConfirmationDialogBox(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {}
@@ -89,5 +89,5 @@ fun DeleteTaskConfirmationBox(
 @Preview
 @Composable
 fun DeleteTaskConfirmationBoxPreview() {
-    DeleteTaskConfirmationBox()
+    ConfirmationDialogBox()
 }

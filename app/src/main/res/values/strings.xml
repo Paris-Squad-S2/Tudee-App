@@ -3,12 +3,13 @@
     <string name="your_cute_helper_for_every_task">Your cute Helper for Every Task</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="in_progress">In progress</string>
     <string name="to_do">To Do</string>
     <string name="done">Done</string>
+    <string name="tasks">Tasks</string>
     <string name="categories">Categories</string>
     <string name="no_tasks_for_today">No tasks for today!</string>
     <string name="tap_the_button_to_add_your_first_one">Tap the + button to add your \nfirst one.</string>
+    <string name="in_progress_text">In progress</string>
     <string name="no_tasks_here">No tasks here!</string>
     <string name="onboarding1title">Overwhelmed with tasks?</string>
     <string name="onboarding1description">Let’s bring some order to the chaos. Tudee is here to help you sort, plan, and breathe easier.</string>
@@ -16,9 +17,6 @@
     <string name="onboarding2description">Tudee not mad… just a little disappointed, Let’s get back on track together.</string>
     <string name="onboarding3title">"Let’s complete task and celebrate\n together."</string>
     <string name="onboarding3description">Progress is progress. Tudee will celebrate you on for every win, big or small.</string>
-    <string name="status_in_progress">In Progress</string>
-    <string name="status_to_do">To Do</string>
-    <string name="status_done">Done</string>
     <string name="move_to_done">Move to done</string>
     <string name="move_to_in_progress">Move to in progress</string>
     <string name="task_details">Task details</string>
@@ -35,4 +33,20 @@
     <string name="high">High</string>
     <string name="medium">Medium</string>
     <string name="low">Low</string>
+    <string name="date_format_today">Today</string>
+    <string name="date_format_medium">%s, %d %s %d</string>
+    <string name="slider_title_nothing">Nothing on your list…</string>
+    <string name="slider_description_nothing">Fill your day with something awesome.</string>
+    <string name="slider_title_tadaa">Tadaa!</string>
+    <string name="slider_description_tadaa">You’re doing amazing!!!\nTudee is proud of you.</string>
+    <string name="slider_title_zero_progress">Zero progress?!</string>
+    <string name="slider_description_zero_progress">You just scrolling, not working. Tudee is watching. Back to work!!!</string>
+    <string name="slider_title_stay_working">Stay working!</string>
+    <string name="slider_description_stay_working">You\'ve completed %d out of %d tasks. Keep going!</string>
+    <string name="overview">Overview</string>
+    <string name="are_you_sure_to_continue">Are you sure to continue?</string>
+    <string name="delete">Delete</string>
+    <string name="deleted_task_successfully">Deleted task successfully</string>
+    <string name="delete_task">Delete task</string>
+
 </resources>

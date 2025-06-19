@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.DayItem
-import com.example.tudeeapp.presentation.common.components.DeleteTaskConfirmationBox
+import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
@@ -121,7 +121,7 @@ fun TaskScreenContent(
                 uiState.errorMessage != null -> {
                     Text(
                         text = "Error: ${uiState.errorMessage}",
-                        color = Color.Red,
+                        color = Theme.colors.status.error,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -282,7 +282,7 @@ fun TaskContent(
                     onDismiss = { isSheetOpen = false },
                     content = {
                         val context = LocalContext.current
-                        DeleteTaskConfirmationBox(
+                        ConfirmationDialogBox(
                             onConfirm = {
                                 onClickDeleteIcon(task.id)
                                 showSnackBar.show(context.getString(R.string.deleted_task_successfully))
