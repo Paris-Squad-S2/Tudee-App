@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -21,7 +20,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.SnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
@@ -93,7 +91,6 @@ fun TudeeNavGraph() {
                 composable<Screens.Category> { CategoriesScreen() }
                 composable<Screens.TaskForm> { TaskFormScreen() }
                 composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                composable<Screens.CategoriesForm> { CategoryFormScreen() }
 
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
