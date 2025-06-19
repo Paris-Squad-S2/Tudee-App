@@ -16,6 +16,15 @@
     <string name="onboarding2description">Tudee not mad… just a little disappointed, Let’s get back on track together.</string>
     <string name="onboarding3title">"Let’s complete task and celebrate\n together."</string>
     <string name="onboarding3description">Progress is progress. Tudee will celebrate you on for every win, big or small.</string>
+    <string name="priority">Priority</string>
+    <string name="category">Category</string>
+    <string name="save">Save</string>
+    <string name="add">Add</string>
+    <string name="add_task">Add Task</string>
+    <string name="edit_task">Edit task</string>
+    <string name="high">High</string>
+    <string name="medium">Medium</string>
+    <string name="low">Low</string>
     <string name="date_format_today">Today</string>
     <string name="date_format_medium">%s, %d %s %d</string>
 
