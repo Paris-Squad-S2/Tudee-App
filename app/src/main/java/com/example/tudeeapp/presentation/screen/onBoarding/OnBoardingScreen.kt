@@ -29,10 +29,11 @@ import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.onBoarding.components.OnBoardingPage
 import com.example.tudeeapp.presentation.screen.onBoarding.components.PageIndicator
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OnBoardScreen(
-    viewModel: OnboardingViewModel,
+    viewModel: OnboardingViewModel = koinViewModel(),
     pages: List<Page>,
 ) {
     val navController = LocalNavController.current

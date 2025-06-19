@@ -31,14 +31,12 @@ import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScree
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
-import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
 import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
 import kotlinx.coroutines.delay
-import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 val LocalSnackBarState = compositionLocalOf<SnackBarState> {
@@ -86,10 +84,8 @@ fun TudeeNavGraph() {
                 }
 
                 composable<Screens.OnBoarding> {
-                    val onboardingViewModel: OnboardingViewModel = koinViewModel()
                     OnBoardScreen(
-                        onboardingViewModel,
-                        onboardingPages()
+                        pages = onboardingPages()
                     )
                 }
 
