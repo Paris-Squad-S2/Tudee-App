@@ -36,20 +36,20 @@ fun OverviewCard(
             .background(color = color)
     ) {
         Icon(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .size(78.dp)
-                .align(Alignment.Companion.TopEnd)
+                .align(Alignment.TopEnd)
                 .offset(x = 39.dp, y = (-39).dp),
             painter = painterResource(R.drawable.ic_overview_card_background),
             contentDescription = null,
-            tint = Color.Companion.Unspecified,
+            tint = Color.Unspecified,
         )
         Column(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .padding(top = 12.dp, start = 12.dp, bottom = 12.dp)
         ) {
             Box(
-                modifier = Modifier.Companion
+                modifier = Modifier
                     .border(
                         width = 1.dp,
                         color = Color(0x1FFFFFFF),
@@ -62,11 +62,11 @@ fun OverviewCard(
                 Icon(
                     painter = painter,
                     contentDescription = null,
-                    tint = Color.Companion.Unspecified
+                    tint = Color.Unspecified
                 )
             }
             Text(
-                modifier = Modifier.Companion.padding(top = 4.dp),
+                modifier = Modifier.padding(top = 4.dp),
                 text = stat.toString(),
                 style = Theme.textStyle.headline.medium,
                 color = Theme.colors.surfaceColors.onPrimaryColors.onPrimary
