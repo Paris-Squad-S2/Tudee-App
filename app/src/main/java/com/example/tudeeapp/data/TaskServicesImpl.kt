@@ -31,7 +31,7 @@ class TaskServicesImpl(
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
-        return categoryDao.getCategories()
+        return categoryDao.getAllCategories()
             .map { categories -> categories.map { it.toCategory() } }
             .catch { throw CategoryException() }
     }
