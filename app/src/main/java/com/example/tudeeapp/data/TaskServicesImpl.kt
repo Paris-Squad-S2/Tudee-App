@@ -25,14 +25,23 @@ class TaskServicesImpl(
 
     override fun getAllTasks(): Flow<List<Task>> {
         return taskDao.getAll()
-            .map { list -> list.map { it.toTask() } }
-            .catch { throw NoTasksFoundException()  }
+            .map { list ->
+                if (list.isEmpty()) {
+                    throw NoTasksFoundException()
+                }
+                list.map { it.toTask() }
+            }
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
         return categoryDao.getAll()
-            .map { list -> list.map { it.toCategory() } }
-            .catch { throw NoCategoriesFoundException() }
+            .map { list ->
+                if (list.isEmpty()) {
+                    throw NoCategoriesFoundException()
+                }
+                list.map { it.toCategory() }
+            }
+
     }
 
     override suspend fun loadPredefinedCategories() {
