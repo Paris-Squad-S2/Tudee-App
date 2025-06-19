@@ -48,6 +48,7 @@ class TaskDetailsViewModel(
                     Pair(task, category)
                 }.collect { (task, category) ->
                     _uiState.value = _uiState.value.copy(
+                        isLoading = false,
                         taskUiState = task.toTaskUiState(),
                         categoryUiState = category.toCategoryUiState()
                     )

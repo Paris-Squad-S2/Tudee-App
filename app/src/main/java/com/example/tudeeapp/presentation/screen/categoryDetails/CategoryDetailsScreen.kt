@@ -117,7 +117,7 @@ fun CategoryDetailsContent(
 
         HorizontalTabs(
             tabs = listOf(
-                Tab(title = stringResource(R.string.in_progress), count = inProgressCount),
+                Tab(title = stringResource(R.string.in_progress_text), count = inProgressCount),
                 Tab(title = stringResource(R.string.to_do), count = toDoCount),
                 Tab(title = stringResource(R.string.done), count = doneCount)
             ),

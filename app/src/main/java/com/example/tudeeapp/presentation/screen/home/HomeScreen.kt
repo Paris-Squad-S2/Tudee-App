@@ -416,7 +416,7 @@ private fun OverViewCardsRow(
             color = Theme.colors.status.yellowAccent,
             painter = painterResource(id = R.drawable.ic_in_progress),
             stat = inProgressTasksCount,
-            label = stringResource(R.string.in_progress),
+            label = stringResource(R.string.in_progress_text),
         )
         OverviewCard(
             modifier = Modifier.weight(1f),
