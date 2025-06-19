@@ -1,7 +1,7 @@
 package com.example.tudeeapp.data
 
-import com.example.tudeeapp.data.exception.DataException
 import com.example.tudeeapp.data.mapper.DataConstant
+import com.example.tudeeapp.domain.exception.AddCategoryException
 import com.example.tudeeapp.data.mapper.toCategory
 import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTask
@@ -13,7 +13,6 @@ import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.exception.CategoriesNotFoundException
 import com.example.tudeeapp.domain.exception.CategoryNotFoundException
-import com.example.tudeeapp.domain.exception.NoCategoryAddedException
 import com.example.tudeeapp.domain.exception.NoCategoryDeletedException
 import com.example.tudeeapp.domain.exception.NoCategoryEditedException
 import com.example.tudeeapp.domain.exception.NoTaskAddedException
@@ -102,20 +101,12 @@ class TaskServicesImpl(
         }
     }
 
-    override suspend fun addCategory(title: String, imageUrl: String) {
-
+    override suspend fun addCategory(category:Category) {
         try {
-            val category = Category(
-                title = title,
-                imageUrl = imageUrl,
-                tasksCount = 0,
-                isPredefined = false
-            ).toCategoryEntity()
-            categoryDao.insertCategory(category)
+            categoryDao.insertCategory(category.toCategoryEntity())
         } catch (e: Exception) {
-            throw NoCategoryAddedException()
+            throw AddCategoryException()
         }
-
     }
 
     override suspend fun editCategory(id: Long, title: String, imageUrl: String) {

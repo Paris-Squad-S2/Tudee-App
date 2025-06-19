@@ -7,7 +7,9 @@ data class CategoryFormState(
     val categoryId: Long = 0,
     val imageUri: Uri? = null,
     val isVisible: Boolean = false,
-) {
+    val errorMessage: String? = null,
+    val successMessage: String? = null
+){
     val isFormValid: Boolean
         get() = categoryName.isNotBlank() && imageUri != null
 }

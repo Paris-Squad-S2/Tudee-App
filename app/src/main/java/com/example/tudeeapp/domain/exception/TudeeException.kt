@@ -10,6 +10,7 @@ class NoTaskEditedException() : TaskException("Something wrong happened while ed
 class TaskNotFoundException() : TaskException("The task that you are looking for not found")
 class TasksNotFoundException() : TaskException("No tasks found in your local data of tudee")
 
+class AddCategoryException(): CategoryException("Category not added")
 class NoCategoryAddedException() : CategoryException("Something wrong happened while adding category")
 class NoCategoryDeletedException() : CategoryException("Something wrong happened while deleting category")
 class NoCategoryEditedException() : CategoryException("Something wrong happened while editing category")

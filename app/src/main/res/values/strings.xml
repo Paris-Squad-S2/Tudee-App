@@ -24,6 +24,10 @@
     <string name="move_to_done">Move to done</string>
     <string name="move_to_in_progress">Move to in progress</string>
     <string name="task_details">Task details</string>
+    <string name="addnewCategory">Add new Category</string>
+    <string name="categoryTitle">Category title</string>
+    <string name="categoryImage">Category image</string>
+    <string name="upload">Upload</string>
     <string name="priority">Priority</string>
     <string name="category">Category</string>
     <string name="add">Add</string>
