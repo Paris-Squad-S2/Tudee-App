@@ -51,4 +51,22 @@ class TaskServicesImplTest {
             taskServices.getAllTasks().toList()
         }
     }
+
+    @Test
+    fun `getCategories should return categories when getAll in CategoryDao called successfully`() = runTest {
+        coEvery { categoryDao.getAll() } returns flowOf(dummyCategoryEntities)
+
+        val result = taskServices.getAllCategories().first()
+
+        assertEquals(expectedCategories[0].title, result[0].title)
+    }
+
+    @Test
+    fun `getCategories should throw exception when CategoryDao fails`() = runTest {
+        coEvery { categoryDao.getAll() } returns flowOf(emptyList())
+
+        assertThrows<NoCategoriesFoundException> {
+            taskServices.getAllCategories().toList()
+        }
+    }
 }
