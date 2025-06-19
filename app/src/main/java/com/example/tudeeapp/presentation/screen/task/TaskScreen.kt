@@ -49,6 +49,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toStyle
@@ -155,6 +156,8 @@ fun TaskContent(
 ) {
     val statusList = TaskStatusUi.entries
     var isSheetOpen by remember { mutableStateOf(false) }
+    val showSnackBar = LocalSnackBarState.current
+
 
     Column(
         modifier = Modifier
@@ -280,6 +283,7 @@ fun TaskContent(
                             onConfirm = {
                                 onClickDeleteIcon(task.id)
                                 isSheetOpen = false
+                                showSnackBar.show("Deleted task successfully")
                             },
                             onDismiss = { isSheetOpen = false })
                     },
