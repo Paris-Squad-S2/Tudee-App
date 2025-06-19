@@ -9,6 +9,7 @@ import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
+import com.example.tudeeapp.domain.exception.AddCategoryException
 import com.example.tudeeapp.domain.exception.CategoriesNotFoundException
 import com.example.tudeeapp.domain.exception.CategoryNotFoundException
 import com.example.tudeeapp.domain.exception.NoCategoryDeletedException
@@ -96,4 +97,13 @@ class TaskServicesImpl(
             throw CategoriesNotFoundException()
         }
     }
+
+    override suspend fun addCategory(category:Category) {
+        try {
+            categoryDao.insertCategory(category.toCategoryEntity())
+        } catch (e: Exception) {
+            throw AddCategoryException()
+        }
+    }
+
 }

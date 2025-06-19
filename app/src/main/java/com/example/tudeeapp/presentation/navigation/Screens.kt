@@ -27,7 +27,7 @@ sealed class Screens {
     data object Category : Screens()
 
     @Serializable
-    data object CategoriesForm : Screens()
+    data object AddCategoryScreen : Screens()
 
     @Serializable
     data class CategoryDetails(val categoryId: Long) : Screens()
