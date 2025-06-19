@@ -9,6 +9,9 @@
     <string name="in_progress">جاري التنفيذ</string>
     <string name="to_do">مطلوب القيام بها</string>
     <string name="done">تمت</string>
+    <string name="in_progress">قيد التنفيذ</string>
+    <string name="to_do">للقيام به</string>
+    <string name="done">تم</string>
     <string name="onboarding1title">تشعر بالإرهاق من كثرة المهام؟</string>
     <string name="onboarding1description">لننظم الفوضى معًا. تودي هنا لمساعدتك في الترتيب والتخطيط لتتنفس بسهولة.</string>
     <string name="onboarding2title">أوه لا! تماطل مرة أخرى؟</string>
