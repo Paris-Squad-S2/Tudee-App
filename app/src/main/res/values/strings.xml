@@ -3,6 +3,15 @@
     <string name="your_cute_helper_for_every_task">Your cute Helper for Every Task</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="categories">Categories</string>
+    <string name="no_tasks_here">No tasks here!</string>
+    <string name="tap_the_button_to_add_your_first_one">Tap the + button to add your first one.</string>
+    <string name="onboarding1title">Overwhelmed with tasks?</string>
+    <string name="onboarding1description">Let’s bring some order to the chaos. Tudee is here to help you sort, plan, and breathe easier.</string>
+    <string name="onboarding2title">Uh-oh! Procrastinating again</string>
+    <string name="onboarding2description">Tudee not mad… just a little disappointed, Let’s get back on track together.</string>
+    <string name="onboarding3title">"Let’s complete task and celebrate\n together."</string>
+    <string name="onboarding3description">Progress is progress. Tudee will celebrate you on for every win, big or small.</string>
     <string name="priority">Priority</string>
     <string name="category">Category</string>
     <string name="save">Save</string>

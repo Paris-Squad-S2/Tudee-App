@@ -2,18 +2,21 @@ package com.example.tudeeapp.presentation.screen.taskManagement
 
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.TaskPriority
+import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.common.extentions.getCurrentDateString
 
 data class TaskManagementUiState(
     val isDatePickerVisible: Boolean = false,
     val title: String = "",
     val description: String = "",
-    val selectedDate: String = "",
+    val selectedDate: String = getCurrentDateString(),
     val selectedPriority: TaskPriorityUiState = TaskPriorityUiState.NONE,
     val categories: List<CategoryUiState> = emptyList<CategoryUiState>(),
-    val selectedCategoryId: Int? = null,
+    val selectedCategoryId: Long? = null,
     val isLoading: Boolean = false,
     val isEditMode: Boolean = false,
     val error: String? = null,
+    val taskStatus: TaskStatus = TaskStatus.TO_DO,
 ) {
     val isInitialState: Boolean
         get() = title.isEmpty() ||
@@ -25,6 +28,7 @@ data class TaskManagementUiState(
 }
 
 data class CategoryUiState(
+    val id : Long = 0,
     val title: String = "",
     val isSelected: Boolean = false,
     val image: String,
@@ -32,6 +36,7 @@ data class CategoryUiState(
 )
 
 fun Category.toCategoryState() = CategoryUiState(
+    id = this.id,
     title = this.title,
     isSelected = false,
     image = this.imageUrl,

@@ -40,7 +40,7 @@ fun TudeeBottomSheet(
     isScrollable: Boolean = true,
     skipPartiallyExpanded: Boolean = true,
     stickyBottomContent: @Composable ColumnScope.() -> Unit = {},
-    content: @Composable ColumnScope.() -> Unit ,
+    content: @Composable ColumnScope.() -> Unit
 ) {
     val scrollModifier = if (isScrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)

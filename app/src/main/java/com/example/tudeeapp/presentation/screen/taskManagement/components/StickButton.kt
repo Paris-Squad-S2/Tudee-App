@@ -17,12 +17,13 @@ import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun AddEditStickButtons(
+fun TaskManagementButtons(
     isEditMode: Boolean,
     isActionButtonDisabled: Boolean,
     onClickActionButton: () -> Unit,
     onClickCancel: () -> Unit,
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
 ) {
     Column(
         modifier = modifier
@@ -37,7 +38,11 @@ fun AddEditStickButtons(
             onClick = { onClickActionButton() },
             text = if (isEditMode) stringResource(R.string.save) else stringResource(R.string.add),
             variant = ButtonVariant.FilledButton,
-            state = if (isActionButtonDisabled) ButtonState.Disabled else ButtonState.Normal,
+            state = when {
+                isLoading -> ButtonState.Loading
+                isActionButtonDisabled -> ButtonState.Disabled
+                else -> ButtonState.Normal
+            },
         )
         TudeeButton(
             modifier = Modifier
@@ -56,7 +61,7 @@ fun AddEditStickButtons(
 @Composable
 fun AddEditUnStickButtonsPreview() {
     BasePreview {
-        AddEditStickButtons(
+        TaskManagementButtons(
             onClickActionButton = {},
             onClickCancel = {},
             isEditMode = true,
