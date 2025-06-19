@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.common.extentions
 
+import android.content.Context
 import android.graphics.BlurMaskFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
@@ -14,6 +15,7 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.tudeeapp.R
 
 fun Modifier.innerShadow(
     shape: Shape,
@@ -47,3 +49,4 @@ fun Modifier.innerShadow(
         canvas.restore()
     }
 }
+

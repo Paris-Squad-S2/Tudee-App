@@ -101,5 +101,4 @@ object DataConstant {
             else -> throw MappingDrawableException(this)
         }
     }
-
 }
