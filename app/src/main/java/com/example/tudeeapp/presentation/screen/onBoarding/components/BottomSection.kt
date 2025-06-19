@@ -37,7 +37,7 @@ fun BottomSection(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.padding(top = 32.dp , bottom = 64.dp)
+        modifier = modifier.padding(top = 32.dp, bottom = 60.dp)
     ) {
         Surface(
             shape = RoundedCornerShape(32.dp),
@@ -57,7 +57,7 @@ fun BottomSection(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.padding(
                     top = 24.dp,
-                    bottom = 40.dp,
+                    bottom = 48.dp,
                     start = 16.dp,
                     end = 16.dp,
                 )
@@ -74,8 +74,8 @@ fun BottomSection(
                     text = page.description,
                     color = Theme.colors.text.body,
                     style = Theme.textStyle.body.small,
-                    textAlign = TextAlign.Center
-                    )
+                    textAlign = TextAlign.Center,
+                )
             }
         }
 
@@ -85,8 +85,7 @@ fun BottomSection(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .size(64.dp)
-                .offset(y= (28).dp)
-            ,
+                .offset(y = (28).dp),
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_right_double),
