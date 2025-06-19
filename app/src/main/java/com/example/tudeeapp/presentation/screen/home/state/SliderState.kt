@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.home
+package com.example.tudeeapp.presentation.screen.home.state
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
