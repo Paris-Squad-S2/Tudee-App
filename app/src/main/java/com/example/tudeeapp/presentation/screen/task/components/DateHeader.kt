@@ -16,7 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -32,6 +35,9 @@ fun DateHeader(
     onClickNext: () -> Unit = {},
     onClickPickDate: () -> Unit = {},
 ) {
+    val layoutDirection = LocalLayoutDirection.current
+    val rotationAngle = if (layoutDirection == LayoutDirection.Rtl) 180f else 0f
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -40,7 +46,11 @@ fun DateHeader(
         verticalAlignment = Alignment.CenterVertically
 
     ) {
-        ArrowContainer(rotationDegree = 0f, onClickPrevious)
+        ArrowContainer(
+            painterResource(R.drawable.ic_left_arrow),
+            onClickPrevious,
+            rotationAngle = rotationAngle
+        )
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.Center,
@@ -53,18 +63,23 @@ fun DateHeader(
                 modifier = Modifier.clickable(onClick = onClickPickDate)
             )
             ArrowIcon(
-                rotationDegree = (-90f),
+                painterResource(R.drawable.ic_bottom_arrow),
                 modifier.padding(start = 8.dp).clickable(onClick = onClickPickDate)
             )
         }
-        ArrowContainer(rotationDegree = 180F, onClickNext)
+        ArrowContainer(
+            painterResource(R.drawable.ic_right_arrow),
+            onClickNext,
+            rotationAngle = rotationAngle
+        )
     }
 }
 
 @Composable
 fun ArrowContainer(
-    rotationDegree: Float,
+    icon: Painter,
     onclick: () -> Unit,
+    rotationAngle: Float,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -78,20 +93,20 @@ fun ArrowContainer(
             .clip(RoundedCornerShape(100.dp))
             .clickable(onClick = onclick)
     ) {
-        ArrowIcon(rotationDegree, modifier.align(Alignment.Center))
+        ArrowIcon(icon, modifier.align(Alignment.Center).rotate(rotationAngle))
     }
 }
 
 @Composable
 private fun ArrowIcon(
-    rotationDegree: Float,
+    icon: Painter,
     modifier: Modifier = Modifier
 ) {
     Icon(
-        painter = painterResource(R.drawable.ic_left_arrow),
+        painter = icon,
         tint = Theme.colors.text.body,
         contentDescription = "Back Icon",
-        modifier = modifier.rotate(rotationDegree)
+        modifier = modifier
     )
 }
 

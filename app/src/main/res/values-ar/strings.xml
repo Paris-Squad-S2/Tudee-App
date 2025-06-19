@@ -5,6 +5,7 @@
     <string name="ok">تأكيد</string>
     <string name="cancel">إلغاء</string>
     <string name="tasks">المهام</string>
+    <string name="categories">الفئات</string>
     <string name="no_tasks_here">لا توجد مهام هنا!</string>
     <string name="tap_the_button_to_add_your_first_one">اضغط على زر + لإضافة أول واحد.</string>
     <string name="onboarding1title">تشعر بالإرهاق من كثرة المهام؟</string>
@@ -13,4 +14,7 @@
     <string name="onboarding2description">تودي ليس غاضبًا... فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
     <string name="onboarding3title">لنُنجز المهام ونحتفل معًا.</string>
     <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
+    <string name="status_in_progress">قيد التنفيذ</string>
+    <string name="status_to_do">للقيام به</string>
+    <string name="status_done">تم</string>
 </resources>

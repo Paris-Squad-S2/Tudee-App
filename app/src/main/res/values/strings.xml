@@ -13,4 +13,7 @@
     <string name="onboarding2description">Tudee not mad… just a little disappointed, Let’s get back on track together.</string>
     <string name="onboarding3title">"Let’s complete task and celebrate\n together."</string>
     <string name="onboarding3description">Progress is progress. Tudee will celebrate you on for every win, big or small.</string>
+    <string name="status_in_progress">In Progress</string>
+    <string name="status_to_do">To Do</string>
+    <string name="status_done">Done</string>
 </resources>
