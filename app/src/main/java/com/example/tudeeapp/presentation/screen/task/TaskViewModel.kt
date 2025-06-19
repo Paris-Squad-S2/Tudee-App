@@ -4,10 +4,13 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.TaskServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
@@ -15,14 +18,14 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlinx.datetime.toLocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TaskViewModel(
     private val taskServices: TaskServices
-) :ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(TaskUiState())
     val uiState: StateFlow<TaskUiState> = _uiState.asStateFlow()
 
@@ -70,7 +73,7 @@ class TaskViewModel(
                 taskServices.deleteTask(taskId)
                 updateUiStateWithFilters()
 
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     errorMessage = e.message ?: "Unknown error occurred"
@@ -81,18 +84,28 @@ class TaskViewModel(
 
     private fun loadTasks() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             try {
-                taskServices.getAllTasks().collect{tasks->
-                    allTasks = tasks.toTasksUi()
+                taskServices.getAllTasks().collect { tasks ->
+                    val tasksIcons =
+                        tasks.map {
+                            taskServices.getCategoryById(it.categoryId).first().imageUrl
+                        }.map { it.toResDrawables() }
+
+                    val tasksUi = tasks.map { it.toTaskUiState() }
+                        .mapIndexed { index, taskUi -> taskUi.copy(iconRes = tasksIcons[index]) }
+
+                    allTasks = tasksUi
                     updateUiStateWithFilters()
                 }
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = e.message ?: "Unknown error occurred"
-                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = e.message ?: "Unknown error occurred"
+                    )
+                }
             }
         }
     }
@@ -106,7 +119,7 @@ class TaskViewModel(
 
         val status = calculateStatusUiList(allTasks, currentSelectedDate, currentSelectedStatus)
 
-        _uiState.value = TaskUiState(
+        _uiState.update { it.copy(
             data = TasksUi(
                 calender = currentSelectedDate.createCalendarUi(
                     getCurrentMonthYear(currentSelectedDate),
@@ -122,7 +135,7 @@ class TaskViewModel(
             ),
             isLoading = false,
             errorMessage = null
-        )
+        ) }
     }
 
     private fun filterTasks(
@@ -155,7 +168,7 @@ class TaskViewModel(
     }
 
     private fun formatDailyDate(daysOfMonth: List<LocalDate>): List<DayUi> {
-        return daysOfMonth.map{ date->
+        return daysOfMonth.map { date ->
             DayUi(
                 name = getShortDayName(date),
                 num = date.dayOfMonth,
@@ -164,13 +177,15 @@ class TaskViewModel(
         }
     }
 
+
     private fun getCurrentDate(): LocalDate {
         return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
     }
 
     private fun getCurrentMonthYear(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("MMM, yyyy", Locale.getDefault())
-        return java.time.LocalDate.of(date.year, date.monthNumber, date.dayOfMonth).format(formatter)
+        return java.time.LocalDate.of(date.year, date.monthNumber, date.dayOfMonth)
+            .format(formatter)
     }
 
     private fun getShortDayName(date: LocalDate): String {

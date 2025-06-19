@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -72,7 +73,7 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
         onTabSelected = viewModel::onTabSelected,
         onDateSelected = viewModel::onDateSelected,
         onClickDeleteIcon = viewModel::deleteTask,
-        onclickTaskItem = { navController.navigate(Screens.TaskDetails(it)) }
+        onclickTaskItem = { navController.navigate(Screens.TaskDetails(it)) },
     )
 }
 
@@ -135,7 +136,7 @@ fun TaskScreenContent(
                         onTabSelected,
                         onDateSelected,
                         onClickDeleteIcon,
-                        onclickTaskItem
+                        onclickTaskItem,
                     )
                 }
             }
@@ -195,7 +196,7 @@ fun TaskContent(
 
         LazyRow(
             state = listState,
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 18.dp),
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(data.calender.daysOfMonth) { day ->
@@ -261,7 +262,7 @@ fun TaskContent(
         ) {
             items(data.tasks) { task ->
                 TaskItemWithSwipe(
-                    icon = painterResource(R.drawable.ic_cooking),
+                    icon = painterResource(task.iconRes),
                     iconColor = Color.Unspecified,
                     title = task.title,
                     date = task.createdDate.toString(),
@@ -275,16 +276,17 @@ fun TaskContent(
                 )
                 TudeeBottomSheet(
                     isVisible = isSheetOpen,
-                    title = "Delete task",
+                    title = LocalContext.current.getString(R.string.delete_task),
                     isScrollable = true,
                     skipPartiallyExpanded = true,
                     onDismiss = { isSheetOpen = false },
                     content = {
+                        val context = LocalContext.current
                         DeleteTaskConfirmationBox(
                             onConfirm = {
                                 onClickDeleteIcon(task.id)
+                                showSnackBar.show(context.getString(R.string.deleted_task_successfully))
                                 isSheetOpen = false
-                                showSnackBar.show("Deleted task successfully")
                             },
                             onDismiss = { isSheetOpen = false })
                     },
@@ -292,5 +294,4 @@ fun TaskContent(
             }
         }
     }
-
 }

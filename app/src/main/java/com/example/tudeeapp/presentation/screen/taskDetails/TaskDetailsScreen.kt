@@ -11,7 +11,7 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 
 
 @Composable
-fun TaskDetailsScreen(id: Long){
+fun TaskDetailsScreen(){
     val navController = LocalNavController.current
     Column(
         modifier = Modifier.fillMaxSize(),

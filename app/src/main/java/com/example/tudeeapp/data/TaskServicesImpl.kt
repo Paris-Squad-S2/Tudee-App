@@ -14,9 +14,9 @@ import com.example.tudeeapp.domain.exception.CategoryNotFoundException
 import com.example.tudeeapp.domain.exception.NoCategoryDeletedException
 import com.example.tudeeapp.domain.exception.NoTaskAddedException
 import com.example.tudeeapp.domain.exception.NoTaskDeletedException
+import com.example.tudeeapp.domain.exception.NoTaskEditedException
 import com.example.tudeeapp.domain.exception.TaskNotFoundException
 import com.example.tudeeapp.domain.exception.TasksNotFoundException
-import com.example.tudeeapp.domain.exception.NoTaskEditedException
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow

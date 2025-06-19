@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
@@ -38,7 +39,7 @@ fun DeleteTaskConfirmationBox(
         ) {
             Text(
                 modifier = Modifier.padding(top = 12.dp),
-                text = "Are you sure to continue?",
+                text = stringResource(R.string.are_you_sure_to_continue),
                 style = Theme.textStyle.body.large,
                 color = Theme.colors.text.body,
             )
@@ -67,11 +68,10 @@ fun DeleteTaskConfirmationBox(
                     .padding(top = 12.dp, bottom = 6.dp)
                     .fillMaxWidth()
                     .height(56.dp),
-                text = "Delete",
+                text = stringResource(R.string.delete),
                 isNegative = true,
                 variant = ButtonVariant.FilledButton,
                 contentColor = Theme.colors.status.error,
-
                 )
             TudeeButton(
                 onClick = onDismiss,
@@ -79,7 +79,7 @@ fun DeleteTaskConfirmationBox(
                     .padding(bottom = 12.dp, top = 6.dp)
                     .fillMaxWidth()
                     .height(56.dp),
-                text = "Cancel",
+                text = stringResource(R.string.cancel),
                 variant = ButtonVariant.OutlinedButton,
             )
         }

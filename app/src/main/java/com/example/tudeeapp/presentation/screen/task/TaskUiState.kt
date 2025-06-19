@@ -45,7 +45,8 @@ data class TaskItemUiState(
     val priority: TaskPriorityUi,
     val status: TaskStatusUi,
     val createdDate: LocalDate,
-    val categoryId: Long
+    val categoryId: Long,
+    val iconRes: Int = R.drawable.ic_education
 )
 
 data class StatusUi(
@@ -60,10 +61,6 @@ enum class TaskStatusUi(val stringResId: Int) {
     DONE(R.string.status_done)
 }
 
-fun List<Task>.toTasksUi(): List<TaskItemUiState> {
-    return this.map { it.toTaskUiState() }
-}
-
 fun Task.toTaskUiState(): TaskItemUiState {
     return TaskItemUiState(
         id = this.id,
@@ -72,7 +69,8 @@ fun Task.toTaskUiState(): TaskItemUiState {
         priority = this.priority.toUiPriority(),
         status = this.status.toUiStatus(),
         createdDate = this.createdDate,
-        categoryId = this.categoryId
+        categoryId = this.categoryId,
+        iconRes = R.drawable.ic_education
     )
 }
 
