@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.categoriesForm.components.CategoriesBottomSheetButtons
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -56,7 +58,14 @@ fun AddCategoryScreen(
     var showSheet by remember { mutableStateOf(true) }
     val navController = LocalNavController.current
     val context = LocalContext.current
+    val snackbarHostState = LocalSnackBarState.current
 
+    LaunchedEffect(formState.successMessage, formState.errorMessage) {
+        formState.successMessage?.let {
+            snackbarHostState.show(message = it, isSuccess = true)
+            navController.popBackStack()
+        }
+    }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -88,8 +97,6 @@ fun AddCategoryScreen(
             },
             onSubmit = {
                 viewModel.addCategory()
-                showSheet = false
-                navController.popBackStack()
             },
             onValueChange = { viewModel.updateCategoryName(it) },
             onImageClick = {

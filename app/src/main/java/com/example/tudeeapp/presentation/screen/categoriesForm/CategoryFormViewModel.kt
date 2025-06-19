@@ -37,6 +37,7 @@ class CategoryFormViewModel(val taskServices: TaskServices, savedStateHandle: Sa
                     isPredefined = false
                 )
                 taskServices.addCategory(category)
+                _state.update { it.copy(successMessage = "Category added successfully") }
             }
             catch (e: Exception){
                 _state.update {
