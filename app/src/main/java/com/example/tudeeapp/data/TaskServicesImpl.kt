@@ -36,9 +36,25 @@ class TaskServicesImpl(
             .catch { throw CategoryException() }
     }
 
+    override suspend fun addTask(task: Task) {
+        try {
+            taskDao.addTask(task.toTaskEntity())
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
     override suspend fun editTask(task: Task) {
         try {
             taskDao.editTask(task.toTaskEntity())
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
+    override suspend fun deleteTask(taskId: Long) {
+        try {
+            taskDao.deleteTask(taskId)
         } catch (e: Exception) {
             throw TaskException()
         }
@@ -50,7 +66,15 @@ class TaskServicesImpl(
             .catch { throw TaskException() }
     }
 
-        override fun getCategoryById(categoryId: Long): Flow<Category> {
+    override suspend fun deleteCategory(categoryId: Long) {
+        try {
+            categoryDao.deleteCategory(categoryId)
+        } catch (e: Exception) {
+            throw TaskException()
+        }
+    }
+
+    override fun getCategoryById(categoryId: Long): Flow<Category> {
         return categoryDao.getCategoryById(categoryId)
             .map { it.toCategory() }
             .catch { throw CategoryException() }
