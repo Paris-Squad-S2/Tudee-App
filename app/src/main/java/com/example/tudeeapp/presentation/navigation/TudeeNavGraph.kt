@@ -19,9 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.SnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
@@ -80,44 +78,45 @@ fun TudeeNavGraph() {
                 startDestination = Screens.Splash,
             ) {
 
-                    composable<Screens.Splash> { SplashScreen() }
-                    composable<Screens.OnBoarding> {
-                        val onboardingViewModel: OnboardingViewModel = koinViewModel()
-                        OnBoardScreen(
-                            onboardingViewModel,
-                            onboardingPages()
-                        )
-                    }
-                    composable<Screens.Home> { HomeScreen() }
-                    composable<Screens.Task> { TaskScreen() }
-                    composable<Screens.Category> { CategoriesScreen() }
-                    composable<Screens.TaskForm> { TaskFormScreen() }
-                    composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                    composable<Screens.CategoriesForm> { CategoryFormScreen() }
+                composable<Screens.Splash> { SplashScreen() }
+                composable<Screens.OnBoarding> {
+                    val onboardingViewModel: OnboardingViewModel = koinViewModel()
+                    OnBoardScreen(
+                        onboardingViewModel,
+                        onboardingPages()
+                    )
+                }
+                composable<Screens.Home> { HomeScreen() }
+                composable<Screens.Task> { TaskScreen() }
+                composable<Screens.Category> { CategoriesScreen() }
+                composable<Screens.TaskForm> { TaskFormScreen() }
+                composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                composable<Screens.CategoriesForm> { CategoryFormScreen() }
 
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
                 }
             }
 
-        if (snackBarState.isVisible) {
-            AnimatedVisibility(
-                visible = snackBarState.isVisible,
-                enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
-                exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
-            ) {
-                SnackBar(
-                    Modifier
-                        .statusBarsPadding()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                    text = snackBarState.message,
-                    isSuccess = snackBarState.isSuccess,
-                    onClick = { snackBarState.hide() }
-                )
-            }
-            LaunchedEffect(Unit) {
-                delay(snackBarState.durationMillis.toLong())
-                snackBarState.hide()
+            if (snackBarState.isVisible) {
+                AnimatedVisibility(
+                    visible = snackBarState.isVisible,
+                    enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
+                    exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+                ) {
+                    SnackBar(
+                        Modifier
+                            .statusBarsPadding()
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        text = snackBarState.message,
+                        isSuccess = snackBarState.isSuccess,
+                        onClick = { snackBarState.hide() }
+                    )
+                }
+                LaunchedEffect(Unit) {
+                    delay(snackBarState.durationMillis.toLong())
+                    snackBarState.hide()
+                }
             }
         }
     }
