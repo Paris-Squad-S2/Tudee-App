@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.screen.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -150,6 +151,7 @@ private fun HomeContent(
                 toDoTasksCount = state.toDoTasks.size
             )
         }
+
         if (state.isTasksEmpty) {
             item {
                 AnimatedVisibility(

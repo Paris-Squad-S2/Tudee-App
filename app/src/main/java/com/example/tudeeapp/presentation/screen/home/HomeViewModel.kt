@@ -11,6 +11,7 @@ import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
 import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
+import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -45,23 +46,40 @@ class HomeViewModel(
 
     fun getTasksIcons() {
         viewModelScope.launch(IO) {
+            val today = getToday()
             try {
                 taskServices.getAllTasks().collect { tasks ->
-                    val tasksIcons = tasks.map { taskServices.getCategoryById(it.categoryId).first().imageUrl }
-                                          .map { it.toResDrawables() }
+                    tasks.filter { it.createdDate == today.date }
+                        .also { filteredTasks ->
+                            if (filteredTasks.isEmpty()) {
+                                _homeState.update {
+                                    it.copy(
+                                        isTasksEmpty = true,
+                                        isLoading = false,
+                                        isSuccess = true
+                                    )
+                                }
+                                return@collect
+                            }
+                            val tasksIcons =
+                                filteredTasks.map {
+                                    taskServices.getCategoryById(it.categoryId).first().imageUrl
+                                }
+                                    .map { it.toResDrawables() }
 
-                    val tasksUi = tasks.map { it.toTaskUi() }
-                        .mapIndexed { index, taskUi -> taskUi.copy(categoryIcon = tasksIcons[index]) }
-                    _homeState.update {
-                        it.copy(
-                            inProgressTasks = tasksUi.filter { it.status == TaskStatus.IN_PROGRESS },
-                            toDoTasks = tasksUi.filter { it.status == TaskStatus.TO_DO },
-                            doneTasks = tasksUi.filter { it.status == TaskStatus.DONE },
-                            isSuccess = true,
-                            isLoading = false,
-                            isTasksEmpty = false
-                        )
-                    }
+                            val tasksUi = filteredTasks.map { it.toTaskUi() }
+                                .mapIndexed { index, taskUi -> taskUi.copy(categoryIcon = tasksIcons[index]) }
+                            _homeState.update {
+                                it.copy(
+                                    inProgressTasks = tasksUi.filter { it.status == TaskStatus.IN_PROGRESS },
+                                    toDoTasks = tasksUi.filter { it.status == TaskStatus.TO_DO },
+                                    doneTasks = tasksUi.filter { it.status == TaskStatus.DONE },
+                                    isSuccess = true,
+                                    isLoading = false,
+                                    isTasksEmpty = false
+                                )
+                            }
+                        }
                 }
             } catch (e: Exception) {
                 _homeState.update {
@@ -72,11 +90,13 @@ class HomeViewModel(
     }
 
     fun getTasks() {
+        val today = getToday()
         viewModelScope.launch(IO) {
             try {
                 _homeState.update { it.copy(isLoading = true) }
                 taskServices.getAllTasks().collect { tasks ->
                     val tasksUi = tasks
+                        .filter { it.createdDate == today.date }
                         .map { it.toTaskUi() }
 
 
