@@ -12,28 +12,28 @@ sealed class SliderViewState(
     @StringRes val descriptionRes: Int,
     val formatArgs: Array<Any> = emptyArray()
 ) {
-    object Nothing : SliderViewState(
+    object NothingState : SliderViewState(
         titleRes = R.string.slider_title_nothing,
         iconRes = R.drawable.ic_poor,
         imageRes = R.drawable.img_ropot1,
         descriptionRes = R.string.slider_description_nothing
     )
 
-    data class Tadaa(val count: Int, val total: Int) : SliderViewState(
+    data class GoodState(val count: Int, val total: Int) : SliderViewState(
         titleRes = R.string.slider_title_tadaa,
         iconRes = R.drawable.ic_good,
         imageRes = R.drawable.img_ropot2,
         descriptionRes = R.string.slider_description_tadaa
     )
 
-    data class ZeroProgress(val count: Int, val total: Int) : SliderViewState(
+    data class ZeroProgressState(val count: Int, val total: Int) : SliderViewState(
         titleRes = R.string.slider_title_zero_progress,
         iconRes = R.drawable.ic_bad,
         imageRes = R.drawable.img_ropot3,
         descriptionRes = R.string.slider_description_zero_progress
     )
 
-    data class StayWorking(val done: Int, val total: Int) : SliderViewState(
+    data class StayWorkingState(val done: Int, val total: Int) : SliderViewState(
         titleRes = R.string.slider_title_stay_working,
         iconRes = R.drawable.ic_okay,
         imageRes = R.drawable.img_ropot1,
@@ -48,9 +48,9 @@ fun mapTaskCountToSliderState(taskCount: Map<TaskStatus, Int>): SliderViewState 
     val toDo = taskCount[TaskStatus.TO_DO] ?: 0
 
     return when {
-        total == 0 -> SliderViewState.Nothing
-        done > 0 && done == total -> SliderViewState.Tadaa(done, total)
-        done == 0 -> SliderViewState.ZeroProgress(toDo, total)
-        else -> SliderViewState.StayWorking(done, total)
+        total == 0 -> SliderViewState.NothingState
+        done > 0 && done == total -> SliderViewState.GoodState(done, total)
+        done == 0 -> SliderViewState.ZeroProgressState(toDo, total)
+        else -> SliderViewState.StayWorkingState(done, total)
     }
 }
