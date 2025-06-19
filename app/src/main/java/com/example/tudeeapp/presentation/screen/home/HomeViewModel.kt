@@ -9,6 +9,8 @@ import com.example.tudeeapp.domain.exception.TudeeException
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
+import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -106,8 +108,8 @@ class HomeViewModel(
     }
 
 
-    private fun Task.toTaskUi(): TaskUi {
-        return TaskUi(
+    private fun Task.toTaskUi(): TaskUiState {
+        return TaskUiState(
             id = this.id,
             title = title,
             description = description,

@@ -29,13 +29,13 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.screen.home.TaskUi
+import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeTaskSection(
     modifier: Modifier = Modifier,
-    tasks: List<TaskUi>,
+    tasks: List<TaskUiState>,
     tasksType: TaskStatus,
     onTasksCountClick: (String) -> Unit,
     onTaskClick: (Long) -> Unit

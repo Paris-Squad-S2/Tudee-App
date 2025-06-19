@@ -37,7 +37,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
-import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.Header
 import com.example.tudeeapp.presentation.common.components.Slider
 import com.example.tudeeapp.presentation.common.components.TudeeButton
@@ -45,8 +44,10 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
+import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import org.koin.compose.viewmodel.koinViewModel
 
