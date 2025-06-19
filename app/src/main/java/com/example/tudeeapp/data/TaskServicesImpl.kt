@@ -46,6 +46,7 @@ class TaskServicesImpl(
             .catch { throw CategoriesNotFoundException() }
     }
 
+
     override suspend fun addTask(task: Task) {
         try {
             taskDao.addTask(task.toTaskEntity())

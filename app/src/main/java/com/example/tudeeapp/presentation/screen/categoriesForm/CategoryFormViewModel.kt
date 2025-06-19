@@ -50,11 +50,6 @@ class CategoryFormViewModel(val taskServices: TaskServices, savedStateHandle: Sa
         _state.update { it.copy(imageUri = uri) }
     }
 
-    fun addCategory(title: String, imageUrl: String) {
-        viewModelScope.launch {
-            taskServices.addCategory(title = title, imageUrl = imageUrl)
-        }
-    }
 
     fun editCategory() {
         viewModelScope.launch {
@@ -66,15 +61,8 @@ class CategoryFormViewModel(val taskServices: TaskServices, savedStateHandle: Sa
         }
     }
 
-    fun dismissForm() {
-        _state.update { it.copy(isVisible = false) }
-    }
 
-    fun submitCategory() {
-
-    }
-
-    fun getImageUrl(url: String): String{
+    private fun getImageUrl(url: String): String{
         if (url.startsWith("content")){
             return url
         }

@@ -114,7 +114,7 @@ fun TudeeNavGraph() {
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
                 }
-                composable<Screens.CategoryFormEditScreen> {
+                dialog<Screens.CategoryFormEditScreen> {
                     CategoryFormEditScreen()
                 }
             }
