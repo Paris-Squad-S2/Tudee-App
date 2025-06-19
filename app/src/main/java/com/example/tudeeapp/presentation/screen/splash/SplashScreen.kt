@@ -33,7 +33,9 @@ fun SplashScreen(
     val navController = LocalNavController.current
     LaunchedEffect(Unit) {
         delay(3000)
-        navController.navigate(Screens.OnBoarding)
+        navController.navigate(Screens.OnBoarding) {
+            popUpTo(0) { inclusive = true }
+        }
     }
     Box(
         modifier = modifier
