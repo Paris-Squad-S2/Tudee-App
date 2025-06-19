@@ -33,6 +33,6 @@ sealed class Screens {
     data class CategoryDetails(val id: Long) : Screens()
 
     @Serializable
-    data class TaskManagement(val taskId: Int? = null) : Screens()
+    data class TaskManagement(val taskId: Long? = null) : Screens()
 
 }
