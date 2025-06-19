@@ -22,7 +22,10 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun EmptyTasksSection(modifier: Modifier) {
+fun HomeEmptyTasksSection(
+    title: String,
+    modifier: Modifier
+) {
     Box(
         modifier = modifier,
     ) {
@@ -34,16 +37,15 @@ fun EmptyTasksSection(modifier: Modifier) {
         ) {
 
             Image(
-                painter = painterResource(R.drawable.task_card_ropo_background),
+                painter = painterResource(R.drawable.img_task_card_ropo_background),
                 contentDescription = "ropo",
                 modifier = Modifier
                     .size(136.dp)
                     .align(Alignment.TopEnd)
             )
 
-
             Image(
-                painter = painterResource(R.drawable.task_card_ropo_container),
+                painter = painterResource(R.drawable.img_task_card_ropo_container),
                 contentDescription = "ropo",
                 modifier = Modifier
                     .size(144.dp)
@@ -51,7 +53,7 @@ fun EmptyTasksSection(modifier: Modifier) {
             )
 
             Image(
-                painter = painterResource(R.drawable.task_card_dots),
+                painter = painterResource(R.drawable.img_task_card_dots),
                 contentDescription = "ropo2",
                 modifier = Modifier
                     .size(54.dp)
@@ -61,7 +63,7 @@ fun EmptyTasksSection(modifier: Modifier) {
             )
 
             Image(
-                painter = painterResource(R.drawable.img_ropot4),
+                painter = painterResource(R.drawable.img_robot4),
                 contentDescription = "ropo4",
                 modifier = Modifier
                     .width(107.dp)
@@ -73,10 +75,8 @@ fun EmptyTasksSection(modifier: Modifier) {
         }
         Column(
             modifier = Modifier
-                .padding(end = 100.dp)
-                .width(203.dp)
-                .height(74.dp)
-                .offset(x = 0.dp, y = (-10).dp)
+                .padding(end = 120.dp)
+                .offset(x = 0.dp, y = (-30).dp)
                 .background(
                     color = Theme.colors.surfaceColors.surfaceHigh,
                     shape = RoundedCornerShape(
@@ -91,7 +91,7 @@ fun EmptyTasksSection(modifier: Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = stringResource(R.string.no_tasks_for_today),
+                text = title,
                 style = Theme.textStyle.title.small,
                 color = Theme.colors.text.hint
             )

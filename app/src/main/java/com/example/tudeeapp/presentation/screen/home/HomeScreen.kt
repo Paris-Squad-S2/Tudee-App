@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,21 +26,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.Header
 import com.example.tudeeapp.presentation.common.components.Slider
 import com.example.tudeeapp.presentation.common.components.TudeeButton
@@ -47,7 +45,6 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.screen.home.composable.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
@@ -56,23 +53,40 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val navController = LocalNavController.current
-    var toggled by remember { mutableStateOf(false) } //TODO
     val state by homeViewModel.homeState.collectAsStateWithLifecycle()
 
+    HomeScreenContent(
+        state = state,
+        onToggleTheme = homeViewModel::onToggledAction,
+        onFloatingActionButtonClick = { navController.navigate(Screens.TaskForm) },
+        onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Task(tasksTitle)) },
+        onTaskClick = { taskId -> navController.navigate(Screens.TaskDetails(taskId)) },
+    )
+
+}
+
+@Composable
+fun HomeScreenContent(
+    state: HomeUiState,
+    onToggleTheme: (Boolean) -> Unit,
+    onFloatingActionButtonClick: () -> Unit,
+    onTasksCountClick: (String) -> Unit,
+    onTaskClick: (Long) -> Unit,
+) {
     TudeeScaffold(
         topBar = {
             Header(
                 modifier = Modifier
                     .background(Theme.colors.primary)
                     .statusBarsPadding(),
-                isDarkMode = toggled, //TODO
-                onToggleTheme = { toggled = it }, //TODO
+                isDarkMode = state.isDarkMode,
+                onToggleTheme = onToggleTheme,
             )
         },
         floatingActionButton = {
             TudeeButton(
                 modifier = Modifier.size(64.dp),
-                onClick = { navController.navigate(Screens.TaskForm) },
+                onClick = onFloatingActionButtonClick,
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_note_add),
@@ -95,17 +109,18 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
 
                 when {
                     state.isLoading -> {
-                        HomeLoadingScreen()
+                        ShowLoading()
                     }
 
                     state.error != null -> {
-                        HomeErrorScreen(state.error.toString())
+                        ShowError(state.error.toString())
                     }
 
                     state.isSuccess -> {
                         HomeContent(
                             state = state,
-                            navController = navController
+                            onTasksCountClick = onTasksCountClick,
+                            onTaskClick = onTaskClick
                         )
                     }
                 }
@@ -114,10 +129,12 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeContent(
-    state: HomeViewModeUiState,
-    navController: NavController
+    state: HomeUiState,
+    onTasksCountClick: (String) -> Unit,
+    onTaskClick: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -142,52 +159,33 @@ private fun HomeContent(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    EmptyTasksSection(
+                    HomeEmptyTasksSection(
+                        title = stringResource(R.string.no_tasks_for_today),
                         Modifier
-                            .padding(top = 58.dp, bottom = 27.dp)
-                            .fillMaxWidth()
-                            .height(160.dp)
+                            .padding(top = 70.dp)
                     )
                 }
             }
+
         }
         if (state.inProgressTasks.isNotEmpty()) {
             item {
                 HomeTaskSection(
                     tasks = state.inProgressTasks,
                     tasksType = TaskStatus.IN_PROGRESS,
-                    onTasksCountClick = {
-                        navController.navigate(
-                            Screens.Task(
-                                TaskStatus.IN_PROGRESS.name
-                            )
-                        )
-                    },
-                    onTaskClick = { taskId ->
-                        navController.navigate(
-                            Screens.TaskDetails(taskId)
-                        )
-                    }
+                    onTasksCountClick = onTasksCountClick,
+                    onTaskClick = onTaskClick
                 )
             }
+
         }
         if (state.toDoTasks.isNotEmpty()) {
             item {
                 HomeTaskSection(
                     tasks = state.toDoTasks,
                     tasksType = TaskStatus.TO_DO,
-                    onTasksCountClick = {
-                        navController.navigate(
-                            Screens.Task(
-                                TaskStatus.TO_DO.name
-                            )
-                        )
-                    },
-                    onTaskClick = { taskId ->
-                        navController.navigate(
-                            Screens.TaskDetails(taskId)
-                        )
-                    }
+                    onTasksCountClick = onTasksCountClick,
+                    onTaskClick = onTaskClick
                 )
             }
         }
@@ -196,18 +194,8 @@ private fun HomeContent(
                 HomeTaskSection(
                     tasks = state.doneTasks,
                     tasksType = TaskStatus.DONE,
-                    onTasksCountClick = {
-                        navController.navigate(
-                            Screens.Task(
-                                TaskStatus.DONE.name
-                            )
-                        )
-                    },
-                    onTaskClick = { taskId ->
-                        navController.navigate(
-                            Screens.TaskDetails(taskId)
-                        )
-                    }
+                    onTasksCountClick = onTasksCountClick,
+                    onTaskClick = onTaskClick
                 )
             }
         }
@@ -218,13 +206,13 @@ private fun HomeContent(
 }
 
 @Composable
-fun HomeErrorScreen(error: String) {
+fun ShowError(error: String) {
+
     Box(
         modifier = Modifier
             .background(Theme.colors.surfaceColors.surface)
             .fillMaxSize()
-            .padding(end = 40.dp)
-        ,
+            .padding(end = 40.dp),
         contentAlignment = Alignment.Center
     ) {
 
@@ -277,7 +265,6 @@ fun HomeErrorScreen(error: String) {
                 .padding(top = 222.dp, end = 90.dp)
                 .width(203.dp)
                 .height(74.dp)
-                .offset(x = 0.dp)
                 .background(
                     color = Theme.colors.surfaceColors.surfaceHigh,
                     shape = RoundedCornerShape(
@@ -295,7 +282,8 @@ fun HomeErrorScreen(error: String) {
             Text(
                 text = error,
                 style = Theme.textStyle.title.small,
-                color = Theme.colors.text.hint
+                color = Theme.colors.text.hint,
+                maxLines = 2
             )
         }
 
@@ -303,7 +291,7 @@ fun HomeErrorScreen(error: String) {
 }
 
 @Composable
-fun HomeLoadingScreen() {
+fun ShowLoading() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -439,8 +427,3 @@ private fun OverViewCardsRow(
 }
 
 
-@Composable
-@Preview
-fun HomeScreenPreview() {
-    HomeScreen()
-}
