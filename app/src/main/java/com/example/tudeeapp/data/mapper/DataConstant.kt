@@ -102,4 +102,25 @@ object DataConstant {
         }
     }
 
+    fun Int.toStringResDrawables(): String {
+        return when (this) {
+            R.drawable.ic_education -> "R.drawable.education"
+            R.drawable.ic_cart -> "R.drawable.shopping"
+            R.drawable.ic_medical -> "R.drawable.medical"
+            R.drawable.ic_gym -> "R.drawable.gym"
+            R.drawable.ic_entertainment -> "R.drawable.entertainment"
+            R.drawable.ic_cooking -> "R.drawable.cooking"
+            R.drawable.ic_family -> "R.drawable.family_friend"
+            R.drawable.ic_traveling -> "R.drawable.traveling"
+            R.drawable.ic_agriculture -> "R.drawable.agriculture"
+            R.drawable.ic_coding -> "R.drawable.coding"
+            R.drawable.ic_adoration -> "R.drawable.adoration"
+            R.drawable.ic_fixing_bugs -> "R.drawable.fixing_bugs"
+            R.drawable.ic_cleaning -> "R.drawable.cleaning"
+            R.drawable.ic_work -> "R.drawable.work"
+            R.drawable.ic_budgeting -> "R.drawable.budgeting"
+            else -> throw MappingDrawableException("Unknown resource ID: $this")
+        }
+    }
+
 }
