@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
@@ -43,18 +44,21 @@ fun DayItem(
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(horizontal = 16.dp , vertical = 12.dp)
+            modifier = Modifier.padding(vertical = 12.dp)
         ) {
             Text(
                 text = dayNumber,
                 style = Theme.textStyle.title.medium,
-                color = dayNumberTextColor
+                color = dayNumberTextColor,
+                maxLines = 1
             )
             Text(
                 text = dayName,
                 modifier = Modifier.padding(top = 2.dp),
                 style = Theme.textStyle.body.small,
-                color = dayNameTextColor
+                color = dayNameTextColor,
+                maxLines = 1,
+                overflow = TextOverflow.Clip
             )
         }
     }
