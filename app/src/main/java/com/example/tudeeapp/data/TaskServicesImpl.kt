@@ -16,6 +16,7 @@ import com.example.tudeeapp.domain.exception.NoTaskAddedException
 import com.example.tudeeapp.domain.exception.NoTaskDeletedException
 import com.example.tudeeapp.domain.exception.TaskNotFoundException
 import com.example.tudeeapp.domain.exception.TasksNotFoundException
+import com.example.tudeeapp.domain.exception.NoTaskEditedException
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +54,7 @@ class TaskServicesImpl(
         try {
             taskDao.editTask(task.toTaskEntity())
         } catch (_: Exception) {
-            throw NoTaskAddedException()
+            throw NoTaskEditedException()
         }
     }
 
@@ -95,5 +96,4 @@ class TaskServicesImpl(
             throw CategoriesNotFoundException()
         }
     }
-
 }
