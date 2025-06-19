@@ -34,7 +34,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.home.state.mapTaskCountToSliderState
 
 @Composable
-fun Slider(
+fun TudeeHomeMessage(
     modifier: Modifier = Modifier,
     taskCount: Map<TaskStatus, Int>,
 ) {
@@ -103,28 +103,28 @@ fun Slider(
 private fun SliderPreview() {
     BasePreview {
         Column {
-            Slider(
+            TudeeHomeMessage(
                 taskCount = mapOf<TaskStatus, Int>(
                     TaskStatus.TO_DO to 0,
                     TaskStatus.IN_PROGRESS to 0,
                     TaskStatus.DONE to 0
                 )
             )
-            Slider(
+            TudeeHomeMessage(
                 taskCount = mapOf<TaskStatus, Int>(
                     TaskStatus.TO_DO to 0,
                     TaskStatus.IN_PROGRESS to 0,
                     TaskStatus.DONE to 5
                 )
             )
-            Slider(
+            TudeeHomeMessage(
                 taskCount = mapOf<TaskStatus, Int>(
                     TaskStatus.TO_DO to 5,
                     TaskStatus.IN_PROGRESS to 0,
                     TaskStatus.DONE to 0
                 )
             )
-            Slider(
+            TudeeHomeMessage(
                 taskCount = mapOf<TaskStatus, Int>(
                     TaskStatus.TO_DO to 2,
                     TaskStatus.IN_PROGRESS to 3,

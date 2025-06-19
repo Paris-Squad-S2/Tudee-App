@@ -1,6 +1,5 @@
 package com.example.tudeeapp.presentation.screen.home
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -39,7 +38,7 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.Header
-import com.example.tudeeapp.presentation.common.components.Slider
+import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -352,7 +351,7 @@ private fun OverViewSection(
                 color = Theme.colors.text.body
             )
         }
-        Slider(
+        TudeeHomeMessage(
             modifier = Modifier.padding(
                 bottom = 8.dp,
                 start = 6.dp,
