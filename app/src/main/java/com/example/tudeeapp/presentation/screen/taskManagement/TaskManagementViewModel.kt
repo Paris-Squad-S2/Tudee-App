@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlin.random.Random
 
 class TaskManagementViewModel(
     private val taskServices: TaskServices,
@@ -22,32 +23,28 @@ class TaskManagementViewModel(
 
     val taskId = savedStateHandle.toRoute<Screens.TaskManagement>().taskId
 
-    private val _state = MutableStateFlow(
-        TaskManagementUiState(
-            selectedPriority = TaskPriorityUiState.NONE, categories = emptyList(),isEditMode = taskId != null)
-    )
+    private val _state = MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
 
     val state = _state.asStateFlow()
 
     init {
         getAllCategories()
-       taskId?.let {
-           getTaskById(it)
-       }
     }
 
     private fun getAllCategories() {
         viewModelScope.launch {
-            taskServices.getAllCategories().collect { categories ->
-                _state.update {
-                    it.copy(categories = categories.map { category -> category.toCategoryState() })
+            try {
+                taskServices.getAllCategories().collect { categories ->
+                    _state.update {
+                        it.copy(categories = categories.map { category -> category.toCategoryState() }, isLoading = false)
+                    }
                 }
+            } catch (_: Exception) {
+                handleException()
             }
         }
-    }
+        taskId?.let { getTaskById(it) }
 
-    private fun getTaskById(id:Int){
-        //todo
     }
 
     fun onTitleChange(title: String) {
@@ -72,11 +69,11 @@ class TaskManagementViewModel(
         }
     }
 
-    fun onCategorySelected(categoryId: Int) {
+    fun onCategorySelected(categoryId: Long) {
         _state.update { currentState ->
             val isCurrentlySelected = currentState.selectedCategoryId == categoryId
-            val updatedCategories = currentState.categories.mapIndexed { index, category ->
-                category.copy(isSelected = !isCurrentlySelected && index == categoryId)
+            val updatedCategories = currentState.categories.map { category ->
+                category.copy(isSelected = !isCurrentlySelected && category.id == categoryId)
             }
             currentState.copy(
                 categories = updatedCategories,
@@ -85,27 +82,73 @@ class TaskManagementViewModel(
         }
     }
 
+    private fun getTaskById(id: Long) {
+        viewModelScope.launch {
+            try {
+                taskServices.getTaskById(id).collect { task ->
+                    _state.update {
+                        it.copy(
+                            title = task.title,
+                            description = task.description,
+                            selectedDate = task.createdDate.toString(),
+                            selectedPriority = TaskPriorityUiState.fromDomain(task.priority),
+                            selectedCategoryId = task.categoryId,
+                            taskStatus = task.status,
+                            isLoading = false,
+                            categories = it.categories.map { category ->
+                                category.copy(isSelected = category.id == task.categoryId)
+                            })
+                    }
+                }
+            } catch (_: Exception) {
+                handleException()
+            }
+        }
+    }
+
     fun onActionButtonClicked() {
         viewModelScope.launch {
             try {
+                _state.update { it.copy(isLoading = true) }
+
                 val currentState = _state.value
 
-                val createDate: LocalDate = LocalDate.parse(currentState.selectedDate)
-
-                taskServices.addTask(
-                    Task(
-                        title = currentState.title,
-                        description = currentState.description,
-                        priority = currentState.selectedPriority.toDomain() ?: TaskPriority.LOW,
-                        status = TaskStatus.TO_DO,
-                        createdDate = createDate,
-                        categoryId = currentState.selectedCategoryId?.toLong()
-                            ?: throw IllegalArgumentException("Selected category ID is null")
-                    )
+                val task = Task(
+                    id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
+                    title = currentState.title,
+                    description = currentState.description,
+                    priority = currentState.selectedPriority.toDomain() ?: TaskPriority.LOW,
+                    status = if (currentState.isEditMode) currentState.taskStatus else TaskStatus.TO_DO,
+                    createdDate = LocalDate.parse(currentState.selectedDate),
+                    categoryId = currentState.selectedCategoryId ?: 0L
                 )
-            } catch (e: Exception) {
-                _state.update { it.copy(error = e.message ?: "An error occurred") }
+
+                if (currentState.isEditMode) editTask(task) else addTask(task)
+
+                _state.update { it.copy(isLoading = false) }
+            } catch (_: Exception) {
+                handleException()
             }
         }
+    }
+
+    private suspend fun addTask(task: Task) {
+        try {
+            taskServices.addTask(task)
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    private suspend fun editTask(task: Task) {
+        try {
+            taskServices.editTask(task)
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    private fun handleException() {
+        _state.update { it.copy(isLoading = false, error = "There was an error processing your request. Please try again later.") }
     }
 }

@@ -2,19 +2,21 @@ package com.example.tudeeapp.presentation.screen.taskManagement
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.screen.taskManagement.components.AddEditStickButtons
+import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
 import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -25,7 +27,7 @@ fun TaskManagementBottomSheet(
     viewModel: TaskManagementViewModel = koinViewModel(),
 ) {
     val navController = LocalNavController.current
-
+    val snackbarHostState = LocalSnackBarState.current
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     TaskManagementBottomSheetContent(
@@ -41,6 +43,12 @@ fun TaskManagementBottomSheet(
             onSelectDate = { viewModel.onDateSelected(it) }
         )
     }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            snackbarHostState.show(message = it, isSuccess = false)
+        }
+    }
 }
 
 @Composable
@@ -52,15 +60,18 @@ private fun TaskManagementBottomSheetContent(
     TudeeBottomSheet(
         isVisible = true,
         title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
-        onDismiss =onCancelClicked,
+        onDismiss = onCancelClicked,
         isScrollable = true,
         skipPartiallyExpanded = true,
         stickyBottomContent = {
-            AddEditStickButtons(
+            TaskManagementButtons(
                 isEditMode = uiState.isEditMode,
                 isActionButtonDisabled = uiState.isInitialState,
-                onClickActionButton = viewModel::onActionButtonClicked,
+                onClickActionButton = {
+                    viewModel::onActionButtonClicked
+                },
                 onClickCancel = onCancelClicked,
+                isLoading = uiState.isLoading,
             )
         },
     ) {
