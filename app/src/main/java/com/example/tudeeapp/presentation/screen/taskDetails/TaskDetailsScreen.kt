@@ -70,7 +70,7 @@ fun TaskDetailsScreen(
                         TaskDetailsContent(
                             taskUiState = taskUiState,
                             categoryUiState = categoryUiState,
-                            onStatusChange = { newStatus -> viewModel.onUpdateTaskStatus(newStatus) }
+                            onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) }
                         )
                     }
                 }

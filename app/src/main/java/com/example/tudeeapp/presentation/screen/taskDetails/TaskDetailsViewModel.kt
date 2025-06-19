@@ -59,20 +59,20 @@ class TaskDetailsViewModel(
         }
     }
 
-    fun onUpdateTaskStatus(newStatus: TaskStatus) {
+    fun onEditTaskStatus(newStatus: TaskStatus) {
         val currentTaskUiState = _uiState.value.taskUiState
         if (currentTaskUiState != null) {
             viewModelScope.launch {
                 try {
 
                     val task = taskServices.getTaskById(currentTaskUiState.id).first()
-                    val updateTaskState = task.copy(status = newStatus)
+                    val editTaskState = task.copy(status = newStatus)
 
-                    taskServices.editTask(updateTaskState)
+                    taskServices.editTask(editTaskState)
 
-                    val updatedTask = currentTaskUiState.copy(status = newStatus)
+                    val editTask = currentTaskUiState.copy(status = newStatus)
 
-                    _uiState.value = _uiState.value.copy(taskUiState = updatedTask)
+                    _uiState.value = _uiState.value.copy(taskUiState = editTask)
 
                 } catch (e: TaskException) {
                     _uiState.value =
