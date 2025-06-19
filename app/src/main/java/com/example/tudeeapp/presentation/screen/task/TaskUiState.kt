@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.screen.task
 
+import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
@@ -48,15 +49,15 @@ data class TaskItemUiState(
 )
 
 data class StatusUi(
-    val name:String = "",
+    val name:TaskStatusUi = TaskStatusUi.TO_DO,
     val count:Int = 0,
     val isSelected:Boolean = false
 )
 
-enum class TaskStatusUi(val status: String) {
-    IN_PROGRESS("In progress"),
-    TO_DO("TO DO"),
-    DONE("Done")
+enum class TaskStatusUi(val stringResId: Int) {
+    IN_PROGRESS(R.string.status_in_progress),
+    TO_DO(R.string.status_to_do),
+    DONE(R.string.status_done)
 }
 
 fun List<Task>.toTasksUi(): List<TaskItemUiState> {
@@ -82,8 +83,8 @@ fun TaskPriority.toUiPriority(): TaskPriorityUi = when (this) {
 }
 
 fun TaskStatus.toUiStatus(): TaskStatusUi = when (this) {
-    TaskStatus.TO_DO -> TaskStatusUi.TO_DO
     TaskStatus.IN_PROGRESS -> TaskStatusUi.IN_PROGRESS
+    TaskStatus.TO_DO -> TaskStatusUi.TO_DO
     TaskStatus.DONE -> TaskStatusUi.DONE
 }
 
