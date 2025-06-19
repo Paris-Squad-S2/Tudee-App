@@ -52,10 +52,10 @@ fun PriorityButton(
                 tint = contentColor
             )
             Spacer(modifier = Modifier.width(2.dp))
-                Text(
-                    text = text,
-                    style = defaultTextStyle.label.small
-                )
+            Text(
+                text = text,
+                style = defaultTextStyle.label.small
+            )
         }
     }
 }
