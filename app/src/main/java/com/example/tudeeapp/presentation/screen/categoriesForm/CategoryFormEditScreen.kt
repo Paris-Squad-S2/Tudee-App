@@ -38,13 +38,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
+import com.example.tudeeapp.presentation.common.extentions.dashedBorder
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import org.koin.compose.viewmodel.koinViewModel
@@ -217,31 +218,6 @@ fun CategoryFormEditContent(
     )
 
 }
-
-fun Modifier.dashedBorder(
-    strokeWidth: Dp,
-    color: Color,
-    cornerRadius: Dp = 0.dp,
-    dashLength: Dp = 10.dp,
-    gapLength: Dp = 10.dp
-): Modifier = this.then(
-    Modifier.drawWithCache {
-        val stroke = Stroke(
-            width = strokeWidth.toPx(),
-            pathEffect = PathEffect.dashPathEffect(
-                floatArrayOf(dashLength.toPx(), gapLength.toPx()), 0f
-            )
-        )
-        onDrawBehind {
-            drawRoundRect(
-                color = color,
-                size = size,
-                style = stroke,
-                cornerRadius = CornerRadius(cornerRadius.toPx())
-            )
-        }
-    }
-)
 
 @Composable
 @Preview
