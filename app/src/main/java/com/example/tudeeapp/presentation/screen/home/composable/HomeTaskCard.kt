@@ -6,6 +6,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getPriorityColor
+import com.example.tudeeapp.presentation.utills.toPainter
 
 @Composable
 fun HomeTaskCard(
@@ -13,8 +14,9 @@ fun HomeTaskCard(
     task: TaskUiState,
     onClickItem: () -> Unit
 ) {
+
     TaskCard(
-        icon = painterResource(task.categoryIcon),
+        icon =toPainter(task.isCategoryPredefined,task.categoryIcon) ,
         title = task.title,
         date = "",
         subtitle = task.description,

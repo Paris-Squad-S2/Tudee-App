@@ -8,7 +8,6 @@ import com.example.tudeeapp.domain.exception.TudeeException
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
 import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getToday
@@ -65,10 +64,18 @@ class HomeViewModel(
                                 filteredTasks.map {
                                     taskServices.getCategoryById(it.categoryId).first().imageUrl
                                 }
-                                    .map { it.toResDrawables() }
+
+                            val isCategoryPredefined = filteredTasks.map {
+                                taskServices.getCategoryById(it.categoryId).first().isPredefined
+                            }
 
                             val tasksUi = filteredTasks.map { it.toTaskUi() }
-                                .mapIndexed { index, taskUi -> taskUi.copy(categoryIcon = tasksIcons[index]) }
+                                .mapIndexed { index, taskUi ->
+                                    taskUi.copy(
+                                        categoryIcon = tasksIcons[index],
+                                        isCategoryPredefined = isCategoryPredefined[index]
+                                    )
+                                }
                             _homeState.update {
                                 it.copy(
                                     inProgressTasks = tasksUi.filter { it.status == TaskStatus.IN_PROGRESS },
@@ -140,6 +147,8 @@ class HomeViewModel(
                 TaskPriority.HIGH -> R.drawable.ic_flag
             },
             status = this.status,
+            categoryIcon = "",
+            isCategoryPredefined = false
         )
     }
 

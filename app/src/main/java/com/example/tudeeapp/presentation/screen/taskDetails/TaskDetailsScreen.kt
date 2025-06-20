@@ -57,8 +57,6 @@ fun TaskDetailsScreen(
     TudeeBottomSheet(
         isVisible = true,
         title = stringResource(R.string.task_details),
-        isScrollable = false,
-        skipPartiallyExpanded = false,
         onDismiss = { navController.popBackStack() },
         content = {
 
@@ -228,14 +226,14 @@ private fun StatusActionButtons(
 private fun BoxTaskStatus(taskUiState: TaskUiState) {
 
     val textStatusColor = when (taskUiState.status) {
-        TaskStatus.DONE -> Theme.colors.status.yellowAccent
-        TaskStatus.TO_DO -> Theme.colors.status.greenAccent
+        TaskStatus.TO_DO -> Theme.colors.status.yellowAccent
+        TaskStatus.DONE -> Theme.colors.status.greenAccent
         TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleAccent
     }
 
     val backgroundStatusColor = when (taskUiState.status) {
-        TaskStatus.DONE -> Theme.colors.status.yellowVariant
-        TaskStatus.TO_DO -> Theme.colors.status.greenVariant
+        TaskStatus.TO_DO -> Theme.colors.status.yellowVariant
+        TaskStatus.DONE -> Theme.colors.status.greenVariant
         TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleVariant
     }
 

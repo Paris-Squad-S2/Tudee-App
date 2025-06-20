@@ -361,7 +361,7 @@ private fun OverViewSection(
                 start = 6.dp,
                 end = 6.dp
             ),
-            taskCount = mapOf<TaskStatus, Int>(
+            taskCount = mapOf(
                 TaskStatus.TO_DO to toDoTasksCount,
                 TaskStatus.IN_PROGRESS to inProgressTasksCount,
                 TaskStatus.DONE to doneTasksCount
