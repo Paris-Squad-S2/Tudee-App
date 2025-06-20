@@ -152,8 +152,8 @@ private fun HorizontalLine1Dp() {
 private fun CategoryIcon(painter: Painter) {
     Box(
         modifier = Modifier
-            .size(56.dp)
             .padding(top = 12.dp)
+            .size(56.dp)
             .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
     ) {
         Icon(
@@ -162,6 +162,7 @@ private fun CategoryIcon(painter: Painter) {
             tint = Color.Unspecified,
             modifier = Modifier
                 .size(32.dp)
+                .clip(CircleShape)
                 .align(Alignment.Center)
         )
     }
