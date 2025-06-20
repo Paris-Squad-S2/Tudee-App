@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -182,7 +183,9 @@ private fun TaskTexts(taskUiState: TaskUiState) {
         modifier = Modifier.padding(top = 8.dp),
         text = taskUiState.description,
         style = Theme.textStyle.body.medium,
-        color = Theme.colors.text.body
+        color = Theme.colors.text.body,
+        maxLines = 3,
+        overflow = TextOverflow.Ellipsis
     )
 }
 
