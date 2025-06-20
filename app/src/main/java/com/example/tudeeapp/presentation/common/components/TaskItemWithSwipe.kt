@@ -22,10 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
@@ -82,6 +84,9 @@ private fun SwipeToDeleteTaskItem(
     val swipeableState = rememberSwipeableState(initialValue = SwipeState.DEFAULT)
     val coroutineScope = rememberCoroutineScope()
     val anchors = mapOf(0f to SwipeState.DEFAULT, -maxSwipePx to SwipeState.SWIPED)
+    val layoutDirection = LocalLayoutDirection.current
+    val swipeDirection = layoutDirection != LayoutDirection.Ltr
+
 
     Box(
         modifier = modifier
@@ -91,7 +96,7 @@ private fun SwipeToDeleteTaskItem(
                 anchors = anchors,
                 thresholds = { _, _ -> FractionalThreshold(0.5f) },
                 orientation = Orientation.Horizontal,
-                reverseDirection = false,
+                reverseDirection = swipeDirection,
                 resistance = null
             )
     ) {
