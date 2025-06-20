@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
@@ -39,7 +38,6 @@ import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
@@ -231,7 +229,7 @@ private fun BoxTaskStatus(taskUiState: TaskUiState) {
     val textStatusColor = when (taskUiState.status) {
         TaskStatus.DONE -> Theme.colors.status.yellowAccent
         TaskStatus.TO_DO -> Theme.colors.status.greenAccent
-        TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleVariant
+        TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleAccent
     }
 
     val backgroundStatusColor = when (taskUiState.status) {
