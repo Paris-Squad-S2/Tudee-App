@@ -90,5 +90,9 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     //kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.coil.compose)
+
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
 }

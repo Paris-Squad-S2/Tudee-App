@@ -28,6 +28,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.categoriesForm.AddCategoryScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormEditScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
@@ -97,6 +98,9 @@ fun TudeeNavGraph() {
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
                 }
+                dialog<Screens.CategoryFormEditScreen> {
+                    CategoryFormEditScreen()
+                }
             }
 
             if (snackBarState.isVisible) {
@@ -122,4 +126,3 @@ fun TudeeNavGraph() {
         }
     }
 }
-

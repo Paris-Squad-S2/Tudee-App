@@ -16,4 +16,3 @@ class NoCategoryDeletedException() : CategoryException("Something wrong happened
 class NoCategoryEditedException() : CategoryException("Something wrong happened while editing category")
 class CategoryNotFoundException() : CategoryException("The category that you are looking for not found")
 class CategoriesNotFoundException() : CategoryException("No categories found in your local data of tudee")
-
