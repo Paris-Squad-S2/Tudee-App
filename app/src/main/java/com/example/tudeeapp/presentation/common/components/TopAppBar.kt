@@ -44,14 +44,26 @@ fun TopAppBar(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-            contentDescription = "Back",
+        Box(
             modifier = Modifier
-                .size(40.dp)
                 .clip(CircleShape)
-                .clickable { onClickBack() }
-        )
+                .size(40.dp)
+                .border(
+                    width = 1.dp,
+                    color = Theme.colors.stroke,
+                    shape = CircleShape
+                ).clickable { onClickBack() }
+
+        ){
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_back),
+                contentDescription = "Back",
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.Center)
+            )
+        }
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -94,15 +106,27 @@ private fun OptionsButton(
     Box(
         modifier = modifier
     ) {
-
-        Icon(
-            imageVector = iconButton,
-            contentDescription = "Options",
+        Box(
             modifier = Modifier
-                .size(40.dp)
                 .clip(CircleShape)
-                .clickable { onClick() }
-        )
+                .size(40.dp)
+                .border(
+                    width = 1.dp,
+                    color = Theme.colors.stroke,
+                    shape = CircleShape
+                ).clickable { onClick() }
+
+        ){
+            Icon(
+                imageVector = iconButton,
+                contentDescription = "Options",
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.Center)
+            )
+        }
+
 
         if (showIndicator) {
             Box(
