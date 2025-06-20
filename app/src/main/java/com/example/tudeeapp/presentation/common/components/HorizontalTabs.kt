@@ -52,7 +52,7 @@ fun HorizontalTabs(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Theme.colors.stroke)
-                .padding(bottom = 0.5.dp)
+                .padding(bottom = 1.dp)
                 .background(backgroundColor),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
