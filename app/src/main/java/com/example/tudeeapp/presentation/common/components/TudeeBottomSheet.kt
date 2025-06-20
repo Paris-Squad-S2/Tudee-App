@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -43,8 +44,10 @@ fun TudeeBottomSheet(
     stickyBottomContent: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val scrollModifier = if (isScrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
+    val scrollModifier =
+        if (isScrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier
+    val bottomSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
 
     LaunchedEffect(isVisible) {
         when {
@@ -65,19 +68,22 @@ fun TudeeBottomSheet(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     ) {
         Column {
-            Column(modifier = scrollModifier.weight(weight = 1f, fill = false)) {
-                Row(){
+            Column(
+                modifier = scrollModifier
+                    .weight(weight = 1f, fill = false),
+            ) {
+                Row() {
                     Text(
-                        text = title, style = Theme.textStyle.title.large,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis,
+                        text = title,
+                        style = Theme.textStyle.title.large,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
-                            .padding(top = 16.dp)
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     headerEnd()
                     Spacer(modifier = Modifier.width(16.dp))
-
                 }
                 content()
             }
