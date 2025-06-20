@@ -51,4 +51,5 @@
     <string name="are_you_sure_to_continue">هل أنت متأكد من الاستمرار؟</string>
     <string name="deleted_task_successfully">تم حذف المهمة بنجاح</string>
     <string name="delete_task">حذف مهمة</string>
+    <string name="no_task_for">لا توجد مهام يومية! %1$s</string>
 </resources>

@@ -152,7 +152,7 @@ fun CategoryDetailsContent(
                 modifier = Modifier.fillMaxSize()
             ){
                 HomeEmptyTasksSection(
-                    title = stringResource(R.string.no_tasks_for_today),
+                    title = stringResource(R.string.no_task_for, categoryTitle),
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

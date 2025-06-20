@@ -50,5 +50,6 @@
     <string name="are_you_sure_to_continue">Are you sure to continue?</string>
     <string name="deleted_task_successfully">Deleted task successfully</string>
     <string name="delete_task">Delete task</string>
+    <string name="no_task_for">No task for %1$s</string>
 
 </resources>
