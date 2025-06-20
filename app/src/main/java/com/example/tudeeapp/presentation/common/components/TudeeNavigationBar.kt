@@ -58,7 +58,7 @@ fun TudeeNavigationBar(
                                 shape = RoundedCornerShape(16.dp)
                             )
                             .background(
-                                color = if (isSelected) Color(0xFFE5F6FF) else Color.Transparent,
+                                color = if (isSelected) Theme.colors.primaryVariant else Theme.colors.surfaceColors.surfaceHigh,
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -69,7 +69,7 @@ fun TudeeNavigationBar(
                                 else navItem.unselectedIcon
                             ),
                             null,
-                            tint = Color.Unspecified
+                            tint = if (isSelected) Theme.colors.primary else Theme.colors.text.hint,
                         )
                     }
                 },
