@@ -24,6 +24,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 @Composable
 fun HomeEmptyTasksSection(
     title: String,
+    description: String = stringResource(R.string.tap_the_button_to_add_your_first_one),
     modifier: Modifier
 ) {
     Box(
@@ -96,7 +97,7 @@ fun HomeEmptyTasksSection(
                 color = Theme.colors.text.hint
             )
             Text(
-                text = stringResource(R.string.tap_the_button_to_add_your_first_one),
+                text = description,
                 style = Theme.textStyle.body.small,
                 color = Theme.colors.text.hint
             )

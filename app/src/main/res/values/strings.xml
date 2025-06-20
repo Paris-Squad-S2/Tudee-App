@@ -54,5 +54,6 @@
     <string name="task_title">Task Title</string>
     <string name="description">Description</string>
     <string name="task_saved_successfully">Task saved successfully</string>
+    <string name="add_first_task">Add task first</string>
 
 </resources>

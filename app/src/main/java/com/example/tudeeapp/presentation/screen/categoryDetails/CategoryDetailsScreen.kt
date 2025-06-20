@@ -12,32 +12,42 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskCard
+import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
 import com.example.tudeeapp.presentation.common.components.TopAppBar
+import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
@@ -45,6 +55,7 @@ import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSe
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
+import androidx.lifecycle.compose.currentStateAsState
 
 @Composable
 fun CategoryDetailsScreen(
@@ -72,7 +83,8 @@ fun CategoryDetailsScreen(
                 categoryTitle = uiState.categoryUiState!!.title,
                 onOptionClick = { navController.navigate(Screens.CategoryFormEditScreen(uiState.categoryUiState!!.id)) },
                 categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
-                topBarOption = editableCategory(uiState.categoryUiState!!)
+                topBarOption = editableCategory(uiState.categoryUiState!!),
+                onClickDeleteIcon = viewModel::deleteTask
             )
         }
     }
@@ -95,6 +107,7 @@ fun CategoryDetailsContent(
     selectedState: TaskStatus,
     categoryImage: Painter,
     topBarOption: Boolean,
+    onClickDeleteIcon: (Long) -> Unit,
     modifier: Modifier = Modifier,
     onStatusChange: (TaskStatus) -> Unit,
     onBack: () -> Unit,
@@ -148,20 +161,24 @@ fun CategoryDetailsContent(
             ){
                 HomeEmptyTasksSection(
                     title = stringResource(R.string.no_task_for, categoryTitle),
+                    description = stringResource(R.string.add_first_task),
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
 
 
         }else {
+            var isSheetOpen by remember { mutableStateOf(false) }
+            val showSnackBar = LocalSnackBarState.current
             LazyColumn(
                 modifier = Modifier.padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(filteredTasks) { task ->
                     val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
-                    TaskCard(
+                    TaskItemWithSwipe(
                         icon = categoryImage,
+                        iconColor = Color.Unspecified,
                         title = task.title,
                         date = task.createdDate,
                         subtitle = task.description,
@@ -169,7 +186,25 @@ fun CategoryDetailsContent(
                         priorityIcon = painterResource(id = style.iconRes),
                         priorityColor = style.backgroundColor,
                         isDated = true,
-                        onClickItem = { navController.navigate(Screens.TaskDetails(task.id)) }
+                        onClickItem = { navController.navigate(Screens.TaskDetails(task.id)) },
+                        onDelete = { isSheetOpen = true }
+                    )
+                    TudeeBottomSheet(
+                        isVisible = isSheetOpen,
+                        title = LocalContext.current.getString(R.string.delete_task),
+                        isScrollable = true,
+                        skipPartiallyExpanded = true,
+                        onDismiss = { isSheetOpen = false },
+                        content = {
+                            val context = LocalContext.current
+                            ConfirmationDialogBox(
+                                onConfirm = {
+                                    onClickDeleteIcon(task.id)
+                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                    isSheetOpen = false
+                                },
+                                onDismiss = { isSheetOpen = false })
+                        },
                     )
                 }
             }
@@ -244,6 +279,7 @@ fun CategoryDetailsPreview() {
         categoryTitle = "Coding",
         categoryImage = painterResource(R.drawable.ic_education),
         navController = fakeNavController,
-        topBarOption = true
+        topBarOption = true,
+        onClickDeleteIcon = {}
     )
 }

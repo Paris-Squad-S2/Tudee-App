@@ -229,7 +229,7 @@ private fun BoxTaskStatus(taskUiState: TaskUiState) {
     val textStatusColor = when (taskUiState.status) {
         TaskStatus.DONE -> Theme.colors.status.yellowAccent
         TaskStatus.TO_DO -> Theme.colors.status.greenAccent
-        TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleVariant
+        TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleAccent
     }
 
     val backgroundStatusColor = when (taskUiState.status) {
