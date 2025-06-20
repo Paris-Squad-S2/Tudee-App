@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,7 +26,6 @@ import com.example.tudeeapp.presentation.common.components.SnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.categoriesForm.AddCategoryScreen
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormEditScreen
@@ -71,25 +68,22 @@ fun TudeeNavGraph() {
             Screens.Category::class.qualifiedName
         ).indexOf(currentRoute)
 
-        TudeeTheme(
-            isDarkTheme = themeMode.value.value
+        TudeeScaffold(
+            bottomBar = {
+                if (selectedRouteIndex != -1)
+                    TudeeNavigationBar(
+                        onItemClick = { navItem ->
+                            navController.navigate(navItem.screen)
+                        },
+                        selected = selectedRouteIndex
+                    )
+            },
+            contentBackground = Theme.colors.surfaceColors.surface
         ) {
-            TudeeScaffold(
-                bottomBar = {
-                    if (selectedRouteIndex != -1)
-                        TudeeNavigationBar(
-                            onItemClick = { navItem ->
-                                navController.navigate(navItem.screen)
-                            },
-                            selected = selectedRouteIndex
-                        )
-                },
-                contentBackground = Theme.colors.surfaceColors.surface,
+            NavHost(
+                navController = navController,
+                startDestination = Screens.Splash,
             ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = Screens.Splash,
-                ) {
 
                 composable<Screens.Splash> { SplashScreen() }
                 composable<Screens.OnBoarding> {
@@ -106,43 +100,34 @@ fun TudeeNavGraph() {
                     AddCategoryScreen()
                 }
 
-                    composable<Screens.CategoryDetails> {
-                        CategoryDetailsScreen()
-                    }
-                    dialog<Screens.CategoryDetails> {
-                        CategoryDetailsScreen()
-                    }
-                    dialog<Screens.CategoryFormEditScreen> {
-                        CategoryFormEditScreen()
-                    }
+                dialog<Screens.CategoryDetails> {
+                    CategoryDetailsScreen()
                 }
+                dialog<Screens.CategoryFormEditScreen> {
+                    CategoryFormEditScreen()
+                }
+            }
 
-                if (snackBarState.isVisible) {
-                    AnimatedVisibility(
-                        visible = snackBarState.isVisible,
-                        enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
-                        exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
-                    ) {
-                        SnackBar(
-                            Modifier
-                                .statusBarsPadding()
-                                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                            text = snackBarState.message,
-                            isSuccess = snackBarState.isSuccess,
-                            onClick = { snackBarState.hide() }
-                        )
-                    }
-                    LaunchedEffect(Unit) {
-                        delay(snackBarState.durationMillis.toLong())
-                        snackBarState.hide()
-                    }
+            if (snackBarState.isVisible) {
+                AnimatedVisibility(
+                    visible = snackBarState.isVisible,
+                    enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
+                    exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+                ) {
+                    SnackBar(
+                        Modifier
+                            .statusBarsPadding()
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        text = snackBarState.message,
+                        isSuccess = snackBarState.isSuccess,
+                        onClick = { snackBarState.hide() }
+                    )
+                }
+                LaunchedEffect(Unit) {
+                    delay(snackBarState.durationMillis.toLong())
+                    snackBarState.hide()
                 }
             }
         }
     }
-}
-
-enum class TudeeThemeMode(val value: Boolean) {
-    LIGHT(false),
-    DARK(true)
 }
