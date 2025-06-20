@@ -126,7 +126,8 @@ private fun CategoryListItem(
         count = category.count,
         iconColor = Color.Unspecified,
         isSelected = false,
-        onClick = {onClickItem(category.id)}
+        onClick = {onClickItem(category.id)},
+        isPredefined = category.isPredefined
     )
 }
 

@@ -55,7 +55,8 @@ fun CategoryGrid(
                     label = category.title,
                     iconColor = Color.Unspecified,
                     isSelected = category.isSelected,
-                    onClick = { onCategoryClick(category.id) }
+                    onClick = { onCategoryClick(category.id) },
+                    isPredefined = category.isPredefined
                 )
             }
         }
