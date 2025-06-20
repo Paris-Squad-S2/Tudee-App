@@ -77,7 +77,10 @@ fun TaskDetailsScreen(
                         TaskDetailsContent(
                             taskUiState = taskUiState,
                             categoryUiState = categoryUiState,
-                            onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) },
+                            onStatusChange = { newStatus ->
+                                    viewModel.onEditTaskStatus(newStatus)
+                                    navController.popBackStack()
+                            },
                             onEditTaskClick = {
                                 navController.navigate(
                                     Screens.TaskManagement(
@@ -151,7 +154,8 @@ private fun CategoryIcon(painter: Painter) {
     Box(
         modifier = Modifier
             .padding(top = 12.dp)
-            .size(56.dp).clip(CircleShape)
+            .size(56.dp)
+            .clip(CircleShape)
             .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
     ) {
         Icon(
@@ -202,7 +206,9 @@ private fun StatusActionButtons(
         )
         Spacer(Modifier.width(4.dp))
         TudeeButton(
-            modifier = Modifier.weight(1f).height(56.dp),
+            modifier = Modifier
+                .weight(1f)
+                .height(56.dp),
             onClick = {
                 val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
                     TaskStatus.DONE
