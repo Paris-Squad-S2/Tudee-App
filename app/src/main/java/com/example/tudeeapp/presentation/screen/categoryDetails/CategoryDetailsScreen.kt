@@ -148,6 +148,7 @@ fun CategoryDetailsContent(
             ){
                 HomeEmptyTasksSection(
                     title = stringResource(R.string.no_task_for, categoryTitle),
+                    description = stringResource(R.string.add_first_task),
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

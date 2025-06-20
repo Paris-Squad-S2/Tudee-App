@@ -165,7 +165,7 @@ private fun HomeContent(
                     ){
                         HomeEmptyTasksSection(
                             title = stringResource(R.string.no_tasks_for_today),
-                            Modifier
+                            modifier = Modifier
                                 .padding(top = 70.dp)
                                 .align(Alignment.Center)
                         )
