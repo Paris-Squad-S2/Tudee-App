@@ -53,7 +53,6 @@ fun TextField(
     leadingIcon: Int?,
     modifier: Modifier = Modifier,
     singleLine: Boolean = true,
-    maxLines: Int = 1,
     enabled: Boolean = true,
     onClick: () -> Unit = {}
 ) {
@@ -106,7 +105,7 @@ fun TextField(
             .clickable { onClick() }
         ,
         singleLine = singleLine,
-        maxLines = if (singleLine) 1 else maxLines,
+        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         textStyle = textStyle,
         cursorBrush = SolidColor(Theme.colors.primary),
         interactionSource = interactionSource,
@@ -243,7 +242,6 @@ fun PreviewTextField() {
                 onValueChange = { multiLineText = it },
                 placeholder = "Description",
                 singleLine = false,
-                maxLines = 5,
                 leadingIcon = null
             )
         }
