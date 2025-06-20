@@ -47,7 +47,6 @@ class CategoryDetailsViewModel(
                     taskUiState = tasks.map { it.toTaskUiState() },
                     categoryUiState = category.first().toCategoryUiState()
                 )
-                updateUiStateWithFilters()
 
             } catch (e: Exception) {
                 _uiState.value = CategoryDetailsUiState(
