@@ -71,7 +71,7 @@ fun TextField(
 
     val borderColor = when {
         isFocused -> Theme.colors.primary
-        else -> Theme.colors.surfaceColors.surfaceLow
+        else -> Theme.colors.stroke
     }
 
     val textColor = if (isFocused) {
