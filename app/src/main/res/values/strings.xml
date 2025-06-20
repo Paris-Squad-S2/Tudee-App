@@ -48,7 +48,6 @@
     <string name="slider_description_stay_working">You\'ve completed %d out of %d tasks. Keep going!</string>
     <string name="overview">Overview</string>
     <string name="are_you_sure_to_continue">Are you sure to continue?</string>
-    <string name="delete">Delete</string>
     <string name="deleted_task_successfully">Deleted task successfully</string>
     <string name="delete_task">Delete task</string>
 
