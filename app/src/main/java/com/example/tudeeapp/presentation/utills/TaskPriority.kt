@@ -12,7 +12,9 @@ import com.example.tudeeapp.presentation.mapper.toResDrawables
 enum class TaskPriorityUi {
     HIGH,
     MEDIUM,
-    LOW
+    LOW;
+    val lowercaseName: String
+        get() = name.lowercase()
 }
 
 data class PriorityStyle(

@@ -38,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.data.mapper.toTaskPriority
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.DayItem
@@ -267,7 +268,7 @@ fun TaskContent(
                         title = task.title,
                         date = task.createdDate.toString(),
                         subtitle = task.description,
-                        priorityLabel = task.priority.name,
+                        priorityLabel = task.priority.lowercaseName,
                         priorityIcon = painterResource(task.priority.toStyle().iconRes),
                         priorityColor = task.priority.toStyle().backgroundColor,
                         isDated = false,
