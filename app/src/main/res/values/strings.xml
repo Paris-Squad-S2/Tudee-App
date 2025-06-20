@@ -55,5 +55,7 @@
     <string name="description">Description</string>
     <string name="task_saved_successfully">Task saved successfully</string>
     <string name="add_first_task">Add task first</string>
+    <string name="delete_category">Delete category</string>
+    <string name="deleted_successfully">Category Deleted successfully</string>
 
 </resources>

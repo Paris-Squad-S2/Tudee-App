@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.extentions.dashedBorder
@@ -58,6 +59,8 @@ fun CategoryFormScreen(
     val snackbarHostState = LocalSnackBarState.current
     val context = LocalContext.current
     var showSheet by remember { mutableStateOf(true) }
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
         state.successMessage?.let {
@@ -80,7 +83,17 @@ fun CategoryFormScreen(
     TudeeBottomSheet(
         isVisible = showSheet,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
-        headerEnd = { DeleteButton(modifier = Modifier.padding(end = 16.dp)) },
+        headerEnd = {
+            if (isEdit) {
+                DeleteButton(
+                    modifier = Modifier.padding(end = 16.dp),
+                    onClick = {
+                        showDeleteConfirmation = true
+                        showSheet = false
+                    }
+                )
+            }
+        },
         onDismiss = {
             showSheet = false
             navController.popBackStack()
@@ -104,6 +117,31 @@ fun CategoryFormScreen(
             buttonText = if (isEdit) stringResource(id = R.string.save)
             else stringResource(id = R.string.add),
         )
+    }
+    if (showDeleteConfirmation) {
+        TudeeBottomSheet(
+            isVisible = true,
+            title = stringResource(id = R.string.delete_category),
+            isScrollable = true,
+            skipPartiallyExpanded = true,
+            onDismiss = { showDeleteConfirmation = false }
+        ) {
+            ConfirmationDialogBox(
+                title = R.string.are_you_sure_to_continue,
+                onConfirm = {
+                    viewModel.deleteCategory(
+                        onSuccess = {
+                            showDeleteConfirmation = false
+                            showSheet = false
+                            navController.popBackStack()
+                            snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
+                            navController.popBackStack()
+                        }
+                    )
+                },
+                onDismiss = { showDeleteConfirmation = false }
+            )
+        }
     }
 }
 
@@ -205,9 +243,13 @@ fun CategoryFormContent(
 }
 
 @Composable
-fun DeleteButton(modifier: Modifier = Modifier){
+fun DeleteButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+){
     TudeeButton(
-        onClick = { }, text = stringResource(R.string.delete),
+        onClick = onClick,
+        text = stringResource(R.string.delete),
         variant = ButtonVariant.TextButton,
         isNegative = true
     )

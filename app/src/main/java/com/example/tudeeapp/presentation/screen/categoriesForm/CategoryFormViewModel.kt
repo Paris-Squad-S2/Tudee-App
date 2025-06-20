@@ -81,6 +81,17 @@ class CategoryFormViewModel(
         }
     }
 
+    fun deleteCategory(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                taskServices.deleteCategory(state.value.categoryId)
+                onSuccess()
+            } catch (e: Exception) {
+                _state.update { it.copy(errorMessage = "Failed to delete category") }
+            }
+        }
+    }
+
     private fun getImageUrl(url: String): String {
         if (url.startsWith("content")) {
             return url

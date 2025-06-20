@@ -56,4 +56,6 @@
     <string name="description">الوصف</string>
     <string name="task_saved_successfully">تم أضافة المهمه</string>
     <string name="add_first_task">اضف مهمة اولا</string>
+    <string name="delete_category">حذف الفئه</string>
+    <string name="deleted_successfully">تم حذف الفئه</string>
 </resources>
