@@ -18,9 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.components.ButtonState
+import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormState
 
 @Composable
@@ -48,46 +53,38 @@ fun CategoriesBottomSheetButtons(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            Button(
+            TudeeButton(
+                modifier = Modifier.fillMaxWidth(),
                 onClick = onSubmit,
-                enabled = state.isFormValid,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(100.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (state.isFormValid)
-                        Theme.colors.primary
-                    else
-                        Theme.colors.text.disable
-                )
-            ) {
-                Text(buttonText, style = Theme.textStyle.label.large)
-            }
+                text = buttonText,
+                variant = ButtonVariant.FilledButton,
+                state = if (state.isFormValid) ButtonState.Normal else ButtonState.Disabled,
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            TextButton(
+            TudeeButton(
                 onClick = onCancel,
+                text = stringResource(id = R.string.cancel),
+                variant = ButtonVariant.OutlinedButton,
+                state = ButtonState.Normal,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Theme.colors.stroke,
-                        shape = RoundedCornerShape(100.dp)
-                    )
-                    .background(
-                        Color.White,
-                        shape = RoundedCornerShape(100.dp)
-                    )
-            ) {
-                Text(
-                    stringResource(id = R.string.cancel),
-                    style = Theme.textStyle.label.large,
-                    color = Theme.colors.primary
-                )
-            }
+            )
         }
+    }
+}
+
+@Composable
+@Preview
+fun CategoriesBottomSheetButtonsPreview() {
+    TudeeTheme {
+        CategoriesBottomSheetButtons(
+            state = CategoryFormState(),
+            onSubmit = {},
+            onCancel = {},
+            buttonText = stringResource(id = R.string.add)
+        )
     }
 }
