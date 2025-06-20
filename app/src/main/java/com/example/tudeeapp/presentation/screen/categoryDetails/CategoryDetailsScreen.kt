@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,9 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
@@ -68,20 +65,12 @@ fun CategoryDetailsScreen(
                 onBack = { navController.popBackStack() },
                 categoryTitle = uiState.categoryUiState!!.title,
                 onOptionClick = { navController.navigate(Screens.AddCategoryScreen) },
-                categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
+                categoryImage = uiState.categoryUiState!!.imageUrl,
                 topBarOption = editableCategory(uiState.categoryUiState!!)
             )
         }
     }
 }
-
-@Composable
-private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
-    if (categoryUiState.isPredefined) {
-        painterResource(categoryUiState.imageUrl.toResDrawables())
-    } else {
-        rememberAsyncImagePainter(categoryUiState.imageUrl)
-    }
 
 @Composable
 private fun editableCategory(categoryUiState: CategoryUiState) = categoryUiState.isPredefined
@@ -90,7 +79,7 @@ private fun editableCategory(categoryUiState: CategoryUiState) = categoryUiState
 fun CategoryDetailsContent(
     tasks: List<TaskUiState>,
     selectedState: TaskStatus,
-    categoryImage: Painter,
+    categoryImage: String,
     topBarOption: Boolean,
     modifier: Modifier = Modifier,
     onStatusChange: (TaskStatus) -> Unit,
@@ -144,7 +133,7 @@ fun CategoryDetailsContent(
             items(filteredTasks) { task ->
                 val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
                 TaskCard(
-                    icon = categoryImage,
+                    categoryIcon = categoryImage,
                     title = task.title,
                     date = task.createdDate,
                     subtitle = task.description,
@@ -223,7 +212,7 @@ fun CategoryDetailsPreview() {
         },
         onBack = {},
         categoryTitle = "Coding",
-        categoryImage = painterResource(R.drawable.ic_education),
+        categoryImage = "",
         navController = fakeNavController,
         topBarOption = true
     )

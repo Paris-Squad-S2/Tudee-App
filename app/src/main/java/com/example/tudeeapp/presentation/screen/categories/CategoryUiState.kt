@@ -1,8 +1,8 @@
 package com.example.tudeeapp.presentation.screen.categories
 
 import androidx.annotation.DrawableRes
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.models.Category
+import com.example.tudeeapp.presentation.mapper.toResDrawables
 
 data class CategoryUIState(
     val categories: List<CategoryItemUIState> = emptyList(),
