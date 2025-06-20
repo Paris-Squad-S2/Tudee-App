@@ -32,14 +32,12 @@ import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormEditS
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
-import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
 import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
-import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
+import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
 import kotlinx.coroutines.delay
-import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
@@ -89,13 +87,13 @@ fun TudeeNavGraph() {
                 composable<Screens.Home> { HomeScreen() }
                 composable<Screens.Task> { TaskScreen() }
                 composable<Screens.Category> { CategoriesScreen() }
-                composable<Screens.TaskForm> { TaskFormScreen() }
+                dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
                 composable<Screens.TaskDetails> { TaskDetailsScreen() }
                 dialog<Screens.AddCategoryScreen> {
                     AddCategoryScreen()
                 }
 
-                composable<Screens.CategoryDetails> {
+                dialog<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
                 }
                 dialog<Screens.CategoryFormEditScreen> {
