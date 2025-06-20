@@ -3,13 +3,12 @@ package com.example.tudeeapp.presentation.screen.task
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,6 +17,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,9 +38,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
-import com.example.tudeeapp.presentation.common.components.DayItem
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
-import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
+import com.example.tudeeapp.presentation.common.components.DayItem
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
@@ -54,6 +54,7 @@ import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
+import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
 import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
@@ -197,8 +198,9 @@ fun TaskContent(
 
         LazyRow(
             state = listState,
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(data.calender.daysOfMonth) { day ->
                 DayItem(
@@ -219,7 +221,6 @@ fun TaskContent(
             )
         }
         HorizontalTabs(
-            modifier = Modifier.height(48.dp),
             tabs = tabs,
             selectedTabIndex = statusList.indexOf(data.selectedStatus),
             onTabSelected = { index ->
@@ -227,12 +228,17 @@ fun TaskContent(
             }
         )
         if (data.tasks.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ){
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 HomeEmptyTasksSection(
                     title = stringResource(R.string.no_tasks_for_today),
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier
                 )
             }
         }else {
@@ -244,10 +250,14 @@ fun TaskContent(
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-
                 items(data.tasks) { task ->
+                    val iconResource = toPainter(
+                        imageUri = task.category.iconRes,
+                        isPredefined =task.category.isPredefined
+                    )
+
                     TaskItemWithSwipe(
-                        icon = painterResource(task.iconRes),
+                        icon = iconResource,
                         iconColor = Color.Unspecified,
                         title = task.title,
                         date = task.createdDate.toString(),

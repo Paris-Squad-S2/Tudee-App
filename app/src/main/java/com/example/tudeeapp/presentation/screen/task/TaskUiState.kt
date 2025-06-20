@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.screen.task
 
 import com.example.tudeeapp.R
+import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
@@ -45,8 +46,7 @@ data class TaskItemUiState(
     val priority: TaskPriorityUi,
     val status: TaskStatusUi,
     val createdDate: LocalDate,
-    val categoryId: Long,
-    val iconRes: Int = R.drawable.ic_education
+    val category: CategoryUiState
 )
 
 data class StatusUi(
@@ -55,10 +55,26 @@ data class StatusUi(
     val isSelected:Boolean = false
 )
 
+data class CategoryUiState(
+    val id: Long = 1L,
+    val iconRes: String = "",
+    val isPredefined: Boolean = false
+)
+
 enum class TaskStatusUi(val stringResId: Int) {
     IN_PROGRESS(R.string.in_progress_text),
     TO_DO(R.string.to_do),
-    DONE(R.string.done)
+    DONE(R.string.done);
+
+    companion object {
+        private fun fromNameOrNull(name: String): TaskStatusUi? {
+            return entries.find { it.name.equals(name, ignoreCase = true) }
+        }
+
+        fun fromNameOrDefault(name: String, default: TaskStatusUi = TO_DO): TaskStatusUi {
+            return fromNameOrNull(name) ?: default
+        }
+    }
 }
 
 fun Task.toTaskUiState(): TaskItemUiState {
@@ -69,11 +85,17 @@ fun Task.toTaskUiState(): TaskItemUiState {
         priority = this.priority.toUiPriority(),
         status = this.status.toUiStatus(),
         createdDate = this.createdDate,
-        categoryId = this.categoryId,
-        iconRes = R.drawable.ic_education
+        category = CategoryUiState()
     )
 }
 
+fun Category.toCategoryUi(): CategoryUiState{
+    return CategoryUiState(
+        id = this.id,
+        iconRes = this.imageUrl,
+        isPredefined = this.isPredefined
+    )
+}
 fun TaskPriority.toUiPriority(): TaskPriorityUi = when (this) {
     TaskPriority.HIGH -> TaskPriorityUi.HIGH
     TaskPriority.MEDIUM -> TaskPriorityUi.MEDIUM

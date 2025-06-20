@@ -88,13 +88,12 @@ class TaskViewModel(
 
             try {
                 taskServices.getAllTasks().collect { tasks ->
-                    val tasksIcons =
-                        tasks.map {
-                            taskServices.getCategoryById(it.categoryId).first().imageUrl
-                        }.map { it.toResDrawables() }
-
-                    val tasksUi = tasks.map { it.toTaskUiState() }
-                        .mapIndexed { index, taskUi -> taskUi.copy(iconRes = tasksIcons[index]) }
+                    val tasksUi = tasks.map { task ->
+                        val category = taskServices.getCategoryById(task.categoryId).first()
+                        task.toTaskUiState().copy(
+                            category = category.toCategoryUi(),
+                        )
+                    }
 
                     allTasks = tasksUi
                     updateUiStateWithFilters()

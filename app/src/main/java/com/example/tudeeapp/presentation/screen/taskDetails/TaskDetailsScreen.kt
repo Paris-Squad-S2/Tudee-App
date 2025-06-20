@@ -43,7 +43,7 @@ import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskUiState
-import com.example.tudeeapp.presentation.utills.rememberCategoryPainter
+import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -108,7 +108,7 @@ private fun TaskDetailsContent(
     onEditTaskClick: () -> Unit
 ) {
 
-    val painter = rememberCategoryPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
+    val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
     val iconPriority = getPriorityIcon(taskUiState.priority)
     val backgroundPriorityColor = getPriorityBackgroundColor(taskUiState.priority)
 
