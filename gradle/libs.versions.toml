@@ -22,9 +22,7 @@ composeBom = "2024.09.00"
 roomCompiler = "2.7.1"
 roomKtx = "`2.7.1"
 roomRuntime = "2.7.1"
-kotlinxDateTime = "0.5.0"
 serializationJson ="1.6.3"
-navigationComposeJvmstubs = "2.9.0"
 composeMaterial = "1.4.1"
 
 [libraries]
@@ -59,7 +57,6 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
 
-androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 
 [plugins]
