@@ -18,7 +18,7 @@ import kotlin.random.Random
 
 class TaskManagementViewModel(
     private val taskServices: TaskServices,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     val taskId = savedStateHandle.toRoute<Screens.TaskManagement>().taskId
@@ -27,6 +27,8 @@ class TaskManagementViewModel(
         MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
 
     val state = _state.asStateFlow()
+
+
 
     init {
         getAllCategories()
@@ -86,6 +88,34 @@ class TaskManagementViewModel(
         }
     }
 
+    fun onActionButtonClicked() {
+        viewModelScope.launch {
+            try {
+                _state.update { it.copy(isLoading = true) }
+
+                val currentState = _state.value
+
+                val task = Task(
+                    id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
+                    title = currentState.title,
+                    description = currentState.description,
+                    priority = currentState.selectedPriority.toTaskPriority() ?: TaskPriority.LOW,
+                    status = if (currentState.isEditMode) currentState.taskStatus else TaskStatus.TO_DO,
+                    createdDate = LocalDate.parse(currentState.selectedDate),
+                    categoryId = currentState.selectedCategoryId ?: 0L
+                )
+
+                if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(
+                    task
+                )
+                _state.update { it.copy(isLoading = false, isTaskSaved = true) }
+
+            } catch (_: Exception) {
+                handleException()
+            }
+        }
+    }
+
     private fun getTaskById(id: Long) {
         viewModelScope.launch {
             try {
@@ -110,31 +140,6 @@ class TaskManagementViewModel(
         }
     }
 
-    fun onActionButtonClicked() {
-        viewModelScope.launch {
-            try {
-                _state.update { it.copy(isLoading = true) }
-
-                val currentState = _state.value
-
-                val task = Task(
-                    id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
-                    title = currentState.title,
-                    description = currentState.description,
-                    priority = currentState.selectedPriority.toTaskPriority() ?: TaskPriority.LOW,
-                    status = if (currentState.isEditMode) currentState.taskStatus else TaskStatus.TO_DO,
-                    createdDate = LocalDate.parse(currentState.selectedDate),
-                    categoryId = currentState.selectedCategoryId ?: 0L
-                )
-
-                if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(task)
-
-                _state.update { it.copy(isLoading = false) }
-            } catch (_: Exception) {
-                handleException()
-            }
-        }
-    }
 
     private fun handleException() {
         _state.update {

@@ -51,4 +51,7 @@
     <string name="are_you_sure_to_continue">هل أنت متأكد من الاستمرار؟</string>
     <string name="deleted_task_successfully">تم حذف المهمة بنجاح</string>
     <string name="delete_task">حذف مهمة</string>
+    <string name="task_title">عنوان المهمه</string>
+    <string name="description">الوصف</string>
+    <string name="task_saved_successfully">تم أضافة المهمه</string>
 </resources>
