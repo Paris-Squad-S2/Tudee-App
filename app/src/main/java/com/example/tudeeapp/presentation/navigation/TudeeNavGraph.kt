@@ -84,9 +84,38 @@ fun TudeeNavGraph() {
                 },
                 contentBackground = Theme.colors.surfaceColors.surface,
             ) {
+<<<<<<< HEAD
                 NavHost(
                     navController = navController,
                     startDestination = Screens.Splash,
+=======
+
+                composable<Screens.Splash> { SplashScreen() }
+                composable<Screens.OnBoarding> {
+                    OnBoardScreen(
+                        pages = onboardingPages()
+                    )
+                }
+                composable<Screens.Home> { HomeScreen() }
+                composable<Screens.Task> { TaskScreen() }
+                composable<Screens.Category> { CategoriesScreen() }
+                dialog<Screens.TaskForm> { TaskManagementBottomSheet() }
+                dialog<Screens.TaskDetails> { TaskDetailsScreen() }
+                dialog<Screens.AddCategoryScreen> {
+                    AddCategoryScreen()
+                }
+
+                composable<Screens.CategoryDetails> {
+                    CategoryDetailsScreen()
+                }
+            }
+
+            if (snackBarState.isVisible) {
+                AnimatedVisibility(
+                    visible = snackBarState.isVisible,
+                    enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
+                    exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+>>>>>>> bc6f34b (fixed the snackBar bug to show when added new task)
                 ) {
 
                     composable<Screens.Splash> { SplashScreen() }

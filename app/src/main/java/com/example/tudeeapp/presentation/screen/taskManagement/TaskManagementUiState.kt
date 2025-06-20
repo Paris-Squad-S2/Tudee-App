@@ -17,6 +17,7 @@ data class TaskManagementUiState(
     val isEditMode: Boolean = false,
     val error: String? = null,
     val taskStatus: TaskStatus = TaskStatus.TO_DO,
+    val isTaskSaved: Boolean = false,
 ) {
     val isInitialState: Boolean
         get() = title.isEmpty() ||

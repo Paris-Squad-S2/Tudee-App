@@ -53,4 +53,5 @@
     <string name="delete_task">حذف مهمة</string>
     <string name="task_title">عنوان المهمه</string>
     <string name="description">الوصف</string>
+    <string name="task_saved_successfully">تم أضافة المهمه</string>
 </resources>
