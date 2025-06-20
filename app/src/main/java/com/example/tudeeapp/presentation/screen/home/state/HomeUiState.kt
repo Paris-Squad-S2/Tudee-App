@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.screen.home.state
 
+
 data class HomeUiState(
     val inProgressTasks: List<TaskUiState> = emptyList(),
     val toDoTasks: List<TaskUiState> = emptyList(),

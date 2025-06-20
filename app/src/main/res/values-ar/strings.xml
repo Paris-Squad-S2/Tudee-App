@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name"> تودي</string>
+    <string name="app_name"> تيدي</string>
     <string name="your_cute_helper_for_every_task">مساعدك اللطيف لإنجاز كل مهامك</string>
     <string name="ok">تأكيد</string>
     <string name="editCategory">تعديل الفئة</string>
@@ -17,11 +17,11 @@
     <string name="to_do">للقيام به</string>
     <string name="done">تم</string>
     <string name="onboarding1title">تشعر بالإرهاق من كثرة المهام؟</string>
-    <string name="onboarding1description">لننظم الفوضى معًا. تودي هنا لمساعدتك في الترتيب والتخطيط لتتنفس بسهولة.</string>
+    <string name="onboarding1description">لننظم الفوضى معًا. تيدي هنا لمساعدتك في الترتيب والتخطيط لتتنفس بسهولة.</string>
     <string name="onboarding2title">أوه لا! تماطل مرة أخرى؟</string>
-    <string name="onboarding2description">تودي ليس غاضبًا… فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
+    <string name="onboarding2description">تيدي ليس غاضبًا… فقط يشعر ببعض الخيبة. لنعد معًا إلى المسار الصحيح.</string>
     <string name="onboarding3title">لنُنجز المهام ونحتفل معًا.</string>
-    <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
+    <string name="onboarding3description">التقدم هو تقدم، تيدي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
     <string name="addnewCategory">إضافة فئة جديدة</string>
     <string name="categoryTitle">عنوان الفئة</string>
     <string name="upload">رفع</string>
@@ -39,9 +39,9 @@
     <string name="slider_title_nothing">لا شيء في قائمتك…</string>
     <string name="slider_description_nothing">املأ يومك بشيء رائع.</string>
     <string name="slider_title_tadaa">تا دا!</string>
-    <string name="slider_description_tadaa">أنت تقوم بعمل رائع!!!\nتودي فخورة بك.</string>
+    <string name="slider_description_tadaa">أنت تقوم بعمل رائع!!!\nتيدي فخورة بك.</string>
     <string name="slider_title_zero_progress">لا تقدم؟!</string>
-    <string name="slider_description_zero_progress">أنت فقط تتصفح، لا تعمل. تودي تراقبك. عودة إلى العمل!!!</string>
+    <string name="slider_description_zero_progress">أنت فقط تتصفح، لا تعمل. تيدي تراقبك. عودة إلى العمل!!!</string>
     <string name="slider_title_stay_working">استمر في العمل!</string>
     <string name="slider_description_stay_working">لقد أكملت %d من أصل %d من المهام. استمر!</string>
     <string name="overview">نظرة عامة</string>
@@ -51,7 +51,9 @@
     <string name="are_you_sure_to_continue">هل أنت متأكد من الاستمرار؟</string>
     <string name="deleted_task_successfully">تم حذف المهمة بنجاح</string>
     <string name="delete_task">حذف مهمة</string>
+    <string name="no_task_for">لا توجد مهام يومية! %1$s</string>
     <string name="task_title">عنوان المهمه</string>
     <string name="description">الوصف</string>
     <string name="task_saved_successfully">تم أضافة المهمه</string>
+    <string name="add_first_task">اضف مهمة اولا</string>
 </resources>

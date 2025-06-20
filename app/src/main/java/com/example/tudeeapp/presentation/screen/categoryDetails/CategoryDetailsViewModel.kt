@@ -56,6 +56,45 @@ class CategoryDetailsViewModel(
             }
         }
     }
+    fun deleteTask(taskId: Long) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
+
+            try {
+                taskService.deleteTask(taskId)
+                updateUiStateWithFilters()
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Unknown error occurred"
+                )
+            }
+        }
+    }
+
+    fun updateUiStateWithFilters() {
+        viewModelScope.launch {
+            try {
+                _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
+
+                val category = taskService.getCategoryById(categoryId).first()
+                val allTasks = taskService.getAllTasks().first()
+                val filteredTasks = allTasks.filter { it.categoryId == categoryId }
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    categoryUiState = category.toCategoryUiState(),
+                    taskUiState = filteredTasks.map { it.toTaskUiState() }
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Error updating tasks"
+                )
+            }
+        }
+    }
 
     fun setStatus(status: TaskStatus) {
         _stateFilter.value = status

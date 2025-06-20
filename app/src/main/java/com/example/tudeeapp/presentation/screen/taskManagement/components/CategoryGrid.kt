@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.presentation.screen.taskManagement.CategoryUiState
 import com.example.tudeeapp.presentation.common.components.CategoryItem
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.mapper.toResDrawables
 
 @Composable
 fun CategoryGrid(
@@ -55,7 +55,8 @@ fun CategoryGrid(
                     label = category.title,
                     iconColor = Color.Unspecified,
                     isSelected = category.isSelected,
-                    onClick = { onCategoryClick(category.id) }
+                    onClick = { onCategoryClick(category.id) },
+                    isPredefined = category.isPredefined
                 )
             }
         }

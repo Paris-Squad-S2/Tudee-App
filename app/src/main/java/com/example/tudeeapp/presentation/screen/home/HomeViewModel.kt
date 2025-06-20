@@ -3,7 +3,7 @@ package com.example.tudeeapp.presentation.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
+import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.exception.TudeeException
 import com.example.tudeeapp.domain.models.Task
@@ -22,7 +22,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val taskServices: TaskServices
+    private val taskServices: TaskServices,
+    private val appPreferences: AppPreferences
 ) : ViewModel() {
 
     private val _homeState = MutableStateFlow(HomeUiState())
@@ -37,11 +38,19 @@ class HomeViewModel(
             initialValue = HomeUiState()
         )
 
+    init {
+        loadInitialData()
+    }
+
+    private fun loadInitialData() {
+        viewModelScope.launch {
+            _homeState.update { it.copy(isDarkMode = appPreferences.isDarkTheme()) }
+        }
+    }
 
     fun onToggledAction(isDarkMode: Boolean) {
-        _homeState.update {
-            it.copy(isDarkMode = isDarkMode)
-        }
+        _homeState.update { it.copy(isDarkMode = isDarkMode) }
+        viewModelScope.launch { appPreferences.setDarkTheme(isDarkMode) }
     }
 
     fun getTasksIcons() {
@@ -65,10 +74,18 @@ class HomeViewModel(
                                 filteredTasks.map {
                                     taskServices.getCategoryById(it.categoryId).first().imageUrl
                                 }
-                                    .map { it.toResDrawables() }
+
+                            val isCategoryPredefined = filteredTasks.map {
+                                taskServices.getCategoryById(it.categoryId).first().isPredefined
+                            }
 
                             val tasksUi = filteredTasks.map { it.toTaskUi() }
-                                .mapIndexed { index, taskUi -> taskUi.copy(categoryIcon = tasksIcons[index]) }
+                                .mapIndexed { index, taskUi ->
+                                    taskUi.copy(
+                                        categoryIcon = tasksIcons[index],
+                                        isCategoryPredefined = isCategoryPredefined[index]
+                                    )
+                                }
                             _homeState.update {
                                 it.copy(
                                     inProgressTasks = tasksUi.filter { it.status == TaskStatus.IN_PROGRESS },
@@ -140,6 +157,8 @@ class HomeViewModel(
                 TaskPriority.HIGH -> R.drawable.ic_flag
             },
             status = this.status,
+            categoryIcon = "",
+            isCategoryPredefined = false
         )
     }
 

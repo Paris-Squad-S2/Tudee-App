@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,13 +37,15 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.Header
-import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeButton
+import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.LocalThemeState
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
+import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
@@ -55,11 +56,15 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     val state by homeViewModel.homeState.collectAsStateWithLifecycle()
+    val themeMode = LocalThemeState.current
 
     HomeScreenContent(
         state = state,
-        onToggleTheme = homeViewModel::onToggledAction,
-        onFloatingActionButtonClick = { navController.navigate(Screens.TaskForm) },
+        onToggleTheme = { isDark ->
+            themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
+            homeViewModel.onToggledAction(isDark)
+        },
+        onFloatingActionButtonClick = { navController.navigate(Screens.TaskManagement()) },
         onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Task(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Screens.TaskDetails(taskId)) },
     )
@@ -130,7 +135,6 @@ fun HomeScreenContent(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeContent(
     state: HomeUiState,
@@ -161,11 +165,16 @@ private fun HomeContent(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    HomeEmptyTasksSection(
-                        title = stringResource(R.string.no_tasks_for_today),
-                        Modifier
-                            .padding(top = 70.dp)
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        EmptyTasksSection(
+                            title = stringResource(R.string.no_tasks_for_today),
+                            modifier = Modifier
+                                .padding(top = 70.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
                 }
             }
 
@@ -357,7 +366,7 @@ private fun OverViewSection(
                 start = 6.dp,
                 end = 6.dp
             ),
-            taskCount = mapOf<TaskStatus, Int>(
+            taskCount = mapOf(
                 TaskStatus.TO_DO to toDoTasksCount,
                 TaskStatus.IN_PROGRESS to inProgressTasksCount,
                 TaskStatus.DONE to doneTasksCount

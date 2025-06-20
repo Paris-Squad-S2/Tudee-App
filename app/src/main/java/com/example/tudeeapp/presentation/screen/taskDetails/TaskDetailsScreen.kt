@@ -30,9 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
@@ -40,33 +38,38 @@ import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskUiState
+import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = koinViewModel()
 ) {
-
+    val navController = LocalNavController.current
     val taskDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isSheetOpen by remember { mutableStateOf(true) }
 
     TudeeBottomSheet(
-        isVisible = isSheetOpen,
+        isVisible = true,
         title = stringResource(R.string.task_details),
-        isScrollable = false,
-        skipPartiallyExpanded = false,
-        onDismiss = { isSheetOpen = true },
+        onDismiss = { navController.popBackStack() },
         content = {
 
             when {
                 taskDetailsUiState.isLoading -> LoadingView()
-                taskDetailsUiState.errorMessage.isNotEmpty() ->{
-                    LocalSnackBarState.current.show(taskDetailsUiState.errorMessage, isSuccess = false)
+                taskDetailsUiState.errorMessage.isNotEmpty() -> {
+                    LocalSnackBarState.current.show(
+                        taskDetailsUiState.errorMessage,
+                        isSuccess = false
+                    )
                     isSheetOpen = false
                 }
+
                 else -> {
                     val taskUiState = taskDetailsUiState.taskUiState
                     val categoryUiState = taskDetailsUiState.categoryUiState
@@ -74,7 +77,14 @@ fun TaskDetailsScreen(
                         TaskDetailsContent(
                             taskUiState = taskUiState,
                             categoryUiState = categoryUiState,
-                            onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) }
+                            onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) },
+                            onEditTaskClick = {
+                                navController.navigate(
+                                    Screens.TaskManagement(
+                                        taskUiState.id
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -92,10 +102,11 @@ private fun LoadingView() {
 private fun TaskDetailsContent(
     taskUiState: TaskUiState,
     categoryUiState: CategoryUiState,
-    onStatusChange: (TaskStatus) -> Unit
+    onStatusChange: (TaskStatus) -> Unit,
+    onEditTaskClick: () -> Unit
 ) {
 
-    val painter = rememberCategoryPainter(categoryUiState)
+    val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
     val iconPriority = getPriorityIcon(taskUiState.priority)
     val backgroundPriorityColor = getPriorityBackgroundColor(taskUiState.priority)
 
@@ -121,7 +132,7 @@ private fun TaskDetailsContent(
             )
         }
         if (taskUiState.status != TaskStatus.DONE)
-            StatusActionButtons(taskUiState, onStatusChange)
+            StatusActionButtons(taskUiState, onEditTaskClick, onStatusChange)
     }
 }
 
@@ -139,8 +150,8 @@ private fun HorizontalLine1Dp() {
 private fun CategoryIcon(painter: Painter) {
     Box(
         modifier = Modifier
-            .size(56.dp)
             .padding(top = 12.dp)
+            .size(56.dp)
             .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
     ) {
         Icon(
@@ -149,6 +160,7 @@ private fun CategoryIcon(painter: Painter) {
             tint = Color.Unspecified,
             modifier = Modifier
                 .size(32.dp)
+                .clip(CircleShape)
                 .align(Alignment.Center)
         )
     }
@@ -171,17 +183,14 @@ private fun TaskTexts(taskUiState: TaskUiState) {
 }
 
 @Composable
-private fun StatusActionButtons(taskUiState: TaskUiState, onStatusChange: (TaskStatus) -> Unit) {
+private fun StatusActionButtons(
+    taskUiState: TaskUiState,
+    onEditTaskClick: () -> Unit,
+    onStatusChange: (TaskStatus) -> Unit
+) {
     Row(modifier = Modifier.padding(top = 24.dp)) {
         TudeeButton(
-            onClick = {
-                val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
-                    TaskStatus.DONE
-                } else {
-                    TaskStatus.IN_PROGRESS
-                }
-                onStatusChange(newStatus)
-            },
+            onClick = { onEditTaskClick() },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_pencil_edit_24),
@@ -194,7 +203,14 @@ private fun StatusActionButtons(taskUiState: TaskUiState, onStatusChange: (TaskS
         Spacer(Modifier.width(4.dp))
         TudeeButton(
             modifier = Modifier.weight(1f),
-            onClick = { },
+            onClick = {
+                val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
+                    TaskStatus.DONE
+                } else {
+                    TaskStatus.IN_PROGRESS
+                }
+                onStatusChange(newStatus)
+            },
             text = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
                 stringResource(R.string.move_to_done)
             } else {
@@ -205,26 +221,19 @@ private fun StatusActionButtons(taskUiState: TaskUiState, onStatusChange: (TaskS
     }
 }
 
-@Composable
-private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
-    if (categoryUiState.isPredefined) {
-        painterResource(categoryUiState.imageUrl.toResDrawables())
-    } else {
-        rememberAsyncImagePainter(categoryUiState.imageUrl)
-    }
 
 @Composable
 private fun BoxTaskStatus(taskUiState: TaskUiState) {
 
     val textStatusColor = when (taskUiState.status) {
-        TaskStatus.DONE -> Theme.colors.status.yellowAccent
-        TaskStatus.TO_DO -> Theme.colors.status.greenAccent
-        TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleVariant
+        TaskStatus.TO_DO -> Theme.colors.status.yellowAccent
+        TaskStatus.DONE -> Theme.colors.status.greenAccent
+        TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleAccent
     }
 
     val backgroundStatusColor = when (taskUiState.status) {
-        TaskStatus.DONE -> Theme.colors.status.yellowVariant
-        TaskStatus.TO_DO -> Theme.colors.status.greenVariant
+        TaskStatus.TO_DO -> Theme.colors.status.yellowVariant
+        TaskStatus.DONE -> Theme.colors.status.greenVariant
         TaskStatus.IN_PROGRESS -> Theme.colors.status.purpleVariant
     }
 

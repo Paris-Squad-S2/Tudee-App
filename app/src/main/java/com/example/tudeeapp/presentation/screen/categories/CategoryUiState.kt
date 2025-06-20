@@ -1,8 +1,8 @@
 package com.example.tudeeapp.presentation.screen.categories
 
 import androidx.annotation.DrawableRes
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.models.Category
+import com.example.tudeeapp.presentation.mapper.toResDrawables
 
 data class CategoryUIState(
     val categories: List<CategoryItemUIState> = emptyList(),
@@ -16,15 +16,17 @@ data class CategoryItemUIState(
     val count: Int,
     val imageUrl: String? = null,
     @DrawableRes val imageResId: Int? = null,
+    val isPredefined: Boolean
 )
 
-fun Category.toCategoryUIState(): CategoryItemUIState {
+fun Category.toCategoryUIState(calculatedCount: Int): CategoryItemUIState {
     val isPredefined = this.isPredefined
     return CategoryItemUIState(
         id = this.id,
         name = this.title,
-        count = this.tasksCount,
+        count = calculatedCount,
         imageResId = if (this.isPredefined) this.imageUrl.toResDrawables() else null,
-        imageUrl = if (!this.isPredefined) this.imageUrl else null
+        imageUrl = if (!this.isPredefined) this.imageUrl else null,
+        isPredefined = isPredefined
     )
 }

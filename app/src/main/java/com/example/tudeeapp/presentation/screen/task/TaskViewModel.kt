@@ -2,10 +2,15 @@ package com.example.tudeeapp.presentation.screen.task
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
+import androidx.navigation.toRoute
+import com.example.tudeeapp.data.mapper.toTaskStatus
 import com.example.tudeeapp.domain.TaskServices
+import com.example.tudeeapp.presentation.mapper.toResDrawables
+import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.task.TaskStatusUi.Companion.fromNameOrDefault
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +29,7 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TaskViewModel(
+    savedStateHandle: SavedStateHandle,
     private val taskServices: TaskServices
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(TaskUiState())
@@ -31,7 +37,9 @@ class TaskViewModel(
 
     private var allTasks: List<TaskItemUiState> = emptyList()
     private var currentSelectedDate: LocalDate = getCurrentDate()
-    private var currentSelectedStatus: TaskStatusUi = TaskStatusUi.TO_DO
+    private var currentSelectedStatus: TaskStatusUi = fromNameOrDefault(
+        savedStateHandle.toRoute<Screens.Task>().tasksStatus
+    )
 
     init {
         loadTasks()
@@ -88,13 +96,12 @@ class TaskViewModel(
 
             try {
                 taskServices.getAllTasks().collect { tasks ->
-                    val tasksIcons =
-                        tasks.map {
-                            taskServices.getCategoryById(it.categoryId).first().imageUrl
-                        }.map { it.toResDrawables() }
-
-                    val tasksUi = tasks.map { it.toTaskUiState() }
-                        .mapIndexed { index, taskUi -> taskUi.copy(iconRes = tasksIcons[index]) }
+                    val tasksUi = tasks.map { task ->
+                        val category = taskServices.getCategoryById(task.categoryId).first()
+                        task.toTaskUiState().copy(
+                            category = category.toCategoryUi(),
+                        )
+                    }
 
                     allTasks = tasksUi
                     updateUiStateWithFilters()

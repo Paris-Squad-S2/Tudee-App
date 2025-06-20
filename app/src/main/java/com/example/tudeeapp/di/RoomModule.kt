@@ -7,6 +7,7 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val roomModule = module {
+    single { androidApplication().applicationContext}
     single { TudeeDatabase.getInstance(androidApplication().applicationContext) }
     single<TaskDao> { get<TudeeDatabase>().taskDao() }
     single<CategoryDao> { get<TudeeDatabase>().categoryDao() }

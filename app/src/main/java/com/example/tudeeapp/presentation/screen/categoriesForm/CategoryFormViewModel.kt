@@ -6,9 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
-import com.example.tudeeapp.data.mapper.DataConstant.toStringResDrawables
 import com.example.tudeeapp.domain.TaskServices
+import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -67,7 +66,7 @@ class CategoryFormViewModel(val taskServices: TaskServices, savedStateHandle: Sa
             return url
         }
         else{
-            return url.getLastPartAfterSlash().toInt().toStringResDrawables()
+            return url.getLastPartAfterSlash()
         }
 
     }

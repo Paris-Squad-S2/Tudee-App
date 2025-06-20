@@ -2,14 +2,14 @@ package com.example.tudeeapp.presentation.screen.task
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,6 +18,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,9 +39,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
-import com.example.tudeeapp.presentation.common.components.DayItem
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
-import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
+import com.example.tudeeapp.presentation.common.components.DayItem
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
@@ -52,7 +53,9 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
+import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
 import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
@@ -66,7 +69,7 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
     TaskScreenContent(
         uiState = uiState,
         listState = rememberLazyListState(),
-        addTask = { navController.navigate(Screens.TaskForm) },
+        addTask = { navController.navigate(Screens.TaskManagement()) },
         onCLickDatePicker = viewModel::onDatePickerVisibilityChanged,
         onClickPreviousMonth = viewModel::goToPreviousMonth,
         onClickNextMonth = viewModel::goToNextMonth,
@@ -74,6 +77,7 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
         onDateSelected = viewModel::onDateSelected,
         onClickDeleteIcon = viewModel::deleteTask,
         onclickTaskItem = { navController.navigate(Screens.TaskDetails(it)) },
+        scrollState = rememberScrollState()
     )
 }
 
@@ -90,6 +94,7 @@ fun TaskScreenContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
+    scrollState: ScrollState,
 ) {
     TudeeScaffold(
         floatingActionButton = {
@@ -137,6 +142,7 @@ fun TaskScreenContent(
                         onDateSelected,
                         onClickDeleteIcon,
                         onclickTaskItem,
+                        scrollState
                     )
                 }
             }
@@ -155,6 +161,7 @@ fun TaskContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
+    scrollState: ScrollState
 ) {
     val statusList = TaskStatusUi.entries
     var isSheetOpen by remember { mutableStateOf(false) }
@@ -163,7 +170,7 @@ fun TaskContent(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(Theme.colors.surfaceColors.surfaceHigh)
     ) {
         if (data.showDatePicker) {
@@ -196,8 +203,9 @@ fun TaskContent(
 
         LazyRow(
             state = listState,
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(data.calender.daysOfMonth) { day ->
                 DayItem(
@@ -218,79 +226,73 @@ fun TaskContent(
             )
         }
         HorizontalTabs(
-            modifier = Modifier.height(48.dp),
             tabs = tabs,
             selectedTabIndex = statusList.indexOf(data.selectedStatus),
             onTabSelected = { index ->
                 onTabSelected(statusList[index])
             }
         )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = Theme.colors.stroke
-                ),
-        )
-
         if (data.tasks.isEmpty()) {
             Column(
-                modifier = Modifier
+                modifier = Modifier.verticalScroll(scrollState)
                     .fillMaxSize()
-                    .background(color = Theme.colors.surfaceColors.surface),
+                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .weight(1f),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 EmptyTasksSection(
-                    stringResource(R.string.no_tasks_here),
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 20.dp)
+                    title = stringResource(R.string.no_tasks_for_today),
+                    modifier = Modifier
                 )
             }
-        }
+        }else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .padding(vertical = 12.dp, horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                items(data.tasks) { task ->
+                    val iconResource = toPainter(
+                        imageUri = task.category.iconRes,
+                        isPredefined =task.category.isPredefined
+                    )
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .background(Theme.colors.surfaceColors.surfaceLow)
-                .padding(vertical = 12.dp, horizontal = 16.dp)
-                .fillMaxWidth()
-                .weight(1f)
-        ) {
-            items(data.tasks) { task ->
-                TaskItemWithSwipe(
-                    icon = painterResource(task.iconRes),
-                    iconColor = Color.Unspecified,
-                    title = task.title,
-                    date = task.createdDate.toString(),
-                    subtitle = task.description,
-                    priorityLabel = task.priority.name,
-                    priorityIcon = painterResource(task.priority.toStyle().iconRes),
-                    priorityColor = task.priority.toStyle().backgroundColor,
-                    isDated = false,
-                    onClickItem = { onclickTaskItem(task.id) },
-                    onDelete = { isSheetOpen = true }
-                )
-                TudeeBottomSheet(
-                    isVisible = isSheetOpen,
-                    title = LocalContext.current.getString(R.string.delete_task),
-                    isScrollable = true,
-                    skipPartiallyExpanded = true,
-                    onDismiss = { isSheetOpen = false },
-                    content = {
-                        val context = LocalContext.current
-                        ConfirmationDialogBox(
-                            onConfirm = {
-                                onClickDeleteIcon(task.id)
-                                showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                isSheetOpen = false
-                            },
-                            onDismiss = { isSheetOpen = false })
-                    },
-                )
+                    TaskItemWithSwipe(
+                        icon = iconResource,
+                        iconColor = Color.Unspecified,
+                        title = task.title,
+                        date = task.createdDate.toString(),
+                        subtitle = task.description,
+                        priorityLabel = task.priority.name,
+                        priorityIcon = painterResource(task.priority.toStyle().iconRes),
+                        priorityColor = task.priority.toStyle().backgroundColor,
+                        isDated = false,
+                        onClickItem = { onclickTaskItem(task.id) },
+                        onDelete = { isSheetOpen = true }
+                    )
+                    TudeeBottomSheet(
+                        isVisible = isSheetOpen,
+                        title = LocalContext.current.getString(R.string.delete_task),
+                        isScrollable = true,
+                        skipPartiallyExpanded = true,
+                        onDismiss = { isSheetOpen = false },
+                        content = {
+                            val context = LocalContext.current
+                            ConfirmationDialogBox(
+                                title = R.string.are_you_sure_to_continue,
+                                onConfirm = {
+                                    onClickDeleteIcon(task.id)
+                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                    isSheetOpen = false
+                                },
+                                onDismiss = { isSheetOpen = false })
+                        },
+                    )
+                }
             }
         }
     }

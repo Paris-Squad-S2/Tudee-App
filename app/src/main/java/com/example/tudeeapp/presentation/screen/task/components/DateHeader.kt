@@ -35,9 +35,6 @@ fun DateHeader(
     onClickNext: () -> Unit = {},
     onClickPickDate: () -> Unit = {},
 ) {
-    val layoutDirection = LocalLayoutDirection.current
-    val rotationAngle = if (layoutDirection == LayoutDirection.Rtl) 180f else 0f
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -48,8 +45,7 @@ fun DateHeader(
     ) {
         ArrowContainer(
             painterResource(R.drawable.ic_left_arrow),
-            onClickPrevious,
-            rotationAngle = rotationAngle
+            onClickPrevious
         )
         Row(
             modifier = Modifier.weight(1f),
@@ -69,8 +65,7 @@ fun DateHeader(
         }
         ArrowContainer(
             painterResource(R.drawable.ic_right_arrow),
-            onClickNext,
-            rotationAngle = rotationAngle
+            onClickNext
         )
     }
 }
@@ -79,7 +74,6 @@ fun DateHeader(
 fun ArrowContainer(
     icon: Painter,
     onclick: () -> Unit,
-    rotationAngle: Float,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -93,7 +87,7 @@ fun ArrowContainer(
             .clip(RoundedCornerShape(100.dp))
             .clickable(onClick = onclick)
     ) {
-        ArrowIcon(icon, modifier.align(Alignment.Center).rotate(rotationAngle))
+        ArrowIcon(icon, modifier.align(Alignment.Center))
     }
 }
 

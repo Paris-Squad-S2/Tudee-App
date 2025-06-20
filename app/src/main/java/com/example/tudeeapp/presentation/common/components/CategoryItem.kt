@@ -1,10 +1,12 @@
 package com.example.tudeeapp.presentation.common.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +33,7 @@ fun CategoryItem(
     icon: Painter,
     label: String,
     iconColor: Color,
+    isPredefined: Boolean,
     modifier: Modifier = Modifier,
     count: Int? = null,
     isSelected: Boolean = true,
@@ -48,25 +52,38 @@ fun CategoryItem(
                     shape = CircleShape
                 )
         ) {
+
             Box(
                 modifier = Modifier
                     .size(78.dp)
                     .clip(CircleShape)
                     .clickable(onClick = onClick)
-            )
+            ){
+                if (isPredefined) {
+                    Icon(
+                        painter = icon,
+                        contentDescription = "$label Icon",
+                        tint = iconColor,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .align(Alignment.Center)
+                    )
+                }else {
+                    Image(
+                        painter = icon,
+                        contentDescription = "$label Icon",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
             when {
                 isSelected -> SelectedBadge(Modifier.align(Alignment.TopEnd))
                 count != null -> NumBadge(count, Modifier.align(Alignment.TopEnd))
             }
 
-            Icon(
-                painter = icon,
-                contentDescription = "$label Icon",
-                tint = iconColor,
-                modifier = Modifier
-                    .size(32.dp)
-                    .align(Alignment.Center)
-            )
         }
 
         Text(
@@ -128,7 +145,8 @@ private fun PreviewCategoryItems() {
             icon = painterResource(R.drawable.ic_education),
             label = "Education",
             iconColor = Color.Unspecified,
-            count = 23
+            count = 23,
+            isPredefined = true,
         )
     }
 }

@@ -40,7 +40,6 @@ fun TaskManagementTextFields(
             onValueChange = onDescriptionChange,
             placeholder = stringResource(R.string.description),
             singleLine = false,
-            maxLines = 5,
             leadingIcon = null
         )
         TextField(

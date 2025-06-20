@@ -204,7 +204,7 @@ fun CategoryFormEditContent(
 
                                 TudeeButton(
                                     onClick = onCancel, text = stringResource(R.string.cancel),
-                                    variant = ButtonVariant.TextButton,
+                                    variant = ButtonVariant.OutlinedButton,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }

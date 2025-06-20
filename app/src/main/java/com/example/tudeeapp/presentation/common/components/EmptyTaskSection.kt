@@ -24,6 +24,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 @Composable
 fun EmptyTasksSection(
     title: String,
+    description: String = stringResource(R.string.tap_the_button_to_add_your_first_one),
     modifier: Modifier
 ) {
     Box(
@@ -75,10 +76,8 @@ fun EmptyTasksSection(
         }
         Column(
             modifier = Modifier
-                .padding(end = 100.dp)
-                .width(203.dp)
-                .height(74.dp)
-                .offset(x = 0.dp, y = (-10).dp)
+                .padding(end = 120.dp)
+                .offset(x = 0.dp, y = (-30).dp)
                 .background(
                     color = Theme.colors.surfaceColors.surfaceHigh,
                     shape = RoundedCornerShape(
@@ -95,10 +94,10 @@ fun EmptyTasksSection(
             Text(
                 text = title,
                 style = Theme.textStyle.title.small,
-                color = Theme.colors.text.body
+                color = Theme.colors.text.hint
             )
             Text(
-                text = stringResource(R.string.tap_the_button_to_add_your_first_one),
+                text = description,
                 style = Theme.textStyle.body.small,
                 color = Theme.colors.text.hint
             )

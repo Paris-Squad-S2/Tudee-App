@@ -135,7 +135,7 @@ private fun MorphingCircle1(toggled: Boolean, modifier: Modifier = Modifier) {
     )
 
     val color by animateColorAsState(
-        targetValue = if (toggled) Color(0xFFE9EFFF) else Theme.colors.surfaceColors.surfaceHigh,
+        targetValue = if (toggled) Color(0xFFE9EFFF) else Color.White,
         animationSpec = tween(1500)
     )
 
@@ -171,7 +171,7 @@ private fun MorphingCircle2(toggled: Boolean, modifier: Modifier = Modifier) {
     )
 
     val color by animateColorAsState(
-        targetValue = if (toggled) Color(0xFFE9EFFF) else Theme.colors.surfaceColors.surfaceHigh,
+        targetValue = if (toggled) Color(0xFFE9EFFF) else Color.White,
         animationSpec = tween(1500)
     )
 
@@ -205,7 +205,7 @@ private fun Ellipse5CircleDay(toggled: Boolean, modifier: Modifier = Modifier) {
         modifier = modifier
             .offset(x = offsetX, y = offsetY)
             .size(16.dp)
-            .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
+            .background(color = Color.White, shape = CircleShape)
             .innerShadow(
                 shape = CircleShape,
                 blur = if (toggled) 4.dp else 0.dp,
@@ -227,7 +227,7 @@ private fun Ellipse14CircleDay(toggled: Boolean, modifier: Modifier = Modifier) 
         modifier = modifier
             .offset(x = offsetX, y = 24.dp)
             .size(height = 16.dp, width = 14.dp)
-            .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
+            .background(color = Color.White, shape = CircleShape)
             .innerShadow(
                 shape = CircleShape,
                 blur = if (toggled) 4.dp else 0.dp,
@@ -251,7 +251,7 @@ private fun Ellipse12CircleDay(toggled: Boolean, modifier: Modifier = Modifier) 
         modifier = modifier
             .offset(x = offsetX, y = (-3).dp)
             .size(32.dp)
-            .background(color = Theme.colors.surfaceColors.surfaceLow, shape = CircleShape)
+            .background(color = Color.White, shape = CircleShape)
             .innerShadow(
                 shape = CircleShape,
                 blur = if (toggled) 4.dp else 0.dp,
