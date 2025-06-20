@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import com.example.tudeeapp.MainViewModel
 import com.example.tudeeapp.presentation.screen.categories.CategoriesViewModel
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormViewModel
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormAddViewModel
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsViewModel
 import com.example.tudeeapp.presentation.screen.home.HomeViewModel
 import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
@@ -25,6 +24,5 @@ val viewModelModule = module {
     viewModelOf(::TaskManagementViewModel)
     viewModelOf(::CategoryDetailsViewModel)
     viewModelOf(::CategoryFormViewModel)
-    viewModelOf(::CategoryFormAddViewModel)
     viewModelOf(::TaskViewModel)
 }
