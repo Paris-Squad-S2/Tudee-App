@@ -71,7 +71,7 @@ fun TextField(
 
     val borderColor = when {
         isFocused -> Theme.colors.primary
-        else -> Theme.colors.surfaceColors.surfaceLow
+        else -> Theme.colors.stroke
     }
 
     val textColor = if (isFocused) {
@@ -95,7 +95,13 @@ fun TextField(
         value = value,
         enabled = enabled,
         onValueChange = { newText ->
-            if (newText.lines().size <= 11) { onValueChange(newText) }
+            if (singleLine){
+                if (newText.length<=100){
+                    onValueChange(newText)
+                }
+            }else{
+                if (newText.lines().size <= 11) { onValueChange(newText) }
+            }
         },
         modifier = modifier
             .fillMaxWidth()

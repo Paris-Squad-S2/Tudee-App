@@ -93,4 +93,6 @@ dependencies {
 
     implementation(libs.coil.compose)
 
+    implementation(libs.accompanist.systemuicontroller)
+
 }
