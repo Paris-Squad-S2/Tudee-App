@@ -130,7 +130,6 @@ fun HomeScreenContent(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeContent(
     state: HomeUiState,

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.example.tudeeapp.presentation.common.components.TaskCard
-import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getPriorityColor
 
@@ -15,7 +14,7 @@ fun HomeTaskCard(
     onClickItem: () -> Unit
 ) {
     TaskCard(
-        icon = painterResource(task.categoryIcon.toResDrawables()),
+        icon = painterResource(task.categoryIcon),
         title = task.title,
         date = "",
         subtitle = task.description,

@@ -37,15 +37,10 @@ import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
-import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
-import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
-import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
 import kotlinx.coroutines.delay
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
-val LocalThemeMode =
-    compositionLocalOf<MutableState<TudeeThemeMode>> { error("No ThemeMode provided") }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -53,12 +48,10 @@ fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
     val snackBarState = remember { SnackBarState() }
-    val themeMode = remember { mutableStateOf(TudeeThemeMode.LIGHT) }
 
     CompositionLocalProvider(
         LocalNavController provides navController,
-        LocalSnackBarState provides snackBarState,
-        LocalThemeMode provides themeMode
+        LocalSnackBarState provides snackBarState
     ) {
 
         val currentRoute = backStackEntry?.destination?.route?.substringBefore('?')
@@ -100,7 +93,7 @@ fun TudeeNavGraph() {
                     AddCategoryScreen()
                 }
 
-                dialog<Screens.CategoryDetails> {
+                composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
                 }
                 dialog<Screens.CategoryFormEditScreen> {

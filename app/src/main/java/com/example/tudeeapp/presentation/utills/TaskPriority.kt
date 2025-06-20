@@ -2,9 +2,13 @@ package com.example.tudeeapp.presentation.utills
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.domain.models.TaskPriority
+import com.example.tudeeapp.presentation.mapper.toResDrawables
+import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
 
 enum class TaskPriorityUi {
     HIGH,
@@ -43,3 +47,11 @@ fun TaskPriority.toUi(): TaskPriorityUi {
         TaskPriority.LOW -> TaskPriorityUi.LOW
     }
 }
+
+@Composable
+fun rememberCategoryPainter(isPredefined: Boolean,imageUri: String) =
+    if (isPredefined) {
+        painterResource(imageUri.toResDrawables())
+    } else {
+        rememberAsyncImagePainter(imageUri)
+    }

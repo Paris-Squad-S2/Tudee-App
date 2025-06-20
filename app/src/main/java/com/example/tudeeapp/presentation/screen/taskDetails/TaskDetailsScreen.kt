@@ -45,6 +45,7 @@ import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskUiState
+import com.example.tudeeapp.presentation.utills.rememberCategoryPainter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -81,7 +82,13 @@ fun TaskDetailsScreen(
                             taskUiState = taskUiState,
                             categoryUiState = categoryUiState,
                             onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) },
-                            onEditTaskClick = { navController.navigate(Screens.TaskManagement(taskUiState.id)) }
+                            onEditTaskClick = {
+                                navController.navigate(
+                                    Screens.TaskManagement(
+                                        taskUiState.id
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -103,7 +110,7 @@ private fun TaskDetailsContent(
     onEditTaskClick: () -> Unit
 ) {
 
-    val painter = rememberCategoryPainter(categoryUiState)
+    val painter = rememberCategoryPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
     val iconPriority = getPriorityIcon(taskUiState.priority)
     val backgroundPriorityColor = getPriorityBackgroundColor(taskUiState.priority)
 
@@ -129,7 +136,7 @@ private fun TaskDetailsContent(
             )
         }
         if (taskUiState.status != TaskStatus.DONE)
-            StatusActionButtons(taskUiState, onEditTaskClick,onStatusChange)
+            StatusActionButtons(taskUiState, onEditTaskClick, onStatusChange)
     }
 }
 
@@ -179,10 +186,14 @@ private fun TaskTexts(taskUiState: TaskUiState) {
 }
 
 @Composable
-private fun StatusActionButtons(taskUiState: TaskUiState, onEditTaskClick:() -> Unit ,onStatusChange: (TaskStatus) -> Unit) {
+private fun StatusActionButtons(
+    taskUiState: TaskUiState,
+    onEditTaskClick: () -> Unit,
+    onStatusChange: (TaskStatus) -> Unit
+) {
     Row(modifier = Modifier.padding(top = 24.dp)) {
         TudeeButton(
-            onClick = {onEditTaskClick()},
+            onClick = { onEditTaskClick() },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_pencil_edit_24),
@@ -213,13 +224,6 @@ private fun StatusActionButtons(taskUiState: TaskUiState, onEditTaskClick:() -> 
     }
 }
 
-@Composable
-private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
-    if (categoryUiState.isPredefined) {
-        painterResource(categoryUiState.imageUrl.toResDrawables())
-    } else {
-        rememberAsyncImagePainter(categoryUiState.imageUrl)
-    }
 
 @Composable
 private fun BoxTaskStatus(taskUiState: TaskUiState) {
