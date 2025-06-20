@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.home.composable
+package com.example.tudeeapp.presentation.screen.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +22,7 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun HomeEmptyTasksSection(
+fun EmptyTasksSection(
     title: String,
     description: String = stringResource(R.string.tap_the_button_to_add_your_first_one),
     modifier: Modifier

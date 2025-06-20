@@ -53,7 +53,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
+import com.example.tudeeapp.presentation.screen.common.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
@@ -241,7 +241,7 @@ fun TaskContent(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HomeEmptyTasksSection(
+                EmptyTasksSection(
                     title = stringResource(R.string.no_tasks_for_today),
                     modifier = Modifier
                 )

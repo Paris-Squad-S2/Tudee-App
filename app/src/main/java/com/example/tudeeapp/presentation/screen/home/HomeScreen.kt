@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,7 +45,7 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalThemeState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
-import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
+import com.example.tudeeapp.presentation.screen.common.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
@@ -136,7 +135,6 @@ fun HomeScreenContent(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeContent(
     state: HomeUiState,
@@ -170,7 +168,7 @@ private fun HomeContent(
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ){
-                        HomeEmptyTasksSection(
+                        EmptyTasksSection(
                             title = stringResource(R.string.no_tasks_for_today),
                             modifier = Modifier
                                 .padding(top = 70.dp)

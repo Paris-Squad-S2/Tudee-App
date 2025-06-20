@@ -47,7 +47,7 @@ import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
-import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
+import com.example.tudeeapp.presentation.screen.common.EmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
@@ -154,7 +154,7 @@ fun CategoryDetailsContent(
             Box(
                 modifier = Modifier.fillMaxSize()
             ){
-                HomeEmptyTasksSection(
+                EmptyTasksSection(
                     title = stringResource(R.string.no_task_for, categoryTitle),
                     description = stringResource(R.string.add_first_task),
                     modifier = Modifier.align(Alignment.Center)
