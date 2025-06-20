@@ -43,7 +43,9 @@ import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.LocalThemeState
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
 import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
@@ -55,10 +57,14 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     val state by homeViewModel.homeState.collectAsStateWithLifecycle()
+    val themeMode = LocalThemeState.current
 
     HomeScreenContent(
         state = state,
-        onToggleTheme = homeViewModel::onToggledAction,
+        onToggleTheme = { isDark ->
+            themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
+            homeViewModel.onToggledAction(isDark)
+        },
         onFloatingActionButtonClick = { navController.navigate(Screens.TaskManagement()) },
         onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Task(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Screens.TaskDetails(taskId)) },
@@ -130,6 +136,7 @@ fun HomeScreenContent(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeContent(
     state: HomeUiState,
