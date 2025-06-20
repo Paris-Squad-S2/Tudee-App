@@ -224,7 +224,7 @@ fun CategoryFormContent(
                             tint = Theme.colors.text.hint
                         )
                         Text(
-                            stringResource(id = R.string.categoryImage),
+                            stringResource(id = R.string.upload),
                             style = Theme.textStyle.label.medium,
                             color = Theme.colors.text.hint
                         )
