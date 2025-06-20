@@ -94,7 +94,9 @@ fun TextField(
     BasicTextField(
         value = value,
         enabled = enabled,
-        onValueChange = onValueChange,
+        onValueChange = { newText ->
+            if (newText.lines().size <= 11) { onValueChange(newText) }
+        },
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
@@ -102,10 +104,9 @@ fun TextField(
             .background(Theme.colors.surfaceColors.surfaceHigh, shape)
             .border(BorderStroke(borderWidth, borderColor), shape)
             .clip(shape)
-            .clickable { onClick() }
-        ,
+            .clickable { onClick() },
         singleLine = singleLine,
-        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
+        maxLines = if (singleLine) 1 else 11,
         textStyle = textStyle,
         cursorBrush = SolidColor(Theme.colors.primary),
         interactionSource = interactionSource,
