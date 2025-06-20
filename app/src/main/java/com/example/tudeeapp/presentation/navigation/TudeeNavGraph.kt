@@ -49,7 +49,6 @@ val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarS
 fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = backStackEntry?.destination
     val snackBarState = remember { SnackBarState() }
 
     CompositionLocalProvider(
@@ -83,10 +82,8 @@ fun TudeeNavGraph() {
 
                 composable<Screens.Splash> { SplashScreen() }
                 composable<Screens.OnBoarding> {
-                    val onboardingViewModel: OnboardingViewModel = koinViewModel()
                     OnBoardScreen(
-                        onboardingViewModel,
-                        onboardingPages()
+                        pages = onboardingPages()
                     )
                 }
                 composable<Screens.Home> { HomeScreen() }
@@ -94,22 +91,9 @@ fun TudeeNavGraph() {
                 composable<Screens.Category> { CategoriesScreen() }
                 composable<Screens.TaskForm> { TaskFormScreen() }
                 composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                    composable<Screens.Splash> { SplashScreen() }
-                    composable<Screens.OnBoarding> {
-                        val onboardingViewModel: OnboardingViewModel = koinViewModel()
-                        OnBoardScreen(
-                            onboardingViewModel,
-                            onboardingPages()
-                        )
-                    }
-                    composable<Screens.Home> { HomeScreen() }
-                    composable<Screens.Task> { TaskScreen() }
-                    composable<Screens.Category> { CategoriesScreen() }
-                    composable<Screens.TaskForm> { TaskFormScreen() }
-                    composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                    dialog<Screens.AddCategoryScreen> {
-                        AddCategoryScreen()
-                    }
+                dialog<Screens.AddCategoryScreen> {
+                    AddCategoryScreen()
+                }
 
                 composable<Screens.CategoryDetails> {
                     CategoryDetailsScreen()
