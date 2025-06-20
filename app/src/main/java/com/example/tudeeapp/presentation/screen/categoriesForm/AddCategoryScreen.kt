@@ -48,7 +48,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AddCategoryScreen(
-    viewModel: CategoryFormViewModel = koinViewModel()
+    viewModel: CategoryFormAddViewModel = koinViewModel()
 ) {
 
     val formState by viewModel.state.collectAsState()
