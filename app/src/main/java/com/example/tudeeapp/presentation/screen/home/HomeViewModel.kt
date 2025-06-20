@@ -3,7 +3,6 @@ package com.example.tudeeapp.presentation.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.exception.TudeeException
 import com.example.tudeeapp.domain.models.Task
@@ -65,7 +64,6 @@ class HomeViewModel(
                                 filteredTasks.map {
                                     taskServices.getCategoryById(it.categoryId).first().imageUrl
                                 }
-                                    .map { it.toResDrawables() }
 
                             val tasksUi = filteredTasks.map { it.toTaskUi() }
                                 .mapIndexed { index, taskUi -> taskUi.copy(categoryIcon = tasksIcons[index]) }

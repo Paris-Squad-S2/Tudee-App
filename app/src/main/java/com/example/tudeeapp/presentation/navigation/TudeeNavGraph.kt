@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,12 +28,14 @@ import com.example.tudeeapp.presentation.common.components.SnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.categoriesForm.AddCategoryScreen
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormEditScreen
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
+import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
 import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
@@ -41,6 +45,8 @@ import kotlinx.coroutines.delay
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
+val LocalThemeMode =
+    compositionLocalOf<MutableState<TudeeThemeMode>> { error("No ThemeMode provided") }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -48,10 +54,12 @@ fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
     val snackBarState = remember { SnackBarState() }
+    val themeMode = remember { mutableStateOf(TudeeThemeMode.LIGHT) }
 
     CompositionLocalProvider(
         LocalNavController provides navController,
-        LocalSnackBarState provides snackBarState
+        LocalSnackBarState provides snackBarState,
+        LocalThemeMode provides themeMode
     ) {
 
         val currentRoute = backStackEntry?.destination?.route?.substringBefore('?')
@@ -61,66 +69,78 @@ fun TudeeNavGraph() {
             Screens.Category::class.qualifiedName
         ).indexOf(currentRoute)
 
-        TudeeScaffold(
-            bottomBar = {
-                if (selectedRouteIndex != -1)
-                    TudeeNavigationBar(
-                        onItemClick = { navItem ->
-                            navController.navigate(navItem.screen)
-                        },
-                        selected = selectedRouteIndex
-                    )
-            },
-            contentBackground = Theme.colors.surfaceColors.surface
+        TudeeTheme(
+            isDarkTheme = themeMode.value.value
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = Screens.Splash,
+            TudeeScaffold(
+                bottomBar = {
+                    if (selectedRouteIndex != -1)
+                        TudeeNavigationBar(
+                            onItemClick = { navItem ->
+                                navController.navigate(navItem.screen)
+                            },
+                            selected = selectedRouteIndex
+                        )
+                },
+                contentBackground = Theme.colors.surfaceColors.surface,
             ) {
-
-                composable<Screens.Splash> { SplashScreen() }
-                composable<Screens.OnBoarding> {
-                    OnBoardScreen(
-                        pages = onboardingPages()
-                    )
-                }
-                composable<Screens.Home> { HomeScreen() }
-                composable<Screens.Task> { TaskScreen() }
-                composable<Screens.Category> { CategoriesScreen() }
-                dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
-                composable<Screens.TaskDetails> { TaskDetailsScreen() }
-                dialog<Screens.AddCategoryScreen> {
-                    AddCategoryScreen()
-                }
-
-                dialog<Screens.CategoryDetails> {
-                    CategoryDetailsScreen()
-                }
-                dialog<Screens.CategoryFormEditScreen> {
-                    CategoryFormEditScreen()
-                }
-            }
-
-            if (snackBarState.isVisible) {
-                AnimatedVisibility(
-                    visible = snackBarState.isVisible,
-                    enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
-                    exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+                NavHost(
+                    navController = navController,
+                    startDestination = Screens.Splash,
                 ) {
-                    SnackBar(
-                        Modifier
-                            .statusBarsPadding()
-                            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                        text = snackBarState.message,
-                        isSuccess = snackBarState.isSuccess,
-                        onClick = { snackBarState.hide() }
-                    )
+
+                    composable<Screens.Splash> { SplashScreen() }
+                    composable<Screens.OnBoarding> {
+                        OnBoardScreen(
+                            pages = onboardingPages()
+                        )
+                    }
+                    composable<Screens.Home> { HomeScreen() }
+                    composable<Screens.Task> { TaskScreen() }
+                    composable<Screens.Category> { CategoriesScreen() }
+                    dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
+                    composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                    dialog<Screens.AddCategoryScreen> {
+                        AddCategoryScreen()
+                    }
+
+                    composable<Screens.CategoryDetails> {
+                        CategoryDetailsScreen()
+                    }
+                    dialog<Screens.CategoryDetails> {
+                        CategoryDetailsScreen()
+                    }
+                    dialog<Screens.CategoryFormEditScreen> {
+                        CategoryFormEditScreen()
+                    }
                 }
-                LaunchedEffect(Unit) {
-                    delay(snackBarState.durationMillis.toLong())
-                    snackBarState.hide()
+
+                if (snackBarState.isVisible) {
+                    AnimatedVisibility(
+                        visible = snackBarState.isVisible,
+                        enter = fadeIn(animationSpec = tween(snackBarState.durationMillis)),
+                        exit = fadeOut(animationSpec = tween(snackBarState.durationMillis))
+                    ) {
+                        SnackBar(
+                            Modifier
+                                .statusBarsPadding()
+                                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            text = snackBarState.message,
+                            isSuccess = snackBarState.isSuccess,
+                            onClick = { snackBarState.hide() }
+                        )
+                    }
+                    LaunchedEffect(Unit) {
+                        delay(snackBarState.durationMillis.toLong())
+                        snackBarState.hide()
+                    }
                 }
             }
         }
     }
+}
+
+enum class TudeeThemeMode(val value: Boolean) {
+    LIGHT(false),
+    DARK(true)
 }

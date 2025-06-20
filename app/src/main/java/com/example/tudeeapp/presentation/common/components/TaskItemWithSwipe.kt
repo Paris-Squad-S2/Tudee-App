@@ -57,18 +57,18 @@ fun TaskItemWithSwipe(
         modifier = modifier,
         onDelete = onDelete,
     ) {
-        TaskCard(
-            icon = icon,
-            title = title,
-            date = date,
-            subtitle = subtitle,
-            priorityLabel = priorityLabel,
-            priorityIcon = priorityIcon,
-            priorityColor = priorityColor,
-            isDated = isDated,
-            iconColor = iconColor,
-            onClickItem = onClickItem
-        )
+//        TaskCard(
+//            icon = icon,
+//            title = title,
+//            date = date,
+//            subtitle = subtitle,
+//            priorityLabel = priorityLabel,
+//            priorityIcon = priorityIcon,
+//            priorityColor = priorityColor,
+//            isDated = isDated,
+//            iconColor = iconColor,
+//            onClickItem = onClickItem
+//        )
     }
 }
 
