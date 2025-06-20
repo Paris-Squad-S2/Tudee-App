@@ -34,7 +34,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.screen.task.components.ConfirmationDialogBox
+import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
@@ -47,7 +47,7 @@ import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
-import com.example.tudeeapp.presentation.screen.common.EmptyTasksSection
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
@@ -192,7 +192,9 @@ fun CategoryDetailsContent(
                         onDismiss = { isSheetOpen = false },
                         content = {
                             val context = LocalContext.current
+
                             ConfirmationDialogBox(
+                                title = R.string.are_you_sure_to_continue,
                                 onConfirm = {
                                     onClickDeleteIcon(task.id)
                                     showSnackBar.show(context.getString(R.string.deleted_task_successfully))

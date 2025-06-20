@@ -45,7 +45,7 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalThemeState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
-import com.example.tudeeapp.presentation.screen.common.EmptyTasksSection
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState

@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.common
+package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -85,7 +85,7 @@ private fun SwipeToDeleteTaskItem(
     val coroutineScope = rememberCoroutineScope()
     val anchors = mapOf(0f to SwipeState.DEFAULT, -maxSwipePx to SwipeState.SWIPED)
     val layoutDirection = LocalLayoutDirection.current
-    val swipeDirection = layoutDirection != LayoutDirection.Ltr
+    val swipeDirection = layoutDirection == LayoutDirection.Rtl
 
 
     Box(

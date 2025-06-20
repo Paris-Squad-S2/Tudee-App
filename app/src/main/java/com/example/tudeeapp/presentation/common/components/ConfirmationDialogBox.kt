@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.task.components
+package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,8 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.common.components.ButtonVariant
-import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
