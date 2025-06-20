@@ -46,6 +46,7 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
+import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
@@ -145,25 +146,40 @@ fun CategoryDetailsContent(
             }
         )
         val filteredTasks = tasks.filter { it.status == selectedState.name }
-        LazyColumn(
-            modifier = Modifier.padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(filteredTasks) { task ->
-                val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
-                TaskCard(
-                    icon = categoryImage,
-                    title = task.title,
-                    date = task.createdDate,
-                    subtitle = task.description,
-                    priorityLabel = task.priority,
-                    priorityIcon = painterResource(id = style.iconRes),
-                    priorityColor = style.backgroundColor,
-                    isDated = true,
-                    onClickItem = { navController.navigate(Screens.TaskDetails(task.id)) }
+        if (filteredTasks.isEmpty()){
+
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ){
+                HomeEmptyTasksSection(
+                    title = stringResource(R.string.no_tasks_for_today),
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
+
+
+        }else {
+            LazyColumn(
+                modifier = Modifier.padding(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(filteredTasks) { task ->
+                    val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
+                    TaskCard(
+                        icon = categoryImage,
+                        title = task.title,
+                        date = task.createdDate,
+                        subtitle = task.description,
+                        priorityLabel = task.priority,
+                        priorityIcon = painterResource(id = style.iconRes),
+                        priorityColor = style.backgroundColor,
+                        isDated = true,
+                        onClickItem = { navController.navigate(Screens.TaskDetails(task.id)) }
+                    )
+                }
+            }
         }
+
     }
 }
 
