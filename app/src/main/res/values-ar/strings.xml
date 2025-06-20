@@ -3,6 +3,10 @@
     <string name="app_name"> تودي</string>
     <string name="your_cute_helper_for_every_task">مساعدك اللطيف لإنجاز كل مهامك</string>
     <string name="ok">تأكيد</string>
+    <string name="editCategory">تعديل الفئة</string>
+    <string name="categoryImage">صورة الفئة</string>
+    <string name="categoryEditSnackBarSuccessfully">تم تغيير الفئة بنجاح</string>
+    <string name="delete">حذف</string>
     <string name="cancel">إلغاء</string>
     <string name="tasks">المهام</string>
     <string name="categories">الفئات</string>
@@ -20,7 +24,6 @@
     <string name="onboarding3description">التقدم هو تقدم، تودي سيحتفل بك في كل إنجاز مهما كان صغيرًا.</string>
     <string name="addnewCategory">إضافة فئة جديدة</string>
     <string name="categoryTitle">عنوان الفئة</string>
-    <string name="categoryImage">صورة الفئة</string>
     <string name="upload">رفع</string>
     <string name="priority">الأولوية</string>
     <string name="category">الفئة</string>
@@ -46,7 +49,6 @@
     <string name="move_to_in_progress">نقل إلى قيد التنفيذ</string>
     <string name="task_details">تفاصيل المهمة</string>
     <string name="are_you_sure_to_continue">هل أنت متأكد من الاستمرار؟</string>
-    <string name="delete">حذف</string>
     <string name="deleted_task_successfully">تم حذف المهمة بنجاح</string>
     <string name="delete_task">حذف مهمة</string>
 </resources>
