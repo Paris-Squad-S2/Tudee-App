@@ -46,11 +46,13 @@ fun HorizontalTabs(
     indicatorHeight: Dp = 4.dp
 ) {
     Column(
-        modifier = modifier.height(50.dp)
+        modifier = modifier.height(48.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(Theme.colors.stroke)
+                .padding(bottom = 0.5.dp)
                 .background(backgroundColor),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -69,10 +71,36 @@ fun HorizontalTabs(
                 )
             }
         }
-        HorizontalDivider(color = Theme.colors.stroke)
     }
 
 }
+
+@Composable
+@PreviewLightDark
+fun HorizontalTabsPrev() {
+    val tabs = listOf(
+        Tab(title = "In progress", count = 14, isSelected = true),
+        Tab(title = "To Do", count = 5),
+        Tab(title = "Done")
+    )
+
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+
+    TudeeTheme {
+        Surface(color = Theme.colors.surfaceColors.surface) {
+            HorizontalTabs(
+                modifier = Modifier
+                    .height(48.dp),
+                tabs = tabs,
+                selectedTabIndex = selectedTabIndex,
+                onTabSelected = { index ->
+                    selectedTabIndex = index
+                },
+            )
+        }
+    }
+}
+
 
 @Composable
 @PreviewLightDark
