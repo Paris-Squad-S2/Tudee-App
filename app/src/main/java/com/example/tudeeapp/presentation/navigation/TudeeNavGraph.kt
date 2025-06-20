@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -24,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
+import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.SnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
@@ -53,7 +55,12 @@ fun TudeeNavGraph() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState().value
     val snackBarState = remember { SnackBarState() }
-    val themeMode = rememberSaveable { mutableStateOf(TudeeThemeMode.LIGHT) }
+    val context = LocalContext.current
+    val appPrefs = remember { AppPreferences(context) }
+    val themeMode = rememberSaveable {
+        mutableStateOf(if (appPrefs.isDarkTheme()) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT)
+    }
+
     CompositionLocalProvider(
         LocalNavController provides navController,
         LocalSnackBarState provides snackBarState,
@@ -74,9 +81,7 @@ fun TudeeNavGraph() {
                 bottomBar = {
                     if (selectedRouteIndex != -1)
                         TudeeNavigationBar(
-                            onItemClick = { navItem ->
-                                navController.navigate(navItem.screen)
-                            },
+                            onItemClick = { navItem -> navController.navigate(navItem.screen) },
                             selected = selectedRouteIndex
                         )
                 },
@@ -86,28 +91,16 @@ fun TudeeNavGraph() {
                     navController = navController,
                     startDestination = Screens.Splash,
                 ) {
-
                     composable<Screens.Splash> { SplashScreen() }
-                    composable<Screens.OnBoarding> {
-                        OnBoardScreen(
-                            pages = onboardingPages()
-                        )
-                    }
+                    composable<Screens.OnBoarding> { OnBoardScreen(pages = onboardingPages()) }
                     composable<Screens.Home> { HomeScreen() }
                     composable<Screens.Task> { TaskScreen() }
                     composable<Screens.Category> { CategoriesScreen() }
                     dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
                     dialog<Screens.TaskDetails> { TaskDetailsScreen() }
-                    dialog<Screens.AddCategoryScreen> {
-                        AddCategoryScreen()
-                    }
-
-                    composable<Screens.CategoryDetails> {
-                        CategoryDetailsScreen()
-                    }
-                    dialog<Screens.CategoryFormEditScreen> {
-                        CategoryFormEditScreen()
-                    }
+                    dialog<Screens.AddCategoryScreen> { AddCategoryScreen() }
+                    composable<Screens.CategoryDetails> { CategoryDetailsScreen() }
+                    dialog<Screens.CategoryFormEditScreen> { CategoryFormEditScreen() }
                 }
 
                 if (snackBarState.isVisible) {
