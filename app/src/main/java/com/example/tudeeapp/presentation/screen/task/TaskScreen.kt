@@ -2,6 +2,7 @@ package com.example.tudeeapp.presentation.screen.task
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,7 +77,9 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
         onDateSelected = viewModel::onDateSelected,
         onClickDeleteIcon = viewModel::deleteTask,
         onclickTaskItem = { navController.navigate(Screens.TaskDetails(it)) },
-    )
+        scrollState = rememberScrollState(),
+
+        )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -92,6 +95,7 @@ fun TaskScreenContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
+    scrollState: ScrollState,
 ) {
     TudeeScaffold(
         floatingActionButton = {
@@ -139,6 +143,7 @@ fun TaskScreenContent(
                         onDateSelected,
                         onClickDeleteIcon,
                         onclickTaskItem,
+                        scrollState
                     )
                 }
             }
@@ -157,6 +162,7 @@ fun TaskContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
+    scrollState: ScrollState
 ) {
     val statusList = TaskStatusUi.entries
     var isSheetOpen by remember { mutableStateOf(false) }
@@ -229,7 +235,7 @@ fun TaskContent(
         )
         if (data.tasks.isEmpty()) {
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier.verticalScroll(scrollState)
                     .fillMaxSize()
                     .background(Theme.colors.surfaceColors.surfaceLow)
                     .weight(1f),
