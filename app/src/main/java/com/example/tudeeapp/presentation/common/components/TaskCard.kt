@@ -17,19 +17,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.mapper.toResDrawables
 
 @Composable
 fun TaskCard(
-    icon: Painter,
+    categoryIcon: String,
+    isCategoryPredefined: Boolean = false,
+    categoryIconColor: Color = Color.Unspecified,
     title: String,
     date: String,
     subtitle: String,
@@ -38,7 +45,6 @@ fun TaskCard(
     priorityColor: Color,
     isDated: Boolean,
     modifier: Modifier = Modifier,
-    iconColor: Color = Color.Unspecified,
     onClickItem: () -> Unit = {}
 ) {
     Column(
@@ -48,19 +54,22 @@ fun TaskCard(
                 Theme.colors.surfaceColors.surfaceHigh,
                 shape = RoundedCornerShape(12.dp)
             )
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { onClickItem() }
             .padding(top = 4.dp, bottom = 12.dp, start = 4.dp, end = 12.dp)
-            .clickable{onClickItem()}
+
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier.size(56.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    painter = icon,
+
+                AsyncImage(
+                    model = if (isCategoryPredefined) painterResource(categoryIcon.toResDrawables())
+                    else rememberAsyncImagePainter(categoryIcon),
                     contentDescription = "Icon Description",
-                    tint = iconColor,
-                    modifier = Modifier.size(24.dp)
+                    colorFilter = ColorFilter.tint(categoryIconColor),
                 )
             }
             Row(
@@ -136,14 +145,14 @@ private fun DateCard(date: String) {
 private fun TaskCardPreview() {
     BasePreview {
         TaskCard(
-            icon = painterResource(R.drawable.ic_education),
+            categoryIcon = "",
             title = "Organize Study Desk",
             date = "2023-10-15",
             subtitle = "Review cell structure and functions for tomorrow...",
             priorityLabel = "Medium",
             priorityIcon = painterResource(R.drawable.ic_alert),
             priorityColor = Theme.colors.status.yellowAccent,
-            isDated = true
+            isDated = true,
         )
     }
 }

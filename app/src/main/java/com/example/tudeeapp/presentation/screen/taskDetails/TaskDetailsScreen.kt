@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.DataConstant.toResDrawables
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
@@ -40,6 +39,7 @@ import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens

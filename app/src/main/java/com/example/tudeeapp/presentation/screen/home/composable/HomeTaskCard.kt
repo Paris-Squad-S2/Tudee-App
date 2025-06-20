@@ -14,7 +14,8 @@ fun HomeTaskCard(
     onClickItem: () -> Unit
 ) {
     TaskCard(
-        icon = painterResource(task.categoryIcon),
+        categoryIcon = task.categoryIcon,
+        isCategoryPredefined = task.isCategoryPredefined,
         title = task.title,
         date = "",
         subtitle = task.description,
