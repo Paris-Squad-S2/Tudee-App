@@ -1,18 +1,20 @@
 package com.example.tudeeapp.data
 
 import com.example.tudeeapp.data.mapper.DataConstant
+import com.example.tudeeapp.domain.exception.AddCategoryException
 import com.example.tudeeapp.data.mapper.toCategory
 import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTask
 import com.example.tudeeapp.data.mapper.toTaskEntity
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
+import com.example.tudeeapp.data.source.local.room.entity.CategoryEntity
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.exception.AddCategoryException
 import com.example.tudeeapp.domain.exception.CategoriesNotFoundException
 import com.example.tudeeapp.domain.exception.CategoryNotFoundException
 import com.example.tudeeapp.domain.exception.NoCategoryDeletedException
+import com.example.tudeeapp.domain.exception.NoCategoryEditedException
 import com.example.tudeeapp.domain.exception.NoTaskAddedException
 import com.example.tudeeapp.domain.exception.NoTaskDeletedException
 import com.example.tudeeapp.domain.exception.NoTaskEditedException
@@ -22,6 +24,7 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 class TaskServicesImpl(
@@ -42,6 +45,7 @@ class TaskServicesImpl(
             .map { categories -> categories.map { it.toCategory() } }
             .catch { throw CategoriesNotFoundException() }
     }
+
 
     override suspend fun addTask(task: Task) {
         try {
@@ -104,6 +108,24 @@ class TaskServicesImpl(
         } catch (e: Exception) {
             throw AddCategoryException()
         }
+    }
+
+    override suspend fun editCategory(id: Long, title: String, imageUrl: String) {
+
+        try {
+            val currentCategory: CategoryEntity =
+                categoryDao.getCategoryById(id).firstOrNull() ?: throw CategoryNotFoundException()
+
+            val updatedCategory = currentCategory.copy(
+                title = title,
+                imageUrl = imageUrl
+            )
+
+            categoryDao.updateCategory(updatedCategory)
+        } catch (e: Exception) {
+            throw NoCategoryEditedException()
+        }
+
     }
 
 }
