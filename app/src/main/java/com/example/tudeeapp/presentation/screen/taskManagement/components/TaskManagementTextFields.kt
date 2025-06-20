@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
@@ -30,14 +31,14 @@ fun TaskManagementTextFields(
             modifier = Modifier.padding(top = 12.dp),
             value = title,
             onValueChange = onTitleChange,
-            placeholder = "Task Title",
+            placeholder = stringResource(R.string.task_title),
             leadingIcon = R.drawable.ic_unselected_tasks,
         )
         TextField(
             modifier = Modifier.padding(top = 16.dp),
             value = description,
             onValueChange = onDescriptionChange,
-            placeholder = "Description",
+            placeholder = stringResource(R.string.description),
             singleLine = false,
             maxLines = 5,
             leadingIcon = null

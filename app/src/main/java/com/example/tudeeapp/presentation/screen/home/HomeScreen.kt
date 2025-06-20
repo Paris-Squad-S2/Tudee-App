@@ -43,7 +43,9 @@ import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.navigation.LocalThemeMode
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
 import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
@@ -55,7 +57,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     val state by homeViewModel.homeState.collectAsStateWithLifecycle()
-
+    val themeMode = LocalThemeMode.current
+    if (state.isDarkMode) themeMode.value = TudeeThemeMode.DARK else themeMode.value = TudeeThemeMode.LIGHT
     HomeScreenContent(
         state = state,
         onToggleTheme = homeViewModel::onToggledAction,
