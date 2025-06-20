@@ -87,7 +87,7 @@ fun TudeeNavGraph() {
                 composable<Screens.Task> { TaskScreen() }
                 composable<Screens.Category> { CategoriesScreen() }
                 dialog<Screens.TaskForm> { TaskManagementBottomSheet() }
-                composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                dialog<Screens.TaskDetails> { TaskDetailsScreen() }
                 dialog<Screens.AddCategoryScreen> {
                     AddCategoryScreen()
                 }
