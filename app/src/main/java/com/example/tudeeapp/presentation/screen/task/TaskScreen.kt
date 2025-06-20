@@ -52,6 +52,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSection
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toStyle
 import kotlinx.datetime.LocalDate
@@ -163,7 +164,7 @@ fun TaskContent(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(Theme.colors.surfaceColors.surfaceHigh)
     ) {
         if (data.showDatePicker) {
@@ -225,73 +226,59 @@ fun TaskContent(
                 onTabSelected(statusList[index])
             }
         )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = Theme.colors.stroke
-                ),
-        )
-
         if (data.tasks.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Theme.colors.surfaceColors.surface),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                EmptyTasksSection(
-                    stringResource(R.string.no_tasks_here),
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 20.dp)
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ){
+                HomeEmptyTasksSection(
+                    title = stringResource(R.string.no_tasks_for_today),
+                    modifier = Modifier.align(Alignment.Center)
                 )
+            }
+        }else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .padding(vertical = 12.dp, horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+
+                items(data.tasks) { task ->
+                    TaskItemWithSwipe(
+                        icon = painterResource(task.iconRes),
+                        iconColor = Color.Unspecified,
+                        title = task.title,
+                        date = task.createdDate.toString(),
+                        subtitle = task.description,
+                        priorityLabel = task.priority.name,
+                        priorityIcon = painterResource(task.priority.toStyle().iconRes),
+                        priorityColor = task.priority.toStyle().backgroundColor,
+                        isDated = false,
+                        onClickItem = { onclickTaskItem(task.id) },
+                        onDelete = { isSheetOpen = true }
+                    )
+                    TudeeBottomSheet(
+                        isVisible = isSheetOpen,
+                        title = LocalContext.current.getString(R.string.delete_task),
+                        isScrollable = true,
+                        skipPartiallyExpanded = true,
+                        onDismiss = { isSheetOpen = false },
+                        content = {
+                            val context = LocalContext.current
+                            ConfirmationDialogBox(
+                                onConfirm = {
+                                    onClickDeleteIcon(task.id)
+                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                    isSheetOpen = false
+                                },
+                                onDismiss = { isSheetOpen = false })
+                        },
+                    )
+                }
             }
         }
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .background(Theme.colors.surfaceColors.surfaceLow)
-                .padding(vertical = 12.dp, horizontal = 16.dp)
-                .fillMaxWidth()
-                .weight(1f)
-        ) {
-            items(data.tasks) { task ->
-                TaskItemWithSwipe(
-                    icon = painterResource(task.iconRes),
-                    iconColor = Color.Unspecified,
-                    title = task.title,
-                    date = task.createdDate.toString(),
-                    subtitle = task.description,
-                    priorityLabel = task.priority.name,
-                    priorityIcon = painterResource(task.priority.toStyle().iconRes),
-                    priorityColor = task.priority.toStyle().backgroundColor,
-                    isDated = false,
-                    onClickItem = { onclickTaskItem(task.id) },
-                    onDelete = { isSheetOpen = true }
-                )
-                TudeeBottomSheet(
-                    isVisible = isSheetOpen,
-                    title = LocalContext.current.getString(R.string.delete_task),
-                    isScrollable = true,
-                    skipPartiallyExpanded = true,
-                    onDismiss = { isSheetOpen = false },
-                    content = {
-                        val context = LocalContext.current
-                        ConfirmationDialogBox(
-                            onConfirm = {
-                                onClickDeleteIcon(task.id)
-                                showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                isSheetOpen = false
-                            },
-                            onDismiss = { isSheetOpen = false })
-                    },
-                )
-            }
-        }
     }
 }
