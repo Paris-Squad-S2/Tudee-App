@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.common.components
+package com.example.tudeeapp.presentation.screen.task.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,16 +11,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
 fun ConfirmationDialogBox(
+    title: Int,
     modifier: Modifier = Modifier,
+    image: Painter = painterResource(R.drawable.tudee_img),
     onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {}
 
@@ -39,7 +44,7 @@ fun ConfirmationDialogBox(
         ) {
             Text(
                 modifier = Modifier.padding(top = 12.dp),
-                text = stringResource(R.string.are_you_sure_to_continue),
+                text = stringResource(title),
                 style = Theme.textStyle.body.large,
                 color = Theme.colors.text.body,
             )
@@ -49,11 +54,9 @@ fun ConfirmationDialogBox(
                     .align(Alignment.CenterHorizontally)
                     .width(107.dp)
                     .height(100.dp),
-                painter = painterResource(R.drawable.tudee_img),
+                painter = image,
                 contentDescription = "tudee image",
-
-
-                )
+            )
         }
 
         Column(
@@ -72,7 +75,7 @@ fun ConfirmationDialogBox(
                 isNegative = true,
                 variant = ButtonVariant.FilledButton,
                 contentColor = Theme.colors.status.error,
-                )
+            )
             TudeeButton(
                 onClick = onDismiss,
                 modifier = Modifier
@@ -89,5 +92,5 @@ fun ConfirmationDialogBox(
 @Preview
 @Composable
 fun DeleteTaskConfirmationBoxPreview() {
-    ConfirmationDialogBox()
+    ConfirmationDialogBox(title = R.string.are_you_sure_to_continue)
 }

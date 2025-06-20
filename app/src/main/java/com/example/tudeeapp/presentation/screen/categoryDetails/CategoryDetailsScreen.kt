@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,19 +27,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
+import com.example.tudeeapp.presentation.screen.task.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
-import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
 import com.example.tudeeapp.presentation.common.components.TopAppBar
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
@@ -55,7 +51,6 @@ import com.example.tudeeapp.presentation.screen.home.composable.HomeEmptyTasksSe
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
-import androidx.lifecycle.compose.currentStateAsState
 
 @Composable
 fun CategoryDetailsScreen(

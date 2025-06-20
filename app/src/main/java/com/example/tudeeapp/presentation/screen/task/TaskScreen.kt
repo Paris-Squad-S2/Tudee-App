@@ -39,7 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
-import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
+import com.example.tudeeapp.presentation.screen.task.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.DayItem
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
@@ -77,8 +77,7 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
         onDateSelected = viewModel::onDateSelected,
         onClickDeleteIcon = viewModel::deleteTask,
         onclickTaskItem = { navController.navigate(Screens.TaskDetails(it)) },
-        scrollState = rememberScrollState(),
-
+        scrollState = rememberScrollState()
         )
 }
 
@@ -284,6 +283,7 @@ fun TaskContent(
                         content = {
                             val context = LocalContext.current
                             ConfirmationDialogBox(
+                                title = R.string.are_you_sure_to_continue,
                                 onConfirm = {
                                     onClickDeleteIcon(task.id)
                                     showSnackBar.show(context.getString(R.string.deleted_task_successfully))
