@@ -183,7 +183,7 @@ fun CategoryFormContent(
                             painter = painterResource(id = R.drawable.ic_image_add_02),
                             contentDescription = "Upload",
                             modifier = Modifier.padding(bottom = 12.dp),
-                            tint = Color.Unspecified
+                            tint = Theme.colors.text.hint
                         )
                         Text(
                             stringResource(id = R.string.categoryImage),
