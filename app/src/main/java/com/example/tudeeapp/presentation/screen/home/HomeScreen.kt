@@ -164,11 +164,16 @@ private fun HomeContent(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    HomeEmptyTasksSection(
-                        title = stringResource(R.string.no_tasks_for_today),
-                        Modifier
-                            .padding(top = 70.dp)
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        HomeEmptyTasksSection(
+                            title = stringResource(R.string.no_tasks_for_today),
+                            Modifier
+                                .padding(top = 70.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
                 }
             }
 
