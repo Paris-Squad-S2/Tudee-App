@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
@@ -39,13 +38,12 @@ import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskUiState
-import com.example.tudeeapp.presentation.utills.rememberCategoryPainter
+import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -110,7 +108,7 @@ private fun TaskDetailsContent(
     onEditTaskClick: () -> Unit
 ) {
 
-    val painter = rememberCategoryPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
+    val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
     val iconPriority = getPriorityIcon(taskUiState.priority)
     val backgroundPriorityColor = getPriorityBackgroundColor(taskUiState.priority)
 
