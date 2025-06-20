@@ -58,6 +58,7 @@ fun TopAppBar(
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                 contentDescription = "Back",
+                tint = Theme.colors.text.body,
                 modifier = Modifier
                     .size(20.dp)
                     .clip(CircleShape)
@@ -120,6 +121,7 @@ private fun OptionsButton(
             Icon(
                 imageVector = iconButton,
                 contentDescription = "Options",
+                tint = Theme.colors.text.body,
                 modifier = Modifier
                     .size(20.dp)
                     .clip(CircleShape)
