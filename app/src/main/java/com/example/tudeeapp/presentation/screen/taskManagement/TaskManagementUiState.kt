@@ -21,7 +21,6 @@ data class TaskManagementUiState(
 ) {
     val isInitialState: Boolean
         get() = title.isEmpty() ||
-                description.isEmpty() ||
                 selectedDate.isEmpty() ||
                 selectedPriority == TaskPriorityUiState.NONE ||
                 categories.isEmpty() ||
