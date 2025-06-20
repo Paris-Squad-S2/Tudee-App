@@ -49,6 +49,15 @@ fun TaskManagementBottomSheet(
             snackbarHostState.show(message = it, isSuccess = false)
         }
     }
+
+    LaunchedEffect(uiState.isTaskSaved) {
+        if (uiState.isTaskSaved) {
+            snackbarHostState.show(message = navController.context.getString(R.string.task_saved_successfully), isSuccess = true)
+            navController.popBackStack()
+        }
+    }
+
+
 }
 
 @Composable
