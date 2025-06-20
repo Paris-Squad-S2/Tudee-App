@@ -19,12 +19,12 @@ data class CategoryItemUIState(
     val isPredefined: Boolean
 )
 
-fun Category.toCategoryUIState(): CategoryItemUIState {
+fun Category.toCategoryUIState(calculatedCount: Int): CategoryItemUIState {
     val isPredefined = this.isPredefined
     return CategoryItemUIState(
         id = this.id,
         name = this.title,
-        count = this.tasksCount,
+        count = calculatedCount,
         imageResId = if (this.isPredefined) this.imageUrl.toResDrawables() else null,
         imageUrl = if (!this.isPredefined) this.imageUrl else null,
         isPredefined = isPredefined
