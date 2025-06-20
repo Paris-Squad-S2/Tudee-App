@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -78,12 +79,13 @@ fun TudeeNavGraph() {
             isDarkTheme = themeMode.value == TudeeThemeMode.DARK
         ) {
             TudeeScaffold(
+                modifier = Modifier.navigationBarsPadding(),
                 bottomBar = {
-                    if (selectedRouteIndex != -1)
-                        TudeeNavigationBar(
-                            onItemClick = { navItem -> navController.navigate(navItem.screen) },
-                            selected = selectedRouteIndex
-                        )
+                    TudeeNavigationBar(
+                        onItemClick = { navItem -> navController.navigate(navItem.screen) },
+                        selected = selectedRouteIndex,
+                        isVisible = selectedRouteIndex != -1
+                    )
                 },
                 contentBackground = Theme.colors.surfaceColors.surface
             ) {

@@ -95,7 +95,13 @@ fun TextField(
         value = value,
         enabled = enabled,
         onValueChange = { newText ->
-            if (newText.lines().size <= 11) { onValueChange(newText) }
+            if (singleLine){
+                if (newText.length<=100){
+                    onValueChange(newText)
+                }
+            }else{
+                if (newText.lines().size <= 11) { onValueChange(newText) }
+            }
         },
         modifier = modifier
             .fillMaxWidth()

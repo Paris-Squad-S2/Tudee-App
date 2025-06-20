@@ -94,7 +94,7 @@ fun EmptyTasksSection(
             Text(
                 text = title,
                 style = Theme.textStyle.title.small,
-                color = Theme.colors.text.hint
+                color = Theme.colors.text.body
             )
             Text(
                 text = description,

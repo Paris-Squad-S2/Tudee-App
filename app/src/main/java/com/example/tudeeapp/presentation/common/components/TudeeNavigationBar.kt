@@ -1,5 +1,10 @@
 package com.example.tudeeapp.presentation.common.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -28,54 +33,61 @@ fun TudeeNavigationBar(
     modifier: Modifier = Modifier,
     itemList: List<NavItem> = navItemList,
     onItemClick: (NavItem) -> Unit = {},
-    selected: Int = 0
+    selected: Int = 0,
+    isVisible: Boolean = true
 ) {
     var selectedIndex by remember(selected) {
         mutableIntStateOf(selected)
     }
 
-    NavigationBar(
-        modifier = modifier,
-        containerColor = Theme.colors.surfaceColors.surfaceHigh
+    AnimatedVisibility(
+    visible = isVisible,
+        enter = slideInVertically(initialOffsetY = {it})+ fadeIn(),
+        exit = slideOutVertically(targetOffsetY = {it})+ fadeOut(),
     ) {
-        itemList.forEachIndexed { index, navItem ->
-            val isSelected = selectedIndex == index
-            NavigationBarItem(
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.Transparent
+        NavigationBar(
+            modifier = modifier,
+            containerColor = Theme.colors.surfaceColors.surfaceHigh
+        ) {
+            itemList.forEachIndexed { index, navItem ->
+                val isSelected = selectedIndex == index
+                NavigationBarItem(
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = Color.Transparent
 
-                ),
-                selected = isSelected,
-                onClick = {
-                    selectedIndex = index
-                    onItemClick(navItem)
-                },
-                icon = {
-                    Box(
-                        modifier = Modifier
-                            .size(42.dp)
-                            .clip(
-                                shape = RoundedCornerShape(16.dp)
+                    ),
+                    selected = isSelected,
+                    onClick = {
+                        selectedIndex = index
+                        onItemClick(navItem)
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(42.dp)
+                                .clip(
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                                .background(
+                                    color = if (isSelected) Theme.colors.primaryVariant else Theme.colors.surfaceColors.surfaceHigh,
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(
+                                    if (isSelected)
+                                        navItem.selectedIcon
+                                    else navItem.unselectedIcon
+                                ),
+                                null,
+                                tint = if (isSelected) Theme.colors.primary else Theme.colors.text.hint,
                             )
-                            .background(
-                                color = if (isSelected) Theme.colors.primaryVariant else Theme.colors.surfaceColors.surfaceHigh,
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                if (isSelected)
-                                    navItem.selectedIcon
-                                else navItem.unselectedIcon
-                            ),
-                            null,
-                            tint = if (isSelected) Theme.colors.primary else Theme.colors.text.hint,
-                        )
-                    }
-                },
-            )
-        }
+                        }
+                    },
+                )
+            }
 
+        }
     }
 }
 

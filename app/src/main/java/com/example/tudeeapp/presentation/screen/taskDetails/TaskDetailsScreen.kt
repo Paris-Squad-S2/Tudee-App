@@ -151,7 +151,7 @@ private fun CategoryIcon(painter: Painter) {
     Box(
         modifier = Modifier
             .padding(top = 12.dp)
-            .size(56.dp)
+            .size(56.dp).clip(CircleShape)
             .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
     ) {
         Icon(
@@ -160,7 +160,7 @@ private fun CategoryIcon(painter: Painter) {
             tint = Color.Unspecified,
             modifier = Modifier
                 .size(32.dp)
-                .clip(CircleShape)
+
                 .align(Alignment.Center)
         )
     }
@@ -190,19 +190,19 @@ private fun StatusActionButtons(
 ) {
     Row(modifier = Modifier.padding(top = 24.dp)) {
         TudeeButton(
+            modifier = Modifier.height(56.dp),
             onClick = { onEditTaskClick() },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_pencil_edit_24),
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp)
                 )
             },
             variant = ButtonVariant.OutlinedButton,
         )
         Spacer(Modifier.width(4.dp))
         TudeeButton(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).height(56.dp),
             onClick = {
                 val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
                     TaskStatus.DONE
