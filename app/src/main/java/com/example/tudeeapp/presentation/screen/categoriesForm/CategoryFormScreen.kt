@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import com.example.tudeeapp.presentation.common.components.TudeeButton
+import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,6 +80,7 @@ fun CategoryFormScreen(
     TudeeBottomSheet(
         isVisible = showSheet,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
+        headerEnd = { DeleteButton(modifier = Modifier.padding(end = 16.dp)) },
         onDismiss = {
             showSheet = false
             navController.popBackStack()
@@ -199,4 +202,13 @@ fun CategoryFormContent(
                 buttonText = buttonText
             )
     }
+}
+
+@Composable
+fun DeleteButton(modifier: Modifier = Modifier){
+    TudeeButton(
+        onClick = { }, text = stringResource(R.string.delete),
+        variant = ButtonVariant.TextButton,
+        isNegative = true
+    )
 }
