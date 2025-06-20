@@ -66,7 +66,7 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
     TaskScreenContent(
         uiState = uiState,
         listState = rememberLazyListState(),
-        addTask = { navController.navigate(Screens.TaskForm) },
+        addTask = { navController.navigate(Screens.TaskManagement()) },
         onCLickDatePicker = viewModel::onDatePickerVisibilityChanged,
         onClickPreviousMonth = viewModel::goToPreviousMonth,
         onClickNextMonth = viewModel::goToNextMonth,

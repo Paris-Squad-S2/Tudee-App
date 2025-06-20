@@ -40,7 +40,9 @@ import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskUiState
 import org.koin.compose.viewmodel.koinViewModel
@@ -49,24 +51,28 @@ import org.koin.compose.viewmodel.koinViewModel
 fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = koinViewModel()
 ) {
-
+    val navController = LocalNavController.current
     val taskDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isSheetOpen by remember { mutableStateOf(true) }
 
     TudeeBottomSheet(
-        isVisible = isSheetOpen,
+        isVisible = true,
         title = stringResource(R.string.task_details),
         isScrollable = false,
         skipPartiallyExpanded = false,
-        onDismiss = { isSheetOpen = true },
+        onDismiss = { navController.popBackStack() },
         content = {
 
             when {
                 taskDetailsUiState.isLoading -> LoadingView()
-                taskDetailsUiState.errorMessage.isNotEmpty() ->{
-                    LocalSnackBarState.current.show(taskDetailsUiState.errorMessage, isSuccess = false)
+                taskDetailsUiState.errorMessage.isNotEmpty() -> {
+                    LocalSnackBarState.current.show(
+                        taskDetailsUiState.errorMessage,
+                        isSuccess = false
+                    )
                     isSheetOpen = false
                 }
+
                 else -> {
                     val taskUiState = taskDetailsUiState.taskUiState
                     val categoryUiState = taskDetailsUiState.categoryUiState
@@ -74,7 +80,8 @@ fun TaskDetailsScreen(
                         TaskDetailsContent(
                             taskUiState = taskUiState,
                             categoryUiState = categoryUiState,
-                            onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) }
+                            onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) },
+                            onEditTaskClick = { navController.navigate(Screens.TaskManagement(taskUiState.id)) }
                         )
                     }
                 }
@@ -92,7 +99,8 @@ private fun LoadingView() {
 private fun TaskDetailsContent(
     taskUiState: TaskUiState,
     categoryUiState: CategoryUiState,
-    onStatusChange: (TaskStatus) -> Unit
+    onStatusChange: (TaskStatus) -> Unit,
+    onEditTaskClick: () -> Unit
 ) {
 
     val painter = rememberCategoryPainter(categoryUiState)
@@ -121,7 +129,7 @@ private fun TaskDetailsContent(
             )
         }
         if (taskUiState.status != TaskStatus.DONE)
-            StatusActionButtons(taskUiState, onStatusChange)
+            StatusActionButtons(taskUiState, onEditTaskClick,onStatusChange)
     }
 }
 
@@ -171,17 +179,10 @@ private fun TaskTexts(taskUiState: TaskUiState) {
 }
 
 @Composable
-private fun StatusActionButtons(taskUiState: TaskUiState, onStatusChange: (TaskStatus) -> Unit) {
+private fun StatusActionButtons(taskUiState: TaskUiState, onEditTaskClick:() -> Unit ,onStatusChange: (TaskStatus) -> Unit) {
     Row(modifier = Modifier.padding(top = 24.dp)) {
         TudeeButton(
-            onClick = {
-                val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
-                    TaskStatus.DONE
-                } else {
-                    TaskStatus.IN_PROGRESS
-                }
-                onStatusChange(newStatus)
-            },
+            onClick = {onEditTaskClick()},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_pencil_edit_24),
@@ -194,7 +195,14 @@ private fun StatusActionButtons(taskUiState: TaskUiState, onStatusChange: (TaskS
         Spacer(Modifier.width(4.dp))
         TudeeButton(
             modifier = Modifier.weight(1f),
-            onClick = { },
+            onClick = {
+                val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
+                    TaskStatus.DONE
+                } else {
+                    TaskStatus.IN_PROGRESS
+                }
+                onStatusChange(newStatus)
+            },
             text = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
                 stringResource(R.string.move_to_done)
             } else {

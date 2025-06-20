@@ -38,6 +38,7 @@ import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskForm.TaskFormScreen
+import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -89,8 +90,8 @@ fun TudeeNavGraph() {
                 composable<Screens.Home> { HomeScreen() }
                 composable<Screens.Task> { TaskScreen() }
                 composable<Screens.Category> { CategoriesScreen() }
-                composable<Screens.TaskForm> { TaskFormScreen() }
-                composable<Screens.TaskDetails> { TaskDetailsScreen() }
+                dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
+                dialog<Screens.TaskDetails> { TaskDetailsScreen() }
                 dialog<Screens.AddCategoryScreen> {
                     AddCategoryScreen()
                 }
