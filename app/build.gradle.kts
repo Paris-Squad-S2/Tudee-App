@@ -55,44 +55,50 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.compose.material)
+    implementation(libs.navigation.compose)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
+    //Splash Api
+    implementation(libs.androidx.core.splashscreen)
+
+    //coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.test)
+
+    //kotlinx date time
+    implementation(libs.kotlinx.datetime)
+
+    //kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    //coil
+    implementation(libs.coil.compose)
+    implementation(libs.accompanist.systemuicontroller)
+
+    //Koin
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.android)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.test)
-    implementation(libs.coil.compose)
 
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // testing
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit)
+
+    //android testing
+    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.kotlinx.serialization.json)
-
-
-    //Splash Api
-    implementation (libs.androidx.core.splashscreen)
-
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    implementation(libs.navigation.compose)
-
-    //kotlinx date time
-    implementation(libs.kotlinx.datetime)
-    //kotlinx serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.coil.compose)
-
-    implementation(libs.accompanist.systemuicontroller)
-
 }
