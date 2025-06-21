@@ -1,7 +1,7 @@
 package com.example.tudeeapp.presentation.screen.categories
 
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.domain.exception.CategoriesNotFoundException
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,6 @@ import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import com.google.common.truth.Truth.assertThat
 
 class CategoryViewModelTest {
     private lateinit var taskServices: TaskServices
