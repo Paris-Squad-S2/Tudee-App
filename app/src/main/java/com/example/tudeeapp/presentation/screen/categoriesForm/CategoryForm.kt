@@ -97,9 +97,7 @@ fun CategoryForm(
         onDismiss = {
             showSheet = false
             navController.popBackStack()
-        },
-        isScrollable = true,
-        skipPartiallyExpanded = true
+        }
     ) {
         CategoryFormContent(
             state = state,
@@ -122,8 +120,6 @@ fun CategoryForm(
         TudeeBottomSheet(
             isVisible = true,
             title = stringResource(id = R.string.delete_category),
-            isScrollable = true,
-            skipPartiallyExpanded = true,
             onDismiss = { showDeleteConfirmation = false }
         ) {
             ConfirmationDialogBox(
@@ -170,10 +166,9 @@ fun CategoryFormContent(
             Text(
                 text = stringResource(id = R.string.categoryImage),
                 style = Theme.textStyle.title.medium,
-                modifier = Modifier.align(Alignment.Start),
-                color = Theme.colors.text.title
+                modifier = Modifier.align(Alignment.Start).padding(8.dp),
+                color = Theme.colors.text.title,
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Box(
                 modifier = Modifier
                     .size(113.dp)

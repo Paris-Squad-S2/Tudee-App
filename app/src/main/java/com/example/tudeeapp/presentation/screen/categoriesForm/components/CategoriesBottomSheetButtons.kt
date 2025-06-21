@@ -3,7 +3,6 @@ package com.example.tudeeapp.presentation.screen.categoriesForm.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,15 +47,14 @@ fun CategoriesBottomSheetButtons(
                 .padding(horizontal = 16.dp)
         ) {
             TudeeButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
                 onClick = onSubmit,
                 text = buttonText,
                 variant = ButtonVariant.FilledButton,
                 state = if (state.isFormValid) ButtonState.Normal else ButtonState.Disabled,
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
             TudeeButton(
                 onClick = onCancel,
                 text = stringResource(id = R.string.cancel),
