@@ -16,12 +16,18 @@ import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.google.common.truth.Truth.assertThat
 import com.example.tudeeapp.data.mapper.toCategoryEntity
+import com.example.tudeeapp.presentation.screen.categories.dummyCategoryEntities
+import com.example.tudeeapp.presentation.screen.categories.expectedCategories
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -36,6 +42,24 @@ class TaskServicesImplTest {
     @BeforeEach
     fun setUp() {
         taskServices = TaskServicesImpl(taskDao, categoryDao, appPreferences, dataConstant)
+    }
+
+    @Test
+    fun `getCategories should return categories when getAll in CategoryDao called successfully`() = runTest {
+        coEvery { categoryDao.getAllCategories() } returns flowOf(dummyCategoryEntities)
+
+        val result = taskServices.getAllCategories().first()
+
+        assertEquals(expectedCategories[0].title, result[0].title)
+    }
+
+    @Test
+    fun `getCategories should throw exception when CategoryDao fails`() = runTest {
+        coEvery { categoryDao.getAllCategories() } throws Exception()
+
+        assertThrows<Exception> {
+            taskServices.getAllCategories().toList()
+        }
     }
 
     @Test
