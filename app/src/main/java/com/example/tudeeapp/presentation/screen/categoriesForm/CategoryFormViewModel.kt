@@ -27,10 +27,8 @@ class CategoryFormViewModel(
     val state: StateFlow<CategoryFormUIState> = _state.asStateFlow()
 
     init {
-        val args = savedStateHandle.toRoute<Screens.CategoryForm>()
-        val categoryId = args.categoryId
-        if (categoryId != null) {
-            loadCategory(categoryId)
+        savedStateHandle.toRoute<Screens.CategoryForm>().categoryId?.let {
+            loadCategory(it)
         }
     }
 
