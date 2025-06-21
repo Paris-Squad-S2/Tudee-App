@@ -154,7 +154,7 @@ private fun getBackgroundBrush(
 private fun getBorderColor(variant: ButtonVariant, isNegative: Boolean): Color {
     return when (variant) {
         ButtonVariant.OutlinedButton ->
-            if (!isNegative) Theme.colors.text.disable
+            if (!isNegative) Theme.colors.stroke
             else Theme.colors.status.error.copy(alpha = 0.12f)
 
         else -> Color.Transparent
