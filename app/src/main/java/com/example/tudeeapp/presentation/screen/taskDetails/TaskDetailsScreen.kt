@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -77,7 +78,10 @@ fun TaskDetailsScreen(
                         TaskDetailsContent(
                             taskUiState = taskUiState,
                             categoryUiState = categoryUiState,
-                            onStatusChange = { newStatus -> viewModel.onEditTaskStatus(newStatus) },
+                            onStatusChange = { newStatus ->
+                                    viewModel.onEditTaskStatus(newStatus)
+                                    navController.popBackStack()
+                            },
                             onEditTaskClick = {
                                 navController.navigate(
                                     Screens.TaskManagement(
@@ -152,6 +156,7 @@ private fun CategoryIcon(painter: Painter) {
         modifier = Modifier
             .padding(top = 12.dp)
             .size(56.dp)
+            .clip(CircleShape)
             .background(color = Theme.colors.surfaceColors.surfaceHigh, shape = CircleShape)
     ) {
         Icon(
@@ -160,7 +165,7 @@ private fun CategoryIcon(painter: Painter) {
             tint = Color.Unspecified,
             modifier = Modifier
                 .size(32.dp)
-                .clip(CircleShape)
+
                 .align(Alignment.Center)
         )
     }
@@ -178,7 +183,9 @@ private fun TaskTexts(taskUiState: TaskUiState) {
         modifier = Modifier.padding(top = 8.dp),
         text = taskUiState.description,
         style = Theme.textStyle.body.medium,
-        color = Theme.colors.text.body
+        color = Theme.colors.text.body,
+        maxLines = 3,
+        overflow = TextOverflow.Ellipsis
     )
 }
 
@@ -190,19 +197,21 @@ private fun StatusActionButtons(
 ) {
     Row(modifier = Modifier.padding(top = 24.dp)) {
         TudeeButton(
+            modifier = Modifier.height(56.dp),
             onClick = { onEditTaskClick() },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_pencil_edit_24),
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp)
                 )
             },
             variant = ButtonVariant.OutlinedButton,
         )
         Spacer(Modifier.width(4.dp))
         TudeeButton(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .height(56.dp),
             onClick = {
                 val newStatus = if (taskUiState.status == TaskStatus.IN_PROGRESS) {
                     TaskStatus.DONE

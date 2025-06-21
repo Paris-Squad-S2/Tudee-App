@@ -55,14 +55,14 @@ fun TaskCard(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
-                modifier = Modifier.size(56.dp),
+                modifier = Modifier.size(56.dp).clip(CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = icon,
                     contentDescription = "Icon Description",
                     tint = iconColor,
-                    modifier = Modifier.size(24.dp).clip(CircleShape)
+                    modifier = Modifier.size(24.dp)
                 )
             }
             Row(

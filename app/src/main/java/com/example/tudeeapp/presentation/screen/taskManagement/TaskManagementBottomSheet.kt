@@ -9,14 +9,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons
-import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
-import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
-import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
+import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
+import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons
+import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -52,7 +52,10 @@ fun TaskManagementBottomSheet(
 
     LaunchedEffect(uiState.isTaskSaved) {
         if (uiState.isTaskSaved) {
-            snackbarHostState.show(message = navController.context.getString(R.string.task_saved_successfully), isSuccess = true)
+            snackbarHostState.show(
+                message = navController.context.getString(R.string.task_saved_successfully),
+                isSuccess = true
+            )
             navController.popBackStack()
         }
     }
@@ -76,7 +79,9 @@ private fun TaskManagementBottomSheetContent(
             TaskManagementButtons(
                 isEditMode = uiState.isEditMode,
                 isActionButtonDisabled = uiState.isInitialState,
-                onClickActionButton = { viewModel.onActionButtonClicked() },
+                onClickActionButton = {
+                    viewModel.onActionButtonClicked()
+                },
                 onClickCancel = onCancelClicked,
                 isLoading = uiState.isLoading,
             )
