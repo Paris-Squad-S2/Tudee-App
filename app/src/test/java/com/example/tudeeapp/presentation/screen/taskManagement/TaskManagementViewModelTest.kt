@@ -136,6 +136,47 @@ class TaskManagementViewModelTest {
         assertThat(viewModel.state.value.error).isEqualTo("There was an error processing your request. Please try again later.")
     }
 
+
+    @Test
+    fun `onDateClicked() should update isDatePickerVisible to true when true is passed`() = runTest {
+
+        assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
+
+        viewModel.onDateClicked(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
+    }
+
+    @Test
+    fun `onDateClicked() should update isDatePickerVisible to false when false is passed`() = runTest {
+
+        viewModel.onDateClicked(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
+
+        viewModel.onDateClicked(false)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
+    }
+
+    @Test
+    fun `onDateSelected() should update selectedDate and hide date picker`() = runTest {
+        val testDate = LocalDate(2025, 6, 22)
+        val expectedDateString = testDate.toString()
+
+        viewModel.onDateClicked(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
+
+        viewModel.onDateSelected(testDate)
+        testDispatcher.scheduler.advanceUntilIdle() 
+
+        assertThat(viewModel.state.value.selectedDate).isEqualTo(expectedDateString)
+        assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
+    }
+
     companion object {
         const val validTaskId = 123L
         val validTask = Task(
