@@ -11,9 +11,12 @@ import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -48,10 +51,8 @@ class TaskDetailsViewModelTest {
     @Test
     fun `should return task details successfully when loading task details`() = runTest {
 
-        val taskFlow = flowOf(testTask)
-        val categoryFlow = flowOf(testCategory)
-        every { taskServices.getTaskById(any()) } returns taskFlow
-        every { taskServices.getCategoryById(any()) } returns categoryFlow
+        every { taskServices.getTaskById(any()) } returns flowOf(testTask)
+        every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
         every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
@@ -63,8 +64,7 @@ class TaskDetailsViewModelTest {
     @Test
     fun `should return null data when getCategoryById null`() = runTest {
 
-        val taskFlow = flowOf(testTask)
-        every { taskServices.getTaskById(any()) } returns taskFlow
+        every { taskServices.getTaskById(any()) } returns  flowOf(testTask)
         every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
@@ -91,9 +91,8 @@ class TaskDetailsViewModelTest {
 
     @Test
     fun `should update uiState with errorMessage when category id is invalid`() = runTest {
-        val taskFlow = flowOf(testTask)
 
-        every { taskServices.getTaskById(any()) } returns taskFlow
+        every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { taskServices.getCategoryById(any()) } returns flow {
             throw CategoryException("Invalid category id")
         }
@@ -106,6 +105,24 @@ class TaskDetailsViewModelTest {
         assertThat(viewModel.uiState.value.errorMessage).isEqualTo("Category , Invalid category id")
     }
 
+    @Test
+    fun `onEditTaskStatus updates status when successful`() = runTest {
+        every { taskServices.getTaskById(any()) } returns flowOf(testTask)
+        every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
+        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+
+        coEvery { taskServices.editTask(any()) } returns Unit
+
+        viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
+        testDispatcher.scheduler.advanceUntilIdle() // Wait for initial load
+
+        viewModel.onEditTaskStatus(TaskStatus.DONE)
+        testDispatcher.scheduler.advanceUntilIdle() // Process coroutine
+
+
+        coVerify(exactly = 1) { taskServices.editTask(testTask.copy(status = TaskStatus.DONE)) }
+        assertThat(viewModel.uiState.value.taskUiState?.status).isEqualTo(TaskStatus.DONE)
+    }
 
 
     private val testTask = Task(
