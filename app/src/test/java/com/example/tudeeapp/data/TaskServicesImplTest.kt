@@ -17,7 +17,9 @@ import com.example.tudeeapp.domain.models.TaskStatus
 import com.google.common.truth.Truth.assertThat
 import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.presentation.screen.categories.dummyCategoryEntities
+import com.example.tudeeapp.presentation.screen.categories.dummyTaskEntities
 import com.example.tudeeapp.presentation.screen.categories.expectedCategories
+import com.example.tudeeapp.presentation.screen.categories.expectedTasks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -59,6 +61,24 @@ class TaskServicesImplTest {
 
         assertThrows<Exception> {
             taskServices.getAllCategories().toList()
+        }
+    }
+
+    @Test
+    fun `getTasks should return tasks when getAll in TaskDao called successfully`() = runTest {
+        coEvery { taskDao.getAllTasks() } returns flowOf(dummyTaskEntities)
+
+        val result = taskServices.getAllTasks().first()
+
+        assertEquals(expectedTasks[0].title, result[0].title)
+    }
+
+    @Test
+    fun `getTasks should throw exception when TaskDao fails`() = runTest {
+        coEvery { taskDao.getAllTasks() } throws Exception()
+
+        assertThrows< Exception > {
+            taskServices.getAllTasks().toList()
         }
     }
 
