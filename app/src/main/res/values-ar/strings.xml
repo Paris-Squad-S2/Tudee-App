@@ -56,4 +56,11 @@
     <string name="description">الوصف</string>
     <string name="task_saved_successfully">تم أضافة المهمه</string>
     <string name="add_first_task">اضف مهمة اولا</string>
+    <string name="delete_category">حذف الفئه</string>
+    <string name="deleted_successfully">تم حذف الفئه</string>
+    <string name="failed_to_add_category">فشل في اضافة الفئة</string>
+    <string name="failed_to_edit_category">فشل في تحديث الفئة</string>
+    <string name="failed_to_delete_category">فشل في حذف الفئه</string>
+    <string name="category_added_successfully">تم أضافة الفئة</string>
+    <string name="edited_category_successfully">تم تحديث الفئة</string>
 </resources>

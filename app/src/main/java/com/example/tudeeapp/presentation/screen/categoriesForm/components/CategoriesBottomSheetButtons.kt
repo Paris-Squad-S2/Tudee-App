@@ -1,18 +1,11 @@
 package com.example.tudeeapp.presentation.screen.categoriesForm.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -26,11 +19,11 @@ import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormState
+import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormUIState
 
 @Composable
 fun CategoriesBottomSheetButtons(
-    state : CategoryFormState,
+    state : CategoryFormUIState,
     onSubmit: ()-> Unit,
     onCancel: ()-> Unit,
     buttonText : String
@@ -54,15 +47,14 @@ fun CategoriesBottomSheetButtons(
                 .padding(horizontal = 16.dp)
         ) {
             TudeeButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
                 onClick = onSubmit,
                 text = buttonText,
                 variant = ButtonVariant.FilledButton,
                 state = if (state.isFormValid) ButtonState.Normal else ButtonState.Disabled,
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
             TudeeButton(
                 onClick = onCancel,
                 text = stringResource(id = R.string.cancel),
@@ -81,7 +73,7 @@ fun CategoriesBottomSheetButtons(
 fun CategoriesBottomSheetButtonsPreview() {
     TudeeTheme {
         CategoriesBottomSheetButtons(
-            state = CategoryFormState(),
+            state = CategoryFormUIState(),
             onSubmit = {},
             onCancel = {},
             buttonText = stringResource(id = R.string.add)
