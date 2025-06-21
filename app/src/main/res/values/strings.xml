@@ -57,5 +57,10 @@
     <string name="add_first_task">Add task first</string>
     <string name="delete_category">Delete category</string>
     <string name="deleted_successfully">Category Deleted successfully</string>
+    <string name="failed_to_add_category">Failed to Add Category</string>
+    <string name="failed_to_edit_category">Failed to Edit Category</string>
+    <string name="failed_to_delete_category">Failed to Delete Category</string>
+    <string name="category_added_successfully">Added Category successfully</string>
+    <string name="edited_category_successfully">Edited Category Successfully</string>
 
 </resources>

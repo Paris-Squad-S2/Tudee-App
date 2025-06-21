@@ -33,7 +33,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormScreen
+import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryForm
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
@@ -98,8 +98,8 @@ fun TudeeNavGraph() {
                     dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
                     dialog<Screens.TaskDetails> { TaskDetailsScreen() }
                     composable<Screens.CategoryDetails> { CategoryDetailsScreen() }
-                    dialog<Screens.CategoryFormScreen> {
-                        CategoryFormScreen()
+                    dialog<Screens.CategoryForm> {
+                        CategoryForm()
                     }
                 }
 

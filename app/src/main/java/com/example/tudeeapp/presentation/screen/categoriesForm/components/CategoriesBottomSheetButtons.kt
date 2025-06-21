@@ -20,11 +20,11 @@ import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormState
+import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormUIState
 
 @Composable
 fun CategoriesBottomSheetButtons(
-    state : CategoryFormState,
+    state : CategoryFormUIState,
     onSubmit: ()-> Unit,
     onCancel: ()-> Unit,
     buttonText : String
@@ -75,7 +75,7 @@ fun CategoriesBottomSheetButtons(
 fun CategoriesBottomSheetButtonsPreview() {
     TudeeTheme {
         CategoriesBottomSheetButtons(
-            state = CategoryFormState(),
+            state = CategoryFormUIState(),
             onSubmit = {},
             onCancel = {},
             buttonText = stringResource(id = R.string.add)

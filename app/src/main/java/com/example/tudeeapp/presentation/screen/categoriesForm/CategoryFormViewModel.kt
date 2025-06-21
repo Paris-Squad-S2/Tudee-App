@@ -1,14 +1,16 @@
 package com.example.tudeeapp.presentation.screen.categoriesForm
 
 import android.net.Uri
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.mapper.toResDrawables
+import com.example.tudeeapp.presentation.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,14 +23,14 @@ class CategoryFormViewModel(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(CategoryFormState())
-    val state: StateFlow<CategoryFormState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(CategoryFormUIState())
+    val state: StateFlow<CategoryFormUIState> = _state.asStateFlow()
 
     init {
-        val args = savedStateHandle.get<Long>("categoryId")
-        Log.d("EditCategory", "Received categoryId: $args")
-        if (args != null) {
-            loadCategory(args)
+        val args = savedStateHandle.toRoute<Screens.CategoryForm>()
+        val categoryId = args.categoryId
+        if (categoryId != null) {
+            loadCategory(categoryId)
         }
     }
 
@@ -74,9 +76,9 @@ class CategoryFormViewModel(
                     title = state.value.categoryName,
                     imageUrl = getImageUrl(state.value.imageUri.toString())
                 )
-                _state.update { it.copy(successMessage = "Category updated successfully") }
+                _state.update { it.copy(successMessage = R.string.edited_category_successfully) }
             } catch (e: Exception) {
-                _state.update { it.copy(errorMessage = "Failed to edit category") }
+                _state.update { it.copy(errorMessage = R.string.failed_to_edit_category) }
             }
         }
     }
@@ -87,7 +89,7 @@ class CategoryFormViewModel(
                 taskServices.deleteCategory(state.value.categoryId)
                 onSuccess()
             } catch (e: Exception) {
-                _state.update { it.copy(errorMessage = "Failed to delete category") }
+                _state.update { it.copy(errorMessage =  R.string.failed_to_delete_category) }
             }
         }
     }
@@ -110,10 +112,10 @@ class CategoryFormViewModel(
                     isPredefined = false
                 )
                 taskServices.addCategory(category)
-                _state.update { it.copy(successMessage = "Category added successfully") }
+                _state.update { it.copy(successMessage = R.string.category_added_successfully) }
             } catch (e: Exception) {
                 _state.update {
-                    it.copy(errorMessage = e.message ?: "Unexpected error")
+                    it.copy(errorMessage = R.string.failed_to_add_category)
                 }
             }
         }

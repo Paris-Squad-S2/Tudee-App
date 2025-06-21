@@ -43,7 +43,7 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
         state = state,
         onClickCategory = {navController.navigate(Screens.CategoryDetails(it))},
         onClickAddCategory = {
-            navController.navigate(Screens.CategoryFormScreen())
+            navController.navigate(Screens.CategoryForm())
         }
         )
 }

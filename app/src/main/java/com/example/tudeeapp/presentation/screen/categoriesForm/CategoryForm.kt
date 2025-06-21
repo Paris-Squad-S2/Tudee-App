@@ -21,7 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,11 +49,11 @@ import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun CategoryFormScreen(
+fun CategoryForm(
     viewModel: CategoryFormViewModel = koinViewModel(),
 ) {
 
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val isEdit = state.categoryId != 0L
     val navController = LocalNavController.current
     val snackbarHostState = LocalSnackBarState.current
@@ -64,7 +64,7 @@ fun CategoryFormScreen(
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
         state.successMessage?.let {
-            snackbarHostState.show(message = it, isSuccess = true)
+            snackbarHostState.show(message =context.getString(it) , isSuccess = true)
             navController.popBackStack()
         }
     }
@@ -147,7 +147,7 @@ fun CategoryFormScreen(
 
 @Composable
 fun CategoryFormContent(
-    state: CategoryFormState,
+    state: CategoryFormUIState,
     onCancel: () -> Unit,
     onSubmit: () -> Unit,
     onValueChange: (String) -> Unit,
@@ -162,7 +162,6 @@ fun CategoryFormContent(
             leadingIcon = R.drawable.ic_menu_circle,
             modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
         )
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
