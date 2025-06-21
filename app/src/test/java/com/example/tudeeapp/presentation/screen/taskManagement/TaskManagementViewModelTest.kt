@@ -84,7 +84,8 @@ class TaskManagementViewModelTest {
             selectedCategoryId = testCategoryId
         )
 
-        (stateField.get(viewModel) as? MutableStateFlow<TaskManagementUiState>)?.value = updatedState
+        (stateField.get(viewModel) as? MutableStateFlow<TaskManagementUiState>)?.value =
+            updatedState
 
         coEvery { taskServices.addTask(any()) } returns Unit
 
@@ -138,28 +139,30 @@ class TaskManagementViewModelTest {
 
 
     @Test
-    fun `onDateClicked() should update isDatePickerVisible to true when true is passed`() = runTest {
+    fun `onDateClicked() should update isDatePickerVisible to true when true is passed`() =
+        runTest {
 
-        assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
+            assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
 
-        viewModel.onDateClicked(true)
-        testDispatcher.scheduler.advanceUntilIdle()
+            viewModel.onDateClicked(true)
+            testDispatcher.scheduler.advanceUntilIdle()
 
-        assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
-    }
+            assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
+        }
 
     @Test
-    fun `onDateClicked() should update isDatePickerVisible to false when false is passed`() = runTest {
+    fun `onDateClicked() should update isDatePickerVisible to false when false is passed`() =
+        runTest {
 
-        viewModel.onDateClicked(true)
-        testDispatcher.scheduler.advanceUntilIdle()
-        assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
+            viewModel.onDateClicked(true)
+            testDispatcher.scheduler.advanceUntilIdle()
+            assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
 
-        viewModel.onDateClicked(false)
-        testDispatcher.scheduler.advanceUntilIdle()
+            viewModel.onDateClicked(false)
+            testDispatcher.scheduler.advanceUntilIdle()
 
-        assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
-    }
+            assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
+        }
 
     @Test
     fun `onDateSelected() should update selectedDate and hide date picker`() = runTest {
@@ -171,11 +174,12 @@ class TaskManagementViewModelTest {
         assertThat(viewModel.state.value.isDatePickerVisible).isTrue()
 
         viewModel.onDateSelected(testDate)
-        testDispatcher.scheduler.advanceUntilIdle() 
+        testDispatcher.scheduler.advanceUntilIdle()
 
         assertThat(viewModel.state.value.selectedDate).isEqualTo(expectedDateString)
         assertThat(viewModel.state.value.isDatePickerVisible).isFalse()
     }
+
 
     companion object {
         const val validTaskId = 123L
