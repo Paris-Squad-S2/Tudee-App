@@ -52,7 +52,6 @@ fun TaskManagementButtons(
             text = stringResource(R.string.cancel),
             variant = ButtonVariant.OutlinedButton,
             state = ButtonState.Normal,
-            contentColor = Theme.colors.primary,
         )
     }
 }
