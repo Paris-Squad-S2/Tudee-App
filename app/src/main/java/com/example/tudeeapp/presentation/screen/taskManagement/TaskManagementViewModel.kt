@@ -23,34 +23,12 @@ class TaskManagementViewModel(
 
     val taskId = savedStateHandle.toRoute<Screens.TaskManagement>().taskId
 
-    private val _state =
-        MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
+    private val _state = MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
 
     val state = _state.asStateFlow()
 
-
-
     init {
         getAllCategories()
-    }
-
-    private fun getAllCategories() {
-        viewModelScope.launch {
-            try {
-                taskServices.getAllCategories().collect { categories ->
-                    _state.update {
-                        it.copy(
-                            categories = categories.map { category -> category.toCategoryState() },
-                            isLoading = false
-                        )
-                    }
-                }
-            } catch (_: Exception) {
-                handleException()
-            }
-        }
-        taskId?.let { getTaskById(it) }
-
     }
 
     fun onTitleChange(title: String) {
@@ -86,6 +64,24 @@ class TaskManagementViewModel(
                 selectedCategoryId = if (isCurrentlySelected) null else categoryId
             )
         }
+    }
+
+    private fun getAllCategories() {
+        viewModelScope.launch {
+            try {
+                taskServices.getAllCategories().collect { categories ->
+                    _state.update {
+                        it.copy(
+                            categories = categories.map { category -> category.toCategoryState() },
+                            isLoading = false
+                        )
+                    }
+                }
+            } catch (_: Exception) {
+                handleException()
+            }
+        }
+        taskId?.let { getTaskById(it) }
     }
 
     fun onActionButtonClicked() {

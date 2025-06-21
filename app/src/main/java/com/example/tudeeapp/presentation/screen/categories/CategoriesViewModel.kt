@@ -21,24 +21,30 @@ class CategoriesViewModel(private val taskServices: TaskServices) : ViewModel() 
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                taskServices.getAllTasks().combine(taskServices.getAllCategories()) {tasks, categories ->
-                    val taskCounts = tasks
-                        .groupBy { it.categoryId }
-                        .mapValues { it.value.size }
+                taskServices.getAllTasks()
+                    .combine(taskServices.getAllCategories()) { tasks, categories ->
+                        val taskCounts = tasks
+                            .groupBy { it.categoryId }
+                            .mapValues { it.value.size }
 
-                    val updatedCategories = categories.map { category ->
-                        val count = taskCounts[category.id] ?: 0
-                        category.toCategoryUIState(count)
+                        val updatedCategories = categories.map { category ->
+                            val count = taskCounts[category.id] ?: 0
+                            category.toCategoryUIState(count)
+                        }
+                        _state.value.copy(
+                            isLoading = false,
+                            categories = updatedCategories
+                        )
+                    }.collect { updatedUiState ->
+                        _state.value = updatedUiState
                     }
-                    _state.value.copy(
-                        isLoading = false,
-                        categories = updatedCategories
-                    )
-                }.collect { updatedUiState ->
-                    _state.value = updatedUiState
-                }
             } catch (e: Exception) {
-                _state.update { it.copy(errorMessage = e.message) }
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "There was an error processing your request. Please try again later."
+                    )
+                }
             }
         }
     }
