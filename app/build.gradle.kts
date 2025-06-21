@@ -94,11 +94,19 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.junit.jupiter)
 
     //android testing
+    androidTestImplementation(libs.truth)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
