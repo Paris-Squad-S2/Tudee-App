@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskDetails.state
+package com.example.tudeeapp.presentation.screen.taskDetails
 
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task

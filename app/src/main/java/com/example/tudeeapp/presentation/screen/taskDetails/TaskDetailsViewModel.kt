@@ -9,9 +9,6 @@ import com.example.tudeeapp.domain.exception.CategoryException
 import com.example.tudeeapp.domain.exception.TaskException
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskDetailsUiState
-import com.example.tudeeapp.presentation.screen.taskDetails.state.toCategoryUiState
-import com.example.tudeeapp.presentation.screen.taskDetails.state.toTaskUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -42,8 +42,6 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.screen.taskDetails.state.CategoryUiState
-import com.example.tudeeapp.presentation.screen.taskDetails.state.TaskUiState
 import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
 
