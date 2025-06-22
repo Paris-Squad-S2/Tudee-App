@@ -92,7 +92,7 @@ fun Task.toTaskUiState(): TaskItemUiState {
 fun Category.toCategoryUi(): CategoryUiState{
     return CategoryUiState(
         id = this.id,
-        iconRes = this.imageUrl,
+        iconRes = this.imageUri,
         isPredefined = this.isPredefined
     )
 }

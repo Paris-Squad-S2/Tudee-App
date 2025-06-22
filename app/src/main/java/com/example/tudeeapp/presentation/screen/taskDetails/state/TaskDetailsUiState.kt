@@ -24,7 +24,7 @@ data class TaskUiState(
 )
 
 data class CategoryUiState(
-    val imageUrl: String,
+    val imageUri: String,
     val isPredefined: Boolean
 )
 
@@ -42,7 +42,7 @@ fun Task.toTaskUiState(): TaskUiState {
 
 fun Category.toCategoryUiState(): CategoryUiState {
     return CategoryUiState(
-        imageUrl = this.imageUrl,
+        imageUri = this.imageUri,
         isPredefined = isPredefined
     )
 }

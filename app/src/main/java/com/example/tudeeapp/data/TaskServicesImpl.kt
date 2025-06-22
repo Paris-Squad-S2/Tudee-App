@@ -110,7 +110,7 @@ class TaskServicesImpl(
         }
     }
 
-    override suspend fun editCategory(id: Long, title: String, imageUrl: String) {
+    override suspend fun editCategory(id: Long, title: String, imageUri: String) {
 
         try {
             val currentCategory: CategoryEntity =
@@ -118,7 +118,7 @@ class TaskServicesImpl(
 
             val updatedCategory = currentCategory.copy(
                 title = title,
-                imageUrl = imageUrl
+                imageUri = imageUri
             )
 
             categoryDao.updateCategory(updatedCategory)

@@ -116,7 +116,7 @@ private fun CategoryListItem(
 ) {
     val painter: Painter = when {
         category.imageResId != null -> painterResource(id = category.imageResId)
-        category.imageUrl != null -> rememberAsyncImagePainter(model = category.imageUrl)
+        category.imageUri != null -> rememberAsyncImagePainter(model = category.imageUri)
         else -> painterResource(id = R.drawable.ic_add_category)
     }
 

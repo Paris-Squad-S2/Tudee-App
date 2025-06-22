@@ -72,7 +72,7 @@ class HomeViewModel(
                             }
                             val tasksIcons =
                                 filteredTasks.map {
-                                    taskServices.getCategoryById(it.categoryId).first().imageUrl
+                                    taskServices.getCategoryById(it.categoryId).first().imageUri
                                 }
 
                             val isCategoryPredefined = filteredTasks.map {
