@@ -90,6 +90,7 @@ private fun RowScope.TudeeNavBarItem(
         modifier = Modifier
             .weight(1f)
             .clickable(
+                enabled = !selected,
                 onClick = onItemClick,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
