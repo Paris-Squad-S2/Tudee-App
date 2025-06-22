@@ -6,9 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.tudeeapp.data.mapper.toTaskStatus
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.task.TaskStatusUi.Companion.fromNameOrDefault
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +36,7 @@ class TaskViewModel(
     private var allTasks: List<TaskItemUiState> = emptyList()
     private var currentSelectedDate: LocalDate = getCurrentDate()
     private var currentSelectedStatus: TaskStatusUi = fromNameOrDefault(
-        savedStateHandle.toRoute<Screens.Task>().tasksStatus
+        savedStateHandle.toRoute<Screens.Tasks>().tasksStatus
     )
 
     init {

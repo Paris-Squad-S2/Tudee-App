@@ -42,7 +42,7 @@ import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
-import com.example.tudeeapp.presentation.screen.task.TaskScreen
+import com.example.tudeeapp.presentation.screen.task.TasksScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -84,7 +84,7 @@ fun TudeeNavGraph() {
         val currentRoute = backStackEntry?.destination?.route?.substringBefore('?')
         val selectedRouteIndex = listOf(
             Screens.Home::class.qualifiedName,
-            Screens.Task::class.qualifiedName,
+            Screens.Tasks::class.qualifiedName,
             Screens.Category::class.qualifiedName
         ).indexOf(currentRoute)
 
@@ -109,7 +109,7 @@ fun TudeeNavGraph() {
                     composable<Screens.Splash> { SplashScreen() }
                     composable<Screens.OnBoarding> { OnBoardScreen(pages = onboardingPages()) }
                     composable<Screens.Home> { HomeScreen() }
-                    composable<Screens.Task> { TaskScreen() }
+                    composable<Screens.Tasks> { TasksScreen() }
                     composable<Screens.Category> { CategoriesScreen() }
                     dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
                     dialog<Screens.TaskDetails> { TaskDetailsScreen() }

@@ -38,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.toTaskPriority
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.DayItem
@@ -63,7 +62,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
+fun TasksScreen(viewModel: TaskViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     val uiState by viewModel.uiState.collectAsState()
 

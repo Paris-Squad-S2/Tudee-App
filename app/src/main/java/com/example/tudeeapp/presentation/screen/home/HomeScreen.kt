@@ -65,7 +65,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             homeViewModel.onToggledAction(isDark)
         },
         onFloatingActionButtonClick = { navController.navigate(Screens.TaskManagement()) },
-        onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Task(tasksTitle)) },
+        onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Tasks(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Screens.TaskDetails(taskId)) },
     )
 

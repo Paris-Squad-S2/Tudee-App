@@ -15,7 +15,7 @@ sealed class Screens {
     data object Home : Screens()
 
     @Serializable
-    data class Task(val tasksStatus: String = "") : Screens()
+    data class Tasks(val tasksStatus: String = "") : Screens()
 
     @Serializable
     data class TaskDetails(val taskId: Long) : Screens()

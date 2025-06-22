@@ -109,7 +109,7 @@ val navItemList = listOf(
         unselectedIcon = R.drawable.ic_unselected_tasks,
         R.drawable.ic_selected_task,
         label = "Tasks",
-        Screens.Task()
+        Screens.Tasks()
     ),
     NavItem(
         unselectedIcon = R.drawable.ic_unselected_categories,
