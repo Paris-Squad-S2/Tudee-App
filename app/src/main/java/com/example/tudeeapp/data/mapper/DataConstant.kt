@@ -1,6 +1,7 @@
 package com.example.tudeeapp.data.mapper
 
 import com.example.tudeeapp.domain.models.Category
+
 object DataConstant {
 
     val predefinedCategories = listOf(
@@ -63,8 +64,7 @@ object DataConstant {
             isPredefined = true,
         ),
         Category(
-            title = "Cleaning"
-            ,imageUrl = "R.drawable.cleaning",
+            title = "Cleaning", imageUrl = "R.drawable.cleaning",
             isPredefined = true
         ),
         Category(
@@ -74,6 +74,16 @@ object DataConstant {
         Category(
             title = "Budgeting",
             imageUrl = "R.drawable.budgeting",
+            isPredefined = true,
+        ),
+        Category(
+            title = "Self-care",
+            imageUrl = "R.drawable.self_care",
+            isPredefined = true,
+        ),
+        Category(
+            title = "Event",
+            imageUrl = "R.drawable.event",
             isPredefined = true,
         ),
     )
