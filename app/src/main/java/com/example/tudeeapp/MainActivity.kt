@@ -13,7 +13,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.tudeeapp.presentation.TudeeAppScaffold
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("SourceLockedOrientationActivity")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -21,7 +20,6 @@ class MainActivity : ComponentActivity() {
         val viewModel by viewModel<MainViewModel>()
         viewModel.loadPredefinedCategories()
         enableEdgeToEdge()
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContent {
             TudeeAppScaffold()
         }
