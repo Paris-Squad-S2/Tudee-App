@@ -46,6 +46,7 @@ import com.example.tudeeapp.presentation.navigation.LocalThemeState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
@@ -437,4 +438,23 @@ private fun OverViewCardsRow(
     }
 }
 
+@PreviewMultiDevices
+@Composable
+fun PreviewHomeScreen() {
+    HomeScreenContent(
+        state = HomeUiState(
+            isLoading = false,
+            isSuccess = true,
+            isDarkMode = false,
+            error = null,
+            doneTasks = listOf(),
+            inProgressTasks = listOf(),
+            toDoTasks = listOf()
+        ),
+        onToggleTheme = {},
+        onFloatingActionButtonClick = {},
+        onTasksCountClick = {},
+        onTaskClick = {}
+    )
+}
 
