@@ -7,9 +7,10 @@
     </style>
 
     <style name="Theme.TudeeApp.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenBackground">@color/Transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.TudeeApp</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/transparent</item>
+        <item name="windowSplashScreenAnimatedIcon">@null</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/Transparent</item>
     </style>
 
 </resources>
