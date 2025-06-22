@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
-class TaskViewModel(
+class TasksViewModel(
     savedStateHandle: SavedStateHandle,
     private val taskServices: TaskServices
 ) : ViewModel() {

@@ -8,7 +8,7 @@ import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormViewM
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsViewModel
 import com.example.tudeeapp.presentation.screen.home.HomeViewModel
 import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
-import com.example.tudeeapp.presentation.screen.task.TaskViewModel
+import com.example.tudeeapp.presentation.screen.task.TasksViewModel
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsViewModel
 import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -24,5 +24,5 @@ val viewModelModule = module {
     viewModelOf(::TaskManagementViewModel)
     viewModelOf(::CategoryDetailsViewModel)
     viewModelOf(::CategoryFormViewModel)
-    viewModelOf(::TaskViewModel)
+    viewModelOf(::TasksViewModel)
 }
