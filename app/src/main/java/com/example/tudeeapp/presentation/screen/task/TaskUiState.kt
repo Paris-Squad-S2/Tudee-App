@@ -97,9 +97,9 @@ fun Category.toCategoryUi(): CategoryUiState{
     )
 }
 fun TaskPriority.toUiPriority(): TaskPriorityUi = when (this) {
-    TaskPriority.HIGH -> TaskPriorityUi.HIGH
-    TaskPriority.MEDIUM -> TaskPriorityUi.MEDIUM
-    TaskPriority.LOW -> TaskPriorityUi.LOW
+    TaskPriority.HIGH -> TaskPriorityUi.High
+    TaskPriority.MEDIUM -> TaskPriorityUi.Medium
+    TaskPriority.LOW -> TaskPriorityUi.Low
 }
 
 fun TaskStatus.toUiStatus(): TaskStatusUi = when (this) {

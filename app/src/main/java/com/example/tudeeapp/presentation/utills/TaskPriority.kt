@@ -10,30 +10,33 @@ import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.presentation.mapper.toResDrawables
 
 enum class TaskPriorityUi {
-    HIGH,
-    MEDIUM,
-    LOW;
+    High,
+    Medium,
+    Low;
+
     val lowercaseName: String
-        get() = name.lowercase()
+        get() = name
 }
 
 data class PriorityStyle(
     val iconRes: Int,
-    val backgroundColor: Color
+    val backgroundColor: Color,
 )
 
 @Composable
 fun TaskPriorityUi.toStyle(): PriorityStyle {
     return when (this) {
-        TaskPriorityUi.HIGH -> PriorityStyle(
+        TaskPriorityUi.High -> PriorityStyle(
             iconRes = R.drawable.ic_alert,
             backgroundColor = Theme.colors.status.pinkAccent
         )
-        TaskPriorityUi.MEDIUM -> PriorityStyle(
+
+        TaskPriorityUi.Medium -> PriorityStyle(
             iconRes = R.drawable.ic_flag,
             backgroundColor = Theme.colors.status.yellowAccent
         )
-        TaskPriorityUi.LOW -> PriorityStyle(
+
+        TaskPriorityUi.Low -> PriorityStyle(
             iconRes = R.drawable.ic_trade_down,
             backgroundColor = Theme.colors.status.greenAccent
         )
@@ -43,9 +46,9 @@ fun TaskPriorityUi.toStyle(): PriorityStyle {
 
 fun TaskPriority.toUi(): TaskPriorityUi {
     return when (this) {
-        TaskPriority.HIGH -> TaskPriorityUi.HIGH
-        TaskPriority.MEDIUM -> TaskPriorityUi.MEDIUM
-        TaskPriority.LOW -> TaskPriorityUi.LOW
+        TaskPriority.HIGH -> TaskPriorityUi.High
+        TaskPriority.MEDIUM -> TaskPriorityUi.Medium
+        TaskPriority.LOW -> TaskPriorityUi.Low
     }
 }
 
