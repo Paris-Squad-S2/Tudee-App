@@ -43,7 +43,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState

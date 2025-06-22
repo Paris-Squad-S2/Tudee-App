@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.navigation
+package com.example.tudeeapp.presentation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.presentation.common.components.SnackBar
@@ -31,6 +30,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
+import com.example.tudeeapp.presentation.navigation.TudeeNavGraph
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 

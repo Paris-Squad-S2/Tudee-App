@@ -51,7 +51,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
