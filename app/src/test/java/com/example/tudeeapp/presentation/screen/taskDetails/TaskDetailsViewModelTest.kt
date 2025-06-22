@@ -50,7 +50,6 @@ class TaskDetailsViewModelTest {
 
     @Test
     fun `should return task details successfully when loading task details`() = runTest {
-
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
         every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
@@ -62,9 +61,8 @@ class TaskDetailsViewModelTest {
     }
 
     @Test
-    fun `should return null data when getCategoryById null`() = runTest {
-
-        every { taskServices.getTaskById(any()) } returns  flowOf(testTask)
+    fun `should return null data when getCategoryById is invalid`() = runTest {
+        every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
@@ -76,14 +74,10 @@ class TaskDetailsViewModelTest {
     @Test
     fun `should update uiState with errorMessage when task id is invalid`() = runTest {
 
-        every { taskServices.getTaskById(any()) } returns flow {
-            throw TaskException("Invalid task id")
-        }
-
+        every { taskServices.getTaskById(any()) } returns flow { throw TaskException("Invalid task id") }
         every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
-
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.errorMessage).isEqualTo("Task , Invalid task id")
@@ -93,13 +87,10 @@ class TaskDetailsViewModelTest {
     fun `should update uiState with errorMessage when category id is invalid`() = runTest {
 
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
-        every { taskServices.getCategoryById(any()) } returns flow {
-            throw CategoryException("Invalid category id")
-        }
+        every { taskServices.getCategoryById(any()) } returns flow { throw CategoryException("Invalid category id") }
         every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
-
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.errorMessage).isEqualTo("Category , Invalid category id")
@@ -107,21 +98,51 @@ class TaskDetailsViewModelTest {
 
     @Test
     fun `onEditTaskStatus updates status when successful`() = runTest {
+
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
         every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
-
         coEvery { taskServices.editTask(any()) } returns Unit
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
-        testDispatcher.scheduler.advanceUntilIdle() // Wait for initial load
-
+        testDispatcher.scheduler.advanceUntilIdle()
         viewModel.onEditTaskStatus(TaskStatus.DONE)
-        testDispatcher.scheduler.advanceUntilIdle() // Process coroutine
+        testDispatcher.scheduler.advanceUntilIdle()
 
 
         coVerify(exactly = 1) { taskServices.editTask(testTask.copy(status = TaskStatus.DONE)) }
         assertThat(viewModel.uiState.value.taskUiState?.status).isEqualTo(TaskStatus.DONE)
+    }
+
+    @Test
+    fun `onEditTaskStatus sets error message when editTask fails`() = runTest {
+
+        every { taskServices.getTaskById(any()) } returns flowOf(testTask)
+        every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
+        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+
+        val errorMessage = "Update failed"
+        coEvery { taskServices.editTask(any()) } throws TaskException(errorMessage)
+
+        viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
+        testDispatcher.scheduler.advanceUntilIdle()
+        viewModel.onEditTaskStatus(TaskStatus.DONE)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+
+        assertThat(viewModel.uiState.value.errorMessage).isEqualTo("Task , Update failed")
+    }
+
+    @Test
+    fun `onEditTaskStatus does nothing when taskUiState is null`() = runTest {
+        every { taskServices.getTaskById(any()) } returns flow { throw TaskException("Not found") }
+        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+
+        viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
+        testDispatcher.scheduler.advanceUntilIdle()
+        viewModel.onEditTaskStatus(TaskStatus.DONE)
+
+        coVerify(exactly = 0) { taskServices.editTask(any()) }
     }
 
 

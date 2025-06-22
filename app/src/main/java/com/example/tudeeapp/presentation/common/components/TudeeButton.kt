@@ -27,9 +27,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
@@ -53,17 +51,9 @@ fun TudeeButton(
     modifier: Modifier = Modifier,
     state: ButtonState = ButtonState.Normal,
     variant: ButtonVariant,
-    shape: Shape = RoundedCornerShape(100.dp),
     isNegative: Boolean = false,
-    contentColor: Color? = null,
     text: String? = null,
     icon: @Composable (() -> Unit)? = null,
-    textStyle: TextStyle = Theme.textStyle.label.large,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = icon,
-    contentPadding: PaddingValues = getContentPadding(variant),
-    elevation: Dp? = null,
-    backgroundBrush: Brush? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isLoading = (state == ButtonState.Loading)
@@ -71,21 +61,20 @@ fun TudeeButton(
     val spacing = 8.dp
     val backgroundColorBrush = getBackgroundBrush(
         variant,
-        backgroundBrush,
         isDisabled = (state == ButtonState.Disabled),
         isNegative = isNegative,
     )
     val borderColor = getBorderColor(variant, isNegative)
-    val buttonContentColor = contentColor ?: getContentColor(state, variant, isNegative)
-    val buttonElevation = elevation ?: when (variant) {
+    val buttonContentColor = getContentColor(state, variant, isNegative)
+    val buttonElevation = when (variant) {
         ButtonVariant.FloatingActionButton -> 6.dp
         else -> 0.dp
     }
 
     Surface(
         modifier = modifier
-            .shadow(elevation = buttonElevation, shape = shape),
-        shape = shape,
+            .shadow(elevation = buttonElevation, shape = RoundedCornerShape(100.dp)),
+        shape = RoundedCornerShape(100.dp),
         color = Color.Transparent,
         contentColor = buttonContentColor,
         border = if (variant == ButtonVariant.OutlinedButton) BorderStroke(
@@ -99,16 +88,11 @@ fun TudeeButton(
         Row(
             modifier = Modifier
                 .background(backgroundColorBrush)
-                .padding(contentPadding),
+                .padding(getContentPadding(variant)),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (leadingIcon != null) {
-                leadingIcon()
-                if (text != null) Spacer(modifier = Modifier.width(spacing))
-            }
-
-            text?.let { Text(it, style = textStyle, color = buttonContentColor) }
+            text?.let { Text(it, style = Theme.textStyle.label.large, color = buttonContentColor) }
 
             if (isLoading) {
                 if (text != null) Spacer(modifier = Modifier.width(spacing))
@@ -119,7 +103,7 @@ fun TudeeButton(
                     )
                 }
             } else {
-                trailingIcon?.let {
+                icon?.let {
                     if (text != null) Spacer(modifier = Modifier.width(spacing))
                     it()
                 }
@@ -131,7 +115,6 @@ fun TudeeButton(
 @Composable
 private fun getBackgroundBrush(
     variant: ButtonVariant,
-    backgroundBrush: Brush?,
     isDisabled: Boolean,
     isNegative: Boolean
 ): Brush {
@@ -152,17 +135,16 @@ private fun getBackgroundBrush(
                     )
                 )
             } else {
-                backgroundBrush ?: Brush.verticalGradient(
+                Brush.verticalGradient(
                     colors = Theme.colors.primaryGradient.colors
                 )
             }
         }
 
         else -> {
-            backgroundBrush
-                ?: Brush.verticalGradient(
-                    colors = listOf(Color.Transparent, Color.Transparent)
-                )
+            Brush.verticalGradient(
+                colors = listOf(Color.Transparent, Color.Transparent)
+            )
         }
     }
 }
@@ -172,7 +154,7 @@ private fun getBackgroundBrush(
 private fun getBorderColor(variant: ButtonVariant, isNegative: Boolean): Color {
     return when (variant) {
         ButtonVariant.OutlinedButton ->
-            if (!isNegative) Theme.colors.text.disable
+            if (!isNegative) Theme.colors.stroke
             else Theme.colors.status.error.copy(alpha = 0.12f)
 
         else -> Color.Transparent
@@ -181,7 +163,11 @@ private fun getBorderColor(variant: ButtonVariant, isNegative: Boolean): Color {
 
 
 @Composable
-private fun getContentColor(state: ButtonState, variant: ButtonVariant, isNegative: Boolean): Color {
+private fun getContentColor(
+    state: ButtonState,
+    variant: ButtonVariant,
+    isNegative: Boolean
+): Color {
     return when {
         state == ButtonState.Disabled -> Theme.colors.text.disable
         isNegative -> Theme.colors.status.error
