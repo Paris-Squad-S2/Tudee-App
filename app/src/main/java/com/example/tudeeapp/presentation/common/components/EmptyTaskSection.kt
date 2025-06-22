@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,14 +54,14 @@ fun EmptyTasksSection(
                     .offset(x = (-4).dp, y = (-9).dp)
             )
 
-            Image(
-                painter = painterResource(R.drawable.img_task_card_dots),
+            Icon(
+                painter = painterResource(R.drawable.ic_task_card_dots),
                 contentDescription = "ropo2",
                 modifier = Modifier
                     .size(54.dp)
                     .align(Alignment.CenterStart)
-                    .offset(x = (-2).dp, y = (10).dp)
-
+                    .offset(x = (-2).dp, y = (10).dp),
+                tint = Theme.colors.surfaceColors.surfaceHigh
             )
 
             Image(

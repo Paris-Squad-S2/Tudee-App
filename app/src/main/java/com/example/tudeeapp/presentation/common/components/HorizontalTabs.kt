@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
@@ -36,14 +33,8 @@ data class Tab(
 fun HorizontalTabs(
     tabs: List<Tab>,
     selectedTabIndex: Int,
-    modifier: Modifier = Modifier,
     onTabSelected: (Int) -> Unit,
-    selectedTextColor: Color = Theme.colors.text.title,
-    unselectedTextColor: Color = Theme.colors.text.hint,
-    backgroundColor: Color = Theme.colors.surfaceColors.surfaceHigh,
-    badgeColor: Color = Theme.colors.surfaceColors.surface,
-    indicatorColor: Color = Theme.colors.secondary,
-    indicatorHeight: Dp = 4.dp
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.height(48.dp)
@@ -53,7 +44,7 @@ fun HorizontalTabs(
                 .fillMaxWidth()
                 .background(Theme.colors.stroke)
                 .padding(bottom = 1.dp)
-                .background(backgroundColor),
+                .background(Theme.colors.surfaceColors.surfaceHigh),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -63,11 +54,6 @@ fun HorizontalTabs(
                     tab = tab,
                     isSelected = index == selectedTabIndex,
                     onClick = { onTabSelected(index) },
-                    selectedTextColor = selectedTextColor,
-                    unselectedTextColor = unselectedTextColor,
-                    badgeColor = badgeColor,
-                    indicatorColor = indicatorColor,
-                    indicatorHeight = indicatorHeight
                 )
             }
         }

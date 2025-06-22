@@ -72,7 +72,6 @@ fun ConfirmationDialogBox(
                 text = stringResource(R.string.delete),
                 isNegative = true,
                 variant = ButtonVariant.FilledButton,
-                contentColor = Theme.colors.status.error,
             )
             TudeeButton(
                 onClick = onDismiss,
