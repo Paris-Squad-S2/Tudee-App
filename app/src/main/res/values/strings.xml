@@ -62,5 +62,6 @@
     <string name="failed_to_delete_category">Failed to Delete Category</string>
     <string name="category_added_successfully">Added Category successfully</string>
     <string name="edited_category_successfully">Edited Category Successfully</string>
+    <string name="skip">Skip</string>
 
 </resources>
