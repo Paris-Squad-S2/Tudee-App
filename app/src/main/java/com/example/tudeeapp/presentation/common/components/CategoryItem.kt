@@ -132,7 +132,7 @@ private fun SelectedBadge(modifier: Modifier) {
         Icon(
             painter = painterResource(R.drawable.ic_checkmark),
             contentDescription = "Check Mark Icon",
-            tint = Theme.colors.surfaceColors.surfaceHigh
+            tint = Theme.colors.surfaceColors.onPrimaryColors.onPrimary
         )
     }
 }

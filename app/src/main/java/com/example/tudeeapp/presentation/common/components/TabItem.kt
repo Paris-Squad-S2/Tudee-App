@@ -18,8 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
@@ -28,12 +26,7 @@ fun TabItem(
     tab: Tab,
     isSelected: Boolean,
     onClick: () -> Unit,
-    selectedTextColor: Color,
-    unselectedTextColor: Color,
     modifier: Modifier = Modifier,
-    badgeColor: Color = Theme.colors.surfaceColors.surface,
-    indicatorColor: Color = Theme.colors.secondary,
-    indicatorHeight: Dp = 4.dp
 ) {
     Box(
         modifier = modifier
@@ -52,13 +45,14 @@ fun TabItem(
                 Text(
                     text = tab.title,
                     style = Theme.textStyle.label.medium,
-                    color = if (isSelected) selectedTextColor else unselectedTextColor
+                    color = if (isSelected) Theme.colors.text.title else Theme.colors.text.hint
                 )
                 if (tab.count >= 0 && isSelected) {
                     Box(
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier
+                            .size(28.dp)
                             .clip(CircleShape)
-                            .background(badgeColor),
+                            .background(Theme.colors.surfaceColors.surface),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -77,10 +71,10 @@ fun TabItem(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = indicatorHeight)
+                        .padding(horizontal = 4.dp)
                         .height(4.dp)
                         .background(
-                            color = indicatorColor,
+                            color = Theme.colors.secondary,
                             shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                         )
                 )
