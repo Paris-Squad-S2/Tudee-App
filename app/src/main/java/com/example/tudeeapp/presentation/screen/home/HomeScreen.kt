@@ -43,9 +43,9 @@ import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalThemeState
+import com.example.tudeeapp.presentation.LocalThemeState
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
+import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
