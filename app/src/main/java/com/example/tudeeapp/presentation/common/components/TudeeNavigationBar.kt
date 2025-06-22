@@ -45,8 +45,12 @@ fun TudeeNavigationBar(
     val currentBackStackEntry by navHostController.currentBackStackEntryAsState()
 
 
-    var selectedDestinationIndex by rememberSaveable {
-        mutableIntStateOf(TudeeNavBarItem.destinations.indices.first)
+    val selectedDestinationIndex by remember(currentBackStackEntry) {
+        derivedStateOf {
+            TudeeNavBarItem.destinations.indexOfFirst { item ->
+                currentBackStackEntry?.destination?.hasRoute(item.destination::class) == true
+            }.takeIf { it >= 0 } ?: 0
+        }
     }
 
     val isVisible by remember {
@@ -70,7 +74,6 @@ fun TudeeNavigationBar(
                     currentItem = item,
                     onItemClick = {
                         navHostController.navigate(item.destination)
-                        selectedDestinationIndex = index
                     }
                 )
             }
@@ -139,7 +142,7 @@ sealed class TudeeNavBarItem(
 
     data object Tasks : TudeeNavBarItem(
         icon = R.drawable.ic_selected_task,
-        destination = Screens.Task()
+        destination = Screens.Tasks()
     )
 
     data object Categories : TudeeNavBarItem(
