@@ -65,7 +65,10 @@ fun CategoryForm(
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
         state.successMessage?.let {
-            snackbarHostState.show(message =context.getString(it) , isSuccess = true)
+            snackbarHostState.show(message = context.getString(it), isSuccess = true)
+            navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.set("categoryEdited", true)
             navController.popBackStack()
         }
     }

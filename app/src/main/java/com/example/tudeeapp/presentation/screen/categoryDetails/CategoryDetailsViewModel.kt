@@ -99,4 +99,9 @@ class CategoryDetailsViewModel(
     fun setStatus(status: TaskStatus) {
         _stateFilter.value = status
     }
+
+    fun refreshCategory() {
+        loadCategory(categoryId)
+    }
+
 }

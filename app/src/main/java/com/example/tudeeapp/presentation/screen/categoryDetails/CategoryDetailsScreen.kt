@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,6 +61,15 @@ fun CategoryDetailsScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val selectedState by viewModel.stateFilter.collectAsStateWithLifecycle()
+    val currentBackStackEntry = navController.currentBackStackEntry
+    val savedStateHandle = currentBackStackEntry?.savedStateHandle
+    val editResult = savedStateHandle?.getStateFlow("categoryEdited", false)
+    val result by editResult?.collectAsState(initial = false) ?: remember { mutableStateOf(false) }
+
+    if (result) {
+        savedStateHandle!!["categoryEdited"] = false
+        viewModel.refreshCategory()
+    }
 
     when {
         uiState.isLoading -> {
