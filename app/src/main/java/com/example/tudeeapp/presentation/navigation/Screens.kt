@@ -30,6 +30,7 @@ sealed class Screens {
     data class CategoryDetails(val categoryId: Long) : Screens()
 
     @Serializable
-    data class TaskManagement(val taskId: Long? = null) : Screens()
-
+    data class TaskManagement(
+        val taskId: Long? = null,
+        val selectedDate:String ) : Screens()
 }

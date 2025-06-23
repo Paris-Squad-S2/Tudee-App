@@ -1,7 +1,6 @@
 package com.example.tudeeapp.presentation.screen.task
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
