@@ -237,7 +237,7 @@ fun TaskContent(
             Column(
                 modifier = Modifier.verticalScroll(scrollState)
                     .fillMaxSize()
-                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .background(Theme.colors.surfaceColors.surface)
                     .weight(1f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -251,7 +251,7 @@ fun TaskContent(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
-                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .background(Theme.colors.surfaceColors.surface)
                     .fillMaxWidth()
                     .weight(1f),
                 contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
