@@ -190,7 +190,6 @@ class TaskViewModel(
 
     private fun getCurrentMonthYear(date: LocalDate): String {
         val month = DateFormatSymbols(Locale.getDefault()).shortMonths[date.monthNumber -1]
-        Log.d("TAG", "getCurrentMonthYear: ${date.month}, ${date.year}")
         return "$month, ${date.year}"
     }
 
