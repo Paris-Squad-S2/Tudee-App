@@ -31,12 +31,12 @@ import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun TudeeDatePickerDialog(
-    initialDate: LocalDate? = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+    initialDate: LocalDate? = Clock.System.now().toLocalDateTime(TimeZone.UTC).date,
     yearRange: IntRange = DatePickerDefaults.YearRange,
     onDismiss: () -> Unit,
     onSelectDate: (LocalDate) -> Unit
 ) {
-    val initialSelectedDateMillis = initialDate?.atStartOfDayIn(TimeZone.currentSystemDefault())?.toEpochMilliseconds()
+    val initialSelectedDateMillis = initialDate?.atStartOfDayIn(TimeZone.UTC)?.toEpochMilliseconds()
 
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = initialSelectedDateMillis,
