@@ -55,6 +55,7 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
+import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
@@ -185,7 +186,7 @@ fun TaskContent(
         }
 
         DateHeader(
-            data.calender.currentMonthYear,
+            date = data.calender.currentMonthYear,
             onClickNext = onClickNextMonth,
             onClickPrevious = onClickPreviousMonth,
             onClickPickDate = { onCLickDatePicker() }
