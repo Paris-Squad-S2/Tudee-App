@@ -3,6 +3,9 @@ package com.example.tudeeapp.di
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.tudeeapp.MainViewModel
+import com.example.tudeeapp.presentation.navigation.Navigator
+import com.example.tudeeapp.presentation.navigation.NavigatorImpl
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.categories.CategoriesViewModel
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormViewModel
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsViewModel
@@ -25,4 +28,5 @@ val viewModelModule = module {
     viewModelOf(::CategoryDetailsViewModel)
     viewModelOf(::CategoryFormViewModel)
     viewModelOf(::TaskViewModel)
+    single<Navigator> { NavigatorImpl(startGraph = Destinations.TudeeGraph) }
 }
