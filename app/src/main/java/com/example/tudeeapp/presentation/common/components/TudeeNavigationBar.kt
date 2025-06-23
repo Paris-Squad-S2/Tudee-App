@@ -49,7 +49,7 @@ fun TudeeNavigationBar(
         derivedStateOf {
             TudeeNavBarItem.destinations.indexOfFirst { item ->
                 currentBackStackEntry?.destination?.hasRoute(item.destination::class) == true
-            }.takeIf { it >= 0 } ?: 0
+            }.coerceAtLeast(0)
         }
     }
 
