@@ -25,28 +25,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.presentation.common.components.SnackBar
 import com.example.tudeeapp.presentation.common.components.SnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeNavigationBar
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
+import com.example.tudeeapp.presentation.common.extentions.ObserveAsEvents
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
-import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryForm
-import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
-import com.example.tudeeapp.presentation.screen.home.HomeScreen
-import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
-import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
-import com.example.tudeeapp.presentation.screen.splash.SplashScreen
-import com.example.tudeeapp.presentation.screen.task.TaskScreen
-import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
-import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
+import org.koin.compose.koinInject
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
@@ -54,7 +44,7 @@ val LocalThemeState = compositionLocalOf<MutableState<TudeeThemeMode>> { error("
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TudeeNavGraph() {
+fun TudeeNavGraph(navigator: Navigator = koinInject()) {
     val navController = rememberNavController()
     val snackBarState = remember { SnackBarState() }
     val context = LocalContext.current
@@ -73,6 +63,15 @@ fun TudeeNavGraph() {
         )
     }
 
+    ObserveAsEvents(navigator.navigationEvent) { event ->
+        when (event) {
+            is NavigationEvent.Navigate -> navController.navigate(
+                route = event.destination, navOptions = event.navOptions
+            )
+
+            NavigationEvent.NavigateUp -> navController.navigateUp()
+        }
+    }
 
     CompositionLocalProvider(
         LocalNavController provides navController,
@@ -86,24 +85,14 @@ fun TudeeNavGraph() {
                 modifier = Modifier
                     .background(Theme.colors.surfaceColors.surface)
                     .navigationBarsPadding(),
-                bottomBar = { TudeeNavigationBar(navController) },
+                bottomBar = { TudeeNavigationBar(navController, navigator) },
                 contentBackground = Theme.colors.surfaceColors.surface
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = Screens.Splash,
+                    startDestination = navigator.startGraph,
                 ) {
-                    composable<Screens.Splash> { SplashScreen() }
-                    composable<Screens.OnBoarding> { OnBoardScreen(pages = onboardingPages()) }
-                    composable<Screens.Home> { HomeScreen() }
-                    composable<Screens.Task> { TaskScreen() }
-                    composable<Screens.Category> { CategoriesScreen() }
-                    dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
-                    dialog<Screens.TaskDetails> { TaskDetailsScreen() }
-                    composable<Screens.CategoryDetails> { CategoryDetailsScreen() }
-                    dialog<Screens.CategoryForm> {
-                        CategoryForm()
-                    }
+                    buildTudeeNavGraph()
                 }
 
                 if (snackBarState.isVisible) {
