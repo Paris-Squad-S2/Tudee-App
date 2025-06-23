@@ -104,7 +104,7 @@ class TaskServicesImpl(
 
     override suspend fun addCategory(category:Category) {
         try {
-            categoryDao.insertCategory(category.toCategoryEntity())
+            categoryDao.insertOrUpdateCategory(category.toCategoryEntity())
         } catch (e: Exception) {
             throw AddCategoryException()
         }
@@ -121,7 +121,7 @@ class TaskServicesImpl(
                 imageUrl = imageUrl
             )
 
-            categoryDao.updateCategory(updatedCategory)
+            categoryDao.insertOrUpdateCategory(updatedCategory)
         } catch (e: Exception) {
             throw NoCategoryEditedException()
         }
