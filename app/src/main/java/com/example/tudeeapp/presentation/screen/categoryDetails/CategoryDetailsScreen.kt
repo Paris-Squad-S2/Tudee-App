@@ -44,7 +44,7 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
@@ -76,7 +76,7 @@ fun CategoryDetailsScreen(
                 onStatusChange = viewModel::setStatus,
                 onBack = { navController.popBackStack() },
                 categoryTitle = uiState.categoryUiState!!.title,
-                onOptionClick = { navController.navigate(Screens.CategoryForm(uiState.categoryUiState!!.id)) },
+                onOptionClick = { navController.navigate(Destinations.CategoryForm(uiState.categoryUiState!!.id)) },
                 categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
                 topBarOption = editableCategory(uiState.categoryUiState!!),
                 onClickDeleteIcon = viewModel::deleteTask
@@ -181,7 +181,7 @@ fun CategoryDetailsContent(
                         priorityIcon = painterResource(id = style.iconRes),
                         priorityColor = style.backgroundColor,
                         isDated = true,
-                        onClickItem = { navController.navigate(Screens.TaskDetails(task.id)) },
+                        onClickItem = { navController.navigate(Destinations.TaskDetails(task.id)) },
                         onDelete = { isSheetOpen = true }
                     )
                     TudeeBottomSheet(

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,10 +43,10 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.LocalThemeState
-import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
@@ -66,9 +65,9 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
             homeViewModel.onToggledAction(isDark)
         },
-        onFloatingActionButtonClick = { navController.navigate(Screens.TaskManagement()) },
-        onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Tasks(tasksTitle)) },
-        onTaskClick = { taskId -> navController.navigate(Screens.TaskDetails(taskId)) },
+        onFloatingActionButtonClick = { navController.navigate(Destinations.TaskManagement()) },
+        onTasksCountClick = { tasksTitle -> navController.navigate(Destinations.Task(tasksTitle)) },
+        onTaskClick = { taskId -> navController.navigate(Destinations.TaskDetails(taskId)) },
     )
 
 }
@@ -170,7 +169,7 @@ private fun HomeContent(
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize()
-                    ){
+                    ) {
                         EmptyTasksSection(
                             title = stringResource(R.string.no_tasks_for_today),
                             modifier = Modifier

@@ -7,43 +7,35 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
-import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
-import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryForm
-import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
-import com.example.tudeeapp.presentation.screen.home.HomeScreen
-import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
-import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
-import com.example.tudeeapp.presentation.screen.splash.SplashScreen
-import com.example.tudeeapp.presentation.screen.task.TasksScreen
-import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
-import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
+import com.example.tudeeapp.presentation.common.extentions.ObserveAsEvents
+import org.koin.compose.koinInject
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TudeeNavGraph(navController: NavHostController) {
+fun TudeeNavGraph(navController: NavHostController, navigator: Navigator = koinInject()) {
+
+    ObserveAsEvents(navigator.navigationEvent) { event ->
+        when (event) {
+            is NavigationEvent.Navigate -> navController.navigate(
+                route = event.destination, navOptions = event.navOptions
+            )
+
+            NavigationEvent.NavigateUp -> navController.navigateUp()
+        }
+    }
 
     CompositionLocalProvider(
         LocalNavController provides navController,
     ) {
+
         NavHost(
             navController = navController,
-            startDestination = Screens.Splash,
+            startDestination = navigator.startGraph,
         ) {
-            composable<Screens.Splash> { SplashScreen() }
-            composable<Screens.OnBoarding> { OnBoardScreen(pages = onboardingPages()) }
-            composable<Screens.Home> { HomeScreen() }
-            composable<Screens.Tasks> { TasksScreen() }
-            composable<Screens.Category> { CategoriesScreen() }
-            dialog<Screens.TaskManagement> { TaskManagementBottomSheet() }
-            dialog<Screens.TaskDetails> { TaskDetailsScreen() }
-            composable<Screens.CategoryDetails> { CategoryDetailsScreen() }
-            dialog<Screens.CategoryForm> {
-                CategoryForm()
-            }
+            buildTudeeNavGraph()
         }
+
     }
 }

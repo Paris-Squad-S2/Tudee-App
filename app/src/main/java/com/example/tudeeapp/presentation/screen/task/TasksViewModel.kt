@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.task.TaskStatusUi.Companion.fromNameOrDefault
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +36,7 @@ class TasksViewModel(
     private var allTasks: List<TaskItemUiState> = emptyList()
     private var currentSelectedDate: LocalDate = getCurrentDate()
     private var currentSelectedStatus: TaskStatusUi = fromNameOrDefault(
-        savedStateHandle.toRoute<Screens.Tasks>().tasksStatus
+        savedStateHandle.toRoute<Destinations.Task>().tasksStatus
     )
 
     init {
