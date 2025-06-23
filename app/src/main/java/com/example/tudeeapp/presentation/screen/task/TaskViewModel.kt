@@ -1,20 +1,14 @@
 package com.example.tudeeapp.presentation.screen.task
 
 import android.os.Build
-import android.os.LocaleList
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.remember
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.tudeeapp.data.mapper.toTaskStatus
 import com.example.tudeeapp.domain.TaskServices
-import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import com.example.tudeeapp.presentation.screen.task.TaskStatusUi.Companion.fromNameOrDefault
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,15 +20,10 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
-import kotlinx.datetime.format.DayOfWeekNames
-import kotlinx.datetime.format.MonthNames
-import kotlinx.datetime.format.char
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toLocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.DateFormatSymbols
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -200,21 +189,16 @@ class TaskViewModel(
     }
 
     private fun getCurrentMonthYear(date: LocalDate): String {
+        val month = DateFormatSymbols(Locale.getDefault()).shortMonths[date.monthNumber -1]
         Log.d("TAG", "getCurrentMonthYear: ${date.month}, ${date.year}")
-        val customFormat = LocalDate.Format{
-            monthName(MonthNames.ENGLISH_ABBREVIATED); chars(", "); year(); LocaleList.getDefault()
-        }
-        Log.d("TAG", "getCurrentMonthYear: ${date.format(customFormat)}")
-        return date.format(customFormat)
+        return "$month, ${date.year}"
     }
 
     private fun getShortDayName(date: LocalDate): String {
-        val customFormat = LocalDate.Format{
-            dayOfWeek(names = DayOfWeekNames.ENGLISH_ABBREVIATED);
-        }
-        Log.d("TAG", "getShortDayName: ${date.format(customFormat)}")
-        val javaDate = java.time.LocalDate.of(date.year, date.monthNumber, date.dayOfMonth)
-        return javaDate.format(DateTimeFormatter.ofPattern("EEE", Locale.getDefault()))
+        val dayOfWeek = date.dayOfWeek.value
+        val androidWeekdayIndex = if (dayOfWeek == 7) 1 else dayOfWeek + 1
+        val day = DateFormatSymbols(Locale.getDefault()).shortWeekdays[androidWeekdayIndex]
+        return day
     }
 
     private fun getSelectedDayIndex(date: LocalDate): Int {
