@@ -6,9 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryDetailsUiState
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.toCategoryUiState
 import com.example.tudeeapp.presentation.screen.categoryDetails.state.toTaskUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +21,7 @@ class CategoryDetailsViewModel(
     private val taskService: TaskServices,
 ) : ViewModel() {
 
-    private val categoryId: Long = savedStateHandle.toRoute<Screens.CategoryDetails>().categoryId
+    private val categoryId: Long = savedStateHandle.toRoute<Destinations.CategoryDetails>().categoryId
 
     private val _uiState = MutableStateFlow(CategoryDetailsUiState())
     val uiState: StateFlow<CategoryDetailsUiState> = _uiState.asStateFlow()

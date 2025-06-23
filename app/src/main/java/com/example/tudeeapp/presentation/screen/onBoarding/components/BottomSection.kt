@@ -4,9 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,7 +35,11 @@ fun BottomSection(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.padding(top = 32.dp, bottom = 60.dp)
+        modifier = modifier
+            .padding(
+                top = 32.dp,
+                bottom = 60.dp
+            )
     ) {
         Surface(
             shape = RoundedCornerShape(32.dp),
@@ -66,10 +68,9 @@ fun BottomSection(
                     text = page.title,
                     color = Theme.colors.text.title,
                     style = Theme.textStyle.title.medium,
-                    modifier = Modifier,
+                    modifier = Modifier.padding(bottom = 16.dp),
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = page.description,
                     color = Theme.colors.text.body,
