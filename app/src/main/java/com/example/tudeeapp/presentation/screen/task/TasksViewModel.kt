@@ -36,7 +36,7 @@ class TasksViewModel(
     private var allTasks: List<TaskItemUiState> = emptyList()
     private var currentSelectedDate: LocalDate = getCurrentDate()
     private var currentSelectedStatus: TaskStatusUi = fromNameOrDefault(
-        savedStateHandle.toRoute<Destinations.Task>().tasksStatus
+        savedStateHandle.toRoute<Destinations.Tasks>().tasksStatus
     )
 
     init {

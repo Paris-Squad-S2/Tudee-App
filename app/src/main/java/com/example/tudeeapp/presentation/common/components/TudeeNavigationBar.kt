@@ -19,11 +19,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -153,7 +150,7 @@ sealed class TudeeNavBarItem(
 
     data object Tasks : TudeeNavBarItem(
         icon = R.drawable.ic_selected_task,
-        destination = Destinations.Task()
+        destination = Destinations.Tasks()
     )
 
     data object Categories : TudeeNavBarItem(

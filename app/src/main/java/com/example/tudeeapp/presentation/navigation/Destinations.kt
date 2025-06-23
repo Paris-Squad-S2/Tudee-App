@@ -13,7 +13,7 @@ import com.example.tudeeapp.presentation.screen.home.HomeScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
-import com.example.tudeeapp.presentation.screen.task.TaskScreen
+import com.example.tudeeapp.presentation.screen.task.TasksScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
 import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
 import kotlinx.serialization.Serializable
@@ -33,7 +33,7 @@ sealed interface Destinations : Graph {
     data object Home : Destination
 
     @Serializable
-    data class Task(val tasksStatus: String = "") : Destination
+    data class Tasks(val tasksStatus: String = "") : Destination
 
     @Serializable
     data class TaskDetails(val taskId: Long) : Destination
@@ -57,7 +57,7 @@ fun NavGraphBuilder.buildTudeeNavGraph() {
         composable<Destinations.Splash> { SplashScreen() }
         composable<Destinations.OnBoarding> { OnBoardScreen(pages = onboardingPages()) }
         composable<Destinations.Home> { HomeScreen() }
-        composable<Destinations.Task> { TaskScreen() }
+        composable<Destinations.Tasks> { TasksScreen() }
         composable<Destinations.Category> { CategoriesScreen() }
         dialog<Destinations.TaskManagement> { TaskManagementBottomSheet() }
         dialog<Destinations.TaskDetails> { TaskDetailsScreen() }
