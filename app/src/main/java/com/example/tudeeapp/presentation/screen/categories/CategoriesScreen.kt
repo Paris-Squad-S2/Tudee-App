@@ -120,7 +120,6 @@ private fun CategoryListItem(
         icon = painter,
         label = category.name,
         count = category.count,
-        iconColor = Color.Unspecified,
         isSelected = false,
         onClick = {onClickItem(category.id)},
         isPredefined = category.isPredefined
