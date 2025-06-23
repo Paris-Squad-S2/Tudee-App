@@ -8,7 +8,8 @@ import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
+import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,42 +20,43 @@ import kotlin.random.Random
 class TaskManagementViewModel(
     private val taskServices: TaskServices,
     savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : BaseViewModel<TaskManagementUiState>(TaskManagementUiState(isLoading = true)) {
 
-    val taskId = savedStateHandle.toRoute<Screens.TaskManagement>().taskId
-
-    private val _state = MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
-
-    val state = _state.asStateFlow()
+    val taskId = savedStateHandle.toRoute<Destinations.TaskManagement>().taskId
 
     init {
+        _uiState.update { it.copy(isEditMode = taskId != null) }
         getAllCategories()
     }
 
     fun onTitleChange(title: String) {
-        _state.update { it.copy(title = title) }
+        _uiState.update { it.copy(title = title) }
     }
 
     fun onDescriptionChange(description: String) {
-        _state.update { it.copy(description = description) }
+        _uiState.update { it.copy(description = description) }
     }
 
     fun onDateClicked(isVisible: Boolean) {
-        _state.update { it.copy(isDatePickerVisible = isVisible) }
+        _uiState.update { it.copy(isDatePickerVisible = isVisible) }
     }
 
     fun onDateSelected(date: LocalDate) {
-        _state.update { it.copy(selectedDate = date.toString(), isDatePickerVisible = false) }
+        _uiState.update { it.copy(selectedDate = date.toString(), isDatePickerVisible = false) }
     }
 
     fun onPrioritySelected(priorityUiState: TaskPriorityUiState) {
-        _state.update { currentState ->
+        _uiState.update { currentState ->
             currentState.copy(selectedPriority = priorityUiState)
         }
     }
 
+    fun popBackStack() {
+        navigateUp()
+    }
+
     fun onCategorySelected(categoryId: Long) {
-        _state.update { currentState ->
+        _uiState.update { currentState ->
             val isCurrentlySelected = currentState.selectedCategoryId == categoryId
             val updatedCategories = currentState.categories.map { category ->
                 category.copy(isSelected = !isCurrentlySelected && category.id == categoryId)
@@ -70,7 +72,7 @@ class TaskManagementViewModel(
         viewModelScope.launch {
             try {
                 taskServices.getAllCategories().collect { categories ->
-                    _state.update {
+                    _uiState.update {
                         it.copy(
                             categories = categories.map { category -> category.toCategoryState() },
                             isLoading = false
@@ -87,9 +89,9 @@ class TaskManagementViewModel(
     fun onActionButtonClicked() {
         viewModelScope.launch {
             try {
-                _state.update { it.copy(isLoading = true) }
+                _uiState.update { it.copy(isLoading = true) }
 
-                val currentState = _state.value
+                val currentState = _uiState.value
 
                 val task = Task(
                     id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
@@ -104,7 +106,7 @@ class TaskManagementViewModel(
                 if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(
                     task
                 )
-                _state.update { it.copy(isLoading = false, isTaskSaved = true) }
+                _uiState.update { it.copy(isLoading = false, isTaskSaved = true) }
 
             } catch (_: Exception) {
                 handleException()
@@ -116,7 +118,7 @@ class TaskManagementViewModel(
         viewModelScope.launch {
             try {
                 taskServices.getTaskById(id).collect { task ->
-                    _state.update {
+                    _uiState.update {
                         it.copy(
                             title = task.title,
                             description = task.description,
@@ -138,7 +140,7 @@ class TaskManagementViewModel(
 
 
     private fun handleException() {
-        _state.update {
+        _uiState.update {
             it.copy(
                 isLoading = false,
                 error = "There was an error processing your request. Please try again later."
