@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -65,7 +64,9 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
             homeViewModel.onToggledAction(isDark)
         },
-        onFloatingActionButtonClick = { navController.navigate(Screens.TaskManagement()) },
+        onFloatingActionButtonClick = { navController.navigate(Screens.TaskManagement(
+            selectedDate = getLocalizedToday()
+        ))},
         onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Task(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Screens.TaskDetails(taskId)) },
     )
