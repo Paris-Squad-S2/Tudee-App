@@ -18,10 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.painterResource
-import com.example.tudeeapp.presentation.screen.onBoarding.components.OnBoardingImage
+import com.example.tudeeapp.presentation.screen.onBoarding.components.OnboardingImage
 import com.example.tudeeapp.presentation.screen.onBoarding.components.PageIndicator
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -31,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -39,12 +39,12 @@ import com.example.tudeeapp.presentation.screen.onBoarding.components.BottomSect
 
 
 @Composable
-fun OnBoardScreen(
+fun OnboardScreen(
     viewModel: OnboardingViewModel = koinViewModel(),
     pages: List<Page>,
 ) {
     val navController = LocalNavController.current
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.isCompleted) {
         if (state.isCompleted) {
@@ -69,7 +69,7 @@ fun OnBoardScreen(
 fun OnBoardingScreenContent(
     modifier: Modifier = Modifier,
     pages : List<Page>,
-    state: OnboardingState,
+    state: OnboardingUIState,
     onFinished: () -> Unit,
     onPageChanged: (Int) -> Unit
 ){
@@ -103,7 +103,7 @@ fun OnBoardingScreenContent(
                 state = pagerState,
                 modifier = Modifier.weight(1f)
             ) { index ->
-                OnBoardingImage(
+                OnboardingImage(
                     page = pages[index]
                 )
             }
@@ -148,7 +148,7 @@ fun OnBoardingScreenPreview(){
             pages = onboardingPages(),
             onFinished = {},
             onPageChanged = {},
-            state = OnboardingState()
+            state = OnboardingUIState()
         )
     }
 }

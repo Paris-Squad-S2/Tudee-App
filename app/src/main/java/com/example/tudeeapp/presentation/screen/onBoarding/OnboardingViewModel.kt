@@ -1,24 +1,19 @@
 package com.example.tudeeapp.presentation.screen.onBoarding
 
-import androidx.lifecycle.ViewModel
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 
 
-class OnboardingViewModel(private val appPreferences: AppPreferences) : ViewModel() {
-
-    private val _state = MutableStateFlow(
-        OnboardingState(isCompleted = appPreferences.isOnboardingCompleted())
-    )
-    val state: StateFlow<OnboardingState> = _state
-
+class OnboardingViewModel(
+    private val appPreferences: AppPreferences
+) : BaseViewModel<OnboardingUIState>(OnboardingUIState(isCompleted = appPreferences.isOnboardingCompleted())
+) {
     fun setOnboardingCompleted() {
-            appPreferences.setOnboardingCompleted()
-            _state.value = _state.value.copy(isCompleted = true)
+        appPreferences.setOnboardingCompleted()
+        _uiState.value = _uiState.value.copy(isCompleted = true)
     }
 
     fun updateCurrentPage(index: Int) {
-        _state.value = _state.value.copy(currentPage = index)
+        _uiState.value = _uiState.value.copy(currentPage = index)
     }
 }

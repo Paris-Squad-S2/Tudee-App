@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.tudeeapp.presentation.screen.onBoarding.Page
 
 @Composable
-fun OnBoardingImage(
+fun OnboardingImage(
     modifier: Modifier = Modifier,
     page: Page,
 ) {

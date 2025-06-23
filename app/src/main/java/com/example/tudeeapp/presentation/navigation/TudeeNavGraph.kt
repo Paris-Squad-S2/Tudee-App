@@ -39,7 +39,7 @@ import com.example.tudeeapp.presentation.screen.categories.CategoriesScreen
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryForm
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsScreen
 import com.example.tudeeapp.presentation.screen.home.HomeScreen
-import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardScreen
+import com.example.tudeeapp.presentation.screen.onBoarding.OnboardScreen
 import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TaskScreen
@@ -94,7 +94,7 @@ fun TudeeNavGraph() {
                     startDestination = Screens.Splash,
                 ) {
                     composable<Screens.Splash> { SplashScreen() }
-                    composable<Screens.OnBoarding> { OnBoardScreen(pages = onboardingPages()) }
+                    composable<Screens.OnBoarding> { OnboardScreen(pages = onboardingPages()) }
                     composable<Screens.Home> { HomeScreen() }
                     composable<Screens.Task> { TaskScreen() }
                     composable<Screens.Category> { CategoriesScreen() }
