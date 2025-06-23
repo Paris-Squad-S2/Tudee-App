@@ -39,13 +39,14 @@ import com.example.tudeeapp.presentation.navigation.Navigator
 import com.example.tudeeapp.presentation.navigation.NavigatorImpl
 import com.example.tudeeapp.presentation.navigation.Destinations
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 
 @Composable
 fun TudeeNavigationBar(
     navHostController: NavHostController,
-    navigator: Navigator,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigator: Navigator =  koinInject()
 ) {
     val currentBackStackEntry by navHostController.currentBackStackEntryAsState()
     val scope = rememberCoroutineScope()
