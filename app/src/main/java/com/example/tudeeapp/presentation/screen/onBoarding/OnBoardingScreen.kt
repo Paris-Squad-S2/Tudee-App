@@ -25,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.onBoarding.components.OnBoardingPage
 import com.example.tudeeapp.presentation.screen.onBoarding.components.PageIndicator
 import kotlinx.coroutines.launch
@@ -41,8 +41,8 @@ fun OnBoardScreen(
 
     LaunchedEffect(state.isCompleted) {
         if (state.isCompleted) {
-            navController.navigate(Screens.Home){
-                popUpTo(Screens.OnBoarding) { inclusive = true }
+            navController.navigate(Destinations.Home){
+                popUpTo(Destinations.OnBoarding) { inclusive = true }
             }
         }
     }
