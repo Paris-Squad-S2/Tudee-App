@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
-class TaskViewModel(
+class TasksViewModel(
     savedStateHandle: SavedStateHandle,
     private val taskServices: TaskServices
 ) : ViewModel() {
@@ -36,7 +36,7 @@ class TaskViewModel(
     private var allTasks: List<TaskItemUiState> = emptyList()
     private var currentSelectedDate: LocalDate = getCurrentDate()
     private var currentSelectedStatus: TaskStatusUi = fromNameOrDefault(
-        savedStateHandle.toRoute<Destinations.Task>().tasksStatus
+        savedStateHandle.toRoute<Destinations.Tasks>().tasksStatus
     )
 
     init {

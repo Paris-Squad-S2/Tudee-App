@@ -19,11 +19,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -42,19 +39,24 @@ import com.example.tudeeapp.presentation.navigation.Navigator
 import com.example.tudeeapp.presentation.navigation.NavigatorImpl
 import com.example.tudeeapp.presentation.navigation.Destinations
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 
 @Composable
 fun TudeeNavigationBar(
     navHostController: NavHostController,
-    navigator: Navigator,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigator: Navigator =  koinInject()
 ) {
     val currentBackStackEntry by navHostController.currentBackStackEntryAsState()
     val scope = rememberCoroutineScope()
 
-    var selectedDestinationIndex by rememberSaveable {
-        mutableIntStateOf(TudeeNavBarItem.destinations.indices.first)
+    val selectedDestinationIndex by remember(currentBackStackEntry) {
+        derivedStateOf {
+            TudeeNavBarItem.destinations.indexOfFirst { item ->
+                currentBackStackEntry?.destination?.hasRoute(item.destination::class) == true
+            }.coerceAtLeast(0)
+        }
     }
 
     val isVisible by remember {
@@ -79,7 +81,6 @@ fun TudeeNavigationBar(
                     onItemClick = {
                         scope.launch {
                             navigator.navigate(item.destination)
-                            selectedDestinationIndex = index
                         }
                     }
                 )
@@ -100,6 +101,7 @@ private fun RowScope.TudeeNavBarItem(
         modifier = Modifier
             .weight(1f)
             .clickable(
+                enabled = !selected,
                 onClick = onItemClick,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -149,7 +151,7 @@ sealed class TudeeNavBarItem(
 
     data object Tasks : TudeeNavBarItem(
         icon = R.drawable.ic_selected_task,
-        destination = Destinations.Task()
+        destination = Destinations.Tasks()
     )
 
     data object Categories : TudeeNavBarItem(

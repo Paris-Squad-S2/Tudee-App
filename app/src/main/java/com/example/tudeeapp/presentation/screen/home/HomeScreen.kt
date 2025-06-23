@@ -42,9 +42,10 @@ import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalThemeState
-import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
+import com.example.tudeeapp.presentation.LocalThemeState
+import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
+import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
@@ -65,7 +66,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             homeViewModel.onToggledAction(isDark)
         },
         onFloatingActionButtonClick = { navController.navigate(Destinations.TaskManagement()) },
-        onTasksCountClick = { tasksTitle -> navController.navigate(Destinations.Task(tasksTitle)) },
+        onTasksCountClick = { tasksTitle -> navController.navigate(Destinations.Tasks(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Destinations.TaskDetails(taskId)) },
     )
 
@@ -435,4 +436,23 @@ private fun OverViewCardsRow(
     }
 }
 
+@PreviewMultiDevices
+@Composable
+fun PreviewHomeScreen() {
+    HomeScreenContent(
+        state = HomeUiState(
+            isLoading = false,
+            isSuccess = true,
+            isDarkMode = false,
+            error = null,
+            doneTasks = listOf(),
+            inProgressTasks = listOf(),
+            toDoTasks = listOf()
+        ),
+        onToggleTheme = {},
+        onFloatingActionButtonClick = {},
+        onTasksCountClick = {},
+        onTaskClick = {}
+    )
+}
 

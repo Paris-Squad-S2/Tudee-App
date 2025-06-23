@@ -11,7 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
-import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons

@@ -53,7 +53,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
@@ -62,7 +62,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
+fun TasksScreen(viewModel: TasksViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     val uiState by viewModel.uiState.collectAsState()
 
@@ -251,9 +251,9 @@ fun TaskContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .background(Theme.colors.surfaceColors.surfaceLow)
-                    .padding(vertical = 12.dp, horizontal = 16.dp)
                     .fillMaxWidth()
-                    .weight(1f)
+                    .weight(1f),
+                contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
             ) {
                 items(data.tasks) { task ->
                     val iconResource = toPainter(
