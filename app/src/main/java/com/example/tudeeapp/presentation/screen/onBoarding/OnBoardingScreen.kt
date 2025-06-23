@@ -20,7 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.painterResource
-import com.example.tudeeapp.presentation.screen.onBoarding.components.OnboardingImage
+import com.example.tudeeapp.presentation.screen.onBoarding.components.OnBoardingImage
 import com.example.tudeeapp.presentation.screen.onBoarding.components.PageIndicator
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -39,8 +39,8 @@ import com.example.tudeeapp.presentation.screen.onBoarding.components.BottomSect
 
 
 @Composable
-fun OnboardScreen(
-    viewModel: OnboardingViewModel = koinViewModel(),
+fun OnBoardingScreen(
+    viewModel: OnBoardingViewModel = koinViewModel(),
     pages: List<Page>,
 ) {
     val navController = LocalNavController.current
@@ -69,7 +69,7 @@ fun OnboardScreen(
 fun OnBoardingScreenContent(
     modifier: Modifier = Modifier,
     pages : List<Page>,
-    state: OnboardingUIState,
+    state: OnBoardingUIState,
     onFinished: () -> Unit,
     onPageChanged: (Int) -> Unit
 ){
@@ -103,7 +103,7 @@ fun OnBoardingScreenContent(
                 state = pagerState,
                 modifier = Modifier.weight(1f)
             ) { index ->
-                OnboardingImage(
+                OnBoardingImage(
                     page = pages[index]
                 )
             }
@@ -148,7 +148,7 @@ fun OnBoardingScreenPreview(){
             pages = onboardingPages(),
             onFinished = {},
             onPageChanged = {},
-            state = OnboardingUIState()
+            state = OnBoardingUIState()
         )
     }
 }

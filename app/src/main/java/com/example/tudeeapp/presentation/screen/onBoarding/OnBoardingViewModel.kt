@@ -4,9 +4,9 @@ import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 
 
-class OnboardingViewModel(
+class OnBoardingViewModel(
     private val appPreferences: AppPreferences
-) : BaseViewModel<OnboardingUIState>(OnboardingUIState(isCompleted = appPreferences.isOnboardingCompleted())
+) : BaseViewModel<OnBoardingUIState>(OnBoardingUIState(isCompleted = appPreferences.isOnboardingCompleted())
 ) {
     fun setOnboardingCompleted() {
         appPreferences.setOnboardingCompleted()
