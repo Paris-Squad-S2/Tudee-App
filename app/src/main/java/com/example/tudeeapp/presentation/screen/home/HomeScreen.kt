@@ -35,23 +35,24 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.LocalThemeState
+import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.Header
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
-import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.LocalThemeState
-import com.example.tudeeapp.presentation.TudeeThemeMode
-import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
+import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.Destinations
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import com.example.tudeeapp.presentation.screen.home.utils.getToday
+import com.example.tudeeapp.presentation.utills.localizeNumbers
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -66,9 +67,13 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
             homeViewModel.onToggledAction(isDark)
         },
-        onFloatingActionButtonClick = { navController.navigate(Destinations.TaskManagement(
-            selectedDate = getToday().date.toString()
-        ))},
+        onFloatingActionButtonClick = {
+            navController.navigate(
+                Destinations.TaskManagement(
+                    selectedDate = getToday().date.toString()
+                )
+            )
+        },
         onTasksCountClick = { tasksTitle -> navController.navigate(Destinations.Tasks(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Destinations.TaskDetails(taskId)) },
     )
@@ -332,7 +337,7 @@ private fun OverViewSection(
     val todayText = stringResource(id = R.string.date_format_today)
 
     val formattedDate = remember {
-        getLocalizedToday()
+        getLocalizedToday().localizeNumbers()
     }
 
     Column(
