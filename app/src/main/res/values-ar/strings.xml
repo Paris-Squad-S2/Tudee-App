@@ -63,4 +63,5 @@
     <string name="failed_to_delete_category">فشل في حذف الفئه</string>
     <string name="category_added_successfully">تم أضافة الفئة</string>
     <string name="edited_category_successfully">تم تحديث الفئة</string>
+    <string name="failed_to_load_category">فشل تحميل الفئة</string>
 </resources>

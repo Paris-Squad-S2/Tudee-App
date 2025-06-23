@@ -54,7 +54,7 @@ fun CategoryForm(
     viewModel: CategoryFormViewModel = koinViewModel(),
 ) {
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val isEdit = state.categoryId != 0L
     val navController = LocalNavController.current
     val snackbarHostState = LocalSnackBarState.current
