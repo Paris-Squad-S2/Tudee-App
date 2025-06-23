@@ -49,7 +49,7 @@ class TaskServicesImpl(
 
     override suspend fun addTask(task: Task) {
         try {
-            taskDao.addTask(task.toTaskEntity())
+            taskDao.addOrUpdateTask(task.toTaskEntity())
         } catch (_: Exception) {
             throw NoTaskAddedException()
         }
@@ -57,7 +57,7 @@ class TaskServicesImpl(
 
     override suspend fun editTask(task: Task) {
         try {
-            taskDao.editTask(task.toTaskEntity())
+            taskDao.addOrUpdateTask(task.toTaskEntity())
         } catch (_: Exception) {
             throw NoTaskEditedException()
         }
