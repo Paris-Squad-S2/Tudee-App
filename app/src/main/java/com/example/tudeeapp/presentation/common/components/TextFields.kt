@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -45,6 +44,7 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+
 @Composable
 fun TextField(
     value: String,
@@ -95,12 +95,14 @@ fun TextField(
         value = value,
         enabled = enabled,
         onValueChange = { newText ->
-            if (singleLine){
-                if (newText.length<=100){
+            if (singleLine) {
+                if (newText.length <= 100) {
                     onValueChange(newText)
                 }
-            }else{
-                if (newText.lines().size <= 11) { onValueChange(newText) }
+            } else {
+                if (newText.lines().size <= 11) {
+                    onValueChange(newText)
+                }
             }
         },
         modifier = modifier
@@ -113,7 +115,7 @@ fun TextField(
             .clickable { onClick() },
         singleLine = singleLine,
         maxLines = if (singleLine) 1 else 11,
-        textStyle = textStyle,
+        textStyle = textStyle.copy(color = textColor),
         cursorBrush = SolidColor(Theme.colors.primary),
         interactionSource = interactionSource,
         decorationBox = { innerTextField ->
@@ -131,7 +133,6 @@ fun TextField(
                     singleLine,
                     value,
                     placeholder,
-                    textColor,
                     textStyle,
                     innerTextField
                 )
@@ -178,24 +179,21 @@ private fun RowScope.HandleInputText(
     singleLine: Boolean,
     value: String,
     placeholder: String,
-    textColor: Color,
     textStyle: TextStyle,
     innerTextField: @Composable () -> Unit,
 ) {
     val verticalAlignment = if (singleLine) Alignment.CenterVertically else Alignment.Top
-    val topPadding = if (singleLine) 0.dp else 12.dp
 
     Row(
         modifier = Modifier
             .weight(1f)
-            .fillMaxHeight()
-            .padding(top = topPadding),
+            .fillMaxHeight(),
         verticalAlignment = verticalAlignment
     ) {
         InputFieldContent(
+            singleLine = singleLine,
             value = value,
             placeholder = placeholder,
-            textColor = textColor,
             innerTextField = innerTextField,
             textStyle = textStyle
         )
@@ -204,22 +202,23 @@ private fun RowScope.HandleInputText(
 
 @Composable
 private fun InputFieldContent(
+    singleLine: Boolean,
     value: String,
     placeholder: String,
-    textColor: Color,
     textStyle: TextStyle,
     innerTextField: @Composable () -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        if (!singleLine) Spacer(modifier = Modifier.height(8.dp))
         if (value.isEmpty()) {
             Text(
                 text = placeholder,
-                color = textColor,
+                color = Theme.colors.text.hint,
                 fontSize = 14.sp,
                 style = textStyle
             )
         }
-        innerTextField()
+        else innerTextField()
     }
 }
 

@@ -26,11 +26,11 @@ data class PriorityStyle(
 fun TaskPriorityUi.toStyle(): PriorityStyle {
     return when (this) {
         TaskPriorityUi.HIGH -> PriorityStyle(
-            iconRes = R.drawable.ic_alert,
+            iconRes = R.drawable.ic_flag,
             backgroundColor = Theme.colors.status.pinkAccent
         )
         TaskPriorityUi.MEDIUM -> PriorityStyle(
-            iconRes = R.drawable.ic_flag,
+            iconRes = R.drawable.ic_alert,
             backgroundColor = Theme.colors.status.yellowAccent
         )
         TaskPriorityUi.LOW -> PriorityStyle(
