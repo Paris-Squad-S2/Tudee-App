@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
@@ -56,7 +56,6 @@ val LocalThemeState = compositionLocalOf<MutableState<TudeeThemeMode>> { error("
 @Composable
 fun TudeeNavGraph() {
     val navController = rememberNavController()
-    val backStackEntry = navController.currentBackStackEntryAsState().value
     val snackBarState = remember { SnackBarState() }
     val context = LocalContext.current
     val appPrefs = remember { AppPreferences(context) }
@@ -80,26 +79,14 @@ fun TudeeNavGraph() {
         LocalSnackBarState provides snackBarState,
         LocalThemeState provides themeMode
     ) {
-
-        val currentRoute = backStackEntry?.destination?.route?.substringBefore('?')
-        val selectedRouteIndex = listOf(
-            Screens.Home::class.qualifiedName,
-            Screens.Task::class.qualifiedName,
-            Screens.Category::class.qualifiedName
-        ).indexOf(currentRoute)
-
         TudeeTheme(
             isDarkTheme = themeMode.value == TudeeThemeMode.DARK
         ) {
             TudeeScaffold(
-                modifier = Modifier.navigationBarsPadding(),
-                bottomBar = {
-                    TudeeNavigationBar(
-                        onItemClick = { navItem -> navController.navigate(navItem.screen) },
-                        selected = selectedRouteIndex,
-                        isVisible = selectedRouteIndex != -1
-                    )
-                },
+                modifier = Modifier
+                    .background(Theme.colors.surfaceColors.surface)
+                    .navigationBarsPadding(),
+                bottomBar = { TudeeNavigationBar(navController) },
                 contentBackground = Theme.colors.surfaceColors.surface
             ) {
                 NavHost(

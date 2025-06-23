@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -143,7 +144,8 @@ private fun HomeContent(
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 16.dp),
     ) {
         item {
             OverViewSection(
@@ -210,9 +212,6 @@ private fun HomeContent(
                 )
             }
         }
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
     }
 }
 
@@ -250,14 +249,14 @@ fun ShowError(error: String) {
                     .offset(x = (-4).dp, y = (-9).dp)
             )
 
-            Image(
-                painter = painterResource(R.drawable.task_card_dots),
+            Icon(
+                painter = painterResource(R.drawable.ic_task_card_dots),
                 contentDescription = "ropo2",
                 modifier = Modifier
                     .size(54.dp)
                     .align(Alignment.CenterStart)
-                    .offset(x = (-2).dp, y = (10).dp)
-
+                    .offset(x = (-2).dp, y = (10).dp),
+                tint = Theme.colors.surfaceColors.surfaceHigh
             )
 
             Image(

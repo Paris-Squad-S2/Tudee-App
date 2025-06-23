@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="46dp"
+    android:height="58dp"
+    android:viewportWidth="46"
+    android:viewportHeight="58"
+    android:autoMirrored="true">
+    <group>
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M32 38A2 2 0 1 0 32 42 2 2 0 1 0 32 38z"/>
+    </group>
+    <group>
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M26 25A4 4 0 1 0 26 33 4 4 0 1 0 26 25z"/>
+    </group>
+    <group>
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M19 8A7 7 0 1 0 19 22 7 7 0 1 0 19 8z"/>
+    </group>
+</vector>
