@@ -74,7 +74,8 @@ fun TaskDetailsScreen(
                                 onEditTaskClick = {
                                     navController.navigate(
                                         Destinations.TaskManagement(
-                                            taskUiState.id
+                                            taskUiState.id,
+                                            taskUiState.createdDate.toString()
                                         )
                                     )
                                 }

@@ -1,7 +1,5 @@
 package com.example.tudeeapp.presentation.screen.task
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,10 +20,10 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.DateFormatSymbols
 import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 class TasksViewModel(
     savedStateHandle: SavedStateHandle,
     private val taskServices: TaskServices
@@ -188,14 +186,16 @@ class TasksViewModel(
     }
 
     private fun getCurrentMonthYear(date: LocalDate): String {
-        val formatter = DateTimeFormatter.ofPattern("MMM, yyyy", Locale.getDefault())
-        return java.time.LocalDate.of(date.year, date.monthNumber, date.dayOfMonth)
-            .format(formatter)
+        val month = DateFormatSymbols(Locale.getDefault()).shortMonths[date.monthNumber -1]
+        return "$month, ${date.year}"
     }
 
     private fun getShortDayName(date: LocalDate): String {
-        val javaDate = java.time.LocalDate.of(date.year, date.monthNumber, date.dayOfMonth)
-        return javaDate.format(DateTimeFormatter.ofPattern("EEE", Locale.getDefault()))
+        // Use ISO dayOfWeek (1=Monday, 7=Sunday), map to Android's shortWeekdays (1=Sunday, 7=Saturday)
+        val isoDayOfWeek = date.dayOfWeek.ordinal + 1 // 1=Monday, ..., 7=Sunday
+        val androidWeekdayIndex = if (isoDayOfWeek == 7) 1 else isoDayOfWeek + 1
+        val day = DateFormatSymbols(Locale.getDefault()).shortWeekdays[androidWeekdayIndex]
+        return day
     }
 
     private fun getSelectedDayIndex(date: LocalDate): Int {
@@ -203,8 +203,15 @@ class TasksViewModel(
     }
 
     private fun getAllDaysOfCurrentMonth(date: LocalDate): List<LocalDate> {
-        val daysInMonth = date.month.length(isLeapYear(date.year))
-        return (1..daysInMonth).map { day -> LocalDate(date.year, date.month, day) }
+        val month = date.monthNumber
+        val year = date.year
+        val daysInMonth = when (month) {
+            1, 3, 5, 7, 8, 10, 12 -> 31
+            4, 6, 9, 11 -> 30
+            2 -> if (isLeapYear(year)) 29 else 28
+            else -> 30
+        }
+        return (1..daysInMonth).map { day -> LocalDate(year, month, day) }
     }
 
     private fun isLeapYear(year: Int): Boolean {

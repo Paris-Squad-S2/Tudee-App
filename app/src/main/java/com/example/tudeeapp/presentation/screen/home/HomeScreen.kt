@@ -51,6 +51,7 @@ import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
+import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -65,7 +66,9 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
             homeViewModel.onToggledAction(isDark)
         },
-        onFloatingActionButtonClick = { navController.navigate(Destinations.TaskManagement()) },
+        onFloatingActionButtonClick = { navController.navigate(Destinations.TaskManagement(
+            selectedDate = getToday().date.toString()
+        ))},
         onTasksCountClick = { tasksTitle -> navController.navigate(Destinations.Tasks(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Destinations.TaskDetails(taskId)) },
     )

@@ -20,9 +20,14 @@ class TaskManagementViewModel(
 ) : BaseViewModel<TaskManagementUiState>(TaskManagementUiState(isLoading = true)) {
 
     val taskId = savedStateHandle.toRoute<Destinations.TaskManagement>().taskId
+    private val selectedDate = savedStateHandle.toRoute<Destinations.TaskManagement>().selectedDate
 
     init {
-        _uiState.update { it.copy(isEditMode = taskId != null) }
+        _uiState.update {
+            it.copy(
+            isEditMode = taskId != null,
+            selectedDate = selectedDate)
+        }
         getAllCategories()
     }
 
