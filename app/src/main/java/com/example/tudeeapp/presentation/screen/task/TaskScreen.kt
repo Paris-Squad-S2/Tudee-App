@@ -38,10 +38,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.mapper.toTaskPriority
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.DayItem
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
@@ -54,8 +54,6 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Screens
-import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
-import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
@@ -71,7 +69,8 @@ fun TaskScreen(viewModel: TaskViewModel = koinViewModel()) {
     TaskScreenContent(
         uiState = uiState,
         listState = rememberLazyListState(),
-        addTask = { navController.navigate(Screens.TaskManagement()) },
+        addTask = { navController.navigate(
+            Screens.TaskManagement(selectedDate = uiState.data.calender.selectedDate.toString())) },
         onCLickDatePicker = viewModel::onDatePickerVisibilityChanged,
         onClickPreviousMonth = viewModel::goToPreviousMonth,
         onClickNextMonth = viewModel::goToNextMonth,

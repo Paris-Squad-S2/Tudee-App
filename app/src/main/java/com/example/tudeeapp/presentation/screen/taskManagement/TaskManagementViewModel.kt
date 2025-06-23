@@ -22,8 +22,13 @@ class TaskManagementViewModel(
 ) : ViewModel() {
 
     val taskId = savedStateHandle.toRoute<Screens.TaskManagement>().taskId
+    private val selectedDate = savedStateHandle.toRoute<Screens.TaskManagement>().selectedDate
 
-    private val _state = MutableStateFlow(TaskManagementUiState(isEditMode = taskId != null, isLoading = true))
+    private val _state = MutableStateFlow(TaskManagementUiState(
+        isEditMode = taskId != null,
+        isLoading = true,
+        selectedDate = selectedDate
+    ))
 
     val state = _state.asStateFlow()
 
