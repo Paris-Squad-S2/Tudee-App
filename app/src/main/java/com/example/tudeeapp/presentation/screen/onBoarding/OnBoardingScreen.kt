@@ -34,9 +34,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.onBoarding.components.BottomSection
-
 
 @Composable
 fun OnBoardingScreen(
@@ -48,8 +47,8 @@ fun OnBoardingScreen(
 
     LaunchedEffect(state.isCompleted) {
         if (state.isCompleted) {
-            navController.navigate(Screens.Home){
-                popUpTo(Screens.OnBoarding) { inclusive = true }
+            navController.navigate(Destinations.Home){
+                popUpTo(Destinations.OnBoarding) { inclusive = true }
             }
         }
     }

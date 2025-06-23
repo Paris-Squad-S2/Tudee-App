@@ -119,10 +119,10 @@ private fun DateCard(date: String) {
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_calender),
+                painter = painterResource(R.drawable.ic_date),
                 contentDescription = "Date",
                 tint = Theme.colors.text.body,
-                modifier = Modifier.padding(end = 2.5.dp)
+                modifier = Modifier.padding(end = 2.5.dp),
             )
             Text(
                 text = date,
