@@ -21,6 +21,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,14 +37,21 @@ import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destination
+import com.example.tudeeapp.presentation.navigation.Navigator
+import com.example.tudeeapp.presentation.navigation.NavigatorImpl
+import com.example.tudeeapp.presentation.navigation.Destinations
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun TudeeNavigationBar(
-    navHostController: NavHostController,modifier: Modifier = Modifier) {
+    navHostController: NavHostController,
+    navigator: Navigator,
+    modifier: Modifier = Modifier
+) {
     val currentBackStackEntry by navHostController.currentBackStackEntryAsState()
-
+    val scope = rememberCoroutineScope()
 
     var selectedDestinationIndex by rememberSaveable {
         mutableIntStateOf(TudeeNavBarItem.destinations.indices.first)
@@ -69,8 +77,10 @@ fun TudeeNavigationBar(
                     selectedDestinationIndex = selectedDestinationIndex,
                     currentItem = item,
                     onItemClick = {
-                        navHostController.navigate(item.destination)
-                        selectedDestinationIndex = index
+                        scope.launch {
+                            navigator.navigate(item.destination)
+                            selectedDestinationIndex = index
+                        }
                     }
                 )
             }
@@ -130,21 +140,21 @@ private fun TudeeNavBarIcon(
 
 sealed class TudeeNavBarItem(
     @DrawableRes val icon: Int,
-    val destination: Screens,
+    val destination: Destination,
 ) {
     data object Home : TudeeNavBarItem(
         icon = R.drawable.ic_selected_home,
-        destination = Screens.Home
+        destination = Destinations.Home
     )
 
     data object Tasks : TudeeNavBarItem(
         icon = R.drawable.ic_selected_task,
-        destination = Screens.Task()
+        destination = Destinations.Task()
     )
 
     data object Categories : TudeeNavBarItem(
         icon = R.drawable.ic_selected_categories,
-        destination = Screens.Category
+        destination = Destinations.Category
     )
 
     companion object {
@@ -159,6 +169,7 @@ private fun TudeeNavigationBarPreview() {
     BasePreview {
         TudeeNavigationBar(
             navHostController = rememberNavController(),
+            navigator = NavigatorImpl(startGraph = Destinations.TudeeGraph),
         )
     }
 }
