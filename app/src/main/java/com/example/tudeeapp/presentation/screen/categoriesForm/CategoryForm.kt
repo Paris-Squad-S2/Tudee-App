@@ -42,9 +42,7 @@ import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.extentions.dashedBorder
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.categoriesForm.components.CategoriesBottomSheetButtons
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -56,7 +54,6 @@ fun CategoryForm(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val isEdit = state.categoryId != 0L
-    val navController = LocalNavController.current
     val snackbarHostState = LocalSnackBarState.current
     val context = LocalContext.current
     var showSheet by remember { mutableStateOf(true) }
@@ -66,7 +63,7 @@ fun CategoryForm(
     LaunchedEffect(state.successMessage, state.errorMessage) {
         state.successMessage?.let {
             snackbarHostState.show(message =context.getString(it) , isSuccess = true)
-            navController.popBackStack()
+            viewModel.onCancel()
         }
     }
 
@@ -97,14 +94,14 @@ fun CategoryForm(
         },
         onDismiss = {
             showSheet = false
-            navController.popBackStack()
+            viewModel.onCancel()
         }
     ) {
         CategoryFormContent(
             state = state,
             onCancel = {
                 showSheet = false
-                navController.popBackStack()
+                viewModel.onCancel()
             },
             onSubmit = {
                 viewModel.submitCategory()
@@ -121,21 +118,22 @@ fun CategoryForm(
         TudeeBottomSheet(
             isVisible = true,
             title = stringResource(id = R.string.delete_category),
-            onDismiss = { showDeleteConfirmation = false }
+            onDismiss = {
+                showDeleteConfirmation = false
+                showSheet = true
+            }
         ) {
             ConfirmationDialogBox(
                 title = R.string.are_you_sure_to_continue,
                 onConfirm = {
-                    viewModel.deleteCategory(
-                        onSuccess = {
-                            showDeleteConfirmation = false
-                            showSheet = false
-                            navController.popBackStack(route = Destinations.Category, inclusive = false)
-                            snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
-                        }
-                    )
+                    viewModel.deleteCategory()
+                    showDeleteConfirmation = false
+                    snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
                 },
-                onDismiss = { showDeleteConfirmation = false }
+                onDismiss = {
+                    showDeleteConfirmation = false
+                    showSheet = true
+                }
             )
         }
     }
@@ -227,12 +225,12 @@ fun CategoryFormContent(
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
-         CategoriesBottomSheetButtons(
-                state = state,
-                onSubmit = onSubmit,
-                onCancel = onCancel,
-                buttonText = buttonText
-            )
+        CategoriesBottomSheetButtons(
+            state = state,
+            onSubmit = onSubmit,
+            onCancel = onCancel,
+            buttonText = buttonText
+        )
     }
 }
 

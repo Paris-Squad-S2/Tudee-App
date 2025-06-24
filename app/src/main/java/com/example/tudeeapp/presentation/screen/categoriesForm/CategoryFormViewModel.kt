@@ -3,23 +3,20 @@ package com.example.tudeeapp.presentation.screen.categoriesForm
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.mapper.toResDrawables
-import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import com.example.tudeeapp.presentation.navigation.Destinations
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 
 class CategoryFormViewModel(
     val taskServices: TaskServices,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<CategoryFormUIState>(CategoryFormUIState()) {
 
     init {
@@ -87,11 +84,16 @@ class CategoryFormViewModel(
         )
     }
 
-    fun deleteCategory(onSuccess: () -> Unit) {
+    fun deleteCategory() {
         launchSafely(
             onSuccess = {
                 taskServices.deleteCategory(_uiState.value.categoryId)
-                onSuccess()
+                navigate(
+                    Destinations.Category,
+                    NavOptions.Builder()
+                        .setPopUpTo(Destinations.Category, inclusive = false)
+                        .build()
+                )
             },
             onError = {
                 _uiState.update { it.copy(errorMessage =  R.string.failed_to_delete_category)}
@@ -127,10 +129,12 @@ class CategoryFormViewModel(
         )
     }
 
+    fun onCancel() {
+        navigateUp()
+    }
 
 }
 
 fun String.getLastPartAfterSlash(): String {
     return this.split("/").last()
 }
-
