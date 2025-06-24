@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.example.tudeeapp.presentation.common.components.TaskCard
-import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
+import com.example.tudeeapp.presentation.screen.home.TaskUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getPriorityColor
 import com.example.tudeeapp.presentation.utills.toPainter
 

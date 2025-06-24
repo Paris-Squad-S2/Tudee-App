@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.home.state
+package com.example.tudeeapp.presentation.screen.home
 
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus

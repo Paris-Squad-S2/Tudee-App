@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
+import com.example.tudeeapp.presentation.screen.home.TaskUiState
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

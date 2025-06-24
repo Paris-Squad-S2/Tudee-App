@@ -31,7 +31,7 @@ import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.screen.home.state.mapTaskCountToSliderState
+import com.example.tudeeapp.presentation.screen.home.mapTaskCountToSliderState
 
 @Composable
 fun TudeeHomeMessage(

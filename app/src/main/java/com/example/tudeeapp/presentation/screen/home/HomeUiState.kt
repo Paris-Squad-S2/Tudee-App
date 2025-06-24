@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.home.state
+package com.example.tudeeapp.presentation.screen.home
 
 
 data class HomeUiState(
