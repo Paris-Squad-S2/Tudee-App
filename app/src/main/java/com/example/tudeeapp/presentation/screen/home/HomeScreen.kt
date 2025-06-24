@@ -52,11 +52,10 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val state by homeViewModel.uiState.collectAsStateWithLifecycle()
-    val themeMode = LocalThemeState.current
 
     HomeScreenContent(
         state = state,
-        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark, themeMode) },
+        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark) },
         onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick,
         onTasksCountClick = homeViewModel::onTasksCountClick ,
         onTaskClick = homeViewModel::onTaskClick
