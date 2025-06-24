@@ -57,7 +57,7 @@ fun CategoryEntity.toCategory(): Category {
     return Category(
         id = this.id,
         title = this.title,
-        imageUrl = this.imageUrl,
+        imageUri = this.imageUri,
         tasksCount = this.tasksCount,
         isPredefined = this.isPredefined
     )
@@ -67,7 +67,7 @@ fun Category.toCategoryEntity(): CategoryEntity {
     return CategoryEntity(
         id = this.id,
         title = this.title,
-        imageUrl = this.imageUrl,
+        imageUri = this.imageUri,
         tasksCount = this.tasksCount,
         isPredefined = this.isPredefined
     )

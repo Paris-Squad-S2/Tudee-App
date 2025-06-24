@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c4a5a712c64e75a682635b60474daa1b",
+    "identityHash": "531c503bc75895e13654b940b70777b3",
     "entities": [
       {
         "tableName": "TASK_TABLE",
@@ -60,7 +60,7 @@
       },
       {
         "tableName": "CATEGORY_TABLE",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, `isPredefined` INTEGER NOT NULL, `tasksCount` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `imageUri` TEXT NOT NULL, `isPredefined` INTEGER NOT NULL, `tasksCount` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -75,8 +75,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "imageUrl",
-            "columnName": "imageUrl",
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -103,7 +103,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c4a5a712c64e75a682635b60474daa1b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '531c503bc75895e13654b940b70777b3')"
     ]
   }
 }
