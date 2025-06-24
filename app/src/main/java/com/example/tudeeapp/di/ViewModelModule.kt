@@ -2,12 +2,15 @@ package com.example.tudeeapp.di
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.tudeeapp.presentation.navigation.Destinations
+import com.example.tudeeapp.presentation.navigation.Navigator
+import com.example.tudeeapp.presentation.navigation.NavigatorImpl
 import com.example.tudeeapp.presentation.screen.categories.CategoriesViewModel
 import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormViewModel
 import com.example.tudeeapp.presentation.screen.categoryDetails.CategoryDetailsViewModel
 import com.example.tudeeapp.presentation.screen.home.HomeViewModel
-import com.example.tudeeapp.presentation.screen.onBoarding.OnboardingViewModel
-import com.example.tudeeapp.presentation.screen.task.TaskViewModel
+import com.example.tudeeapp.presentation.screen.onBoarding.OnBoardingViewModel
+import com.example.tudeeapp.presentation.screen.task.TasksViewModel
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsViewModel
 import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -18,9 +21,10 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::TaskDetailsViewModel)
     viewModelOf(::CategoriesViewModel)
-    viewModelOf(::OnboardingViewModel)
+    viewModelOf(::OnBoardingViewModel)
     viewModelOf(::TaskManagementViewModel)
     viewModelOf(::CategoryDetailsViewModel)
     viewModelOf(::CategoryFormViewModel)
-    viewModelOf(::TaskViewModel)
+    viewModelOf(::TasksViewModel)
+    single<Navigator> { NavigatorImpl(startGraph = Destinations.TudeeGraph) }
 }
