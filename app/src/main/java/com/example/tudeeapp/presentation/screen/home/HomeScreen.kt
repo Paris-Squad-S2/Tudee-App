@@ -39,7 +39,7 @@ import com.example.tudeeapp.presentation.LocalThemeState
 import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
-import com.example.tudeeapp.presentation.common.components.Header
+import com.example.tudeeapp.presentation.common.components.AppHeader
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
@@ -89,7 +89,7 @@ fun HomeScreenContent(
 ) {
     TudeeScaffold(
         topBar = {
-            Header(
+            AppHeader(
                 modifier = Modifier
                     .background(Theme.colors.primary)
                     .statusBarsPadding(),

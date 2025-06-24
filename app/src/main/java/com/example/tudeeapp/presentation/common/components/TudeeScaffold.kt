@@ -88,7 +88,7 @@ private fun TudeeScaffoldPreview() {
                     )
                 },
                 topBar = {
-                    Header(
+                    AppHeader(
                         modifier = Modifier
                             .background(Theme.colors.primary)
                             .statusBarsPadding(),
