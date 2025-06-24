@@ -33,11 +33,11 @@ class CategoryFormViewModel(
                     it.copy(
                         categoryName = category.title,
                         categoryId = category.id,
-                        imageUri = if (category.imageUrl.startsWith("R.drawable.")) {
-                            val resourceId = category.imageUrl.toResDrawables()
+                        imageUri = if (category.imageUri.startsWith("R.drawable.")) {
+                            val resourceId = category.imageUri.toResDrawables()
                             "android.resource://com.example.tudeeapp/$resourceId".toUri()
                         } else {
-                            category.imageUrl.toUri()
+                            category.imageUri.toUri()
                         }
                     )
                 }
@@ -74,7 +74,7 @@ class CategoryFormViewModel(
                 taskServices.editCategory(
                     id = _uiState.value.categoryId,
                     title = _uiState.value.categoryName,
-                    imageUrl = getImageUrl(_uiState.value.imageUri.toString())
+                    imageUri = getImageUrl(_uiState.value.imageUri.toString())
                 )
                 _uiState.update { it.copy(successMessage = R.string.edited_category_successfully) }
             },
@@ -114,7 +114,7 @@ class CategoryFormViewModel(
             onSuccess = {
                 val category = Category(
                     title = _uiState.value.categoryName,
-                    imageUrl = _uiState.value.imageUri.toString(),
+                    imageUri = _uiState.value.imageUri.toString(),
                     tasksCount = 0,
                     isPredefined = false
                 )
