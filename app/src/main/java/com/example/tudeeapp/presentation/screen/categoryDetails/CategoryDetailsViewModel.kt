@@ -1,28 +1,24 @@
 package com.example.tudeeapp.presentation.screen.categoryDetails
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Destinations
+import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+
 
 class CategoryDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val taskService: TaskServices,
-) : ViewModel() {
+) : BaseViewModel<CategoryDetailsUiState>(CategoryDetailsUiState()) {
+
 
     private val categoryId: Long = savedStateHandle.toRoute<Destinations.CategoryDetails>().categoryId
-
-    private val _uiState = MutableStateFlow(CategoryDetailsUiState())
-    val uiState: StateFlow<CategoryDetailsUiState> = _uiState.asStateFlow()
-
 
     init {
         loadCategory(categoryId)
@@ -32,8 +28,11 @@ class CategoryDetailsViewModel(
     val stateFilter = _stateFilter.asStateFlow()
 
     private fun loadCategory(categoryId: Long) {
-        viewModelScope.launch {
-            try {
+        launchSafely(
+            onLoading = {
+                _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
+            },
+            onSuccess = {
                 val category = taskService.getCategoryById(categoryId)
                 val tasks = taskService.getAllTasks().first()
                     .filter { it.categoryId == categoryId }
@@ -43,37 +42,43 @@ class CategoryDetailsViewModel(
                     taskUiState = tasks.map { it.toTaskUiState() },
                     categoryUiState = category.first().toCategoryUiState()
                 )
-
-            } catch (e: Exception) {
-                _uiState.value = CategoryDetailsUiState(
-                    isLoading = false,
-                    errorMessage = e.message ?: "Unexpected Error"
-                )
-            }
-        }
-    }
-    fun deleteTask(taskId: Long) {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
-
-            try {
-                taskService.deleteTask(taskId)
-                updateUiStateWithFilters()
-
-            } catch (e: Exception) {
+            },
+            onError = { error ->
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unknown error occurred"
+                    errorMessage = error
                 )
             }
-        }
+        )
+    }
+
+    fun deleteTask(taskId: Long) {
+        launchSafely(
+            onLoading = {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = true,
+                    errorMessage = "Unknown error occurred"
+                )
+            },
+            onSuccess = {
+                taskService.deleteTask(taskId)
+                updateUiStateWithFilters()
+            },
+            onError = { error ->
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = error
+                )
+            }
+        )
     }
 
     fun updateUiStateWithFilters() {
-        viewModelScope.launch {
-            try {
+        launchSafely(
+            onLoading = {
                 _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
-
+            },
+            onSuccess = {
                 val category = taskService.getCategoryById(categoryId).first()
                 val allTasks = taskService.getAllTasks().first()
                 val filteredTasks = allTasks.filter { it.categoryId == categoryId }
@@ -83,13 +88,14 @@ class CategoryDetailsViewModel(
                     categoryUiState = category.toCategoryUiState(),
                     taskUiState = filteredTasks.map { it.toTaskUiState() }
                 )
-            } catch (e: Exception) {
+            },
+            onError = {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Error updating tasks"
+                    errorMessage = it
                 )
             }
-        }
+        )
     }
 
     fun setStatus(status: TaskStatus) {
