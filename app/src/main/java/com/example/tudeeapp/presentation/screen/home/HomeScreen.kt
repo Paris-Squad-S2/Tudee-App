@@ -56,9 +56,9 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     HomeScreenContent(
         state = state,
         onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark, themeMode) },
-        onFloatingActionButtonClick = homeViewModel::navigateToTaskManagement,
-        onTasksCountClick = homeViewModel::navigateToTasks ,
-        onTaskClick = homeViewModel::navigateToTaskDetails
+        onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick,
+        onTasksCountClick = homeViewModel::onTasksCountClick ,
+        onTaskClick = homeViewModel::onTaskClick
     )
 }
 

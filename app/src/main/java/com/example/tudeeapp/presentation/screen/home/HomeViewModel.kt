@@ -1,11 +1,14 @@
 package com.example.tudeeapp.presentation.screen.home
 
+import androidx.compose.runtime.MutableState
 import com.example.tudeeapp.R
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.TudeeThemeMode
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import kotlinx.coroutines.flow.first
@@ -56,7 +59,7 @@ class HomeViewModel(
                     }
                     val tasksIcons =
                         filteredTasks.map {
-                            taskServices.getCategoryById(it.categoryId).first().imageUrl
+                            taskServices.getCategoryById(it.categoryId).first().imageUri
                         }
 
                     val isCategoryPredefined = filteredTasks.map {
