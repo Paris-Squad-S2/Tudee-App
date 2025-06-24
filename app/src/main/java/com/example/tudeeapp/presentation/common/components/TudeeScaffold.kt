@@ -75,7 +75,7 @@ private fun TudeeScaffoldPreview() {
                         icon = {
                             Icon(
                                 painter = painterResource(R.drawable.ic_note_add),
-                                contentDescription = null
+                                contentDescription = "Add task"
                             )
                         },
                         variant = ButtonVariant.FloatingActionButton
