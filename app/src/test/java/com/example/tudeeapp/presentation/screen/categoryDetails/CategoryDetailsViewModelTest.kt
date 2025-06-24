@@ -6,7 +6,7 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.every
@@ -42,8 +42,8 @@ class CategoryDetailsViewModelTest {
         mockkStatic("androidx.navigation.SavedStateHandleKt")
 
         every {
-            savedStateHandle.toRoute<Screens.CategoryDetails>()
-        } returns Screens.CategoryDetails(categoryId = categoryId)
+            savedStateHandle.toRoute<Destinations.CategoryDetails>()
+        } returns Destinations.CategoryDetails(categoryId = categoryId)
     }
 
     @AfterEach
