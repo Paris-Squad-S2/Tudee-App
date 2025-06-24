@@ -19,7 +19,7 @@ import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 
 @Composable
-fun AnimatedLoadingIcon(
+fun RotatingIconLoadingIndicator(
     modifier: Modifier = Modifier,
     icon: Painter = painterResource(R.drawable.ic_loading),
     color: Color = Color.Unspecified
@@ -44,8 +44,8 @@ fun AnimatedLoadingIcon(
 
 @PreviewMultiDevices
 @Composable
-private fun AnimatedLoadingIconPreview() {
+private fun RotatingIconLoadingIndicatorPreview() {
     BasePreview {
-        AnimatedLoadingIcon()
+        RotatingIconLoadingIndicator()
     }
 }
