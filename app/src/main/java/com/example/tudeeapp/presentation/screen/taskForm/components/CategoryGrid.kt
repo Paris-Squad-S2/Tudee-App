@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskManagement.components
+package com.example.tudeeapp.presentation.screen.taskForm.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import com.example.tudeeapp.presentation.common.components.CategoryItem
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
-import com.example.tudeeapp.presentation.screen.taskManagement.CategoryUiState
+import com.example.tudeeapp.presentation.screen.taskForm.CategoryUiState
 
 @Composable
 fun CategoryGrid(

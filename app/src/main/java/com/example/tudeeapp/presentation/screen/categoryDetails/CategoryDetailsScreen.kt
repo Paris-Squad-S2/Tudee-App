@@ -45,8 +45,6 @@ import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
