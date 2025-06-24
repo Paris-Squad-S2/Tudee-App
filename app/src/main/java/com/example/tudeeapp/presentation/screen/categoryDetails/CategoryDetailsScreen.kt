@@ -82,9 +82,11 @@ fun CategoryDetailsScreen(
                 tasks = uiState.taskUiState,
                 selectedState = selectedState,
                 onStatusChange = viewModel::setStatus,
-                onBack = { navController.popBackStack() },
+                onBack = { viewModel.onClickBack() },
                 categoryTitle = uiState.categoryUiState!!.title,
-                onOptionClick = { navController.navigate(Destinations.CategoryForm(uiState.categoryUiState!!.id)) },
+                onOptionClick = {
+                    viewModel.onClickEditCategory()
+                },
                 categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
                 topBarOption = editableCategory(uiState.categoryUiState!!),
                 onClickDeleteIcon = viewModel::deleteTask

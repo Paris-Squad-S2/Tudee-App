@@ -5,7 +5,6 @@ import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +15,6 @@ class CategoryDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val taskService: TaskServices,
 ) : BaseViewModel<CategoryDetailsUiState>(CategoryDetailsUiState()) {
-
 
     private val categoryId: Long = savedStateHandle.toRoute<Destinations.CategoryDetails>().categoryId
 
@@ -106,4 +104,13 @@ class CategoryDetailsViewModel(
         loadCategory(categoryId)
     }
 
+    fun onClickEditCategory() {
+        uiState.value.categoryUiState?.let {
+            navigate(Destinations.CategoryForm(it.id))
+        }
+    }
+
+    fun onClickBack(){
+        navigateUp()
+    }
 }
