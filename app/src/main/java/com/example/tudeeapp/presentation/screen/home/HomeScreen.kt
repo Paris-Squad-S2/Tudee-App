@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.Header
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
@@ -46,17 +46,15 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.navigation.LocalThemeState
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.navigation.TudeeThemeMode
-import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
-import com.example.tudeeapp.presentation.screen.home.composable.HomeTaskSection
-import com.example.tudeeapp.presentation.screen.home.composable.OverviewCard
-import com.example.tudeeapp.presentation.screen.home.state.HomeUiState
+import com.example.tudeeapp.presentation.screen.home.components.HomeTaskSection
+import com.example.tudeeapp.presentation.screen.home.components.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val navController = LocalNavController.current
-    val state by homeViewModel.homeState.collectAsStateWithLifecycle()
+    val state by homeViewModel.uiState.collectAsStateWithLifecycle()
     val themeMode = LocalThemeState.current
 
     HomeScreenContent(
@@ -69,7 +67,6 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
         onTasksCountClick = { tasksTitle -> navController.navigate(Screens.Task(tasksTitle)) },
         onTaskClick = { taskId -> navController.navigate(Screens.TaskDetails(taskId)) },
     )
-
 }
 
 @Composable
@@ -142,6 +139,7 @@ private fun HomeContent(
     onTasksCountClick: (String) -> Unit,
     onTaskClick: (Long) -> Unit,
 ) {
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -151,38 +149,38 @@ private fun HomeContent(
             OverViewSection(
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
-                doneTasksCount = state.doneTasks.size,
-                inProgressTasksCount = state.inProgressTasks.size,
-                toDoTasksCount = state.toDoTasks.size
+                state = state,
             )
         }
 
-        if (state.isTasksEmpty) {
-            item {
-                AnimatedVisibility(
-                    modifier = Modifier
-                        .background(Theme.colors.surfaceColors.surface)
-                        .padding(horizontal = 16.dp),
-                    visible = true,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+        item {
+            AnimatedVisibility(
+                modifier = Modifier
+                    .background(Theme.colors.surfaceColors.surface)
+                    .padding(horizontal = 16.dp),
+                visible = state.isTasksEmpty,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ){
-                        EmptyTasksSection(
-                            title = stringResource(R.string.no_tasks_for_today),
-                            modifier = Modifier
-                                .padding(top = 70.dp)
-                                .align(Alignment.Center)
-                        )
-                    }
+                    EmptyTasksSection(
+                        title = stringResource(R.string.no_tasks_for_today),
+                        modifier = Modifier
+                            .padding(top = 70.dp)
+                            .align(Alignment.Center)
+                    )
                 }
             }
-
         }
-        if (state.inProgressTasks.isNotEmpty()) {
-            item {
+
+        item {
+            AnimatedVisibility(
+                visible = state.inProgressTasks.isNotEmpty(),
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 HomeTaskSection(
                     tasks = state.inProgressTasks,
                     tasksType = TaskStatus.IN_PROGRESS,
@@ -190,10 +188,14 @@ private fun HomeContent(
                     onTaskClick = onTaskClick
                 )
             }
-
         }
-        if (state.toDoTasks.isNotEmpty()) {
-            item {
+
+        item {
+            AnimatedVisibility(
+                visible = state.toDoTasks.isNotEmpty(),
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 HomeTaskSection(
                     tasks = state.toDoTasks,
                     tasksType = TaskStatus.TO_DO,
@@ -202,8 +204,14 @@ private fun HomeContent(
                 )
             }
         }
-        if (state.doneTasks.isNotEmpty()) {
-            item {
+
+
+        item {
+            AnimatedVisibility(
+                visible = state.doneTasks.isNotEmpty(),
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 HomeTaskSection(
                     tasks = state.doneTasks,
                     tasksType = TaskStatus.DONE,
@@ -212,6 +220,7 @@ private fun HomeContent(
                 )
             }
         }
+
     }
 }
 
@@ -322,9 +331,7 @@ fun ShowLoading() {
 @Composable
 private fun OverViewSection(
     modifier: Modifier = Modifier,
-    doneTasksCount: Int,
-    inProgressTasksCount: Int,
-    toDoTasksCount: Int
+    state: HomeUiState,
 ) {
     val todayText = stringResource(id = R.string.date_format_today)
 
@@ -365,16 +372,12 @@ private fun OverViewSection(
                 start = 6.dp,
                 end = 6.dp
             ),
-            taskCount = mapOf(
-                TaskStatus.TO_DO to toDoTasksCount,
-                TaskStatus.IN_PROGRESS to inProgressTasksCount,
-                TaskStatus.DONE to doneTasksCount
-            )
+            state = state
         )
         OverViewContainer(
-            toDoTasksCount = toDoTasksCount,
-            inProgressTasksCount = inProgressTasksCount,
-            doneTasksCount = doneTasksCount
+            toDoTasksCount = state.toDoTasks.size,
+            inProgressTasksCount = state.inProgressTasks.size,
+            doneTasksCount = state.doneTasks.size
         )
     }
 }
