@@ -1,20 +1,15 @@
 package com.example.tudeeapp.data.source.local.room.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
+import androidx.room.Upsert
 import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun addTask(taskEntity: TaskEntity)
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun editTask(taskEntity: TaskEntity)
+    @Upsert
+    suspend fun addOrUpdateTask(taskEntity: TaskEntity)
 
     @Query("DELETE FROM TASK_TABLE WHERE id = :taskId")
     suspend fun deleteTask(taskId: Long)
