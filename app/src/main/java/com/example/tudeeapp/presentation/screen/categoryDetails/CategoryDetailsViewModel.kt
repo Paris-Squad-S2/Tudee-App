@@ -7,9 +7,6 @@ import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryDetailsUiState
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.toCategoryUiState
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.toTaskUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
