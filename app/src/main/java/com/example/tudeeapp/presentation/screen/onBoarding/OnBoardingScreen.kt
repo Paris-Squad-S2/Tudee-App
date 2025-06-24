@@ -5,60 +5,52 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.unit.dp
-import com.example.tudeeapp.presentation.navigation.LocalNavController
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.res.painterResource
-import com.example.tudeeapp.presentation.screen.onBoarding.components.OnBoardingImage
-import com.example.tudeeapp.presentation.screen.onBoarding.components.PageIndicator
-import kotlinx.coroutines.launch
-import org.koin.compose.viewmodel.koinViewModel
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.onBoarding.components.BottomSection
+import com.example.tudeeapp.presentation.screen.onBoarding.components.OnBoardingImage
+import com.example.tudeeapp.presentation.screen.onBoarding.components.PageIndicator
+import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OnBoardingScreen(
     viewModel: OnBoardingViewModel = koinViewModel(),
     pages: List<Page>,
 ) {
-    val navController = LocalNavController.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.isCompleted) {
-        if (state.isCompleted) {
-            navController.navigate(Destinations.Home){
-                popUpTo(Destinations.OnBoarding) { inclusive = true }
-            }
-        }
+        if (state.isCompleted) { viewModel.navigateToHome() }
     }
+
     if (!state.isCompleted) {
         OnBoardingScreenContent(
             pages = pages,
             state = state,
-            onFinished = {
-                viewModel.setOnboardingCompleted()
-            },
+            onFinished = { viewModel.setOnboardingCompleted() },
             onPageChanged = { viewModel.updateCurrentPage(it) }
         )
     }
@@ -76,9 +68,7 @@ fun OnBoardingScreenContent(
     val pagerState= rememberPagerState(initialPage = 0) { pages.size }
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(pagerState.currentPage) {
-        onPageChanged(pagerState.currentPage)
-    }
+    LaunchedEffect(pagerState.currentPage) { onPageChanged(pagerState.currentPage) }
     Box {
         Column(
             modifier = modifier

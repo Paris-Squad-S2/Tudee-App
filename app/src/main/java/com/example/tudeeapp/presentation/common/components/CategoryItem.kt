@@ -32,7 +32,6 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 fun CategoryItem(
     icon: Painter,
     label: String,
-    iconColor: Color,
     isPredefined: Boolean,
     modifier: Modifier = Modifier,
     count: Int? = null,
@@ -63,7 +62,7 @@ fun CategoryItem(
                     Icon(
                         painter = icon,
                         contentDescription = "$label Icon",
-                        tint = iconColor,
+                        tint = Color.Unspecified,
                         modifier = Modifier
                             .size(32.dp)
                             .align(Alignment.Center)
@@ -144,7 +143,6 @@ private fun PreviewCategoryItems() {
         CategoryItem(
             icon = painterResource(R.drawable.ic_education),
             label = "Education",
-            iconColor = Color.Unspecified,
             count = 23,
             isPredefined = true,
         )

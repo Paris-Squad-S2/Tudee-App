@@ -92,14 +92,14 @@ fun Task.toTaskUiState(): TaskItemUiState {
 fun Category.toCategoryUi(): CategoryUiState{
     return CategoryUiState(
         id = this.id,
-        iconRes = this.imageUrl,
+        iconRes = this.imageUri,
         isPredefined = this.isPredefined
     )
 }
 fun TaskPriority.toUiPriority(): TaskPriorityUi = when (this) {
-    TaskPriority.HIGH -> TaskPriorityUi.HIGH
-    TaskPriority.MEDIUM -> TaskPriorityUi.MEDIUM
-    TaskPriority.LOW -> TaskPriorityUi.LOW
+    TaskPriority.HIGH -> TaskPriorityUi.High
+    TaskPriority.MEDIUM -> TaskPriorityUi.Medium
+    TaskPriority.LOW -> TaskPriorityUi.Low
 }
 
 fun TaskStatus.toUiStatus(): TaskStatusUi = when (this) {

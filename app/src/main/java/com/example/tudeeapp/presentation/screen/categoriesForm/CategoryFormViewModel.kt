@@ -39,11 +39,11 @@ class CategoryFormViewModel(
                 it.copy(
                     categoryName = category.title,
                     categoryId = category.id,
-                    imageUri = if (category.imageUrl.startsWith("R.drawable.")) {
-                        val resourceId = category.imageUrl.toResDrawables()
+                    imageUri = if (category.imageUri.startsWith("R.drawable.")) {
+                        val resourceId = category.imageUri.toResDrawables()
                         "android.resource://com.example.tudeeapp/$resourceId".toUri()
                     } else {
-                        category.imageUrl.toUri()
+                        category.imageUri.toUri()
                     }
                 )
             }
@@ -72,7 +72,7 @@ class CategoryFormViewModel(
                 taskServices.editCategory(
                     id = state.value.categoryId,
                     title = state.value.categoryName,
-                    imageUrl = getImageUrl(state.value.imageUri.toString())
+                    imageUri = getImageUri(state.value.imageUri.toString())
                 )
                 _state.update { it.copy(successMessage = R.string.edited_category_successfully) }
             } catch (e: Exception) {
@@ -92,11 +92,11 @@ class CategoryFormViewModel(
         }
     }
 
-    private fun getImageUrl(url: String): String {
-        if (url.startsWith("content")) {
-            return url
+    private fun getImageUri(uri: String): String {
+        if (uri.startsWith("content")) {
+            return uri
         } else {
-            return url.getLastPartAfterSlash()
+            return uri.getLastPartAfterSlash()
         }
     }
 
@@ -105,7 +105,7 @@ class CategoryFormViewModel(
             try {
                 val category = Category(
                     title = state.value.categoryName,
-                    imageUrl = state.value.imageUri.toString(),
+                    imageUri = state.value.imageUri.toString(),
                     tasksCount = 0,
                     isPredefined = false
                 )
