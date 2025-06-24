@@ -36,7 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.LocalThemeState
-import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.Header
@@ -56,13 +55,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
 
     HomeScreenContent(
         state = state,
-        onToggleTheme = { isDark ->
-            themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
-            homeViewModel.onToggledAction(isDark)
-        },
-        onFloatingActionButtonClick = { homeViewModel.onFloatingActionButtonClick() },
-        onTasksCountClick = { tasksTitle -> homeViewModel.onTasksCountClick(tasksTitle) },
-        onTaskClick = { taskId -> homeViewModel.onTaskClick(taskId) },
+        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark,themeMode) },
+        onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick ,
+        onTasksCountClick = homeViewModel::onTasksCountClick,
+        onTaskClick = homeViewModel::onTaskClick,
     )
 }
 
