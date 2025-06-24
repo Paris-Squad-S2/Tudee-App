@@ -84,7 +84,7 @@ fun CategoryForm(
     TudeeBottomSheet(
         isVisible = showSheet,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
-        headerEnd = {
+        optionalActionButton = {
             if (isEdit) {
                 DeleteButton(
                     modifier = Modifier.padding(end = 16.dp),
