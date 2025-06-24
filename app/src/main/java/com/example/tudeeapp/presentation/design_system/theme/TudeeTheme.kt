@@ -4,7 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import com.example.tudeeapp.presentation.design_system.color.TudeeLocalColors
+import com.example.tudeeapp.presentation.design_system.color.LocalTudeeColors
 import com.example.tudeeapp.presentation.design_system.color.darkThemeColors
 import com.example.tudeeapp.presentation.design_system.color.lightThemeColors
 import com.example.tudeeapp.presentation.design_system.text_style.LocalTudeeTextStyle
@@ -19,7 +19,7 @@ fun TudeeTheme(
     val coloredTextStyle = remember(colors) { generateTudeeTextStyle(colors) }
 
     CompositionLocalProvider(
-        TudeeLocalColors provides colors,
+        LocalTudeeColors provides colors,
         LocalTudeeTextStyle provides coloredTextStyle
     ){
         content()

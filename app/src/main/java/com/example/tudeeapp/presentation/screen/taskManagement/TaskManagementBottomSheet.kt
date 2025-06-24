@@ -9,13 +9,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
-import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
+import com.example.tudeeapp.presentation.utills.localizeNumbers
 import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -85,7 +86,7 @@ private fun TaskManagementBottomSheetContent(
             onDateClicked = { viewModel.onDateClicked(true) },
             title = uiState.title,
             description = uiState.description,
-            date = uiState.selectedDate,
+            date = uiState.selectedDate.localizeNumbers(),
         )
         PriorityRow(
             modifier = Modifier.padding(16.dp),
