@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.CategoryItem
@@ -31,8 +30,9 @@ import com.example.tudeeapp.presentation.common.components.TextTopBar
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -41,11 +41,11 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     CategoriesContent(
         state = state,
-        onClickCategory = {navController.navigate(Screens.CategoryDetails(it))},
+        onClickCategory = { navController.navigate(Destinations.CategoryDetails(it)) },
         onClickAddCategory = {
-            navController.navigate(Screens.CategoryForm())
+            navController.navigate(Destinations.CategoryForm())
         }
-        )
+    )
 }
 
 @Composable
@@ -57,16 +57,17 @@ fun CategoriesContent(
     TudeeScaffold(
         floatingActionButton = {
             TudeeButton(
-                modifier = Modifier.size(64.dp)
-                , onClick = {onClickAddCategory()},
+                modifier = Modifier.size(64.dp),
+                onClick = { onClickAddCategory() },
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
                         contentDescription = null,
-                        tint = Color.Unspecified)
+                        tint = Color.Unspecified
+                    )
                 },
                 variant = ButtonVariant.FloatingActionButton,
-                )
+            )
         },
         topBar = {
             TextTopBar(title = stringResource(R.string.categories))
@@ -114,11 +115,7 @@ private fun CategoryListItem(
     category: CategoryItemUIState,
     onClickItem: (id: Long) -> Unit
 ) {
-    val painter: Painter = when {
-        category.imageResId != null -> painterResource(id = category.imageResId)
-        category.imageUri != null -> rememberAsyncImagePainter(model = category.imageUri)
-        else -> painterResource(id = R.drawable.ic_add_category)
-    }
+    val painter: Painter = toPainter(category.isPredefined, category.imageUri)
 
     CategoryItem(
         icon = painter,
@@ -126,7 +123,7 @@ private fun CategoryListItem(
         count = category.count,
         iconColor = Color.Unspecified,
         isSelected = false,
-        onClick = {onClickItem(category.id)},
+        onClick = { onClickItem(category.id) },
         isPredefined = category.isPredefined
     )
 }

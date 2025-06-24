@@ -10,7 +10,7 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.mapper.toResDrawables
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +27,7 @@ class CategoryFormViewModel(
     val state: StateFlow<CategoryFormUIState> = _state.asStateFlow()
 
     init {
-        savedStateHandle.toRoute<Screens.CategoryForm>().categoryId?.let {
+        savedStateHandle.toRoute<Destinations.CategoryForm>().categoryId?.let {
             loadCategory(it)
         }
     }
@@ -87,7 +87,7 @@ class CategoryFormViewModel(
                 taskServices.deleteCategory(state.value.categoryId)
                 onSuccess()
             } catch (e: Exception) {
-                _state.update { it.copy(errorMessage =  R.string.failed_to_delete_category) }
+                _state.update { it.copy(errorMessage = R.string.failed_to_delete_category) }
             }
         }
     }

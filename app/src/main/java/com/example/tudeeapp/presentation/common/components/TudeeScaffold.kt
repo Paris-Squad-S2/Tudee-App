@@ -2,7 +2,6 @@ package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,10 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
-
+import com.example.tudeeapp.presentation.navigation.NavigatorImpl
+import com.example.tudeeapp.presentation.navigation.Destinations
 
 @Composable
 fun TudeeScaffold(
@@ -59,7 +60,6 @@ fun TudeeScaffold(
     }
 }
 
-
 @Composable
 @PreviewLightDark
 private fun TudeeScaffoldPreview() {
@@ -81,7 +81,12 @@ private fun TudeeScaffoldPreview() {
                         variant = ButtonVariant.FloatingActionButton
                     )
                 },
-                bottomBar = { TudeeNavigationBar() },
+                bottomBar = {
+                    TudeeNavigationBar(
+                        rememberNavController(),
+                        navigator = NavigatorImpl(startGraph = Destinations.TudeeGraph),
+                    )
+                },
                 topBar = {
                     Header(
                         modifier = Modifier
