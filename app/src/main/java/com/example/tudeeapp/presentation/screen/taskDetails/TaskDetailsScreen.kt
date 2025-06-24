@@ -96,7 +96,7 @@ private fun TaskDetailsContent(
     onEditTaskClick: () -> Unit
 ) {
 
-    val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
+    val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUri)
     val iconPriority = getPriorityIcon(taskUiState.priority)
     val backgroundPriorityColor = getPriorityBackgroundColor(taskUiState.priority)
 
