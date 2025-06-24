@@ -6,6 +6,7 @@ import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import kotlinx.coroutines.flow.first
@@ -155,6 +156,18 @@ class HomeViewModel(
             categoryIcon = "",
             isCategoryPredefined = false
         )
+    }
+
+    fun onFloatingActionButtonClick() {
+        navigate(Destinations.TaskManagement(selectedDate = getToday().date.toString()))
+    }
+
+    fun onTasksCountClick(tasksTitle: String) {
+        navigate(Destinations.Tasks(tasksTitle))
+    }
+
+    fun onTaskClick(taskId: Long) {
+        navigate(Destinations.TaskDetails(taskId))
     }
 
 }

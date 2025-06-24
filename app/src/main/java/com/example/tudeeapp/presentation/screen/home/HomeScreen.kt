@@ -44,17 +44,13 @@ import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.home.components.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.components.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
-import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
-    val navController = LocalNavController.current
     val state by homeViewModel.uiState.collectAsStateWithLifecycle()
     val themeMode = LocalThemeState.current
 
@@ -64,11 +60,9 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
             themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
             homeViewModel.onToggledAction(isDark)
         },
-        onFloatingActionButtonClick = { navController.navigate(Destinations.TaskManagement(
-            selectedDate = getToday().date.toString()
-        ))},
-        onTasksCountClick = { tasksTitle -> navController.navigate(Destinations.Tasks(tasksTitle)) },
-        onTaskClick = { taskId -> navController.navigate(Destinations.TaskDetails(taskId)) },
+        onFloatingActionButtonClick = { homeViewModel.onFloatingActionButtonClick() },
+        onTasksCountClick = { tasksTitle -> homeViewModel.onTasksCountClick(tasksTitle) },
+        onTaskClick = { taskId -> homeViewModel.onTaskClick(taskId) },
     )
 }
 
