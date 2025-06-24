@@ -36,13 +36,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.LocalThemeState
+import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.Header
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
-import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.home.components.HomeTaskSection
 import com.example.tudeeapp.presentation.screen.home.components.OverviewCard
@@ -56,10 +56,13 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
 
     HomeScreenContent(
         state = state,
-        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark, themeMode) },
-        onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick,
-        onTasksCountClick = homeViewModel::onTasksCountClick ,
-        onTaskClick = homeViewModel::onTaskClick
+        onToggleTheme = { isDark ->
+            themeMode.value = if (isDark) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
+            homeViewModel.onToggledAction(isDark)
+        },
+        onFloatingActionButtonClick = { homeViewModel.onFloatingActionButtonClick() },
+        onTasksCountClick = { tasksTitle -> homeViewModel.onTasksCountClick(tasksTitle) },
+        onTaskClick = { taskId -> homeViewModel.onTaskClick(taskId) },
     )
 }
 
@@ -133,6 +136,7 @@ private fun HomeContent(
     onTasksCountClick: (String) -> Unit,
     onTaskClick: (Long) -> Unit,
 ) {
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -181,7 +185,6 @@ private fun HomeContent(
                     onTaskClick = onTaskClick
                 )
             }
-
         }
 
         item {
@@ -214,6 +217,7 @@ private fun HomeContent(
                 )
             }
         }
+
     }
 }
 
@@ -432,23 +436,4 @@ private fun OverViewCardsRow(
     }
 }
 
-@PreviewMultiDevices
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreenContent(
-        state = HomeUiState(
-            isLoading = false,
-            isSuccess = true,
-            isDarkMode = false,
-            error = null,
-            doneTasks = listOf(),
-            inProgressTasks = listOf(),
-            toDoTasks = listOf()
-        ),
-        onToggleTheme = {},
-        onFloatingActionButtonClick = {},
-        onTasksCountClick = {},
-        onTaskClick = {}
-    )
-}
 

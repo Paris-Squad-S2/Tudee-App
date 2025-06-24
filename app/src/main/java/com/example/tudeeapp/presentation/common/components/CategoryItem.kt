@@ -80,7 +80,7 @@ fun CategoryItem(
             }
             when {
                 isSelected -> SelectedBadge(Modifier.align(Alignment.TopEnd))
-                count != null -> BadgeCount(count, Modifier.align(Alignment.TopEnd))
+                count != null -> NumBadge(count, Modifier.align(Alignment.TopEnd))
             }
 
         }
@@ -94,7 +94,7 @@ fun CategoryItem(
 }
 
 @Composable
-private fun BadgeCount(
+private fun NumBadge(
     count: Int?,
     modifier: Modifier
 ) {
