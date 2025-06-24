@@ -27,18 +27,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.screen.home.mapTaskCountToSliderState
+import com.example.tudeeapp.presentation.screen.home.HomeUiState
+import com.example.tudeeapp.presentation.screen.home.SliderUiState
 
 @Composable
 fun TudeeHomeMessage(
     modifier: Modifier = Modifier,
-    taskCount: Map<TaskStatus, Int>,
+    state: HomeUiState
 ) {
-    val state = mapTaskCountToSliderState(taskCount)
+
 
     Row(
         modifier = modifier
@@ -51,19 +51,22 @@ fun TudeeHomeMessage(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = stringResource(state.titleRes),
+                    text = stringResource(state.sliderState.titleRes),
                     style = Theme.textStyle.title.small
                 )
                 Spacer(Modifier.width(8.dp))
                 Icon(
-                    painter = painterResource(state.iconRes),
+                    painter = painterResource(state.sliderState.iconRes),
                     contentDescription = "",
                     tint = Color.Unspecified
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = LocalContext.current.getString(state.descriptionRes, *state.formatArgs),
+                text = LocalContext.current.getString(
+                    state.sliderState.descriptionRes,
+                    *state.sliderState.formatArgs
+                ),
                 style = Theme.textStyle.body.small,
                 color = Theme.colors.text.body
             )
@@ -89,7 +92,7 @@ fun TudeeHomeMessage(
                     .clip(CircleShape)
             ) {
                 Image(
-                    painter = painterResource(state.imageRes),
+                    painter = painterResource(state.sliderState.imageRes),
                     contentDescription = "robot",
                     modifier = Modifier.fillMaxSize()
                 )
@@ -104,33 +107,35 @@ private fun SliderPreview() {
     BasePreview {
         Column {
             TudeeHomeMessage(
-                taskCount = mapOf<TaskStatus, Int>(
-                    TaskStatus.TO_DO to 0,
-                    TaskStatus.IN_PROGRESS to 0,
-                    TaskStatus.DONE to 0
+                state = HomeUiState(
+                    sliderState = SliderUiState.GoodState(
+                        count = 10,
+                        total = 15
+                    )
                 )
             )
             TudeeHomeMessage(
-                taskCount = mapOf<TaskStatus, Int>(
-                    TaskStatus.TO_DO to 0,
-                    TaskStatus.IN_PROGRESS to 0,
-                    TaskStatus.DONE to 5
+                state = HomeUiState(
+                    sliderState = SliderUiState.NothingState
                 )
             )
             TudeeHomeMessage(
-                taskCount = mapOf<TaskStatus, Int>(
-                    TaskStatus.TO_DO to 5,
-                    TaskStatus.IN_PROGRESS to 0,
-                    TaskStatus.DONE to 0
+                state = HomeUiState(
+                    sliderState = SliderUiState.ZeroProgressState(
+                        count = 10,
+                        total = 15
+                    )
                 )
             )
             TudeeHomeMessage(
-                taskCount = mapOf<TaskStatus, Int>(
-                    TaskStatus.TO_DO to 2,
-                    TaskStatus.IN_PROGRESS to 3,
-                    TaskStatus.DONE to 1
+                state = HomeUiState(
+                    sliderState = SliderUiState.StayWorkingState(
+                        done = 10,
+                        total = 15
+                    )
                 )
             )
+
         }
     }
 }

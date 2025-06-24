@@ -53,4 +53,4 @@ data class OnPrimaryColors(
     val onPrimaryCard: Color,
     val onPrimaryStroke: Color,
 )
-val LocalTudeeColors = staticCompositionLocalOf { lightThemeColors }
+val TudeeLocalColors = staticCompositionLocalOf { lightThemeColors }
