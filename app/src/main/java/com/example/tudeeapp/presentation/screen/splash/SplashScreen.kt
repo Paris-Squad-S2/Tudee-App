@@ -8,7 +8,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.Screens
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.tudeeapp.presentation.design_system.text_style.cherryBomb
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.navigation.Destinations
 
 @Composable
 fun SplashScreen(
@@ -33,8 +33,8 @@ fun SplashScreen(
     val navController = LocalNavController.current
     LaunchedEffect(Unit) {
         delay(3000)
-        navController.navigate(Screens.OnBoarding) {
-            popUpTo(Screens.Splash) { inclusive = true }
+        navController.navigate(Destinations.OnBoarding) {
+            popUpTo(Destinations.Splash) { inclusive = true }
         }
     }
     Box(
@@ -62,7 +62,7 @@ fun SplashScreen(
 fun OutlinedFilledText(
     text: String,
     fillColor: Color = Theme.colors.surfaceColors.onPrimaryColors.onPrimary,
-    strokeColor: Color = Theme.colors.primary ,
+    strokeColor: Color = Theme.colors.primary,
     strokeWidth: Float = 6f
 ) {
     Box {
@@ -91,6 +91,6 @@ fun OutlinedFilledText(
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun SplashScreenPreview(){
+fun SplashScreenPreview() {
     SplashScreen()
 }

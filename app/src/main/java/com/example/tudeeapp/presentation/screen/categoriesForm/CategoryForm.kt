@@ -43,8 +43,8 @@ import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.extentions.dashedBorder
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.LocalSnackBarState
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.categoriesForm.components.CategoriesBottomSheetButtons
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -130,7 +130,7 @@ fun CategoryForm(
                         onSuccess = {
                             showDeleteConfirmation = false
                             showSheet = false
-                            navController.popBackStack(route = Screens.Category, inclusive = false)
+                            navController.popBackStack(route = Destinations.Category, inclusive = false)
                             snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
                         }
                     )

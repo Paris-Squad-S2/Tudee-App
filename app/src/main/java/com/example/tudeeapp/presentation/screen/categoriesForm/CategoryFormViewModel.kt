@@ -10,6 +10,10 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.Screens
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
+import com.example.tudeeapp.presentation.navigation.Destinations
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 
@@ -19,7 +23,7 @@ class CategoryFormViewModel(
 ) : BaseViewModel<CategoryFormUIState>(CategoryFormUIState()) {
 
     init {
-        savedStateHandle.toRoute<Screens.CategoryForm>().categoryId?.let {
+        savedStateHandle.toRoute<Destinations.CategoryForm>().categoryId?.let {
             loadCategory(it)
         }
     }
