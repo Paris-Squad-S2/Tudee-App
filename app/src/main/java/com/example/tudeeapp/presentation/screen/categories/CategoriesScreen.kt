@@ -41,11 +41,11 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     val navController = LocalNavController.current
     CategoriesContent(
         state = state,
-        onClickCategory = {navController.navigate(Destinations.CategoryDetails(it))},
+        onClickCategory = { navController.navigate(Destinations.CategoryDetails(it)) },
         onClickAddCategory = {
             navController.navigate(Destinations.CategoryForm())
         }
-        )
+    )
 }
 
 @Composable
@@ -57,16 +57,17 @@ fun CategoriesContent(
     TudeeScaffold(
         floatingActionButton = {
             TudeeButton(
-                modifier = Modifier.size(64.dp)
-                , onClick = {onClickAddCategory()},
+                modifier = Modifier.size(64.dp),
+                onClick = { onClickAddCategory() },
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
                         contentDescription = null,
-                        tint = Color.Unspecified)
+                        tint = Color.Unspecified
+                    )
                 },
                 variant = ButtonVariant.FloatingActionButton,
-                )
+            )
         },
         topBar = {
             TextTopBar(title = stringResource(R.string.categories))
