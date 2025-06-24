@@ -106,7 +106,7 @@ fun TaskScreenContent(
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_note_add),
-                        contentDescription = "Add task"
+                        contentDescription = stringResource(R.string.add_task)
                     )
                 },
                 variant = ButtonVariant.FloatingActionButton,

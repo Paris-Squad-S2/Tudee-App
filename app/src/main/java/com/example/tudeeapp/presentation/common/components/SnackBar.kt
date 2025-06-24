@@ -50,7 +50,7 @@ fun SnackBar(
         ) {
             Icon(
                 painter = icon,
-                contentDescription = "Some error happened",
+                contentDescription = if (isSuccess) "Success" else "Some error happened",
                 tint = Color.Unspecified,
                 modifier = Modifier.size(24.dp)
             )

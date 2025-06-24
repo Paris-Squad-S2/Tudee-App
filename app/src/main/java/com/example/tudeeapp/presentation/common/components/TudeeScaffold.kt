@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -75,7 +76,7 @@ private fun TudeeScaffoldPreview() {
                         icon = {
                             Icon(
                                 painter = painterResource(R.drawable.ic_note_add),
-                                contentDescription = "Add task"
+                                contentDescription = stringResource(R.string.add_task)
                             )
                         },
                         variant = ButtonVariant.FloatingActionButton
