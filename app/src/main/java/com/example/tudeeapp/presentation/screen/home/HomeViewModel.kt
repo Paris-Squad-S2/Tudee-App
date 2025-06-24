@@ -33,10 +33,10 @@ class HomeViewModel(
     fun onToggledAction(isDarkMode: Boolean) = launchSafely(
         onLoading = { _uiState.update { it.copy(isLoading = true) } },
         onSuccess = {
-            _uiState.update { it.copy(isDarkMode = isDarkMode) }
+            _uiState.update { it.copy(isLoading = false, isDarkMode = isDarkMode) }
             appPreferences.setDarkTheme(isDarkMode)
                     },
-        onError = { errorMessage -> _uiState.update { it.copy(error = errorMessage) } }
+        onError = { errorMessage -> _uiState.update { it.copy(isLoading = false, error = errorMessage) } }
     )
 
     fun getTasksIcons() = launchSafely(
