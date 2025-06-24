@@ -9,14 +9,13 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -52,7 +51,7 @@ class TaskDetailsViewModelTest {
     fun `should return task details successfully when loading task details`() = runTest {
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
-        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+        every { savedStateHandle.toRoute<Destinations.TaskDetails>() } returns Destinations.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
         testDispatcher.scheduler.advanceUntilIdle()
@@ -63,7 +62,7 @@ class TaskDetailsViewModelTest {
     @Test
     fun `should return null data when getCategoryById is invalid`() = runTest {
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
-        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+        every { savedStateHandle.toRoute<Destinations.TaskDetails>() } returns Destinations.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
         testDispatcher.scheduler.advanceUntilIdle()
@@ -75,7 +74,7 @@ class TaskDetailsViewModelTest {
     fun `should update uiState with errorMessage when task id is invalid`() = runTest {
 
         every { taskServices.getTaskById(any()) } returns flow { throw TaskException("Invalid task id") }
-        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+        every { savedStateHandle.toRoute<Destinations.TaskDetails>() } returns Destinations.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
         testDispatcher.scheduler.advanceUntilIdle()
@@ -88,7 +87,7 @@ class TaskDetailsViewModelTest {
 
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { taskServices.getCategoryById(any()) } returns flow { throw CategoryException("Invalid category id") }
-        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+        every { savedStateHandle.toRoute<Destinations.TaskDetails>() } returns Destinations.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
         testDispatcher.scheduler.advanceUntilIdle()
@@ -101,7 +100,7 @@ class TaskDetailsViewModelTest {
 
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
-        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+        every { savedStateHandle.toRoute<Destinations.TaskDetails>() } returns Destinations.TaskDetails(1L)
         coEvery { taskServices.editTask(any()) } returns Unit
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
@@ -119,7 +118,7 @@ class TaskDetailsViewModelTest {
 
         every { taskServices.getTaskById(any()) } returns flowOf(testTask)
         every { taskServices.getCategoryById(any()) } returns flowOf(testCategory)
-        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+        every { savedStateHandle.toRoute<Destinations.TaskDetails>() } returns Destinations.TaskDetails(1L)
 
         val errorMessage = "Update failed"
         coEvery { taskServices.editTask(any()) } throws TaskException(errorMessage)
@@ -136,7 +135,7 @@ class TaskDetailsViewModelTest {
     @Test
     fun `onEditTaskStatus does nothing when taskUiState is null`() = runTest {
         every { taskServices.getTaskById(any()) } returns flow { throw TaskException("Not found") }
-        every { savedStateHandle.toRoute<Screens.TaskDetails>() } returns Screens.TaskDetails(1L)
+        every { savedStateHandle.toRoute<Destinations.TaskDetails>() } returns Destinations.TaskDetails(1L)
 
         viewModel = TaskDetailsViewModel(savedStateHandle, taskServices)
         testDispatcher.scheduler.advanceUntilIdle()

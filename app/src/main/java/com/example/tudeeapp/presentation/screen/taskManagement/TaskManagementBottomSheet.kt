@@ -11,34 +11,31 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
-import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TaskManagementBottomSheet(
     viewModel: TaskManagementViewModel = koinViewModel(),
 ) {
-    val navController = LocalNavController.current
     val snackbarHostState = LocalSnackBarState.current
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val successMessage = stringResource(R.string.task_saved_successfully)
 
     TaskManagementBottomSheetContent(
         uiState = uiState,
         viewModel = viewModel,
-        onCancelClicked = { navController.popBackStack() }
+        onCancelClicked = { viewModel.popBackStack() }
     )
 
     if (uiState.isDatePickerVisible) {
         TudeeDatePickerDialog(
-            initialDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+            initialDate = LocalDate.parse(uiState.selectedDate),
             onDismiss = { viewModel.onDateClicked(false) },
             onSelectDate = { viewModel.onDateSelected(it) }
         )
@@ -52,15 +49,10 @@ fun TaskManagementBottomSheet(
 
     LaunchedEffect(uiState.isTaskSaved) {
         if (uiState.isTaskSaved) {
-            snackbarHostState.show(
-                message = navController.context.getString(R.string.task_saved_successfully),
-                isSuccess = true
-            )
-            navController.popBackStack()
+            snackbarHostState.show(message = successMessage, isSuccess = true)
+            viewModel.popBackStack()
         }
     }
-
-
 }
 
 @Composable
