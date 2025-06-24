@@ -49,7 +49,7 @@ class TaskServicesImpl(
 
     override suspend fun addTask(task: Task) {
         try {
-            taskDao.addTask(task.toTaskEntity())
+            taskDao.addOrUpdateTask(task.toTaskEntity())
         } catch (_: Exception) {
             throw NoTaskAddedException()
         }
@@ -57,7 +57,7 @@ class TaskServicesImpl(
 
     override suspend fun editTask(task: Task) {
         try {
-            taskDao.editTask(task.toTaskEntity())
+            taskDao.addOrUpdateTask(task.toTaskEntity())
         } catch (_: Exception) {
             throw NoTaskEditedException()
         }
@@ -101,13 +101,13 @@ class TaskServicesImpl(
 
     override suspend fun addCategory(category:Category) {
         try {
-            categoryDao.insertCategory(category.toCategoryEntity())
+            categoryDao.insertOrUpdateCategory(category.toCategoryEntity())
         } catch (e: Exception) {
             throw AddCategoryException()
         }
     }
 
-    override suspend fun editCategory(id: Long, title: String, imageUrl: String) {
+    override suspend fun editCategory(id: Long, title: String, imageUri: String) {
 
         try {
             val currentCategory: CategoryEntity =
@@ -115,10 +115,10 @@ class TaskServicesImpl(
 
             val updatedCategory = currentCategory.copy(
                 title = title,
-                imageUrl = imageUrl
+                imageUri = imageUri
             )
 
-            categoryDao.updateCategory(updatedCategory)
+            categoryDao.insertOrUpdateCategory(updatedCategory)
         } catch (e: Exception) {
             throw NoCategoryEditedException()
         }

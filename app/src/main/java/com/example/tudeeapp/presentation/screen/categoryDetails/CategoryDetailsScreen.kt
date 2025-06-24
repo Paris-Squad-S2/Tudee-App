@@ -88,9 +88,9 @@ fun CategoryDetailsScreen(
 @Composable
 private fun rememberCategoryPainter(categoryUiState: CategoryUiState) =
     if (categoryUiState.isPredefined) {
-        painterResource(categoryUiState.imageUrl.toResDrawables())
+        painterResource(categoryUiState.imageUri.toResDrawables())
     } else {
-        rememberAsyncImagePainter(categoryUiState.imageUrl)
+        rememberAsyncImagePainter(categoryUiState.imageUri)
     }
 
 @Composable

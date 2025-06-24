@@ -21,7 +21,7 @@ fun Category.toCategoryUIState(calculatedCount: Int): CategoryItemUIState {
         id = this.id,
         name = this.title,
         count = calculatedCount,
-        imageUri = this.imageUrl,
+        imageUri = this.imageUri,
         isPredefined = this.isPredefined
     )
 }

@@ -39,7 +39,7 @@ fun Category.toCategoryState() = CategoryUiState(
     id = this.id,
     title = this.title,
     isSelected = false,
-    image = this.imageUrl,
+    image = this.imageUri,
     isPredefined = this.isPredefined
 )
 
