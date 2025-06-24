@@ -10,7 +10,7 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.mapper.toResDrawables
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +27,7 @@ class CategoryFormViewModel(
     val state: StateFlow<CategoryFormUIState> = _state.asStateFlow()
 
     init {
-        savedStateHandle.toRoute<Screens.CategoryForm>().categoryId?.let {
+        savedStateHandle.toRoute<Destinations.CategoryForm>().categoryId?.let {
             loadCategory(it)
         }
     }
@@ -39,11 +39,11 @@ class CategoryFormViewModel(
                 it.copy(
                     categoryName = category.title,
                     categoryId = category.id,
-                    imageUri = if (category.imageUrl.startsWith("R.drawable.")) {
-                        val resourceId = category.imageUrl.toResDrawables()
+                    imageUri = if (category.imageUri.startsWith("R.drawable.")) {
+                        val resourceId = category.imageUri.toResDrawables()
                         "android.resource://com.example.tudeeapp/$resourceId".toUri()
                     } else {
-                        category.imageUrl.toUri()
+                        category.imageUri.toUri()
                     }
                 )
             }
@@ -72,7 +72,7 @@ class CategoryFormViewModel(
                 taskServices.editCategory(
                     id = state.value.categoryId,
                     title = state.value.categoryName,
-                    imageUrl = getImageUrl(state.value.imageUri.toString())
+                    imageUri = getImageUri(state.value.imageUri.toString())
                 )
                 _state.update { it.copy(successMessage = R.string.edited_category_successfully) }
             } catch (e: Exception) {
@@ -87,16 +87,16 @@ class CategoryFormViewModel(
                 taskServices.deleteCategory(state.value.categoryId)
                 onSuccess()
             } catch (e: Exception) {
-                _state.update { it.copy(errorMessage =  R.string.failed_to_delete_category) }
+                _state.update { it.copy(errorMessage = R.string.failed_to_delete_category) }
             }
         }
     }
 
-    private fun getImageUrl(url: String): String {
-        if (url.startsWith("content")) {
-            return url
+    private fun getImageUri(uri: String): String {
+        if (uri.startsWith("content")) {
+            return uri
         } else {
-            return url.getLastPartAfterSlash()
+            return uri.getLastPartAfterSlash()
         }
     }
 
@@ -105,7 +105,7 @@ class CategoryFormViewModel(
             try {
                 val category = Category(
                     title = state.value.categoryName,
-                    imageUrl = state.value.imageUri.toString(),
+                    imageUri = state.value.imageUri.toString(),
                     tasksCount = 0,
                     isPredefined = false
                 )

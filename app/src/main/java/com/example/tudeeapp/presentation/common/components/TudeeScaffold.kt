@@ -27,7 +27,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
-
+import com.example.tudeeapp.presentation.navigation.NavigatorImpl
+import com.example.tudeeapp.presentation.navigation.Destinations
 
 @Composable
 fun TudeeScaffold(
@@ -80,7 +81,12 @@ private fun TudeeScaffoldPreview() {
                         variant = ButtonVariant.FloatingActionButton
                     )
                 },
-                bottomBar = { TudeeNavigationBar(rememberNavController()) },
+                bottomBar = {
+                    TudeeNavigationBar(
+                        rememberNavController(),
+                        navigator = NavigatorImpl(startGraph = Destinations.TudeeGraph),
+                    )
+                },
                 topBar = {
                     Header(
                         modifier = Modifier

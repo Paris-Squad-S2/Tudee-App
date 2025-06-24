@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
@@ -17,7 +17,7 @@ class TaskDetailsViewModel(
     private val taskServices: TaskServices
 ) : BaseViewModel<TaskDetailsUiState>(TaskDetailsUiState()) {
 
-    val taskId = savedStateHandle.toRoute<Screens.TaskDetails>().taskId
+    val taskId = savedStateHandle.toRoute<Destinations.TaskDetails>().taskId
 
     init {
         loadTaskDetails()

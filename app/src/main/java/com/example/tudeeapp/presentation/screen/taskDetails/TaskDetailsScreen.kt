@@ -23,8 +23,8 @@ import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.navigation.LocalSnackBarState
-import com.example.tudeeapp.presentation.navigation.Screens
+import com.example.tudeeapp.presentation.LocalSnackBarState
+import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.taskDetails.components.BoxTaskStatus
 import com.example.tudeeapp.presentation.screen.taskDetails.components.CategoryIcon
 import com.example.tudeeapp.presentation.screen.taskDetails.components.Divider1DPWithPadding
@@ -73,8 +73,9 @@ fun TaskDetailsScreen(
                                 },
                                 onEditTaskClick = {
                                     navController.navigate(
-                                        Screens.TaskManagement(
-                                            taskUiState.id
+                                        Destinations.TaskManagement(
+                                            taskUiState.id,
+                                            taskUiState.createdDate.toString()
                                         )
                                     )
                                 }
@@ -95,7 +96,7 @@ private fun TaskDetailsContent(
     onEditTaskClick: () -> Unit
 ) {
 
-    val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUrl)
+    val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUri)
     val iconPriority = getPriorityIcon(taskUiState.priority)
     val backgroundPriorityColor = getPriorityBackgroundColor(taskUiState.priority)
 
