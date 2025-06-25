@@ -30,7 +30,6 @@ import com.example.tudeeapp.presentation.common.components.TextTopBar
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
@@ -38,13 +37,10 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val navController = LocalNavController.current
     CategoriesContent(
         state = state,
-        onClickCategory = { navController.navigate(Destinations.CategoryDetails(it)) },
-        onClickAddCategory = {
-            navController.navigate(Destinations.CategoryForm())
-        }
+        onClickCategory = viewModel::onClickItem,
+        onClickAddCategory = viewModel::onFloatingActionButtonClick
     )
 }
 
