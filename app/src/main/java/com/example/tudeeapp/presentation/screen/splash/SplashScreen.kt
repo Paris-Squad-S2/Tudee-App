@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,26 +22,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavOptions
 import com.example.tudeeapp.presentation.design_system.text_style.cherryBomb
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.navigation.Navigator
-import org.koin.compose.koinInject
 
 @Composable
 fun SplashScreen(
-    modifier: Modifier = Modifier,
-    navigator: Navigator = koinInject()
+    modifier: Modifier = Modifier
 ) {
+    val navController = LocalNavController.current
     LaunchedEffect(Unit) {
         delay(3000)
-        navigator.navigate(
-            Destinations.OnBoarding,
-            NavOptions.Builder()
-                .setPopUpTo(Destinations.OnBoarding, inclusive = true)
-                .build()
-        )
+        navController.navigate(Destinations.OnBoarding) {
+            popUpTo(Destinations.Splash) { inclusive = true }
+        }
     }
     Box(
         modifier = modifier
