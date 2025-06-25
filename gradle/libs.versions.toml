@@ -30,7 +30,6 @@ roomKtx = "`2.7.1"
 roomRuntime = "2.7.1"
 serializationJson ="1.6.3"
 composeMaterial = "1.4.1"
-accompanistSystemuicontroller = "0.36.0"
 truth = "1.4.4"
 junitJupiter = "5.8.1"
 turbine = "1.1.0"
@@ -73,7 +72,6 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }

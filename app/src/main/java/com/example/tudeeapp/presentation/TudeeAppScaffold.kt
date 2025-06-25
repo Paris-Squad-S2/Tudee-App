@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation
 
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -17,9 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.presentation.common.components.SnackBar
@@ -29,7 +31,6 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 import com.example.tudeeapp.presentation.navigation.TudeeNavGraph
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
 val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
@@ -46,14 +47,19 @@ fun TudeeAppScaffold() {
         mutableStateOf(if (appPrefs.isDarkTheme()) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT)
     }
 
-    val systemUiController = rememberSystemUiController()
-    val darkIcons = themeMode.value == TudeeThemeMode.LIGHT
+    val view = LocalView.current
+    val activity = context as? ComponentActivity
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(themeMode.value) {
+        val darkIcons = themeMode.value == TudeeThemeMode.LIGHT
         themeMode.value = if (appPrefs.isDarkTheme()) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent, darkIcons = darkIcons
-        )
+
+        activity?.window?.also { window ->
+            WindowInsetsControllerCompat(window, view).apply {
+                isAppearanceLightStatusBars = darkIcons
+                isAppearanceLightNavigationBars = darkIcons
+            }
+        }
     }
 
 

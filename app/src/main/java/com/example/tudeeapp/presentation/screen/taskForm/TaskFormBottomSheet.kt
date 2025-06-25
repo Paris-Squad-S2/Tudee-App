@@ -12,6 +12,8 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.LocalSnackBarState
+import com.example.tudeeapp.presentation.screen.taskForm.TaskFormUiState
+import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
 import com.example.tudeeapp.presentation.screen.taskForm.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskForm.components.PriorityRow
 import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
@@ -29,8 +31,7 @@ fun TaskFormBottomSheet(
 
     TaskManagementBottomSheetContent(
         uiState = uiState,
-        viewModel = viewModel,
-        onCancelClicked = { viewModel.popBackStack() }
+        interactionListener  = viewModel,
     )
 
     if (uiState.isDatePickerVisible) {
@@ -50,7 +51,7 @@ fun TaskFormBottomSheet(
     LaunchedEffect(uiState.isTaskSaved) {
         if (uiState.isTaskSaved) {
             snackbarHostState.show(message = successMessage, isSuccess = true)
-            viewModel.popBackStack()
+           viewModel.popBackStack()
         }
     }
 }
@@ -58,31 +59,28 @@ fun TaskFormBottomSheet(
 @Composable
 private fun TaskManagementBottomSheetContent(
     uiState: TaskFormUiState,
-    viewModel: TaskFormViewModel,
-    onCancelClicked: () -> Unit,
+    interactionListener: InteractionListener,
 ) {
     TudeeBottomSheet(
         isVisible = true,
         title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
-        onDismiss = onCancelClicked,
+        onDismiss = interactionListener::popBackStack,
         isScrollable = true,
         skipPartiallyExpanded = true,
         stickyBottomContent = {
             TaskManagementButtons(
                 isEditMode = uiState.isEditMode,
                 isActionButtonDisabled = uiState.isInitialState,
-                onClickActionButton = {
-                    viewModel.onActionButtonClicked()
-                },
-                onClickCancel = onCancelClicked,
+                onClickActionButton = interactionListener::onActionButtonClicked,
+                onClickCancel = interactionListener::popBackStack,
                 isLoading = uiState.isLoading,
             )
         },
     ) {
         TaskFormTextFields(
-            onTitleChange = viewModel::onTitleChange,
-            onDescriptionChange = viewModel::onDescriptionChange,
-            onDateClicked = { viewModel.onDateClicked(true) },
+            onTitleChange = interactionListener::onTitleChange,
+            onDescriptionChange = interactionListener::onDescriptionChange,
+            onDateClicked = { interactionListener.onDateClicked(true) },
             title = uiState.title,
             description = uiState.description,
             date = uiState.selectedDate,
@@ -90,12 +88,12 @@ private fun TaskManagementBottomSheetContent(
         PriorityRow(
             modifier = Modifier.padding(16.dp),
             selectedPriority = uiState.selectedPriority,
-            onPrioritySelected = viewModel::onPrioritySelected
+            onPrioritySelected = interactionListener::onPrioritySelected
         )
         CategoryGrid(
             categories = uiState.categories,
             modifier = Modifier.padding(16.dp),
-            onCategoryClick = viewModel::onCategorySelected,
+            onCategoryClick = interactionListener::onCategorySelected,
         )
     }
 }

@@ -76,7 +76,6 @@ dependencies {
 
     //coil
     implementation(libs.coil.compose)
-    implementation(libs.accompanist.systemuicontroller)
 
     //Koin
     implementation(libs.koin.core)
