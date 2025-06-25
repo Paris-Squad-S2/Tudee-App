@@ -79,7 +79,7 @@ fun CategoryForm(
     }
 
     TudeeBottomSheet(
-        isVisible = showSheet,
+        showBottomSheet = showSheet,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         headerEnd = {
             if (isEdit) {
@@ -116,7 +116,7 @@ fun CategoryForm(
     }
     if (showDeleteConfirmation) {
         TudeeBottomSheet(
-            isVisible = true,
+            showBottomSheet = true,
             title = stringResource(id = R.string.delete_category),
             onDismiss = {
                 showDeleteConfirmation = false

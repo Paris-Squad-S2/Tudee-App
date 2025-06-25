@@ -41,8 +41,9 @@ fun TaskDetailsScreen(
     val taskDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TudeeBottomSheet(
-        isVisible = true,
+        showBottomSheet = true,
         title = stringResource(R.string.task_details),
+        skipPartiallyExpanded = false,
         onDismiss = { navController.popBackStack() },
         content = {
 

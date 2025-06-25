@@ -2,8 +2,6 @@
 
 package com.example.tudeeapp.presentation.common.components
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -11,10 +9,8 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
@@ -22,8 +18,6 @@ import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -32,7 +26,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
@@ -57,24 +49,35 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import kotlinx.coroutines.delay
 import kotlin.math.abs
 
-@SuppressLint("ConfigurationScreenWidthHeight")
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TudeeBottomSheet(
-    isVisible: Boolean,
+    modifier: Modifier = Modifier,
+    showBottomSheet: Boolean,
     title: String,
     onDismiss: () -> Unit,
     headerEnd: @Composable () -> Unit = {},
-    modifier: Modifier = Modifier,
     isScrollable: Boolean = true,
+    isDraggable: Boolean = false,
     skipPartiallyExpanded: Boolean = true,
     stickyBottomContent: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
     val scrollModifier =
         if (isScrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier
+    val bottomSheetState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = skipPartiallyExpanded,
+            confirmValueChange = { newValue ->
+                if (isDraggable) {
+                    newValue != SheetValue.Hidden
+                } else {
+                    true
+                }
+            })
 
     val density = LocalDensity.current
     val configuration = LocalConfiguration.current
@@ -85,9 +88,6 @@ fun TudeeBottomSheet(
     val screenHeightPx = remember(density, configuration) {
         with(density) { configuration.screenHeightDp.dp.toPx() }
     }
-
-    val bottomSheetState =
-        rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
     val sheetOffset = remember { derivedStateOf { bottomSheetState.requireOffset() } }
 
@@ -104,14 +104,12 @@ fun TudeeBottomSheet(
         }
     }
 
-    LaunchedEffect(isVisible) {
-        kotlinx.coroutines.delay(100)
+    LaunchedEffect(showBottomSheet) {
+        delay(100)
         when {
-            isVisible -> bottomSheetState.show()
+            showBottomSheet -> bottomSheetState.show()
             else -> bottomSheetState.hide()
-
         }
-
     }
 
     ModalBottomSheet(
@@ -124,8 +122,7 @@ fun TudeeBottomSheet(
         sheetState = bottomSheetState,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     ) {
-
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
                     .heightIn(
@@ -149,7 +146,7 @@ fun TudeeBottomSheet(
                 }
             }
 
-            Surface(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .onSizeChanged { size ->
@@ -166,10 +163,8 @@ fun TudeeBottomSheet(
                         footerOffset = calculatedTranslation
                         translationY = calculatedTranslation
                     },
-                shadowElevation = 4.dp,
-                tonalElevation = 2.dp,
-                color = MaterialTheme.colorScheme.surface
-            ) {
+
+                ) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
@@ -189,7 +184,7 @@ private fun TudeeBottomSheetPreview() {
     BasePreview {
         var isSheetOpen by remember { mutableStateOf(true) }
         TudeeBottomSheet(
-            isVisible = isSheetOpen,
+            showBottomSheet = isSheetOpen,
             title = "Sample Title",
             isScrollable = true,
             skipPartiallyExpanded = true,

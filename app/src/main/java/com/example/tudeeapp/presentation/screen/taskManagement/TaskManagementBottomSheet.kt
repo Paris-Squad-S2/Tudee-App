@@ -62,11 +62,12 @@ private fun TaskManagementBottomSheetContent(
     onCancelClicked: () -> Unit,
 ) {
     TudeeBottomSheet(
-        isVisible = true,
+        showBottomSheet = true,
+        isDraggable = true,
         title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
         onDismiss = onCancelClicked,
         isScrollable = true,
-        skipPartiallyExpanded = true,
+        skipPartiallyExpanded = false,
         stickyBottomContent = {
             TaskManagementButtons(
                 isEditMode = uiState.isEditMode,
