@@ -29,7 +29,7 @@ fun TaskManagementButtons(
         modifier = modifier
             .fillMaxWidth()
             .background(color = Theme.colors.surfaceColors.surfaceHigh)
-            .padding(top = 12.dp, bottom = 40.dp, end = 12.dp, start = 16.dp)
+            .padding(top = 12.dp, bottom = 46.dp, end = 12.dp, start = 16.dp)
     ) {
         TudeeButton(
             modifier = Modifier

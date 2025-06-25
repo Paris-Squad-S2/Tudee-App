@@ -23,13 +23,14 @@ import com.example.tudeeapp.presentation.screen.categoriesForm.CategoryFormUISta
 
 @Composable
 fun CategoriesBottomSheetButtons(
+    modifier: Modifier = Modifier,
     state : CategoryFormUIState,
     onSubmit: ()-> Unit,
     onCancel: ()-> Unit,
     buttonText : String
 ){
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .shadow(
                 elevation = 20.dp,

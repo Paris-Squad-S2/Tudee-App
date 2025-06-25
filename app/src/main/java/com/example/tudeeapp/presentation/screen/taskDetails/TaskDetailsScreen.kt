@@ -43,7 +43,7 @@ fun TaskDetailsScreen(
     TudeeBottomSheet(
         showBottomSheet = true,
         title = stringResource(R.string.task_details),
-        skipPartiallyExpanded = false,
+        skipPartiallyExpanded = true,
         onDismiss = { navController.popBackStack() },
         content = {
 

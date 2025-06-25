@@ -9,9 +9,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
-import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.LocalSnackBarState
+import com.example.tudeeapp.presentation.common.components.TudeeBottomSheetWithPinnedFooter
+import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.screen.taskForm.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskForm.components.PriorityRow
 import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
@@ -61,7 +61,7 @@ private fun TaskManagementBottomSheetContent(
     viewModel: TaskFormViewModel,
     onCancelClicked: () -> Unit,
 ) {
-    TudeeBottomSheet(
+    TudeeBottomSheetWithPinnedFooter(
         showBottomSheet = true,
         isDraggable = true,
         title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
