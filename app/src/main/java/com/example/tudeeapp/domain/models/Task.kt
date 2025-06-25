@@ -1,10 +1,9 @@
 package com.example.tudeeapp.domain.models
 
 import kotlinx.datetime.LocalDate
-import kotlin.random.Random
 
 data class Task(
-    val id: Long = Random.nextLong(1L, Long.MAX_VALUE),
+    val id: Long =0,
     val title: String,
     val description: String,
     val priority: TaskPriority,

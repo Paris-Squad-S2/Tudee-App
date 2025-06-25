@@ -19,6 +19,7 @@ espressoCore = "3.6.1"
 kotlinxCoroutinesCore = "1.10.1"
 kotlinxCoroutinesTest = "1.10.1"
 kotlinxDatetime = "0.6.2"
+lottieCompose = "6.0.0"
 mockk = "1.13.5"
 navigationCompose = "2.9.0"
 lifecycleRuntimeKtx = "2.9.1"
@@ -67,6 +68,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }

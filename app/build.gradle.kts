@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    //Lottie
+    implementation (libs.lottie.compose)
+
     // testing
     testImplementation(libs.truth)
     testImplementation(libs.mockk)

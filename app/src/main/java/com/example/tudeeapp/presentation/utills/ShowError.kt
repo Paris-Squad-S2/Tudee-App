@@ -1,10 +1,8 @@
-package com.example.tudeeapp.presentation.common.components
+package com.example.tudeeapp.presentation.utills
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -17,37 +15,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun EmptyTasksSection(
-    title: String,
-    description: String = stringResource(R.string.tap_the_button_to_add_your_first_one),
-    modifier: Modifier
+fun ShowError(
+    modifier: Modifier,
+    errorMessage: String
 ) {
+
     Box(
-        modifier = modifier,
+        modifier = modifier.background(Theme.colors.surfaceColors.surface),
+        contentAlignment = Alignment.Center
     ) {
 
         Box(
             modifier = Modifier
+                .padding(end = 20.dp)
                 .size(144.dp)
                 .align(Alignment.CenterEnd)
         ) {
 
             Image(
-                painter = painterResource(R.drawable.img_task_card_ropo_background),
+                painter = painterResource(R.drawable.task_card_ropo_background),
                 contentDescription = "ropo",
                 modifier = Modifier
                     .size(136.dp)
                     .align(Alignment.TopEnd)
             )
 
+
             Image(
-                painter = painterResource(R.drawable.img_task_card_ropo_container),
+                painter = painterResource(R.drawable.task_card_ropo_container),
                 contentDescription = "ropo",
                 modifier = Modifier
                     .size(144.dp)
@@ -65,7 +65,7 @@ fun EmptyTasksSection(
             )
 
             Image(
-                painter = painterResource(R.drawable.img_robot4),
+                painter = painterResource(R.drawable.img_ropo_cry),
                 contentDescription = "ropo4",
                 modifier = Modifier
                     .width(107.dp)
@@ -75,10 +75,11 @@ fun EmptyTasksSection(
 
             )
         }
-        Column(
+
+        Box(
             modifier = Modifier
-                .padding(bottom = 60.dp,end = 120.dp)
-                .offset(x = 0.dp, y = (-30).dp)
+                .padding(start = 40.dp, bottom = 135.dp)
+                .width(203.dp)
                 .background(
                     color = Theme.colors.surfaceColors.surfaceHigh,
                     shape = RoundedCornerShape(
@@ -89,20 +90,14 @@ fun EmptyTasksSection(
                     )
                 )
                 .padding(vertical = 8.dp, horizontal = 12.dp)
-                .align(Alignment.BottomCenter),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+                .align(Alignment.CenterStart),
+            contentAlignment = Alignment.Center
         ) {
             Text(
-                text = title,
+                text = errorMessage,
                 style = Theme.textStyle.title.small,
-                color = Theme.colors.text.body,
-                maxLines = 1
-            )
-            Text(
-                text = description,
-                style = Theme.textStyle.body.small,
                 color = Theme.colors.text.hint,
-                maxLines = 2
+                maxLines = 4
             )
         }
 

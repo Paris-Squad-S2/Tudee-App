@@ -1,7 +1,7 @@
 package com.example.tudeeapp.di
 
 import com.example.tudeeapp.data.TaskServicesImpl
-import com.example.tudeeapp.data.mapper.DataConstant
+import com.example.tudeeapp.data.source.local.DataConstant
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
 import org.koin.android.ext.koin.androidApplication
