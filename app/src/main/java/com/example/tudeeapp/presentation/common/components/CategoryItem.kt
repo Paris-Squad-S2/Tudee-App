@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tudeeapp.R
@@ -41,7 +43,7 @@ fun CategoryItem(
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.width(104.dp)
     ) {
         Box(
             modifier = Modifier
@@ -88,7 +90,9 @@ fun CategoryItem(
         Text(
             text = label,
             style = Theme.textStyle.label.small,
-            color = Theme.colors.text.body
+            color = Theme.colors.text.body,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
