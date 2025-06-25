@@ -95,6 +95,7 @@ fun CategoriesContent(
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(104.dp),
                         verticalArrangement = Arrangement.spacedBy(24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Theme.colors.surfaceColors.surface),
