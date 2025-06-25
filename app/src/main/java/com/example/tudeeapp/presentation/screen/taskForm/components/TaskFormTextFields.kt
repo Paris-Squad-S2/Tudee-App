@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskManagement.components
+package com.example.tudeeapp.presentation.screen.taskForm.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +17,7 @@ import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 
 @Composable
-fun TaskManagementTextFields(
+fun TaskFormTextFields(
     title: String,
     onTitleChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -62,7 +62,7 @@ private fun AddEditTaskFieldsPreview() {
     var description by remember { mutableStateOf("") }
 
     BasePreview {
-        TaskManagementTextFields(
+        TaskFormTextFields(
             title = title,
             onTitleChange = { title = it },
             description = description,

@@ -62,7 +62,7 @@ fun CategoriesContent(
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.addnewCategory),
                         tint = Color.Unspecified
                     )
                 },
