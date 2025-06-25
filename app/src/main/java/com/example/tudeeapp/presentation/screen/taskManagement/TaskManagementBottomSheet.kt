@@ -30,7 +30,6 @@ fun TaskManagementBottomSheet(
     TaskManagementBottomSheetContent(
         uiState = uiState,
         interactionListener  = viewModel,
-        onCancelClicked = { viewModel.popBackStack() }
     )
 
     if (uiState.isDatePickerVisible) {
@@ -59,22 +58,19 @@ fun TaskManagementBottomSheet(
 private fun TaskManagementBottomSheetContent(
     uiState: TaskManagementUiState,
     interactionListener: InteractionListener,
-    onCancelClicked: () -> Unit,
 ) {
     TudeeBottomSheet(
         isVisible = true,
         title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
-        onDismiss = onCancelClicked,
+        onDismiss = interactionListener::popBackStack,
         isScrollable = true,
         skipPartiallyExpanded = true,
         stickyBottomContent = {
             TaskManagementButtons(
                 isEditMode = uiState.isEditMode,
                 isActionButtonDisabled = uiState.isInitialState,
-                onClickActionButton = {
-                    interactionListener.onActionButtonClicked()
-                },
-                onClickCancel = onCancelClicked,
+                onClickActionButton = interactionListener::onActionButtonClicked,
+                onClickCancel = interactionListener::popBackStack,
                 isLoading = uiState.isLoading,
             )
         },
