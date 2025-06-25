@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 
 class CategoriesViewModel(private val taskServices: TaskServices) :
-    BaseViewModel<CategoriesScreenState>(CategoriesScreenState()) {
+    BaseViewModel<CategoriesScreenState>(CategoriesScreenState()), CategoriesInteractionListener {
 
     init {
         getCategories()
@@ -46,11 +46,11 @@ class CategoriesViewModel(private val taskServices: TaskServices) :
         )
     }
 
-    fun onClickItem(id: Long) {
+    override fun onCategoryClick(id: Long) {
         navigate(Destinations.CategoryDetails(categoryId = id))
     }
 
-    fun onFloatingActionButtonClick() {
+    override fun onFloatingActionButtonClick() {
         navigate(Destinations.CategoryForm())
     }
 }

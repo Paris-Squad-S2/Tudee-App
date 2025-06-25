@@ -38,7 +38,7 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CategoriesContent(
         state = state,
-        onClickCategory = viewModel::onClickItem,
+        onClickCategory = viewModel::onCategoryClick,
         onClickAddCategory = viewModel::onFloatingActionButtonClick
     )
 }
