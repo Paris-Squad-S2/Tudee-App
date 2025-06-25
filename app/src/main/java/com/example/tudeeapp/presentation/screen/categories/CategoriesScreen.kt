@@ -50,7 +50,7 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
 
 @Composable
 fun CategoriesContent(
-    state: CategoryUIState,
+    state: CategoriesScreenState,
     onClickCategory: (Long) -> Unit,
     onClickAddCategory: () -> Unit
 ) {
@@ -112,7 +112,7 @@ fun CategoriesContent(
 
 @Composable
 private fun CategoryListItem(
-    category: CategoryItemUIState,
+    category: CategoryUIState,
     onClickItem: (id: Long) -> Unit
 ) {
     val painter: Painter = toPainter(category.isPredefined, category.imageUri)

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CategoriesViewModel(private val taskServices: TaskServices) : ViewModel() {
-    private val _state = MutableStateFlow(CategoryUIState())
+    private val _state = MutableStateFlow(CategoriesScreenState())
     val state = _state.asStateFlow()
 
     init {
