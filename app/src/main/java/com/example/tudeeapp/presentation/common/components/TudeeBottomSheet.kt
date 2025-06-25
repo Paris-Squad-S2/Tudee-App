@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -37,7 +36,7 @@ fun TudeeBottomSheet(
     isVisible: Boolean,
     title: String,
     onDismiss: () -> Unit,
-    headerEnd: @Composable () -> Unit = {},
+    optionalActionButton: @Composable () -> Unit = {},
     modifier: Modifier = Modifier,
     isScrollable: Boolean = true,
     skipPartiallyExpanded: Boolean = true,
@@ -82,7 +81,7 @@ fun TudeeBottomSheet(
                             .padding(horizontal = 16.dp)
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    headerEnd()
+                    optionalActionButton()
                     Spacer(modifier = Modifier.width(16.dp))
                 }
                 content()
