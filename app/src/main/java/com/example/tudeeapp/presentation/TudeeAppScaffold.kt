@@ -49,10 +49,10 @@ fun TudeeAppScaffold() {
     val systemUiController = rememberSystemUiController()
     val darkIcons = themeMode.value == TudeeThemeMode.LIGHT
 
-    LaunchedEffect(themeMode.value) {
+    LaunchedEffect(Unit) {
+        themeMode.value = if (appPrefs.isDarkTheme()) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
         systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = darkIcons
+            color = Color.Transparent, darkIcons = darkIcons
         )
     }
 

@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,8 +46,6 @@ import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.CategoryUiState
-import com.example.tudeeapp.presentation.screen.categoryDetails.state.TaskUiState
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
@@ -60,6 +59,15 @@ fun CategoryDetailsScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val selectedState by viewModel.stateFilter.collectAsStateWithLifecycle()
+    val currentBackStackEntry = navController.currentBackStackEntry
+    val savedStateHandle = currentBackStackEntry?.savedStateHandle
+    val editResult = savedStateHandle?.getStateFlow("categoryEdited", false)
+    val result by editResult?.collectAsState(initial = false) ?: remember { mutableStateOf(false) }
+
+    if (result) {
+        savedStateHandle!!["categoryEdited"] = false
+        viewModel.refreshCategory()
+    }
 
     when {
         uiState.isLoading -> {
@@ -74,9 +82,11 @@ fun CategoryDetailsScreen(
                 tasks = uiState.taskUiState,
                 selectedState = selectedState,
                 onStatusChange = viewModel::setStatus,
-                onBack = { navController.popBackStack() },
+                onBack = { viewModel.onClickBack() },
                 categoryTitle = uiState.categoryUiState!!.title,
-                onOptionClick = { navController.navigate(Destinations.CategoryForm(uiState.categoryUiState!!.id)) },
+                onOptionClick = {
+                    viewModel.onClickEditCategory()
+                },
                 categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
                 topBarOption = editableCategory(uiState.categoryUiState!!),
                 onClickDeleteIcon = viewModel::deleteTask
