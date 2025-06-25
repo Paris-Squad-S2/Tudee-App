@@ -38,22 +38,20 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CategoriesContent(
         state = state,
-        onClickCategory = viewModel::onCategoryClick,
-        onClickAddCategory = viewModel::onFloatingActionButtonClick
+        interactionListener = viewModel
     )
 }
 
 @Composable
 fun CategoriesContent(
     state: CategoriesScreenState,
-    onClickCategory: (Long) -> Unit,
-    onClickAddCategory: () -> Unit
+    interactionListener: CategoriesInteractionListener
 ) {
     TudeeScaffold(
         floatingActionButton = {
             TudeeButton(
                 modifier = Modifier.size(64.dp),
-                onClick = { onClickAddCategory() },
+                onClick =  interactionListener::onFloatingActionButtonClick,
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
@@ -97,7 +95,7 @@ fun CategoriesContent(
                         contentPadding = PaddingValues(12.dp)
                     ) {
                         items(state.categories) {
-                            CategoryListItem(category = it, onClickItem = onClickCategory)
+                            CategoryListItem(category = it, onClickItem = interactionListener::onCategoryClick)
                         }
                     }
                 }
