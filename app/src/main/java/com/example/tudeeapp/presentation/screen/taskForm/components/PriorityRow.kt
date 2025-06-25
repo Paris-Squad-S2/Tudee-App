@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskManagement.components
+package com.example.tudeeapp.presentation.screen.taskForm.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.screen.taskManagement.TaskPriorityUiState
+import com.example.tudeeapp.presentation.screen.taskForm.TaskPriorityUiState
 import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices  

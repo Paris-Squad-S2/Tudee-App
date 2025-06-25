@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskManagement
+package com.example.tudeeapp.presentation.screen.taskForm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -14,10 +14,10 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlin.random.Random
 
-class TaskManagementViewModel(
+class TaskFormViewModel(
     private val taskServices: TaskServices,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<TaskManagementUiState>(TaskManagementUiState(isLoading = true)) {
+) : BaseViewModel<TaskFormUiState>(TaskFormUiState(isLoading = true)) {
 
     val taskId = savedStateHandle.toRoute<Destinations.TaskManagement>().taskId
     private val selectedDate = savedStateHandle.toRoute<Destinations.TaskManagement>().selectedDate
