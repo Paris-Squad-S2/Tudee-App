@@ -5,17 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -32,6 +28,8 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.navigation.LocalNavController
+import com.example.tudeeapp.presentation.utills.ShowError
+import com.example.tudeeapp.presentation.utills.ShowLoading
 import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -76,18 +74,13 @@ fun CategoriesContent(
         Box(modifier = Modifier.fillMaxSize()) {
             when {
                 state.isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+                    ShowLoading()
                 }
 
                 state.errorMessage != null -> {
-                    Text(
-                        text = state.errorMessage,
-                        style = Theme.textStyle.body.medium,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(16.dp)
+                    ShowError(
+                        modifier = Modifier.fillMaxSize(),
+                        errorMessage = state.errorMessage,
                     )
                 }
 
@@ -95,7 +88,6 @@ fun CategoriesContent(
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(104.dp),
                         verticalArrangement = Arrangement.spacedBy(24.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Theme.colors.surfaceColors.surface),

@@ -18,9 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,6 +51,8 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
+import com.example.tudeeapp.presentation.utills.ShowError
+import com.example.tudeeapp.presentation.utills.ShowLoading
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
 import kotlinx.datetime.LocalDate
@@ -119,17 +119,13 @@ fun TaskScreenContent(
         Box(modifier = Modifier.fillMaxSize()) {
             when {
                 uiState.isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                        color = Theme.colors.primary
-                    )
+                    ShowLoading()
                 }
 
                 uiState.errorMessage != null -> {
-                    Text(
-                        text = "Error: ${uiState.errorMessage}",
-                        color = Theme.colors.status.error,
-                        modifier = Modifier.padding(16.dp)
+                    ShowError(
+                        modifier = Modifier.fillMaxSize(),
+                        errorMessage = uiState.errorMessage
                     )
                 }
 
