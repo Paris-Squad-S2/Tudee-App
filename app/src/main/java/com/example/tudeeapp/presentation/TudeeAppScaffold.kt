@@ -1,7 +1,5 @@
 package com.example.tudeeapp.presentation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -14,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +33,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
 val LocalSnackBarState = compositionLocalOf<SnackBarState> { error("No SnackBarState provided") }
-val LocalThemeState = compositionLocalOf<MutableState<TudeeThemeMode>> { error("No TaskManagementState provided") }
+val LocalThemeState =
+    compositionLocalOf<MutableState<TudeeThemeMode>> { error("No TaskManagementState provided") }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TudeeAppScaffold() {
     val navController = rememberNavController()

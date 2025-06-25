@@ -1,79 +1,89 @@
 package com.example.tudeeapp.data.mapper
 
 import com.example.tudeeapp.domain.models.Category
+
 object DataConstant {
 
     val predefinedCategories = listOf(
         Category(
             title = "Education",
-            imageUrl = "R.drawable.eduction",
+            imageUri = "R.drawable.eduction",
             isPredefined = true,
         ),
         Category(
             title = "Shopping",
-            imageUrl = "R.drawable.shooping",
+            imageUri = "R.drawable.shooping",
             isPredefined = true,
         ),
         Category(
             title = "Medical",
-            imageUrl = "R.drawable.medical",
+            imageUri = "R.drawable.medical",
             isPredefined = true,
         ),
         Category(
             title = "Gym",
-            imageUrl = "R.drawable.gym",
+            imageUri = "R.drawable.gym",
             isPredefined = true,
         ),
         Category(
             title = "Entertainment",
-            imageUrl = "R.drawable.entertainment",
+            imageUri = "R.drawable.entertainment",
             isPredefined = true,
         ),
         Category(
-            title = "Cooking", imageUrl = "R.drawable.cooking",
+            title = "Cooking", imageUri = "R.drawable.cooking",
             isPredefined = true
         ),
         Category(
             title = "Family & friend",
-            imageUrl = "R.drawable.family_friend",
+            imageUri = "R.drawable.family_friend",
             isPredefined = true,
         ),
         Category(
             title = "Traveling",
-            imageUrl = "R.drawable.traveling",
+            imageUri = "R.drawable.traveling",
             isPredefined = true,
         ),
         Category(
             title = "Agriculture",
-            imageUrl = "R.drawable.agriculture",
+            imageUri = "R.drawable.agriculture",
             isPredefined = true,
         ),
         Category(
-            title = "Coding", imageUrl = "R.drawable.coding",
+            title = "Coding", imageUri = "R.drawable.coding",
             isPredefined = true
         ),
         Category(
             title = "Adoration",
-            imageUrl = "R.drawable.adoration",
+            imageUri = "R.drawable.adoration",
             isPredefined = true,
         ),
         Category(
             title = "Fixing bugs",
-            imageUrl = "R.drawable.fixing_bugs",
+            imageUri = "R.drawable.fixing_bugs",
             isPredefined = true,
         ),
         Category(
-            title = "Cleaning"
-            ,imageUrl = "R.drawable.cleaning",
+            title = "Cleaning", imageUri = "R.drawable.cleaning",
             isPredefined = true
         ),
         Category(
-            title = "Work", imageUrl = "R.drawable.work",
+            title = "Work", imageUri = "R.drawable.work",
             isPredefined = true
         ),
         Category(
             title = "Budgeting",
-            imageUrl = "R.drawable.budgeting",
+            imageUri = "R.drawable.budgeting",
+            isPredefined = true,
+        ),
+        Category(
+            title = "Self-care",
+            imageUri = "R.drawable.self_care",
+            isPredefined = true,
+        ),
+        Category(
+            title = "Event",
+            imageUri = "R.drawable.event",
             isPredefined = true,
         ),
     )

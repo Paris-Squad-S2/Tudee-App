@@ -9,6 +9,6 @@ import org.koin.dsl.module
 
 val dataModule = module {
     single { DataConstant }
-    single<TaskServices> { TaskServicesImpl(get(), get(),get(),get()) }
+    single<TaskServices> { TaskServicesImpl(get(), get(),get()) }
     single { AppPreferences(androidApplication().applicationContext) }
 }

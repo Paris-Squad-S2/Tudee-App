@@ -16,9 +16,7 @@ import com.example.tudeeapp.presentation.screen.taskManagement.components.Catego
 import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons
 import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -37,7 +35,7 @@ fun TaskManagementBottomSheet(
 
     if (uiState.isDatePickerVisible) {
         TudeeDatePickerDialog(
-            initialDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+            initialDate = LocalDate.parse(uiState.selectedDate),
             onDismiss = { viewModel.onDateClicked(false) },
             onSelectDate = { viewModel.onDateSelected(it) }
         )

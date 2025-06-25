@@ -1,7 +1,5 @@
 package com.example.tudeeapp.presentation.screen.task
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.DayItem
@@ -53,14 +52,13 @@ import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
 import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun TasksScreen(viewModel: TasksViewModel = koinViewModel()) {
     val navController = LocalNavController.current
@@ -69,7 +67,11 @@ fun TasksScreen(viewModel: TasksViewModel = koinViewModel()) {
     TaskScreenContent(
         uiState = uiState,
         listState = rememberLazyListState(),
-        addTask = { navController.navigate(Destinations.TaskManagement()) },
+        addTask = {
+            navController.navigate(
+                Destinations.TaskManagement(selectedDate = uiState.data.calender.selectedDate.toString())
+            )
+        },
         onCLickDatePicker = viewModel::onDatePickerVisibilityChanged,
         onClickPreviousMonth = viewModel::goToPreviousMonth,
         onClickNextMonth = viewModel::goToNextMonth,
@@ -81,7 +83,7 @@ fun TasksScreen(viewModel: TasksViewModel = koinViewModel()) {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun TaskScreenContent(
     uiState: TaskUiState,
@@ -184,7 +186,7 @@ fun TaskContent(
         }
 
         DateHeader(
-            data.calender.currentMonthYear,
+            date = data.calender.currentMonthYear,
             onClickNext = onClickNextMonth,
             onClickPrevious = onClickPreviousMonth,
             onClickPickDate = { onCLickDatePicker() }
@@ -234,9 +236,10 @@ fun TaskContent(
         )
         if (data.tasks.isEmpty()) {
             Column(
-                modifier = Modifier.verticalScroll(scrollState)
+                modifier = Modifier
+                    .verticalScroll(scrollState)
                     .fillMaxSize()
-                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .background(Theme.colors.surfaceColors.surface)
                     .weight(1f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -246,11 +249,11 @@ fun TaskContent(
                     modifier = Modifier
                 )
             }
-        }else {
+        } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
-                    .background(Theme.colors.surfaceColors.surfaceLow)
+                    .background(Theme.colors.surfaceColors.surface)
                     .fillMaxWidth()
                     .weight(1f),
                 contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
@@ -258,7 +261,7 @@ fun TaskContent(
                 items(data.tasks) { task ->
                     val iconResource = toPainter(
                         imageUri = task.category.iconRes,
-                        isPredefined =task.category.isPredefined
+                        isPredefined = task.category.isPredefined
                     )
 
                     TaskItemWithSwipe(

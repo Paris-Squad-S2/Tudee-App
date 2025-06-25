@@ -12,7 +12,6 @@ import org.koin.compose.koinInject
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No Nav Controller Found") }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TudeeNavGraph(navController: NavHostController, navigator: Navigator = koinInject()) {
 
