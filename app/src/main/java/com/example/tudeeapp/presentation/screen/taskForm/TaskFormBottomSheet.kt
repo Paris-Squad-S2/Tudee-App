@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskManagement
+package com.example.tudeeapp.presentation.screen.taskForm
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -12,16 +12,18 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.screen.taskManagement.components.CategoryGrid
-import com.example.tudeeapp.presentation.screen.taskManagement.components.PriorityRow
-import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementButtons
-import com.example.tudeeapp.presentation.screen.taskManagement.components.TaskManagementTextFields
+import com.example.tudeeapp.presentation.screen.taskForm.TaskFormUiState
+import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
+import com.example.tudeeapp.presentation.screen.taskForm.components.CategoryGrid
+import com.example.tudeeapp.presentation.screen.taskForm.components.PriorityRow
+import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
+import com.example.tudeeapp.presentation.screen.taskForm.components.TaskManagementButtons
 import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun TaskManagementBottomSheet(
-    viewModel: TaskManagementViewModel = koinViewModel(),
+fun TaskFormBottomSheet(
+    viewModel: TaskFormViewModel = koinViewModel(),
 ) {
     val snackbarHostState = LocalSnackBarState.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -56,7 +58,7 @@ fun TaskManagementBottomSheet(
 
 @Composable
 private fun TaskManagementBottomSheetContent(
-    uiState: TaskManagementUiState,
+    uiState: TaskFormUiState,
     interactionListener: InteractionListener,
 ) {
     TudeeBottomSheet(
@@ -75,7 +77,7 @@ private fun TaskManagementBottomSheetContent(
             )
         },
     ) {
-        TaskManagementTextFields(
+        TaskFormTextFields(
             onTitleChange = interactionListener::onTitleChange,
             onDescriptionChange = interactionListener::onDescriptionChange,
             onDateClicked = { interactionListener.onDateClicked(true) },

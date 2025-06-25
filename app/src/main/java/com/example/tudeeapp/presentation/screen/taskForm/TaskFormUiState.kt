@@ -1,11 +1,11 @@
-package com.example.tudeeapp.presentation.screen.taskManagement
+package com.example.tudeeapp.presentation.screen.taskForm
 
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.common.extentions.getCurrentDateString
 
-data class TaskManagementUiState(
+data class TaskFormUiState(
     val isDatePickerVisible: Boolean = false,
     val title: String = "",
     val description: String = "",

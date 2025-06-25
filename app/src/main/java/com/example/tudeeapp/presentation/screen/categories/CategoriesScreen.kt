@@ -62,7 +62,7 @@ fun CategoriesContent(
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.addnewCategory),
                         tint = Color.Unspecified
                     )
                 },
@@ -95,6 +95,7 @@ fun CategoriesContent(
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(104.dp),
                         verticalArrangement = Arrangement.spacedBy(24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Theme.colors.surfaceColors.surface),
