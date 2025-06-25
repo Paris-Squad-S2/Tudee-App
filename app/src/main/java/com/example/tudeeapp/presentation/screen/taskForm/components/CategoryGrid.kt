@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,25 +24,19 @@ import com.example.tudeeapp.presentation.screen.taskForm.CategoryUiState
 
 @Composable
 fun CategoryGrid(
-    categories: List<CategoryUiState>,
-    modifier: Modifier = Modifier,
-    onCategoryClick: (Long) -> Unit = {},
+    categories: List<CategoryUiState>, modifier: Modifier = Modifier, onCategoryClick: (Long) -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = stringResource(R.string.category),
-            style = Theme.textStyle.title.medium,
-        )
+        Text(text = stringResource(R.string.category), style = Theme.textStyle.title.medium)
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 13.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Start),
             verticalArrangement = Arrangement.spacedBy(25.dp),
-            maxItemsInEachRow = 3
         ) {
             categories.forEach { category ->
                 val painter = if (category.isPredefined)
@@ -67,11 +62,7 @@ private fun CategoryGridPreview() {
     BasePreview {
         val sampleCategories = listOf(
             CategoryUiState(image = "R.drawable.ic_education", title = "Work"),
-            CategoryUiState(
-                image = "R.drawable.ic_adoration",
-                title = "Personal",
-                isSelected = true
-            ),
+            CategoryUiState(image = "R.drawable.ic_adoration", title = "Personal", isSelected = true),
             CategoryUiState(image = "R.drawable.ic_gym", title = "Shopping"),
             CategoryUiState(image = "R.drawable.ic_education", title = "Work"),
             CategoryUiState(image = "R.drawable.ic_adoration", title = "Personal"),

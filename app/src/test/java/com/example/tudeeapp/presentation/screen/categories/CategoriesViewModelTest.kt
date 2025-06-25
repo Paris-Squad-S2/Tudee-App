@@ -43,7 +43,7 @@ class CategoryViewModelTest {
 
         val state = viewModel.state.value
         assert(
-            state == CategoryUIState(
+            state == CategoriesScreenState(
                 isLoading = true,
                 categories = emptyList(),
                 errorMessage = null
@@ -73,7 +73,7 @@ class CategoryViewModelTest {
 
         val state = viewModel.state.value
         assert(
-            state == CategoryUIState(
+            state == CategoriesScreenState(
                 isLoading = false,
                 categories = emptyList(),
                 errorMessage = "There was an error processing your request. Please try again later."

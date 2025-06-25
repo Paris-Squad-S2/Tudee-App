@@ -76,7 +76,6 @@ dependencies {
 
     //coil
     implementation(libs.coil.compose)
-    implementation(libs.accompanist.systemuicontroller)
 
     //Koin
     implementation(libs.koin.core)
@@ -88,6 +87,9 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    //Lottie
+    implementation (libs.lottie.compose)
 
     // testing
     testImplementation(libs.truth)

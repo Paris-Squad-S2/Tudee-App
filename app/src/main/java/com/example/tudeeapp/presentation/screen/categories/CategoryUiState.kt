@@ -2,13 +2,13 @@ package com.example.tudeeapp.presentation.screen.categories
 
 import com.example.tudeeapp.domain.models.Category
 
-data class CategoryUIState(
-    val categories: List<CategoryItemUIState> = emptyList(),
+data class CategoriesScreenState(
+    val categories: List<CategoryUIState> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
 
-data class CategoryItemUIState(
+data class CategoryUIState(
     val id: Long,
     val name: String,
     val count: Int,
@@ -16,8 +16,8 @@ data class CategoryItemUIState(
     val isPredefined: Boolean
 )
 
-fun Category.toCategoryUIState(calculatedCount: Int): CategoryItemUIState {
-    return CategoryItemUIState(
+fun Category.toCategoryUIState(calculatedCount: Int): CategoryUIState {
+    return CategoryUIState(
         id = this.id,
         name = this.title,
         count = calculatedCount,

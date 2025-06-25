@@ -1,4 +1,4 @@
-package com.example.tudeeapp.data.mapper
+package com.example.tudeeapp.data.source.local
 
 import com.example.tudeeapp.domain.models.Category
 
