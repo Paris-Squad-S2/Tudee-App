@@ -37,7 +37,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = LocalNavController.current
     CategoriesContent(
         state = state,
