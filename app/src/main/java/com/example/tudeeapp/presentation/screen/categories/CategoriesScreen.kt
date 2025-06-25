@@ -30,35 +30,28 @@ import com.example.tudeeapp.presentation.common.components.TextTopBar
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.utills.toPainter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    val navController = LocalNavController.current
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     CategoriesContent(
         state = state,
-        onClickCategory = { navController.navigate(Destinations.CategoryDetails(it)) },
-        onClickAddCategory = {
-            navController.navigate(Destinations.CategoryForm())
-        }
+        interactionListener = viewModel
     )
 }
 
 @Composable
 fun CategoriesContent(
-    state: CategoryUIState,
-    onClickCategory: (Long) -> Unit,
-    onClickAddCategory: () -> Unit
+    state: CategoriesScreenState,
+    interactionListener: CategoriesInteractionListener
 ) {
     TudeeScaffold(
         floatingActionButton = {
             TudeeButton(
                 modifier = Modifier.size(64.dp),
-                onClick = { onClickAddCategory() },
+                onClick =  interactionListener::onFloatingActionButtonClick,
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
@@ -102,7 +95,7 @@ fun CategoriesContent(
                         contentPadding = PaddingValues(12.dp)
                     ) {
                         items(state.categories) {
-                            CategoryListItem(category = it, onClickItem = onClickCategory)
+                            CategoryListItem(category = it, onClickItem = interactionListener::onCategoryClick)
                         }
                     }
                 }
@@ -113,7 +106,7 @@ fun CategoriesContent(
 
 @Composable
 private fun CategoryListItem(
-    category: CategoryItemUIState,
+    category: CategoryUIState,
     onClickItem: (id: Long) -> Unit
 ) {
     val painter: Painter = toPainter(category.isPredefined, category.imageUri)
