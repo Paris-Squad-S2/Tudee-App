@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.taskManagement
+package com.example.tudeeapp.presentation.screen.taskForm
 
 import androidx.lifecycle.SavedStateHandle
 import com.example.tudeeapp.domain.TaskServices
@@ -24,8 +24,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
-class TaskManagementViewModelTest {
-    private lateinit var viewModel: TaskManagementViewModel
+class TaskFormViewModelTest {
+    private lateinit var viewModel: TaskFormViewModel
     private val taskServices: TaskServices = mockk(relaxed = true)
     private val testDispatcher = StandardTestDispatcher()
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true)
@@ -33,7 +33,7 @@ class TaskManagementViewModelTest {
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = TaskManagementViewModel(taskServices, savedStateHandle)
+        viewModel = TaskFormViewModel(taskServices, savedStateHandle)
     }
 
     @AfterEach
@@ -48,7 +48,7 @@ class TaskManagementViewModelTest {
         val categoriesFlow = flowOf(categories)
         every { taskServices.getAllCategories() } returns categoriesFlow
 
-        viewModel = TaskManagementViewModel(taskServices, savedStateHandle)
+        viewModel = TaskFormViewModel(taskServices, savedStateHandle)
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertThat(viewModel.state.value.categories).hasSize(2)
@@ -58,7 +58,7 @@ class TaskManagementViewModelTest {
     fun `getAllCategories() should handle exception and update error state`() = runTest {
         every { taskServices.getAllCategories() } throws Exception("Network error")
 
-        viewModel = TaskManagementViewModel(taskServices, savedStateHandle)
+        viewModel = TaskFormViewModel(taskServices, savedStateHandle)
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertThat(viewModel.state.value.error).isEqualTo("There was an error processing your request. Please try again later.")
@@ -84,7 +84,7 @@ class TaskManagementViewModelTest {
             selectedCategoryId = testCategoryId
         )
 
-        (stateField.get(viewModel) as? MutableStateFlow<TaskManagementUiState>)?.value =
+        (stateField.get(viewModel) as? MutableStateFlow<TaskFormUiState>)?.value =
             updatedState
 
         coEvery { taskServices.addTask(any()) } returns Unit
@@ -101,7 +101,7 @@ class TaskManagementViewModelTest {
         every { taskServices.getTaskById(validTaskId) } returns taskFlow
         every { taskServices.getAllCategories() } returns flowOf(emptyList())
 
-        viewModel = TaskManagementViewModel(taskServices, savedStateHandle)
+        viewModel = TaskFormViewModel(taskServices, savedStateHandle)
         testDispatcher.scheduler.advanceUntilIdle()
 
         viewModel.onTitleChange("Updated Task")
@@ -127,7 +127,7 @@ class TaskManagementViewModelTest {
             selectedPriority = TaskPriorityUiState.HIGH,
             selectedCategoryId = 1L
         )
-        (stateField.get(viewModel) as MutableStateFlow<TaskManagementUiState>).value = updatedState
+        (stateField.get(viewModel) as MutableStateFlow<TaskFormUiState>).value = updatedState
 
         coEvery { taskServices.addTask(any()) } throws Exception("Database error")
 
