@@ -1,26 +1,22 @@
 package com.example.tudeeapp.presentation.screen.categories
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.tudeeapp.domain.TaskServices
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.tudeeapp.presentation.navigation.Destinations
+import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
-class CategoriesViewModel(private val taskServices: TaskServices) : ViewModel() {
-    private val _state = MutableStateFlow(CategoryUIState())
-    val state = _state.asStateFlow()
+class CategoriesViewModel(private val taskServices: TaskServices) :
+    BaseViewModel<CategoriesScreenState>(CategoriesScreenState()), CategoriesInteractionListener {
 
     init {
         getCategories()
     }
 
     private fun getCategories() {
-        _state.update { it.copy(isLoading = true) }
-        viewModelScope.launch {
-            try {
+        launchSafely(
+            onLoading = { _uiState.update { it.copy(isLoading = true) } },
+            onSuccess = {
                 taskServices.getAllTasks()
                     .combine(taskServices.getAllCategories()) { tasks, categories ->
                         val taskCounts = tasks
@@ -31,21 +27,30 @@ class CategoriesViewModel(private val taskServices: TaskServices) : ViewModel() 
                             val count = taskCounts[category.id] ?: 0
                             category.toCategoryUIState(count)
                         }
-                        _state.value.copy(
+                        _uiState.value.copy(
                             isLoading = false,
                             categories = updatedCategories
                         )
                     }.collect { updatedUiState ->
-                        _state.value = updatedUiState
+                        _uiState.value = updatedUiState
                     }
-            } catch (e: Exception) {
-                _state.update {
+            },
+            onError = { errorMessage ->
+                _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "There was an error processing your request. Please try again later."
+                        errorMessage = errorMessage
                     )
                 }
             }
-        }
+        )
+    }
+
+    override fun onCategoryClick(id: Long) {
+        navigate(Destinations.CategoryDetails(categoryId = id))
+    }
+
+    override fun onFloatingActionButtonClick() {
+        navigate(Destinations.CategoryForm())
     }
 }
