@@ -1,7 +1,6 @@
 package com.example.tudeeapp.presentation.screen.taskForm
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Task
@@ -9,13 +8,7 @@ import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
-import com.example.tudeeapp.presentation.screen.taskForm.TaskFormUiState
-import com.example.tudeeapp.presentation.screen.taskForm.TaskPriorityUiState
-import com.example.tudeeapp.presentation.screen.taskForm.toCategoryState
-import com.example.tudeeapp.presentation.screen.taskForm.toTaskPriority
-import com.example.tudeeapp.presentation.screen.taskManagement.InteractionListener
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlin.random.Random
 

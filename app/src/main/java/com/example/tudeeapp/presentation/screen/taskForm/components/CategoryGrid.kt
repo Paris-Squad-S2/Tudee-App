@@ -35,7 +35,7 @@ fun CategoryGrid(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 13.dp),
-            horizontalArrangement = Arrangement.spacedBy(40.dp, alignment = Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Start),
             verticalArrangement = Arrangement.spacedBy(25.dp),
         ) {
             categories.forEach { category ->
