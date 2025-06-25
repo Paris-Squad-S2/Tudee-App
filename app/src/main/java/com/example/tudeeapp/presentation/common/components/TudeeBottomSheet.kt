@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 
 @Composable
 fun TudeeBottomSheet(
@@ -68,6 +69,7 @@ fun TudeeBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     var currentHeight by remember { mutableStateOf(300.dp) } // Start partially opened
 
+    val mutex = remember { kotlinx.coroutines.sync.Mutex() }
 
     if (!isVisible) return
     BoxWithConstraints {
@@ -86,8 +88,10 @@ fun TudeeBottomSheet(
                                     (currentHeight - dragAmount.toDp())
                                 if (currentHeight < 100.dp) {
                                     coroutineScope.launch {
-                                        bottomSheetState.hide()
-                                        onDismiss()
+                                        mutex.withLock {
+                                            bottomSheetState.hide()
+                                            onDismiss()
+                                        }
                                     }
                                 }
                             }
