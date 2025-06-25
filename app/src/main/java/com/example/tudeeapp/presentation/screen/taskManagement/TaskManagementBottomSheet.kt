@@ -29,7 +29,7 @@ fun TaskManagementBottomSheet(
 
     TaskManagementBottomSheetContent(
         uiState = uiState,
-        viewModel = viewModel,
+        interactionListener  = viewModel,
         onCancelClicked = { viewModel.popBackStack() }
     )
 
@@ -50,7 +50,7 @@ fun TaskManagementBottomSheet(
     LaunchedEffect(uiState.isTaskSaved) {
         if (uiState.isTaskSaved) {
             snackbarHostState.show(message = successMessage, isSuccess = true)
-            viewModel.popBackStack()
+           viewModel.popBackStack()
         }
     }
 }
@@ -58,7 +58,7 @@ fun TaskManagementBottomSheet(
 @Composable
 private fun TaskManagementBottomSheetContent(
     uiState: TaskManagementUiState,
-    viewModel: TaskManagementViewModel,
+    interactionListener: InteractionListener,
     onCancelClicked: () -> Unit,
 ) {
     TudeeBottomSheet(
@@ -72,7 +72,7 @@ private fun TaskManagementBottomSheetContent(
                 isEditMode = uiState.isEditMode,
                 isActionButtonDisabled = uiState.isInitialState,
                 onClickActionButton = {
-                    viewModel.onActionButtonClicked()
+                    interactionListener.onActionButtonClicked()
                 },
                 onClickCancel = onCancelClicked,
                 isLoading = uiState.isLoading,
@@ -80,9 +80,9 @@ private fun TaskManagementBottomSheetContent(
         },
     ) {
         TaskManagementTextFields(
-            onTitleChange = viewModel::onTitleChange,
-            onDescriptionChange = viewModel::onDescriptionChange,
-            onDateClicked = { viewModel.onDateClicked(true) },
+            onTitleChange = interactionListener::onTitleChange,
+            onDescriptionChange = interactionListener::onDescriptionChange,
+            onDateClicked = { interactionListener.onDateClicked(true) },
             title = uiState.title,
             description = uiState.description,
             date = uiState.selectedDate,
@@ -90,12 +90,12 @@ private fun TaskManagementBottomSheetContent(
         PriorityRow(
             modifier = Modifier.padding(16.dp),
             selectedPriority = uiState.selectedPriority,
-            onPrioritySelected = viewModel::onPrioritySelected
+            onPrioritySelected = interactionListener::onPrioritySelected
         )
         CategoryGrid(
             categories = uiState.categories,
             modifier = Modifier.padding(16.dp),
-            onCategoryClick = viewModel::onCategorySelected,
+            onCategoryClick = interactionListener::onCategorySelected,
         )
     }
 }
