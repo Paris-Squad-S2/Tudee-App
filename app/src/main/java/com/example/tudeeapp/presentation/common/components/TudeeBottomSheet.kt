@@ -3,7 +3,6 @@
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -69,6 +68,7 @@ fun TudeeBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     var currentHeight by remember { mutableStateOf(300.dp) } // Start partially opened
 
+
     if (!isVisible) return
     BoxWithConstraints {
         ModalBottomSheet(
@@ -84,7 +84,7 @@ fun TudeeBottomSheet(
                             detectVerticalDragGestures { _, dragAmount ->
                                 currentHeight =
                                     (currentHeight - dragAmount.toDp())
-                                if (currentHeight <= 100.dp) {
+                                if (currentHeight < 100.dp) {
                                     coroutineScope.launch {
                                         bottomSheetState.hide()
                                         onDismiss()
@@ -92,16 +92,18 @@ fun TudeeBottomSheet(
                                 }
                             }
                         }
-                        .padding(horizontal = ((this.maxWidth - 32.dp)/2).coerceAtLeast(0.dp))
+                        .padding(horizontal = ((this.maxWidth - 32.dp) / 2).coerceAtLeast(0.dp))
                 )
             },
             sheetState = bottomSheetState,
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         ) {
-            Column {
+            Column(
+                Modifier.height(currentHeight)
+            ) {
                 Column(
                     modifier = Modifier
-                        .height(currentHeight)
+                        .weight(1f)
                         .then(scrollModifier)
                 ) {
                     Row {
