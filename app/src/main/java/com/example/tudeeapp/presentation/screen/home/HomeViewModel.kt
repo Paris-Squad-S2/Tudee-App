@@ -121,6 +121,7 @@ class HomeViewModel(
         onSuccess = {
             taskServices.getAllTasks().collect { tasks ->
                 val taskCount = tasks
+                    .filter(::filterTaskOnToday)
                     .groupBy { it.status }
                     .mapValues { it.value.size }
                 val sliderState = mapTaskCountToSliderState(taskCount)
