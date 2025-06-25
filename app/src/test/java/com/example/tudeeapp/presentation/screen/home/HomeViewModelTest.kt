@@ -68,7 +68,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.homeState.test {
+            homeViewModel.uiState.test {
                 val initialState = awaitItem()
 
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -92,7 +92,7 @@ class HomeViewModelTest {
 
             coEvery { appPreferences.setDarkTheme(any()) } returns Unit
 
-            homeViewModel.homeState.test {
+            homeViewModel.uiState.test {
 
                 val initialStateAfterSetup = awaitItem()
                 assertThat(initialStateAfterSetup.isDarkMode).isFalse()
@@ -125,7 +125,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.homeState.test {
+            homeViewModel.uiState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -155,7 +155,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.homeState.test {
+            homeViewModel.uiState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -182,7 +182,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.homeState.test {
+            homeViewModel.uiState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -207,7 +207,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.homeState.test {
+            homeViewModel.uiState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -233,7 +233,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.homeState.test {
+            homeViewModel.uiState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.error).isNull()

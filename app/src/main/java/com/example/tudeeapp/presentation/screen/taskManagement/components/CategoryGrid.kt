@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -17,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.screen.taskManagement.CategoryUiState
 import com.example.tudeeapp.presentation.common.components.CategoryItem
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
+import com.example.tudeeapp.presentation.screen.taskManagement.CategoryUiState
 
 @Composable
 fun CategoryGrid(
@@ -48,7 +47,6 @@ fun CategoryGrid(
                 CategoryItem(
                     icon = painter,
                     label = category.title,
-                    iconColor = Color.Unspecified,
                     isSelected = category.isSelected,
                     onClick = { onCategoryClick(category.id) },
                     isPredefined = category.isPredefined

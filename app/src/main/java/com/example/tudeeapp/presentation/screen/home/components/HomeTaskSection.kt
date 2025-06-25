@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.screen.home.composable
+package com.example.tudeeapp.presentation.screen.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,8 +28,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.screen.home.state.TaskUiState
+import com.example.tudeeapp.presentation.screen.home.TaskUiState
+import com.example.tudeeapp.presentation.screen.home.utils.getPriorityColor
+import com.example.tudeeapp.presentation.utills.toPainter
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -110,12 +113,17 @@ fun HomeTaskSection(
             maxLines = 2,
         ) {
             tasks.forEach { task ->
-                HomeTaskCard(
-                    modifier = Modifier
-                        .width(320.dp)
-                        .height(111.dp),
-                    task = task,
-                    onClickItem = { onTaskClick(task.id) }
+                TaskCard(
+                    icon =toPainter(task.isCategoryPredefined,task.categoryIcon) ,
+                    title = task.title,
+                    date = "",
+                    subtitle = task.description,
+                    priorityLabel = task.priority.name.lowercase(),
+                    priorityIcon = painterResource(task.priorityResIcon),
+                    priorityColor = getPriorityColor(task.priority),
+                    isDated = false,
+                    modifier = modifier.width(320.dp),
+                    onClickItem = {onTaskClick(task.id)}
                 )
             }
         }

@@ -63,5 +63,6 @@
     <string name="category_added_successfully">Added Category successfully</string>
     <string name="edited_category_successfully">Edited Category Successfully</string>
     <string name="skip">Skip</string>
+    <string name="failed_to_load_category">Failed to Load Category</string>
 
 </resources>

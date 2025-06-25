@@ -1,25 +1,25 @@
 package com.example.tudeeapp.data
 
 import com.example.tudeeapp.data.mapper.DataConstant
+import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTaskEntity
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
+import com.example.tudeeapp.domain.exception.AddCategoryException
+import com.example.tudeeapp.domain.exception.NoCategoryDeletedException
+import com.example.tudeeapp.domain.exception.NoCategoryEditedException
 import com.example.tudeeapp.domain.exception.NoTaskAddedException
 import com.example.tudeeapp.domain.exception.NoTaskEditedException
-import com.example.tudeeapp.domain.exception.AddCategoryException
-import com.example.tudeeapp.domain.exception.NoCategoryEditedException
-import com.example.tudeeapp.domain.exception.NoCategoryDeletedException
-import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.Category
+import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
-import com.google.common.truth.Truth.assertThat
-import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.presentation.screen.categories.dummyCategoryEntities
 import com.example.tudeeapp.presentation.screen.categories.dummyTaskEntities
 import com.example.tudeeapp.presentation.screen.categories.expectedCategories
 import com.example.tudeeapp.presentation.screen.categories.expectedTasks
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -84,16 +84,16 @@ class TaskServicesImplTest {
 
     @Test
     fun `addTask() should add task successfully when valid task is provided`() = runTest {
-        coEvery { taskDao.addTask(any()) } returns Unit
+        coEvery { taskDao.addOrUpdateTask(any()) } returns Unit
 
         taskServices.addTask(sampleTask)
 
-        coVerify { taskDao.addTask(sampleTask.toTaskEntity()) }
+        coVerify { taskDao.addOrUpdateTask(sampleTask.toTaskEntity()) }
     }
 
     @Test
     fun `addTask() should throw NoTaskAddedException when task addition fails`() = runTest {
-        coEvery { taskDao.addTask(any()) } throws Exception("Database error")
+        coEvery { taskDao.addOrUpdateTask(any()) } throws Exception("Database error")
 
         val exception = assertThrows<NoTaskAddedException> {
             taskServices.addTask(sampleTask)
@@ -104,16 +104,16 @@ class TaskServicesImplTest {
 
     @Test
     fun `editTask() should edit task successfully when valid task is provided`() = runTest {
-        coEvery { taskDao.editTask(any()) } returns Unit
+        coEvery { taskDao.addOrUpdateTask(any()) } returns Unit
 
         taskServices.editTask(sampleTask)
 
-        coVerify { taskDao.editTask(sampleTask.toTaskEntity()) }
+        coVerify { taskDao.addOrUpdateTask(sampleTask.toTaskEntity()) }
     }
 
     @Test
     fun `editTask() should throw NoTaskEditedException when task editing fails`() = runTest {
-        coEvery { taskDao.editTask(any()) } throws Exception("Database error")
+        coEvery { taskDao.addOrUpdateTask(any()) } throws Exception("Database error")
 
         val exception = assertThrows<NoTaskEditedException> {
             taskServices.editTask(sampleTask)
@@ -125,25 +125,25 @@ class TaskServicesImplTest {
     @Test
     fun `addTask() should add task with empty title and description`() = runTest {
         val edgeCaseTask = sampleTask.copy(title = "", description = "")
-        coEvery { taskDao.addTask(any()) } returns Unit
+        coEvery { taskDao.addOrUpdateTask(any()) } returns Unit
 
         taskServices.addTask(edgeCaseTask)
 
-        coVerify { taskDao.addTask(edgeCaseTask.toTaskEntity()) }
+        coVerify { taskDao.addOrUpdateTask(edgeCaseTask.toTaskEntity()) }
     }
 
     @Test
     fun `addCategory() should add category successfully when valid category is provided`() = runTest {
-        coEvery { categoryDao.insertCategory(any()) } returns Unit
+        coEvery { categoryDao.insertOrUpdateCategory(any()) } returns Unit
 
         taskServices.addCategory(sampleCategory)
 
-        coVerify { categoryDao.insertCategory(sampleCategory.toCategoryEntity()) }
+        coVerify { categoryDao.insertOrUpdateCategory(sampleCategory.toCategoryEntity()) }
     }
 
     @Test
     fun `addCategory() should throw AddCategoryException when category addition fails`() = runTest {
-        coEvery { categoryDao.insertCategory(any()) } throws Exception("Database error")
+        coEvery { categoryDao.insertOrUpdateCategory(any()) } throws Exception("Database error")
 
         val exception = assertThrows<AddCategoryException> {
             taskServices.addCategory(sampleCategory)
@@ -158,7 +158,7 @@ class TaskServicesImplTest {
         coEvery { categoryDao.getCategoryById(sampleCategory.id) } returns flow {
             emit(sampleCategory.toCategoryEntity())
         }
-        coEvery { categoryDao.updateCategory(any()) } returns Unit
+        coEvery { categoryDao.insertOrUpdateCategory(any()) } returns Unit
 
         taskServices.editCategory(
             id = sampleCategory.id,
@@ -167,7 +167,7 @@ class TaskServicesImplTest {
         )
 
         coVerify {
-            categoryDao.updateCategory(sampleCategory.toCategoryEntity())
+            categoryDao.insertOrUpdateCategory(sampleCategory.toCategoryEntity())
         }
     }
 
@@ -177,7 +177,7 @@ class TaskServicesImplTest {
             (sampleCategory.toCategoryEntity())
         }
 
-        coEvery { categoryDao.updateCategory(any()) } throws Exception("Database error")
+        coEvery { categoryDao.insertOrUpdateCategory(any()) } throws Exception("Database error")
 
         val exception = assertThrows<NoCategoryEditedException> {
             taskServices.editCategory(

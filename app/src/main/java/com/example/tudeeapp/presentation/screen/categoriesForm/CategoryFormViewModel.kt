@@ -3,28 +3,21 @@ package com.example.tudeeapp.presentation.screen.categoriesForm
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.mapper.toResDrawables
+import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import com.example.tudeeapp.presentation.navigation.Destinations
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class CategoryFormViewModel(
     val taskServices: TaskServices,
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-    private val _state = MutableStateFlow(CategoryFormUIState())
-    val state: StateFlow<CategoryFormUIState> = _state.asStateFlow()
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<CategoryFormUIState>(CategoryFormUIState()) {
 
     init {
         savedStateHandle.toRoute<Destinations.CategoryForm>().categoryId?.let {
@@ -33,33 +26,42 @@ class CategoryFormViewModel(
     }
 
     private fun loadCategory(id: Long) {
-        viewModelScope.launch {
-            val category = taskServices.getCategoryById(id).first()
-            _state.update {
-                it.copy(
-                    categoryName = category.title,
-                    categoryId = category.id,
-                    imageUri = if (category.imageUrl.startsWith("R.drawable.")) {
-                        val resourceId = category.imageUrl.toResDrawables()
-                        "android.resource://com.example.tudeeapp/$resourceId".toUri()
-                    } else {
-                        category.imageUrl.toUri()
-                    }
-                )
+        launchSafely(
+            onSuccess = {
+                val category = taskServices.getCategoryById(id).first()
+                _uiState.update {
+                    it.copy(
+                        categoryName = category.title,
+                        categoryId = category.id,
+                        imageUri = if (category.imageUri.startsWith("R.drawable.")) {
+                            val resourceId = category.imageUri.toResDrawables()
+                            "android.resource://com.example.tudeeapp/$resourceId".toUri()
+                        } else {
+                            category.imageUri.toUri()
+                        }
+                    )
+                }
+            },
+            onError = {
+                _uiState.update {
+                    it.copy(
+                        errorMessage = R.string.failed_to_load_category
+                    )
+                }
             }
-        }
+        )
     }
 
     fun updateCategoryName(newName: String) {
-        _state.update { it.copy(categoryName = newName) }
+        _uiState.update { it.copy(categoryName = newName) }
     }
 
     fun updateImage(uri: Uri) {
-        _state.update { it.copy(imageUri = uri) }
+        _uiState.update { it.copy(imageUri = uri) }
     }
 
     fun submitCategory() {
-        if (state.value.categoryId != 0L) {
+        if (_uiState.value.categoryId != 0L) {
             editCategory()
         } else {
             addCategory()
@@ -67,62 +69,72 @@ class CategoryFormViewModel(
     }
 
     fun editCategory() {
-        viewModelScope.launch {
-            try {
+        launchSafely(
+            onSuccess = {
                 taskServices.editCategory(
-                    id = state.value.categoryId,
-                    title = state.value.categoryName,
-                    imageUrl = getImageUrl(state.value.imageUri.toString())
+                    id = _uiState.value.categoryId,
+                    title = _uiState.value.categoryName,
+                    imageUri = getImageUrl(_uiState.value.imageUri.toString())
                 )
-                _state.update { it.copy(successMessage = R.string.edited_category_successfully) }
-            } catch (e: Exception) {
-                _state.update { it.copy(errorMessage = R.string.failed_to_edit_category) }
+                _uiState.update { it.copy(successMessage = R.string.edited_category_successfully) }
+            },
+            onError = {
+                _uiState.update { it.copy(errorMessage = R.string.failed_to_edit_category ) }
             }
-        }
+        )
     }
 
-    fun deleteCategory(onSuccess: () -> Unit) {
-        viewModelScope.launch {
-            try {
-                taskServices.deleteCategory(state.value.categoryId)
-                onSuccess()
-            } catch (e: Exception) {
-                _state.update { it.copy(errorMessage = R.string.failed_to_delete_category) }
+    fun deleteCategory() {
+        launchSafely(
+            onSuccess = {
+                taskServices.deleteCategory(_uiState.value.categoryId)
+                navigate(
+                    Destinations.Category,
+                    NavOptions.Builder()
+                        .setPopUpTo(Destinations.Category, inclusive = false)
+                        .build()
+                )
+            },
+            onError = {
+                _uiState.update { it.copy(errorMessage =  R.string.failed_to_delete_category)}
             }
-        }
+        )
     }
 
     private fun getImageUrl(url: String): String {
-        if (url.startsWith("content")) {
-            return url
+        return if (url.startsWith("content")) {
+            url
         } else {
-            return url.getLastPartAfterSlash()
+            url.getLastPartAfterSlash()
         }
     }
 
     private fun addCategory() {
-        viewModelScope.launch {
-            try {
+        launchSafely(
+            onSuccess = {
                 val category = Category(
-                    title = state.value.categoryName,
-                    imageUrl = state.value.imageUri.toString(),
+                    title = _uiState.value.categoryName,
+                    imageUri = _uiState.value.imageUri.toString(),
                     tasksCount = 0,
                     isPredefined = false
                 )
                 taskServices.addCategory(category)
-                _state.update { it.copy(successMessage = R.string.category_added_successfully) }
-            } catch (e: Exception) {
-                _state.update {
+                _uiState.update { it.copy(successMessage = R.string.category_added_successfully) }
+            },
+            onError = {
+                _uiState.update {
                     it.copy(errorMessage = R.string.failed_to_add_category)
                 }
             }
-        }
+        )
     }
 
+    fun onCancel() {
+        navigateUp()
+    }
 
 }
 
 fun String.getLastPartAfterSlash(): String {
     return this.split("/").last()
 }
-
