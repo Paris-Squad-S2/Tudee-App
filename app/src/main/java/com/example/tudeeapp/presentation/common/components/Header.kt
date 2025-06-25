@@ -33,7 +33,7 @@ import com.example.tudeeapp.presentation.design_system.text_style.cherryBomb
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 
 @Composable
-fun Header(isDarkMode: Boolean, onToggleTheme: (Boolean) -> Unit, modifier: Modifier = Modifier) {
+fun AppHeader(isDarkMode: Boolean, onToggleTheme: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -86,7 +86,7 @@ private fun HeaderPreview() {
     var toggled by remember { mutableStateOf(false) }
 
     BasePreview {
-        Header(
+        AppHeader(
             isDarkMode = toggled,
             onToggleTheme = {toggled = it},
             modifier = Modifier

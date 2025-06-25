@@ -13,7 +13,7 @@ import com.example.tudeeapp.presentation.screen.onBoarding.onboardingPages
 import com.example.tudeeapp.presentation.screen.splash.SplashScreen
 import com.example.tudeeapp.presentation.screen.task.TasksScreen
 import com.example.tudeeapp.presentation.screen.taskDetails.TaskDetailsScreen
-import com.example.tudeeapp.presentation.screen.taskManagement.TaskManagementBottomSheet
+import com.example.tudeeapp.presentation.screen.taskForm.TaskFormBottomSheet
 import kotlinx.serialization.Serializable
 
 sealed interface Destinations : Graph {
@@ -56,7 +56,7 @@ fun NavGraphBuilder.buildTudeeNavGraph() {
         composable<Destinations.Home> { HomeScreen() }
         composable<Destinations.Tasks> { TasksScreen() }
         composable<Destinations.Category> { CategoriesScreen() }
-        dialog<Destinations.TaskManagement> { TaskManagementBottomSheet() }
+        dialog<Destinations.TaskManagement> { TaskFormBottomSheet() }
         dialog<Destinations.TaskDetails> { TaskDetailsScreen() }
         composable<Destinations.CategoryDetails> { CategoryDetailsScreen() }
         dialog<Destinations.CategoryForm> { CategoryForm() }
