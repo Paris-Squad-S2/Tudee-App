@@ -162,7 +162,7 @@ fun TaskContent(
     scrollState: ScrollState
 ) {
     val statusList = TaskStatusUi.entries
-    var isSheetOpen by remember { mutableStateOf(false) }
+    var taskIdToDelete by remember { mutableStateOf<Long?>(null) }
     val showSnackBar = LocalSnackBarState.current
 
 
@@ -254,7 +254,10 @@ fun TaskContent(
                     .weight(1f),
                 contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
             ) {
-                items(data.tasks) { task ->
+                items(
+                    items = data.tasks,
+                    key = { task -> task.id }
+                ) { task ->
                     val iconResource = toPainter(
                         imageUri = task.category.iconRes,
                         isPredefined = task.category.isPredefined
@@ -271,26 +274,29 @@ fun TaskContent(
                         priorityColor = task.priority.toStyle().backgroundColor,
                         isDated = false,
                         onClickItem = { onclickTaskItem(task.id) },
-                        onDelete = { isSheetOpen = true }
+                        onDelete = { taskIdToDelete = task.id },
+                        modifier = Modifier.animateItem()
                     )
-                    TudeeBottomSheet(
-                        isVisible = isSheetOpen,
-                        title = LocalContext.current.getString(R.string.delete_task),
-                        isScrollable = true,
-                        skipPartiallyExpanded = true,
-                        onDismiss = { isSheetOpen = false },
-                        content = {
-                            val context = LocalContext.current
-                            ConfirmationDialogBox(
-                                title = R.string.are_you_sure_to_continue,
-                                onConfirm = {
-                                    onClickDeleteIcon(task.id)
-                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                    isSheetOpen = false
-                                },
-                                onDismiss = { isSheetOpen = false })
-                        },
-                    )
+                    if (taskIdToDelete == task.id) {
+                        TudeeBottomSheet(
+                            isVisible = true,
+                            title = LocalContext.current.getString(R.string.delete_task),
+                            isScrollable = true,
+                            skipPartiallyExpanded = true,
+                            onDismiss = { taskIdToDelete = null },
+                            content = {
+                                val context = LocalContext.current
+                                ConfirmationDialogBox(
+                                    title = R.string.are_you_sure_to_continue,
+                                    onConfirm = {
+                                        onClickDeleteIcon(task.id)
+                                        showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                        taskIdToDelete = null
+                                    },
+                                    onDismiss = { taskIdToDelete = null })
+                            },
+                        )
+                    }
                 }
             }
         }
