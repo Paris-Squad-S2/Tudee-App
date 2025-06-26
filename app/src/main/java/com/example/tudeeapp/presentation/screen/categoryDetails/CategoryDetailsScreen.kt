@@ -149,6 +149,7 @@ fun CategoryDetailsContent(
 
             Box(
                 modifier = Modifier.fillMaxSize()
+                    .padding(horizontal = 16.dp)
             ){
                 EmptyTasksSection(
                     title = stringResource(R.string.no_task_for, categoryTitle),
