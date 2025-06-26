@@ -53,6 +53,7 @@ fun CategoryForm(
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val listner : CategoryFormInteractionListener = viewModel
     val isEdit = state.categoryId != 0L
     val snackbarHostState = LocalSnackBarState.current
     val context = LocalContext.current
@@ -63,7 +64,7 @@ fun CategoryForm(
     LaunchedEffect(state.successMessage, state.errorMessage) {
         state.successMessage?.let {
             snackbarHostState.show(message =context.getString(it) , isSuccess = true)
-            viewModel.onCancel()
+            listner.onCancel()
         }
     }
 
@@ -74,7 +75,7 @@ fun CategoryForm(
             context.contentResolver.takePersistableUriPermission(
                 it, Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
-            viewModel.updateImage(it)
+            listner.onImageSelected(it)
         }
     }
 
@@ -83,30 +84,25 @@ fun CategoryForm(
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         headerEnd = {
             if (isEdit) {
-                DeleteButton(
-                    modifier = Modifier.padding(end = 16.dp),
+                TudeeButton(
                     onClick = {
                         showDeleteConfirmation = true
                         showSheet = false
-                    }
+                    },
+                    text = stringResource(R.string.delete),
+                    variant = ButtonVariant.TextButton,
+                    isNegative = true
                 )
             }
         },
         onDismiss = {
             showSheet = false
-            viewModel.onCancel()
+            listner.onCancel()
         }
     ) {
         CategoryFormContent(
             state = state,
-            onCancel = {
-                showSheet = false
-                viewModel.onCancel()
-            },
-            onSubmit = {
-                viewModel.submitCategory()
-            },
-            onValueChange = viewModel::updateCategoryName,
+            interactionListener = listner,
             onImageClick = {
                 imagePickerLauncher.launch(arrayOf("image/*"))
             },
@@ -126,7 +122,7 @@ fun CategoryForm(
             ConfirmationDialogBox(
                 title = R.string.are_you_sure_to_continue,
                 onConfirm = {
-                    viewModel.deleteCategory()
+                    listner.onDelete()
                     showDeleteConfirmation = false
                     snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
                 },
@@ -142,16 +138,14 @@ fun CategoryForm(
 @Composable
 fun CategoryFormContent(
     state: CategoryFormUIState,
-    onCancel: () -> Unit,
-    onSubmit: () -> Unit,
-    onValueChange: (String) -> Unit,
+    interactionListener: CategoryFormInteractionListener,
     onImageClick: () -> Unit,
     buttonText: String,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
             value = state.categoryName,
-            onValueChange = onValueChange,
+            onValueChange = interactionListener::onCategoryNameChanged,
             placeholder = stringResource(id = R.string.categoryTitle),
             leadingIcon = R.drawable.ic_menu_circle,
             modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
@@ -227,22 +221,10 @@ fun CategoryFormContent(
         Spacer(modifier = Modifier.height(12.dp))
         CategoriesBottomSheetButtons(
             state = state,
-            onSubmit = onSubmit,
-            onCancel = onCancel,
+            onSubmit = interactionListener::onSubmit,
+            onCancel = interactionListener::onCancel,
             buttonText = buttonText
         )
     }
 }
 
-@Composable
-fun DeleteButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-){
-    TudeeButton(
-        onClick = onClick,
-        text = stringResource(R.string.delete),
-        variant = ButtonVariant.TextButton,
-        isNegative = true
-    )
-}

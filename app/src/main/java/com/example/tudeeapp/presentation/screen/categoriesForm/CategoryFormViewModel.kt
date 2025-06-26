@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
+import com.example.tudeeapp.presentation.common.extentions.getLastPartAfterSlash
 import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import com.example.tudeeapp.presentation.navigation.Destinations
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.update
 class CategoryFormViewModel(
     val taskServices: TaskServices,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<CategoryFormUIState>(CategoryFormUIState()) {
+) : BaseViewModel<CategoryFormUIState>(CategoryFormUIState()), CategoryFormInteractionListener {
 
     init {
         savedStateHandle.toRoute<Destinations.CategoryForm>().categoryId?.let {
@@ -52,23 +53,7 @@ class CategoryFormViewModel(
         )
     }
 
-    fun updateCategoryName(newName: String) {
-        _uiState.update { it.copy(categoryName = newName) }
-    }
-
-    fun updateImage(uri: Uri) {
-        _uiState.update { it.copy(imageUri = uri) }
-    }
-
-    fun submitCategory() {
-        if (_uiState.value.categoryId != 0L) {
-            editCategory()
-        } else {
-            addCategory()
-        }
-    }
-
-    fun editCategory() {
+    private fun editCategory() {
         launchSafely(
             onSuccess = {
                 taskServices.editCategory(
@@ -79,24 +64,7 @@ class CategoryFormViewModel(
                 _uiState.update { it.copy(successMessage = R.string.edited_category_successfully) }
             },
             onError = {
-                _uiState.update { it.copy(errorMessage = R.string.failed_to_edit_category ) }
-            }
-        )
-    }
-
-    fun deleteCategory() {
-        launchSafely(
-            onSuccess = {
-                taskServices.deleteCategory(_uiState.value.categoryId)
-                navigate(
-                    Destinations.Category,
-                    NavOptions.Builder()
-                        .setPopUpTo(Destinations.Category, inclusive = false)
-                        .build()
-                )
-            },
-            onError = {
-                _uiState.update { it.copy(errorMessage =  R.string.failed_to_delete_category)}
+                _uiState.update { it.copy(errorMessage = R.string.failed_to_edit_category) }
             }
         )
     }
@@ -129,12 +97,42 @@ class CategoryFormViewModel(
         )
     }
 
-    fun onCancel() {
+    override fun onCategoryNameChanged(newName: String) {
+        _uiState.update { it.copy(categoryName = newName) }
+    }
+
+    override fun onImageSelected(uri: Uri) {
+        _uiState.update { it.copy(imageUri = uri) }
+    }
+
+    override fun onSubmit() {
+        if (_uiState.value.categoryId != 0L) {
+            editCategory()
+        } else {
+            addCategory()
+        }
+    }
+
+    override fun onDelete() {
+        launchSafely(
+            onSuccess = {
+                taskServices.deleteCategory(_uiState.value.categoryId)
+                navigate(
+                    Destinations.Category,
+                    NavOptions.Builder()
+                        .setPopUpTo(Destinations.Category, inclusive = false)
+                        .build()
+                )
+            },
+            onError = {
+                _uiState.update { it.copy(errorMessage = R.string.failed_to_delete_category) }
+            }
+        )
+    }
+
+    override fun onCancel() {
         navigateUp()
     }
 
 }
 
-fun String.getLastPartAfterSlash(): String {
-    return this.split("/").last()
-}

@@ -1,6 +1,6 @@
 package com.example.tudeeapp.presentation.screen.categoriesForm
 
-import coil3.Uri
+import android.net.Uri
 
 interface CategoryFormInteractionListener {
     fun onCategoryNameChanged(newName : String)
