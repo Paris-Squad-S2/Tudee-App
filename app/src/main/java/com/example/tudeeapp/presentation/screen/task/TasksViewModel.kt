@@ -92,7 +92,9 @@ class TasksViewModel(
 
             try {
                 taskServices.getAllTasks().collect { tasks ->
-                    val tasksUi = tasks.map { task ->
+                    val tasksUi = tasks
+                        .sortedBy { it.createdDate.time }
+                        .map { task ->
                         val category = taskServices.getCategoryById(task.categoryId).first()
                         task.toTaskUiState().copy(
                             category = category.toCategoryUi(),

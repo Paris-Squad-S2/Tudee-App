@@ -84,7 +84,7 @@ fun Task.toTaskUiState(): TaskItemUiState {
         description = this.description,
         priority = this.priority.toUiPriority(),
         status = this.status.toUiStatus(),
-        createdDate = this.createdDate,
+        createdDate = this.createdDate.date,
         category = CategoryUiState()
     )
 }

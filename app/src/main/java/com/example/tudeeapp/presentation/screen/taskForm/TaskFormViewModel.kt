@@ -1,15 +1,21 @@
 package com.example.tudeeapp.presentation.screen.taskForm
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.common.extentions.getCurrentDateString
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.random.Random
 
 class TaskFormViewModel(
@@ -69,19 +75,24 @@ class TaskFormViewModel(
             onLoading = { _uiState.update { it.copy(isLoading = true) } },
             onSuccess = {
                 val currentState = _uiState.value
+                val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time.toString()
+                Log.e("TaskFormViewModel", "onActionButtonClicked: ${getCurrentDateString()}")
                 val task = Task(
                     id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
                     title = currentState.title,
                     description = currentState.description,
                     priority = currentState.selectedPriority.toTaskPriority() ?: TaskPriority.LOW,
                     status = if (currentState.isEditMode) currentState.taskStatus else TaskStatus.TO_DO,
-                    createdDate = LocalDate.parse(currentState.selectedDate),
+                    createdDate = LocalDateTime.parse(currentState.selectedDate+"T"+currentDateTime),
                     categoryId = currentState.selectedCategoryId ?: 0L
                 )
                 if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(task)
                 _uiState.update { it.copy(isLoading = false, isTaskSaved = true) }
             },
-            onError = { handleException() }
+            onError = {
+                Log.e("TaskFormViewModel", "onActionButtonClicked: $it")
+                handleException()
+            }
         )
     }
 

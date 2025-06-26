@@ -93,6 +93,7 @@ class HomeViewModel(
         onSuccess = { taskServices.getAllTasks().collect { tasks ->
                 val tasksUi = tasks
                     .filter(::filterTaskOnToday)
+                    .sortedBy { it.createdDate.time }
                     .map { it.toTaskUi() }
 
                 if (tasksUi.isEmpty()) {
@@ -143,7 +144,7 @@ class HomeViewModel(
         }
     }
 
-    private fun filterTaskOnToday(task: Task): Boolean = task.createdDate == getToday().date
+    private fun filterTaskOnToday(task: Task): Boolean = task.createdDate.date == getToday().date
     private fun List<Task>.toTaskUi(): List<TaskUiState> = this.map { it.toTaskUi() }
     private fun Task.toTaskUi(): TaskUiState {
         return TaskUiState(
