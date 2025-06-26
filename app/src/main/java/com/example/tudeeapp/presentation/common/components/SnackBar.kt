@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -33,10 +34,12 @@ fun SnackBar(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .shadow(elevation = 2.dp, shape = RoundedCornerShape(16.dp), clip = false)
-            .background(Theme.colors.surfaceColors.surfaceHigh, RoundedCornerShape(16.dp))
+            .shadow(elevation = 8.dp, RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .background(Theme.colors.surfaceColors.surfaceHigh)
             .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+        ,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
