@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +40,6 @@ import com.example.tudeeapp.presentation.common.components.TopAppBar
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
-import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
@@ -52,19 +50,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun CategoryDetailsScreen(
     viewModel: CategoryDetailsViewModel = koinViewModel()
 ) {
-    val navController = LocalNavController.current
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val selectedState by viewModel.stateFilter.collectAsStateWithLifecycle()
-    val currentBackStackEntry = navController.currentBackStackEntry
-    val savedStateHandle = currentBackStackEntry?.savedStateHandle
-    val editResult = savedStateHandle?.getStateFlow("categoryEdited", false)
-    val result by editResult?.collectAsState(initial = false) ?: remember { mutableStateOf(false) }
-
-    if (result) {
-        savedStateHandle!!["categoryEdited"] = false
-        viewModel.refreshCategory()
-    }
 
     when {
         uiState.isLoading -> {

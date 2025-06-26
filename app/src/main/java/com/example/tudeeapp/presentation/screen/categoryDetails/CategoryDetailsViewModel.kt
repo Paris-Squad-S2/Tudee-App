@@ -31,15 +31,17 @@ class CategoryDetailsViewModel(
                 _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
             },
             onSuccess = {
-                val category = taskService.getCategoryById(categoryId)
-                val tasks = taskService.getAllTasks().first()
-                    .filter { it.categoryId == categoryId }
+                taskService.getCategoryById(categoryId)
+                    .collect { category ->
+                        val tasks = taskService.getAllTasks().first()
+                            .filter { it.categoryId == categoryId }
 
-                _uiState.value = CategoryDetailsUiState(
-                    isLoading = false,
-                    taskUiState = tasks.map { it.toTaskUiState() },
-                    categoryUiState = category.first().toCategoryUiState()
-                )
+                        _uiState.value = CategoryDetailsUiState(
+                            isLoading = false,
+                            taskUiState = tasks.map { it.toTaskUiState() },
+                            categoryUiState = category.toCategoryUiState()
+                        )
+                    }
             },
             onError = { error ->
                 _uiState.value = _uiState.value.copy(
@@ -98,10 +100,6 @@ class CategoryDetailsViewModel(
 
     fun setStatus(status: TaskStatus) {
         _stateFilter.value = status
-    }
-
-    fun refreshCategory() {
-        loadCategory(categoryId)
     }
 
     override fun onClickEditCategory() {
