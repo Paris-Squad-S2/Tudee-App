@@ -122,23 +122,25 @@ class TasksViewModel(
 
         val status = calculateStatusUiList(allTasks, currentSelectedDate, currentSelectedStatus)
 
-        _uiState.update { it.copy(
-            data = TasksUi(
-                calender = currentSelectedDate.createCalendarUi(
-                    getCurrentMonthYear(currentSelectedDate),
-                    daysOfMonth = formatDailyDate(
-                        getAllDaysOfCurrentMonth(currentSelectedDate)
-                    )
+        _uiState.update {
+            it.copy(
+                data = TasksUi(
+                    calender = currentSelectedDate.createCalendarUi(
+                        getCurrentMonthYear(currentSelectedDate),
+                        daysOfMonth = formatDailyDate(
+                            getAllDaysOfCurrentMonth(currentSelectedDate)
+                        )
+                    ),
+                    status = status,
+                    selectedStatus = currentSelectedStatus,
+                    tasks = filteredTasks,
+                    showDatePicker = _uiState.value.data.showDatePicker,
+                    todayIndex = getSelectedDayIndex(currentSelectedDate)
                 ),
-                status = status,
-                selectedStatus = currentSelectedStatus,
-                tasks = filteredTasks,
-                showDatePicker = _uiState.value.data.showDatePicker,
-                todayIndex = getSelectedDayIndex(currentSelectedDate)
-            ),
-            isLoading = false,
-            errorMessage = null
-        ) }
+                isLoading = false,
+                errorMessage = null
+            )
+        }
     }
 
     private fun filterTasks(
@@ -186,13 +188,12 @@ class TasksViewModel(
     }
 
     private fun getCurrentMonthYear(date: LocalDate): String {
-        val month = DateFormatSymbols(Locale.getDefault()).shortMonths[date.monthNumber -1]
+        val month = DateFormatSymbols(Locale.getDefault()).shortMonths[date.monthNumber - 1]
         return "$month, ${date.year}"
     }
 
     private fun getShortDayName(date: LocalDate): String {
-        // Use ISO dayOfWeek (1=Monday, 7=Sunday), map to Android's shortWeekdays (1=Sunday, 7=Saturday)
-        val isoDayOfWeek = date.dayOfWeek.ordinal + 1 // 1=Monday, ..., 7=Sunday
+        val isoDayOfWeek = date.dayOfWeek.ordinal + 1
         val androidWeekdayIndex = if (isoDayOfWeek == 7) 1 else isoDayOfWeek + 1
         val day = DateFormatSymbols(Locale.getDefault()).shortWeekdays[androidWeekdayIndex]
         return day
@@ -220,5 +221,9 @@ class TasksViewModel(
         val divisibleBy400 = year % 400 == 0
 
         return (divisibleBy4 && !divisibleBy100) || divisibleBy400
+    }
+
+    fun onSystemConfigChanged() {
+        updateUiStateWithFilters()
     }
 }

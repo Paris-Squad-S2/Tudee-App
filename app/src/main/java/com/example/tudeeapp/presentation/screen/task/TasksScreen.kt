@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,6 +78,7 @@ fun TasksScreen(viewModel: TasksViewModel = koinViewModel()) {
         onDateSelected = viewModel::onDateSelected,
         onClickDeleteIcon = viewModel::deleteTask,
         onclickTaskItem = { navController.navigate(Destinations.TaskDetails(it)) },
+        onSystemConfigChanged = viewModel::onSystemConfigChanged
     )
 }
 
@@ -92,6 +94,7 @@ fun TaskScreenContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
+    onSystemConfigChanged: () -> Unit,
 ) {
     TudeeScaffold(
         floatingActionButton = {
@@ -135,6 +138,7 @@ fun TaskScreenContent(
                         onDateSelected,
                         onClickDeleteIcon,
                         onclickTaskItem,
+                        onSystemConfigChanged
                     )
                 }
             }
@@ -153,10 +157,17 @@ fun TaskContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
+    onSystemConfigChanged: () -> Unit,
 ) {
     val statusList = TaskStatusUi.entries
     var taskIdToDelete by remember { mutableStateOf<Long?>(null) }
     val showSnackBar = LocalSnackBarState.current
+
+    val configuration = LocalConfiguration.current
+
+    LaunchedEffect(configuration) {
+        onSystemConfigChanged()
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -196,7 +207,9 @@ fun TaskContent(
             }
             LazyRow(
                 state = listState,
-                modifier = Modifier.background(Theme.colors.surfaceColors.surfaceHigh).padding(top = 8.dp, bottom = 8.dp),
+                modifier = Modifier
+                    .background(Theme.colors.surfaceColors.surfaceHigh)
+                    .padding(top = 8.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
@@ -248,7 +261,7 @@ fun TaskContent(
                 items = data.tasks,
                 key = { task -> task.id },
 
-            ) { task ->
+                ) { task ->
                 val iconResource = toPainter(
                     imageUri = task.category.iconRes,
                     isPredefined = task.category.isPredefined
@@ -266,7 +279,9 @@ fun TaskContent(
                     isDated = false,
                     onClickItem = { onclickTaskItem(task.id) },
                     onDelete = { taskIdToDelete = task.id },
-                    modifier = Modifier.animateItem().padding(vertical = 8.dp, horizontal = 16.dp)
+                    modifier = Modifier
+                        .animateItem()
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
                 if (taskIdToDelete == task.id) {
                     TudeeBottomSheet(
