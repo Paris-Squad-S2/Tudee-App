@@ -1,6 +1,7 @@
 package com.example.tudeeapp.presentation.screen.home
 
 import androidx.compose.runtime.MutableState
+import androidx.lifecycle.viewModelScope
 import com.example.tudeeapp.R
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
@@ -12,6 +13,8 @@ import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 class HomeViewModel(
@@ -19,12 +22,19 @@ class HomeViewModel(
     private val appPreferences: AppPreferences
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
 
+    val homeState = _uiState.
+        onStart {
+            getTasksIcons()
+            getTasks()
+            getSliderState()
+        }.stateIn(
+            scope = viewModelScope,
+            started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000),
+            initialValue = HomeUiState()
+        )
 
     init {
         loadInitialData()
-        getTasksIcons()
-        getTasks()
-        getSliderState()
     }
 
     private fun loadInitialData() = launchSafely(

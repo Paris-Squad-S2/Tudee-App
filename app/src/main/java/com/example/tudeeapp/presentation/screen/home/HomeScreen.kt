@@ -49,7 +49,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
-    val state by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val state by homeViewModel.homeState.collectAsStateWithLifecycle()
     val themeMode = LocalThemeState.current
 
     LaunchedEffect(Unit) {
