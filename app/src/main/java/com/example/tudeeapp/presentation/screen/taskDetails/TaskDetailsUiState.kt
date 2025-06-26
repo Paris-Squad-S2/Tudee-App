@@ -35,7 +35,7 @@ fun Task.toTaskUiState(): TaskUiState {
         description = this.description,
         priority = this.priority,
         status = this.status,
-        createdDate = this.createdDate,
+        createdDate = this.createdDate.date,
         categoryId = this.categoryId
     )
 }

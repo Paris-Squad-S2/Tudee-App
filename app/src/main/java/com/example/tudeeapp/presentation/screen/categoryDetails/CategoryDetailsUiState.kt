@@ -33,7 +33,7 @@ fun Task.toTaskUiState(): TaskUiState = TaskUiState(
     description = description,
     priority = priority.name,
     status = status.name,
-    createdDate = createdDate.toString(),
+    createdDate = createdDate.date.toString(),
     categoryId = categoryId
 )
 

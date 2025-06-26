@@ -41,7 +41,7 @@ class CategoryDetailsViewModel(
                 }.collect { (category, filteredTasks) ->
                     _uiState.value = CategoryDetailsUiState(
                         isLoading = false,
-                        taskUiState = filteredTasks.map { it.toTaskUiState() },
+                        taskUiState = filteredTasks.sortedBy { it.createdDate.time }.map { it.toTaskUiState() },
                         categoryUiState = category.toCategoryUiState()
                     )
                 }
@@ -77,12 +77,12 @@ class CategoryDetailsViewModel(
             onSuccess = {
                 val category = taskService.getCategoryById(categoryId).first()
                 val allTasks = taskService.getAllTasks().first()
-                val filteredTasks = allTasks.filter { it.categoryId == categoryId }
+                val filteredTasks = allTasks.filter { it.categoryId == categoryId }.sortedBy { it.createdDate.time }
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     categoryUiState = category.toCategoryUiState(),
-                    taskUiState = filteredTasks.map { it.toTaskUiState() }
+                    taskUiState = filteredTasks.sortedBy { it.createdDate.time }.map { it.toTaskUiState() }
                 )
             },
             onError = {
