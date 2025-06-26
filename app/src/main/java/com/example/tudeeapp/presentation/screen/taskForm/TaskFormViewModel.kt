@@ -77,13 +77,19 @@ class TaskFormViewModel(
                 val currentState = _uiState.value
                 val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time.toString()
                 Log.e("TaskFormViewModel", "onActionButtonClicked: ${getCurrentDateString()}")
+                val createdDate = try {
+                    LocalDateTime.parse(currentState.selectedDate)
+                } catch (e: Exception) {
+                    // If parsing as LocalDateTime fails, treat as LocalDate and append current time
+                    LocalDateTime.parse(currentState.selectedDate + "T" + currentDateTime)
+                }
                 val task = Task(
                     id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
                     title = currentState.title,
                     description = currentState.description,
                     priority = currentState.selectedPriority.toTaskPriority() ?: TaskPriority.LOW,
                     status = if (currentState.isEditMode) currentState.taskStatus else TaskStatus.TO_DO,
-                    createdDate = LocalDateTime.parse(currentState.selectedDate+"T"+currentDateTime),
+                    createdDate = createdDate,
                     categoryId = currentState.selectedCategoryId ?: 0L
                 )
                 if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(task)
