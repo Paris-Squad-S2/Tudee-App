@@ -1,11 +1,13 @@
 package com.example.tudeeapp.presentation.screen.task
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -147,6 +149,12 @@ fun TaskScreenContent(
 }
 
 @Composable
+fun isLandscape(): Boolean {
+    val configuration = LocalConfiguration.current
+    return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+}
+
+@Composable
 fun TaskContent(
     data: TasksUi,
     listState: LazyListState,
@@ -162,12 +170,12 @@ fun TaskContent(
     val statusList = TaskStatusUi.entries
     var taskIdToDelete by remember { mutableStateOf<Long?>(null) }
     val showSnackBar = LocalSnackBarState.current
-
     val configuration = LocalConfiguration.current
 
     LaunchedEffect(configuration) {
         onSystemConfigChanged()
     }
+
 
     LazyColumn(
         modifier = Modifier
@@ -245,20 +253,21 @@ fun TaskContent(
         }
         if (data.tasks.isEmpty()) {
             item {
-                Column(
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(Theme.colors.surfaceColors.surface)
-                        .padding(vertical = 32.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    EmptyTasksSection(
-                        title = stringResource(R.string.no_tasks_for_today),
-                        modifier = Modifier
-                    )
+                        .background( Theme.colors.surfaceColors.surface )
+                        .fillParentMaxWidth()
+                        .fillParentMaxHeight(0.8f)
+                        .padding(horizontal = 16.dp )
+                        .offset(y = if (isLandscape()) 24.dp else 0.dp),
+                    contentAlignment = Alignment.Center
+                    ) {
+                        EmptyTasksSection(
+                            title = stringResource(R.string.no_tasks_for_today),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
                 }
-            }
         } else {
             items(
                 items = data.tasks,
@@ -309,4 +318,5 @@ fun TaskContent(
             }
         }
     }
+
 }
