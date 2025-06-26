@@ -43,6 +43,7 @@ import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.extentions.dashedBorder
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.LocalSnackBarState
+import com.example.tudeeapp.presentation.common.components.TudeeDeleteBottomSheet
 import com.example.tudeeapp.presentation.screen.categoriesForm.components.CategoriesBottomSheetButtons
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -62,7 +63,7 @@ fun CategoryForm(
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
         state.successMessage?.let {
-            snackbarHostState.show(message =context.getString(it) , isSuccess = true)
+            snackbarHostState.show(message = context.getString(it), isSuccess = true)
             viewModel.onCancel()
         }
     }
@@ -80,6 +81,7 @@ fun CategoryForm(
 
     TudeeBottomSheet(
         isVisible = showSheet,
+        stopBarrierDismiss = true,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         headerEnd = {
             if (isEdit) {
@@ -95,59 +97,73 @@ fun CategoryForm(
         onDismiss = {
             showSheet = false
             viewModel.onCancel()
+        },
+        stickyBottomContent = {
+            StickyFooterCategoryForm(
+                onCancel = {
+                    showSheet = false
+                    viewModel.onCancel()
+                },
+                onSubmit = {
+                    viewModel.submitCategory()
+                },
+                state = state,
+                buttonText = when {
+                    isEdit -> stringResource(id = R.string.save)
+                    else -> stringResource(id = R.string.add)
+                }
+            )
         }
     ) {
         CategoryFormContent(
             state = state,
-            onCancel = {
-                showSheet = false
-                viewModel.onCancel()
-            },
-            onSubmit = {
-                viewModel.submitCategory()
-            },
             onValueChange = viewModel::updateCategoryName,
             onImageClick = {
                 imagePickerLauncher.launch(arrayOf("image/*"))
             },
-            buttonText = if (isEdit) stringResource(id = R.string.save)
-            else stringResource(id = R.string.add),
         )
     }
-    if (showDeleteConfirmation) {
-        TudeeBottomSheet(
-            isVisible = true,
-            title = stringResource(id = R.string.delete_category),
-            onDismiss = {
-                showDeleteConfirmation = false
-                showSheet = true
-            }
-        ) {
-            ConfirmationDialogBox(
-                title = R.string.are_you_sure_to_continue,
-                onConfirm = {
-                    viewModel.deleteCategory()
-                    showDeleteConfirmation = false
-                    snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
-                },
-                onDismiss = {
-                    showDeleteConfirmation = false
-                    showSheet = true
-                }
+    TudeeDeleteBottomSheet(
+        onDismiss = {
+            showDeleteConfirmation = false
+            showSheet = true
+        },
+        onConfirm = {
+            viewModel.deleteCategory()
+            showDeleteConfirmation = false
+            snackbarHostState.show(
+                context.getString(R.string.deleted_successfully),
+                isSuccess = true
             )
-        }
-    }
+        },
+        showBottomSheet = showDeleteConfirmation,
+        title = stringResource(id = R.string.delete_category)
+    )
+
+}
+
+@Composable
+private fun StickyFooterCategoryForm(
+    state: CategoryFormUIState,
+    buttonText: String,
+    onCancel: () -> Unit,
+    onSubmit: () -> Unit,
+) {
+    CategoriesBottomSheetButtons(
+        state = state,
+        onSubmit = onSubmit,
+        onCancel = onCancel,
+        buttonText = buttonText
+    )
 }
 
 @Composable
 fun CategoryFormContent(
     state: CategoryFormUIState,
-    onCancel: () -> Unit,
-    onSubmit: () -> Unit,
     onValueChange: (String) -> Unit,
     onImageClick: () -> Unit,
-    buttonText: String,
-) {
+
+    ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
             value = state.categoryName,
@@ -164,7 +180,9 @@ fun CategoryFormContent(
             Text(
                 text = stringResource(id = R.string.categoryImage),
                 style = Theme.textStyle.title.medium,
-                modifier = Modifier.align(Alignment.Start).padding(8.dp),
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(8.dp),
                 color = Theme.colors.text.title,
             )
             Box(
@@ -225,12 +243,6 @@ fun CategoryFormContent(
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
-        CategoriesBottomSheetButtons(
-            state = state,
-            onSubmit = onSubmit,
-            onCancel = onCancel,
-            buttonText = buttonText
-        )
     }
 }
 
@@ -238,7 +250,7 @@ fun CategoryFormContent(
 fun DeleteButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
-){
+) {
     TudeeButton(
         onClick = onClick,
         text = stringResource(R.string.delete),
