@@ -104,7 +104,7 @@ class CategoryDetailsViewModel(
         }
     }
 
-    fun onClickBack() {
+    override fun onClickBack(){
         navigateUp()
     }
 
