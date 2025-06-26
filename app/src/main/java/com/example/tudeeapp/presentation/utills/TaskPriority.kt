@@ -20,6 +20,7 @@ enum class TaskPriorityUi {
 
 data class PriorityStyle(
     val iconRes: Int,
+    val text: Int,
     val backgroundColor: Color,
 )
 
@@ -28,16 +29,19 @@ fun TaskPriorityUi.toStyle(): PriorityStyle {
     return when (this) {
         TaskPriorityUi.High -> PriorityStyle(
             iconRes = R.drawable.ic_flag,
+            text = R.string.high,
             backgroundColor = Theme.colors.status.pinkAccent
         )
 
         TaskPriorityUi.Medium -> PriorityStyle(
             iconRes = R.drawable.ic_alert,
+            text = R.string.medium,
             backgroundColor = Theme.colors.status.yellowAccent
         )
 
         TaskPriorityUi.Low -> PriorityStyle(
             iconRes = R.drawable.ic_trade_down,
+            text = R.string.low,
             backgroundColor = Theme.colors.status.greenAccent
         )
     }

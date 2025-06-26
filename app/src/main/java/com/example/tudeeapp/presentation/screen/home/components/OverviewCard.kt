@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.utills.toLocalizedString
 
 @Composable
 fun OverviewCard(
@@ -67,7 +68,7 @@ fun OverviewCard(
             }
             Text(
                 modifier = Modifier.padding(top = 4.dp),
-                text = stat.toString(),
+                text = stat.toLocalizedString(),
                 style = Theme.textStyle.headline.medium,
                 color = Theme.colors.surfaceColors.onPrimaryColors.onPrimary
             )

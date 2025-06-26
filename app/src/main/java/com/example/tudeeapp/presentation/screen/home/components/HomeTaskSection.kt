@@ -32,7 +32,10 @@ import com.example.tudeeapp.presentation.common.components.TaskCard
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.screen.home.TaskUiState
 import com.example.tudeeapp.presentation.screen.home.utils.getPriorityColor
+import com.example.tudeeapp.presentation.screen.task.toUiPriority
+import com.example.tudeeapp.presentation.utills.toLocalizedString
 import com.example.tudeeapp.presentation.utills.toPainter
+import com.example.tudeeapp.presentation.utills.toStyle
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -54,8 +57,8 @@ fun HomeTaskSection(
 
     Column(
         modifier = modifier
-            .padding(top = 14.dp)
             .background(Theme.colors.surfaceColors.surface)
+            .padding(bottom = 14.dp)
     ) {
         Row(
             modifier = modifier
@@ -90,7 +93,7 @@ fun HomeTaskSection(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = tasks.size.toString(),
+                        text = tasks.size.toLocalizedString(),
                         style = Theme.textStyle.label.medium,
                         color = Theme.colors.text.body
                     )
@@ -118,7 +121,7 @@ fun HomeTaskSection(
                     title = task.title,
                     date = "",
                     subtitle = task.description,
-                    priorityLabel = task.priority.name.lowercase(),
+                    priorityLabel = stringResource(task.priority.toUiPriority().toStyle().text),
                     priorityIcon = painterResource(task.priorityResIcon),
                     priorityColor = getPriorityColor(task.priority),
                     isDated = false,
