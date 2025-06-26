@@ -146,6 +146,7 @@ class HomeViewModel(
 
     private fun filterTaskOnToday(task: Task): Boolean = task.createdDate.date == getToday().date
     private fun List<Task>.toTaskUi(): List<TaskUiState> = this.map { it.toTaskUi() }
+
     private fun Task.toTaskUi(): TaskUiState {
         return TaskUiState(
             id = this.id,
