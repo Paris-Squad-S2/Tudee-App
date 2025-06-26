@@ -53,6 +53,8 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.ShowError
 import com.example.tudeeapp.presentation.utills.ShowLoading
+import com.example.tudeeapp.presentation.utills.localizeNumbers
+import com.example.tudeeapp.presentation.utills.toLocalizedString
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
 import kotlinx.datetime.LocalDate
@@ -182,7 +184,7 @@ fun TaskContent(
         }
 
         DateHeader(
-            date = data.calender.currentMonthYear,
+            date = data.calender.currentMonthYear.localizeNumbers(),
             onClickNext = onClickNextMonth,
             onClickPrevious = onClickPreviousMonth,
             onClickPickDate = { onCLickDatePicker() }
@@ -208,7 +210,7 @@ fun TaskContent(
             items(data.calender.daysOfMonth) { day ->
                 DayItem(
                     isSelected = data.calender.selectedDate.dayOfMonth == day.num,
-                    dayNumber = day.num.toString(),
+                    dayNumber = day.num.toLocalizedString(),
                     dayName = day.name,
                     onClick = { onDateSelected(day.date) },
                     modifier = Modifier.width(56.dp)

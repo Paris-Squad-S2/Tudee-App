@@ -32,9 +32,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.LocalThemeState
+import com.example.tudeeapp.presentation.common.components.AppHeader
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
-import com.example.tudeeapp.presentation.common.components.AppHeader
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
@@ -44,6 +44,7 @@ import com.example.tudeeapp.presentation.screen.home.components.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import com.example.tudeeapp.presentation.utills.ShowError
 import com.example.tudeeapp.presentation.utills.ShowLoading
+import com.example.tudeeapp.presentation.utills.localizeNumbers
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -57,8 +58,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
 
     HomeScreenContent(
         state = state,
-        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark,themeMode) },
-        onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick ,
+        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark, themeMode) },
+        onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick,
         onTasksCountClick = homeViewModel::onTasksCountClick,
         onTaskClick = homeViewModel::onTaskClick,
     )
@@ -228,8 +229,6 @@ private fun HomeContent(
 }
 
 
-
-
 @Composable
 private fun OverViewSection(
     modifier: Modifier = Modifier,
@@ -238,7 +237,7 @@ private fun OverViewSection(
     val todayText = stringResource(id = R.string.date_format_today)
 
     val formattedDate = remember {
-        getLocalizedToday()
+        getLocalizedToday().localizeNumbers()
     }
 
     Column(

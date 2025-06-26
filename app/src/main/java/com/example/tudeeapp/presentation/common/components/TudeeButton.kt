@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -97,7 +96,7 @@ fun TudeeButton(
             if (isLoading) {
                 if (text != null) Spacer(modifier = Modifier.width(spacing))
                 AnimatedVisibility(visible = true, enter = fadeIn()) {
-                    RotatingIconLoadingIndicator(
+                    AnimatedLoadingIcon(
                         modifier = Modifier.size(20.dp),
                         color = buttonContentColor
                     )
