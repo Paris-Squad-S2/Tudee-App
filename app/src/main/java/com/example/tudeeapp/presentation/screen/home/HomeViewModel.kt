@@ -22,85 +22,103 @@ class HomeViewModel(
     private val appPreferences: AppPreferences
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
 
-    val homeState = _uiState.
-        onStart {
-            getTasksIcons()
-            getTasks()
-            getSliderState()
-        }.stateIn(
-            scope = viewModelScope,
-            started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000),
-            initialValue = HomeUiState()
-        )
-
-    init {
+    val homeState = _uiState.onStart {
         loadInitialData()
-    }
+        getTasksIcons()
+        getTasks()
+        getSliderState()
+    }.stateIn(
+        scope = viewModelScope,
+        started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(1000),
+        initialValue = HomeUiState(
+            isDarkMode = appPreferences.isDarkTheme(),
+        )
+    )
+
 
     private fun loadInitialData() = launchSafely(
         onSuccess = { _uiState.update { it.copy(isDarkMode = appPreferences.isDarkTheme()) } },
         onError = { errorMessage -> _uiState.update { it.copy(error = errorMessage) } }
     )
 
-    fun onToggledAction(isDarkMode: Boolean,themeMode: MutableState<TudeeThemeMode>) = launchSafely(
-        onLoading = { _uiState.update { it.copy(isLoading = true) } },
-        onSuccess = {
-            themeMode.value = if (isDarkMode) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
-            _uiState.update { it.copy(isLoading = false, isDarkMode = isDarkMode) }
-            appPreferences.setDarkTheme(isDarkMode)
-                    },
-        onError = { errorMessage -> _uiState.update { it.copy(isLoading = false, error = errorMessage) } }
-    )
+    fun onToggledAction(isDarkMode: Boolean, themeMode: MutableState<TudeeThemeMode>) =
+        launchSafely(
+            onLoading = { _uiState.update { it.copy(isLoading = true) } },
+            onSuccess = {
+                themeMode.value = if (isDarkMode) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
+                _uiState.update { it.copy(isLoading = false, isDarkMode = isDarkMode) }
+                appPreferences.setDarkTheme(isDarkMode)
+            },
+            onError = { errorMessage ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = errorMessage
+                    )
+                }
+            }
+        )
 
     fun getTasksIcons() = launchSafely(
-        onLoading = {_uiState.update { it.copy(isLoading = true) }} ,
-        onSuccess = { taskServices.getAllTasks().collect { tasks ->
-            tasks.filter(::filterTaskOnToday)
-                .let { filteredTasks ->
-                    if (filteredTasks.isEmpty()) {
+        onLoading = { _uiState.update { it.copy(isLoading = true) } },
+        onSuccess = {
+            taskServices.getAllTasks().collect { tasks ->
+                tasks.filter(::filterTaskOnToday)
+                    .let { filteredTasks ->
+                        if (filteredTasks.isEmpty()) {
+                            _uiState.update {
+                                it.copy(
+                                    isTasksEmpty = true,
+                                    isLoading = false,
+                                    isSuccess = true
+                                )
+                            }
+                            return@collect
+                        }
+                        val tasksIcons =
+                            filteredTasks.map {
+                                taskServices.getCategoryById(it.categoryId).first().imageUri
+                            }
+
+                        val isCategoryPredefined = filteredTasks.map {
+                            taskServices.getCategoryById(it.categoryId).first().isPredefined
+                        }
+
+                        val tasksUi = filteredTasks.toTaskUi()
+                            .mapIndexed { index, taskUi ->
+                                taskUi.copy(
+                                    categoryIcon = tasksIcons[index],
+                                    isCategoryPredefined = isCategoryPredefined[index]
+                                )
+                            }
                         _uiState.update {
                             it.copy(
-                                isTasksEmpty = true,
+                                inProgressTasks = tasksUi.filter { it.status == TaskStatus.IN_PROGRESS },
+                                toDoTasks = tasksUi.filter { it.status == TaskStatus.TO_DO },
+                                doneTasks = tasksUi.filter { it.status == TaskStatus.DONE },
+                                isSuccess = true,
                                 isLoading = false,
-                                isSuccess = true
+                                isTasksEmpty = false
                             )
                         }
-                        return@collect
                     }
-                    val tasksIcons =
-                        filteredTasks.map {
-                            taskServices.getCategoryById(it.categoryId).first().imageUri
-                        }
-
-                    val isCategoryPredefined = filteredTasks.map {
-                        taskServices.getCategoryById(it.categoryId).first().isPredefined
-                    }
-
-                    val tasksUi = filteredTasks.toTaskUi()
-                        .mapIndexed { index, taskUi ->
-                            taskUi.copy(
-                                categoryIcon = tasksIcons[index],
-                                isCategoryPredefined = isCategoryPredefined[index]
-                            )
-                        }
-                    _uiState.update {
-                        it.copy(
-                            inProgressTasks = tasksUi.filter { it.status == TaskStatus.IN_PROGRESS },
-                            toDoTasks = tasksUi.filter { it.status == TaskStatus.TO_DO },
-                            doneTasks = tasksUi.filter { it.status == TaskStatus.DONE },
-                            isSuccess = true,
-                            isLoading = false,
-                            isTasksEmpty = false
-                        )
-                    }
-                }
-        }},
-        onError = {errorMessage -> _uiState.update { it.copy(error = errorMessage, isLoading = false, isSuccess = false) }}
+            }
+        },
+        onError = { errorMessage ->
+            _uiState.update {
+                it.copy(
+                    error = errorMessage,
+                    isLoading = false,
+                    isSuccess = false
+                )
+            }
+        }
     )
 
     fun getTasks() = launchSafely(
-        onLoading = {_uiState.update { it.copy(isLoading = true) }},
-        onSuccess = { taskServices.getAllTasks().collect { tasks ->
+        onLoading = { _uiState.update { it.copy(isLoading = true) } },
+        onSuccess = {
+            taskServices.getAllTasks().collect { tasks ->
                 val tasksUi = tasks
                     .filter(::filterTaskOnToday)
                     .sortedBy { it.createdDate.time }
@@ -122,13 +140,22 @@ class HomeViewModel(
                         )
                     }
                 }
-            }},
-        onError = { errorMessage -> _uiState.update { it.copy(error =errorMessage, isLoading = false, isSuccess = false) }}
+            }
+        },
+        onError = { errorMessage ->
+            _uiState.update {
+                it.copy(
+                    error = errorMessage,
+                    isLoading = false,
+                    isSuccess = false
+                )
+            }
+        }
     )
 
 
     fun getSliderState() = launchSafely(
-        onLoading = {_uiState.update { it.copy(isLoading = true) }},
+        onLoading = { _uiState.update { it.copy(isLoading = true) } },
         onSuccess = {
             taskServices.getAllTasks().collect { tasks ->
                 val taskCount = tasks
@@ -136,9 +163,24 @@ class HomeViewModel(
                     .groupBy { it.status }
                     .mapValues { it.value.size }
                 val sliderState = mapTaskCountToSliderState(taskCount)
-                _uiState.update { it.copy(sliderState = sliderState, isLoading = false, isSuccess = true) }
-            } },
-        onError = { errorMessage -> _uiState.update { it.copy(error = errorMessage, isLoading = false, isSuccess = false) }}
+                _uiState.update {
+                    it.copy(
+                        sliderState = sliderState,
+                        isLoading = false,
+                        isSuccess = true
+                    )
+                }
+            }
+        },
+        onError = { errorMessage ->
+            _uiState.update {
+                it.copy(
+                    error = errorMessage,
+                    isLoading = false,
+                    isSuccess = false
+                )
+            }
+        }
     )
 
     private fun mapTaskCountToSliderState(taskCount: Map<TaskStatus, Int>): SliderUiState {

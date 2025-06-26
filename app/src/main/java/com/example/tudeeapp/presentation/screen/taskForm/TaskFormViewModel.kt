@@ -71,14 +71,18 @@ class TaskFormViewModel(
             onLoading = { _uiState.update { it.copy(isLoading = true) } },
             onSuccess = {
                 val currentState = _uiState.value
-
+                val createdDate = if (currentState.selectedDate.contains("T")) {
+                    LocalDateTime.parse(currentState.selectedDate)
+                } else {
+                    LocalDateTime.parse(currentState.selectedDate + "T" + getToday().time.toString())
+                }
                 val task = Task(
                     id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
                     title = currentState.title,
                     description = currentState.description,
                     priority = currentState.selectedPriority.toTaskPriority() ?: TaskPriority.LOW,
                     status = if (currentState.isEditMode) currentState.taskStatus else TaskStatus.TO_DO,
-                    createdDate =LocalDateTime.parse(currentState.selectedDate+"T"+getToday().time.toString()),
+                    createdDate =createdDate,
                     categoryId = currentState.selectedCategoryId ?: 0L
                 )
                 if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(task)
