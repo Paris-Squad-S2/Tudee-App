@@ -115,7 +115,7 @@ fun HomeScreenContent(
                         ShowError(
                             modifier = Modifier
                                 .fillMaxSize(),
-                            errorMessage = state.error.toString()
+                            errorMessage = state.error
                         )
                     }
 
