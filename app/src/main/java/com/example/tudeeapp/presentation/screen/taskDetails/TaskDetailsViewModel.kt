@@ -63,16 +63,29 @@ class TaskDetailsViewModel(
                     val task = taskServices.getTaskById(currentTaskUiState.id).first()
                     val editTaskState = task.copy(status = newStatus)
                     taskServices.editTask(editTaskState)
-                    val editTask = currentTaskUiState.copy(status = newStatus)
-                    _uiState.update { it.copy(taskUiState = editTask) }
-
+                    navigateUp()
                 },
                 onError = {
                     _uiState.value =
                         _uiState.value.copy(errorMessage = it)
+                    navigateUp()
                 }
             )
         }
+    }
+
+    fun onDismiss() {
+        navigateUp()
+    }
+
+    fun onEditTaskClick() {
+        val taskUiState = _uiState.value.taskUiState ?: return
+        navigate(
+            Destinations.TaskManagement(
+                taskUiState.id,
+                taskUiState.createdDate.toString()
+            )
+        )
     }
 
 }

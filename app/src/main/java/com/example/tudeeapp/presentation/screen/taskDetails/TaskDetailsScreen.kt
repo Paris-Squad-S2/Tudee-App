@@ -19,12 +19,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.common.components.PriorityButton
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.taskDetails.components.BoxTaskStatus
 import com.example.tudeeapp.presentation.screen.taskDetails.components.CategoryIcon
 import com.example.tudeeapp.presentation.screen.taskDetails.components.Divider1DPWithPadding
@@ -37,29 +35,20 @@ import org.koin.compose.viewmodel.koinViewModel
 fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = koinViewModel()
 ) {
-    val navController = LocalNavController.current
     val taskDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TudeeBottomSheet(
         showSheet = true,
         title = stringResource(R.string.task_details),
-        onDismiss = { navController.popBackStack() },
+        onDismiss =  viewModel::onDismiss ,
         stickyFooterContent = {
             taskDetailsUiState.taskUiState?.let { taskUiState ->
                 if (taskUiState.status != TaskStatus.DONE)
                 StickyFooterTaskDetails(
                     onStatusChange = { newStatus ->
                         viewModel.onEditTaskStatus(newStatus)
-                        navController.popBackStack()
                     },
-                    onEditTaskClick = {
-                        navController.navigate(
-                            Destinations.TaskManagement(
-                                taskUiState.id,
-                                taskUiState.createdDate.toString()
-                            )
-                        )
-                    },
+                    onEditTaskClick = viewModel::onEditTaskClick,
                     taskUiState = taskUiState,
                 )
             }
@@ -76,7 +65,6 @@ fun TaskDetailsScreen(
                             taskDetailsUiState.errorMessage,
                             isSuccess = false
                         )
-                        navController.popBackStack()
                     }
 
                     else -> {
