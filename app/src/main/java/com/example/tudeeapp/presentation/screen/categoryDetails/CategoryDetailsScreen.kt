@@ -124,7 +124,7 @@ fun CategoryDetailsContent(
         modifier = modifier
             .fillMaxSize()
             .background(Theme.colors.surfaceColors.surfaceHigh)
-        .statusBarsPadding()
+            .statusBarsPadding()
     ) {
         TopAppBar(
             onClickBack = onBack,
@@ -202,12 +202,12 @@ fun CategoryDetailsContent(
                         modifier = Modifier.animateItem()
                     )
                     if (taskIdToDelete == task.id) {
-                    TudeeBottomSheet(
-                        showSheet = true,
-                        title = LocalContext.current.getString(R.string.delete_task),
-                        onDismiss = { taskIdToDelete = null},
-                        content = {
-                            val context = LocalContext.current
+                        TudeeBottomSheet(
+                            showSheet = true,
+                            title = LocalContext.current.getString(R.string.delete_task),
+                            onDismiss = { taskIdToDelete = null },
+                            content = {
+                                val context = LocalContext.current
 
                                 ConfirmationDialogBox(
                                     title = R.string.are_you_sure_to_continue,
@@ -218,14 +218,15 @@ fun CategoryDetailsContent(
                                     },
                                     onDismiss = { taskIdToDelete = null })
                             },
-                        )}
+                        )
                     }
                 }
             }
         }
-
     }
+
 }
+
 
 @Preview(showBackground = true)
 @Composable
