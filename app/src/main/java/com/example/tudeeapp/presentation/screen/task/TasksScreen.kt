@@ -186,6 +186,7 @@ fun TaskContent(
                 )
             }
         }
+
         item {
             DateHeader(
                 date = data.calender.currentMonthYear.localizeNumbers(),
@@ -194,6 +195,7 @@ fun TaskContent(
                 onClickPickDate = { onCLickDatePicker() },
             )
         }
+
         item {
             LaunchedEffect(data.todayIndex) {
                 val targetIndex = (data.todayIndex - 1)
@@ -224,6 +226,7 @@ fun TaskContent(
                 }
             }
         }
+
         item {
             val tabs = data.status.map { status ->
                 Tab(
@@ -273,7 +276,7 @@ fun TaskContent(
                     title = task.title,
                     date = task.createdDate.toString(),
                     subtitle = task.description,
-                    priorityLabel = task.priority.lowercaseName,
+                    priorityLabel = stringResource(task.priority.toStyle().text),
                     priorityIcon = painterResource(task.priority.toStyle().iconRes),
                     priorityColor = task.priority.toStyle().backgroundColor,
                     isDated = false,
