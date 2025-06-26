@@ -2,8 +2,12 @@
 
 package com.example.tudeeapp.presentation.common.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDefaults
@@ -62,11 +66,16 @@ fun TudeeDatePickerDialog(
             TudeeDismissButton(onDismiss = onDismiss)
         }
     ) {
-        DatePicker(
-            state = datePickerState,
-            showModeToggle = false,
-            colors = datePickerDialogColors()
-        )
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
+            DatePicker(
+                state = datePickerState,
+                showModeToggle = false,
+                colors = datePickerDialogColors()
+            )
+        }
     }
 }
 
