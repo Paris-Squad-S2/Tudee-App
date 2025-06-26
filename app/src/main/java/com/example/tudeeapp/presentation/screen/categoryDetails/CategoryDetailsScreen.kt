@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -105,10 +106,12 @@ fun CategoryDetailsContent(
     categoryTitle: String,
     onOptionClick: () -> Unit = {},
 ) {
-    Column(modifier = modifier
-        .fillMaxSize()
-        .background(Theme.colors.surfaceColors.surfaceHigh)
-        .statusBarsPadding()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.colors.surfaceColors.surfaceHigh)
+        .statusBarsPadding()
+    ) {
         TopAppBar(
             onClickBack = onBack,
             title = categoryTitle,
@@ -159,14 +162,17 @@ fun CategoryDetailsContent(
             }
 
 
-        }else {
-            var isSheetOpen by remember { mutableStateOf(false) }
+        } else {
+            var taskIdToDelete by remember { mutableStateOf<Long?>(null) }
             val showSnackBar = LocalSnackBarState.current
             LazyColumn(
                 modifier = Modifier.padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(filteredTasks) { task ->
+                items(
+                    filteredTasks,
+                    key = { task -> task.id }
+                ) { task ->
                     val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
                     TaskItemWithSwipe(
                         icon = categoryImage,
@@ -181,27 +187,30 @@ fun CategoryDetailsContent(
                         onClickItem = {
                             interactionListener.onTaskClick(task.id)
                         },
-                        onDelete = { isSheetOpen = true }
+                        onDelete = { taskIdToDelete = task.id },
+                        modifier = Modifier.animateItem()
                     )
-                    TudeeBottomSheet(
-                        isVisible = isSheetOpen,
-                        title = LocalContext.current.getString(R.string.delete_task),
-                        isScrollable = true,
-                        skipPartiallyExpanded = true,
-                        onDismiss = { isSheetOpen = false },
-                        content = {
-                            val context = LocalContext.current
+                    if (taskIdToDelete == task.id) {
+                        TudeeBottomSheet(
+                            isVisible = true,
+                            title = LocalContext.current.getString(R.string.delete_task),
+                            isScrollable = true,
+                            skipPartiallyExpanded = true,
+                            onDismiss = { taskIdToDelete = null },
+                            content = {
+                                val context = LocalContext.current
 
-                            ConfirmationDialogBox(
-                                title = R.string.are_you_sure_to_continue,
-                                onConfirm = {
-                                    onClickDeleteIcon(task.id)
-                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                    isSheetOpen = false
-                                },
-                                onDismiss = { isSheetOpen = false })
-                        },
-                    )
+                                ConfirmationDialogBox(
+                                    title = R.string.are_you_sure_to_continue,
+                                    onConfirm = {
+                                        onClickDeleteIcon(task.id)
+                                        showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                        taskIdToDelete = null
+                                    },
+                                    onDismiss = { taskIdToDelete = null })
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -262,6 +271,8 @@ fun CategoryDetailsPreview() {
 
     val selectedStatus = remember { mutableStateOf(TaskStatus.TO_DO) }
 
+    val fakeNavController = rememberNavController()
+
     CategoryDetailsContent(
         modifier = Modifier.statusBarsPadding(),
         tasks = fakeTasks,
@@ -272,12 +283,8 @@ fun CategoryDetailsPreview() {
         onBack = {},
         categoryTitle = "Coding",
         categoryImage = painterResource(R.drawable.ic_education),
+        navController = fakeNavController,
         topBarOption = true,
-        onClickDeleteIcon = {},
-        interactionListener = object : CategoryInteractionListener {
-            override fun onClickEditCategory() {}
-            override fun onClickBack() {}
-            override fun onTaskClick(id: Long) {}
-        }
+        onClickDeleteIcon = {}
     )
 }

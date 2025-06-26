@@ -16,7 +16,8 @@ class CategoryDetailsViewModel(
     private val taskService: TaskServices,
 ) : BaseViewModel<CategoryDetailsUiState>(CategoryDetailsUiState()) , CategoryInteractionListener {
 
-    private val categoryId: Long = savedStateHandle.toRoute<Destinations.CategoryDetails>().categoryId
+    private val categoryId: Long =
+        savedStateHandle.toRoute<Destinations.CategoryDetails>().categoryId
 
     init {
         loadCategory(categoryId)
@@ -56,12 +57,7 @@ class CategoryDetailsViewModel(
 
     fun deleteTask(taskId: Long) {
         launchSafely(
-            onLoading = {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = true,
-                    errorMessage = "Unknown error occurred"
-                )
-            },
+            onLoading = {},
             onSuccess = {
                 taskService.deleteTask(taskId)
                 updateUiStateWithFilters()
@@ -77,9 +73,7 @@ class CategoryDetailsViewModel(
 
     fun updateUiStateWithFilters() {
         launchSafely(
-            onLoading = {
-                _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
-            },
+            onLoading = {},
             onSuccess = {
                 val category = taskService.getCategoryById(categoryId).first()
                 val allTasks = taskService.getAllTasks().first()
