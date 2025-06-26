@@ -29,8 +29,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
@@ -45,7 +43,6 @@ import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
 import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
@@ -89,7 +86,8 @@ fun CategoryDetailsScreen(
                 },
                 categoryImage = rememberCategoryPainter(uiState.categoryUiState!!),
                 topBarOption = editableCategory(uiState.categoryUiState!!),
-                onClickDeleteIcon = viewModel::deleteTask
+                onClickDeleteIcon = viewModel::deleteTask,
+                interactionListener = viewModel
             )
         }
     }
@@ -113,12 +111,12 @@ fun CategoryDetailsContent(
     categoryImage: Painter,
     topBarOption: Boolean,
     onClickDeleteIcon: (Long) -> Unit,
+    interactionListener: CategoryInteractionListener,
     modifier: Modifier = Modifier,
     onStatusChange: (TaskStatus) -> Unit,
     onBack: () -> Unit,
     categoryTitle: String,
     onOptionClick: () -> Unit = {},
-    navController: NavHostController = LocalNavController.current
 ) {
     Column(modifier = modifier
         .fillMaxSize()
@@ -191,7 +189,9 @@ fun CategoryDetailsContent(
                         priorityIcon = painterResource(id = style.iconRes),
                         priorityColor = style.backgroundColor,
                         isDated = true,
-                        onClickItem = { navController.navigate(Destinations.TaskDetails(task.id)) },
+                        onClickItem = {
+                            interactionListener.onTaskClick(task.id)
+                        },
                         onDelete = { isSheetOpen = true }
                     )
                     TudeeBottomSheet(
@@ -273,8 +273,6 @@ fun CategoryDetailsPreview() {
 
     val selectedStatus = remember { mutableStateOf(TaskStatus.TO_DO) }
 
-    val fakeNavController = rememberNavController()
-
     CategoryDetailsContent(
         modifier = Modifier.statusBarsPadding(),
         tasks = fakeTasks,
@@ -285,8 +283,12 @@ fun CategoryDetailsPreview() {
         onBack = {},
         categoryTitle = "Coding",
         categoryImage = painterResource(R.drawable.ic_education),
-        navController = fakeNavController,
         topBarOption = true,
-        onClickDeleteIcon = {}
+        onClickDeleteIcon = {},
+        interactionListener = object : CategoryInteractionListener {
+            override fun onClickEditCategory() {}
+            override fun onClickBack() {}
+            override fun onTaskClick(id: Long) {}
+        }
     )
 }

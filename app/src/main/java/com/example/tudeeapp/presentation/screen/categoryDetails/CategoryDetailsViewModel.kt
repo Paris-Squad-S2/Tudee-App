@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.first
 class CategoryDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val taskService: TaskServices,
-) : BaseViewModel<CategoryDetailsUiState>(CategoryDetailsUiState()) {
+) : BaseViewModel<CategoryDetailsUiState>(CategoryDetailsUiState()) , CategoryInteractionListener {
 
     private val categoryId: Long = savedStateHandle.toRoute<Destinations.CategoryDetails>().categoryId
 
@@ -104,13 +104,17 @@ class CategoryDetailsViewModel(
         loadCategory(categoryId)
     }
 
-    fun onClickEditCategory() {
+    override fun onClickEditCategory() {
         uiState.value.categoryUiState?.let {
             navigate(Destinations.CategoryForm(it.id))
         }
     }
 
-    fun onClickBack(){
+    override fun onClickBack(){
         navigateUp()
+    }
+
+    override fun onTaskClick(id: Long) {
+        navigate(Destinations.TaskDetails(id))
     }
 }
