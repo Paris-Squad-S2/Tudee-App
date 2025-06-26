@@ -35,7 +35,9 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
@@ -43,10 +45,8 @@ import com.example.tudeeapp.presentation.common.components.TopAppBar
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
-import com.example.tudeeapp.presentation.navigation.LocalNavController
-import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.navigation.Destinations
-import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
+import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
@@ -120,9 +120,12 @@ fun CategoryDetailsContent(
     onOptionClick: () -> Unit = {},
     navController: NavHostController = LocalNavController.current
 ) {
-    Column(modifier = modifier
-        .fillMaxSize()
-        .statusBarsPadding()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.colors.surfaceColors.surfaceHigh)
+        .statusBarsPadding()
+    ) {
         TopAppBar(
             onClickBack = onBack,
             title = categoryTitle,
@@ -159,11 +162,11 @@ fun CategoryDetailsContent(
             }
         )
         val filteredTasks = tasks.filter { it.status == selectedState.name }
-        if (filteredTasks.isEmpty()){
+        if (filteredTasks.isEmpty()) {
 
             Box(
                 modifier = Modifier.fillMaxSize()
-            ){
+            ) {
                 EmptyTasksSection(
                     title = stringResource(R.string.no_task_for, categoryTitle),
                     description = stringResource(R.string.add_first_task),
@@ -172,14 +175,17 @@ fun CategoryDetailsContent(
             }
 
 
-        }else {
-            var isSheetOpen by remember { mutableStateOf(false) }
+        } else {
+            var taskIdToDelete by remember { mutableStateOf<Long?>(null) }
             val showSnackBar = LocalSnackBarState.current
             LazyColumn(
                 modifier = Modifier.padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(filteredTasks) { task ->
+                items(
+                    filteredTasks,
+                    key = { task -> task.id }
+                ) { task ->
                     val style = TaskPriority.valueOf(task.priority).toUi().toStyle()
                     TaskItemWithSwipe(
                         icon = categoryImage,
@@ -192,27 +198,30 @@ fun CategoryDetailsContent(
                         priorityColor = style.backgroundColor,
                         isDated = true,
                         onClickItem = { navController.navigate(Destinations.TaskDetails(task.id)) },
-                        onDelete = { isSheetOpen = true }
+                        onDelete = { taskIdToDelete = task.id },
+                        modifier = Modifier.animateItem()
                     )
-                    TudeeBottomSheet(
-                        isVisible = isSheetOpen,
-                        title = LocalContext.current.getString(R.string.delete_task),
-                        isScrollable = true,
-                        skipPartiallyExpanded = true,
-                        onDismiss = { isSheetOpen = false },
-                        content = {
-                            val context = LocalContext.current
+                    if (taskIdToDelete == task.id) {
+                        TudeeBottomSheet(
+                            isVisible = true,
+                            title = LocalContext.current.getString(R.string.delete_task),
+                            isScrollable = true,
+                            skipPartiallyExpanded = true,
+                            onDismiss = { taskIdToDelete = null },
+                            content = {
+                                val context = LocalContext.current
 
-                            ConfirmationDialogBox(
-                                title = R.string.are_you_sure_to_continue,
-                                onConfirm = {
-                                    onClickDeleteIcon(task.id)
-                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                    isSheetOpen = false
-                                },
-                                onDismiss = { isSheetOpen = false })
-                        },
-                    )
+                                ConfirmationDialogBox(
+                                    title = R.string.are_you_sure_to_continue,
+                                    onConfirm = {
+                                        onClickDeleteIcon(task.id)
+                                        showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                        taskIdToDelete = null
+                                    },
+                                    onDismiss = { taskIdToDelete = null })
+                            },
+                        )
+                    }
                 }
             }
         }

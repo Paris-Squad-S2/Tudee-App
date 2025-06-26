@@ -77,3 +77,8 @@ fun Modifier.dashedBorder(
         }
     }
 )
+
+fun String.getLastPartAfterSlash(): String {
+    return this.split("/").last()
+}
+
