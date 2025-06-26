@@ -36,35 +36,4 @@ object TudeeDbMigrations {
         }
     }
 
-    val MIGRATION_2_3 = object : Migration(2, 3) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-
-            database.execSQL("ALTER TABLE TASK_TABLE ADD COLUMN date_new TEXT")
-
-            database.execSQL("UPDATE TASK_TABLE SET date_new = date")
-
-            database.execSQL("""
-            CREATE TABLE TASK_TABLE_NEW (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                title TEXT NOT NULL,
-                description TEXT NOT NULL,
-                date TEXT NOT NULL,
-                status TEXT NOT NULL,
-                priority TEXT NOT NULL,
-                categoryId INTEGER NOT NULL
-            )
-        """.trimIndent())
-
-
-            database.execSQL("""
-            INSERT INTO TASK_TABLE_NEW (id, title, description, date, status, priority, categoryId)
-            SELECT id, title, description, date_new, status, priority, categoryId
-            FROM TASK_TABLE
-        """.trimIndent())
-
-            database.execSQL("DROP TABLE TASK_TABLE")
-            database.execSQL("ALTER TABLE TASK_TABLE_NEW RENAME TO TASK_TABLE")
-        }
-    }
-
 }
