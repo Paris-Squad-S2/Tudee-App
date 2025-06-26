@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -50,6 +51,10 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val state by homeViewModel.uiState.collectAsStateWithLifecycle()
     val themeMode = LocalThemeState.current
+
+    LaunchedEffect(Unit) {
+        homeViewModel.getTasks()
+    }
 
     HomeScreenContent(
         state = state,
@@ -111,7 +116,7 @@ fun HomeScreenContent(
                         ShowError(
                             modifier = Modifier
                                 .fillMaxSize(),
-                            errorMessage = state.error.toString()
+                            errorMessage = state.error
                         )
                     }
 
@@ -143,7 +148,8 @@ private fun HomeContent(
         item {
             OverViewSection(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .animateItem(),
                 state = state,
             )
         }
@@ -152,7 +158,8 @@ private fun HomeContent(
             AnimatedVisibility(
                 modifier = Modifier
                     .background(Theme.colors.surfaceColors.surface)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .animateItem(),
                 visible = state.isTasksEmpty,
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -172,6 +179,7 @@ private fun HomeContent(
 
         item {
             AnimatedVisibility(
+                modifier = Modifier.animateItem(),
                 visible = state.inProgressTasks.isNotEmpty(),
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -187,6 +195,7 @@ private fun HomeContent(
 
         item {
             AnimatedVisibility(
+                modifier = Modifier.animateItem(),
                 visible = state.toDoTasks.isNotEmpty(),
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -200,9 +209,9 @@ private fun HomeContent(
             }
         }
 
-
         item {
             AnimatedVisibility(
+                modifier = Modifier.animateItem(),
                 visible = state.doneTasks.isNotEmpty(),
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -330,5 +339,3 @@ private fun OverViewCardsRow(
         )
     }
 }
-
-
