@@ -271,7 +271,6 @@ fun CategoryDetailsPreview() {
 
     val selectedStatus = remember { mutableStateOf(TaskStatus.TO_DO) }
 
-    val fakeNavController = rememberNavController()
 
     CategoryDetailsContent(
         modifier = Modifier.statusBarsPadding(),
@@ -283,8 +282,12 @@ fun CategoryDetailsPreview() {
         onBack = {},
         categoryTitle = "Coding",
         categoryImage = painterResource(R.drawable.ic_education),
-        navController = fakeNavController,
         topBarOption = true,
-        onClickDeleteIcon = {}
+        onClickDeleteIcon = {},
+        interactionListener = object : CategoryInteractionListener {
+            override fun onClickEditCategory() {}
+            override fun onClickBack() {}
+            override fun onTaskClick(id: Long) {}
+        }
     )
 }
