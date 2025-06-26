@@ -11,7 +11,7 @@ fun TudeeDeleteBottomSheet(
     onConfirm: () -> Unit
 ) {
     TudeeBottomSheet(
-        isVisible = showBottomSheet,
+        showSheet = showBottomSheet,
         title = title,
         onDismiss = onDismiss
     ) {

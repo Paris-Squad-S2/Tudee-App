@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -44,20 +45,18 @@ import kotlinx.coroutines.launch
 fun TudeeBottomSheet(
     modifier: Modifier = Modifier,
     stopBarrierDismiss: Boolean = false,
-    isVisible: Boolean,
+    showSheet: Boolean,
     title: String,
     onDismiss: () -> Unit,
     headerEnd: @Composable () -> Unit = {},
-    isScrollable: Boolean = true,
-    skipPartiallyExpanded: Boolean = true,
-    stickyBottomContent: @Composable () -> Unit = {},
+    stickyFooterContent: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val scrollModifier =
-        if (isScrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier
+
+
     val bottomSheetState =
         rememberModalBottomSheetState(
-            skipPartiallyExpanded = skipPartiallyExpanded,
+            skipPartiallyExpanded = true,
             confirmValueChange = { newValue ->
                 if (stopBarrierDismiss) {
                     newValue != SheetValue.Hidden
@@ -67,17 +66,18 @@ fun TudeeBottomSheet(
             }
         )
 
-    LaunchedEffect(isVisible) {
-        when {
-            isVisible -> bottomSheetState.show()
-            else -> bottomSheetState.hide()
+    LaunchedEffect(showSheet) {
+        if (showSheet) {
+            bottomSheetState.show()
+        } else {
+            bottomSheetState.hide()
         }
     }
     val coroutineScope = rememberCoroutineScope()
     var currentHeight by remember { mutableStateOf(300.dp) } // Start partially opened
 
 
-    if (!isVisible) return
+    if (!showSheet) return
     BoxWithConstraints {
         ModalBottomSheet(
             modifier = modifier
@@ -95,7 +95,7 @@ fun TudeeBottomSheet(
                         .pointerInput(Unit) {
                             detectVerticalDragGestures { _, dragAmount ->
                                 if (currentHeight >= 100.dp) {
-                                    currentHeight = (currentHeight - dragAmount.toDp())
+                                    currentHeight = (currentHeight - dragAmount.toDp()).coerceAtLeast(0.dp)
                                     if (currentHeight < 100.dp) {
                                         coroutineScope.launch {
                                             bottomSheetState.hide()
@@ -117,7 +117,7 @@ fun TudeeBottomSheet(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .then(scrollModifier)
+                        .then(Modifier.verticalScroll(rememberScrollState()))
                 ) {
                     Row {
                         Text(
@@ -133,7 +133,7 @@ fun TudeeBottomSheet(
                     }
                     content()
                 }
-                stickyBottomContent()
+                stickyFooterContent()
             }
         }
     }
@@ -146,10 +146,8 @@ private fun TudeeBottomSheetPreview() {
     BasePreview {
         var isSheetOpen by remember { mutableStateOf(true) }
         TudeeBottomSheet(
-            isVisible = isSheetOpen,
+            showSheet = isSheetOpen,
             title = "Sample Title",
-            isScrollable = true,
-            skipPartiallyExpanded = true,
             onDismiss = { isSheetOpen = false },
             content = {
                 Column {
@@ -162,7 +160,7 @@ private fun TudeeBottomSheetPreview() {
                     }
                 }
             },
-            stickyBottomContent = {
+            stickyFooterContent = {
                 Button(
                     modifier = Modifier.fillMaxWidth(), onClick = { isSheetOpen = false },
                 ) { Text(text = "Close") }

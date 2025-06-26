@@ -195,10 +195,8 @@ fun CategoryDetailsContent(
                         onDelete = { isSheetOpen = true }
                     )
                     TudeeBottomSheet(
-                        isVisible = isSheetOpen,
+                        showSheet = isSheetOpen,
                         title = LocalContext.current.getString(R.string.delete_task),
-                        isScrollable = true,
-                        skipPartiallyExpanded = true,
                         onDismiss = { isSheetOpen = false },
                         content = {
                             val context = LocalContext.current

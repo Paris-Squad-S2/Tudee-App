@@ -37,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
-import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.extentions.dashedBorder
@@ -80,7 +79,7 @@ fun CategoryForm(
     }
 
     TudeeBottomSheet(
-        isVisible = showSheet,
+        showSheet = showSheet,
         stopBarrierDismiss = true,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         headerEnd = {
@@ -98,7 +97,7 @@ fun CategoryForm(
             showSheet = false
             viewModel.onCancel()
         },
-        stickyBottomContent = {
+        stickyFooterContent = {
             StickyFooterCategoryForm(
                 onCancel = {
                     showSheet = false

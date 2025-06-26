@@ -41,11 +41,12 @@ fun TaskDetailsScreen(
     val taskDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TudeeBottomSheet(
-        isVisible = true,
+        showSheet = true,
         title = stringResource(R.string.task_details),
         onDismiss = { navController.popBackStack() },
-        stickyBottomContent = {
+        stickyFooterContent = {
             taskDetailsUiState.taskUiState?.let { taskUiState ->
+                if (taskUiState.status != TaskStatus.DONE)
                 StickyFooterTaskDetails(
                     onStatusChange = { newStatus ->
                         viewModel.onEditTaskStatus(newStatus)
@@ -64,7 +65,6 @@ fun TaskDetailsScreen(
             }
         },
         content = {
-
             Column(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -102,7 +102,6 @@ private fun StickyFooterTaskDetails(
     onEditTaskClick: () -> Unit
 ) {
     Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)) {
-        if (taskUiState.status != TaskStatus.DONE)
             StatusActionButtons(taskUiState, onEditTaskClick, onStatusChange)
     }
 }
