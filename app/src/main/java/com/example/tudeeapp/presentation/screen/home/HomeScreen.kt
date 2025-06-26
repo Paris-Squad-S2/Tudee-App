@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,9 +56,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     LaunchedEffect(Unit) {
         homeViewModel.getTasks()
     }
-
+    val isSystemInDarkTheme = isSystemInDarkTheme()
     HomeScreenContent(
         state = state,
+        isSystemInDarkTheme = isSystemInDarkTheme,
         onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark, themeMode) },
         onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick,
         onTasksCountClick = homeViewModel::onTasksCountClick,
@@ -68,6 +70,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    isSystemInDarkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     onFloatingActionButtonClick: () -> Unit,
     onTasksCountClick: (String) -> Unit,
@@ -79,7 +82,11 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .background(Theme.colors.primary)
                     .statusBarsPadding(),
-                isDarkMode = state.isDarkMode,
+                isDarkMode = if (state.isDarkMode == 2) {
+                    isSystemInDarkTheme
+                } else {
+                    state.isDarkMode == 1
+                },
                 onToggleTheme = onToggleTheme,
             )
         },

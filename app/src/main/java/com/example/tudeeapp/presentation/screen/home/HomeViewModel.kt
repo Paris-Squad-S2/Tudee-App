@@ -32,11 +32,14 @@ class HomeViewModel(
         onError = { errorMessage -> _uiState.update { it.copy(error = errorMessage) } }
     )
 
-    fun onToggledAction(isDarkMode: Boolean,themeMode: MutableState<TudeeThemeMode>) = launchSafely(
+    fun onToggledAction(
+        isDarkMode: Boolean,
+        themeMode: MutableState<TudeeThemeMode>,
+    ) = launchSafely(
         onLoading = { _uiState.update { it.copy(isLoading = true) } },
         onSuccess = {
             themeMode.value = if (isDarkMode) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
-            _uiState.update { it.copy(isLoading = false, isDarkMode = isDarkMode) }
+            _uiState.update { it.copy(isLoading = false, isDarkMode = if (isDarkMode) 1 else 0) }
             appPreferences.setDarkTheme(isDarkMode)
                     },
         onError = { errorMessage -> _uiState.update { it.copy(isLoading = false, error = errorMessage) } }
