@@ -107,8 +107,8 @@ class TaskFormViewModel(
                             isLoading = false
                         )
                     }
+                    taskId?.let { getTaskById(it) }
                 }
-                taskId?.let { getTaskById(it) }
             },
             onError = { handleException() }
         )
