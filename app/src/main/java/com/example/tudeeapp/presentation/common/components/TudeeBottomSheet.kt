@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TudeeBottomSheet(
     modifier: Modifier = Modifier,
-    stopBarrierDismiss : Boolean = false,
+    stopBarrierDismiss: Boolean = false,
     isVisible: Boolean,
     title: String,
     onDismiss: () -> Unit,
@@ -59,7 +59,7 @@ fun TudeeBottomSheet(
         rememberModalBottomSheetState(
             skipPartiallyExpanded = skipPartiallyExpanded,
             confirmValueChange = { newValue ->
-                if (stopBarrierDismiss){
+                if (stopBarrierDismiss) {
                     newValue != SheetValue.Hidden
                 } else {
                     true
@@ -85,7 +85,9 @@ fun TudeeBottomSheet(
                 .fillMaxWidth()
                 .statusBarsPadding(),
             containerColor = Theme.colors.surfaceColors.surface,
-            onDismissRequest = { onDismiss() },
+            onDismissRequest = {
+                onDismiss()
+            },
             dragHandle = {
                 BottomSheetDefaults.DragHandle(
                     modifier = Modifier
