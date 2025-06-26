@@ -32,9 +32,8 @@ fun CategoryGrid(
         Text(text = stringResource(R.string.category), style = Theme.textStyle.title.medium)
         FlowRow(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalArrangement = Arrangement.spacedBy(25.dp),
         ) {
             categories.sortedBy { it.id }.forEach { category ->
