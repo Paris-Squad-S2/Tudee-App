@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import com.example.tudeeapp.presentation.utills.toLocalizedString
 
 @Composable
 fun TabItem(
@@ -60,7 +61,7 @@ fun TabItem(
                                 horizontal = 4.dp,
                                 vertical = 3.dp
                             ),
-                            text = tab.count.toString(),
+                            text = tab.count.toLocalizedString(),
                             style = Theme.textStyle.label.medium,
                             color = Theme.colors.text.body
                         )

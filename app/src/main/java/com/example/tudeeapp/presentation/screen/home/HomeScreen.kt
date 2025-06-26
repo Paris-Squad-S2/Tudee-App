@@ -148,7 +148,7 @@ private fun HomeContent(
         item {
             OverViewSection(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .animateItem(),
                 state = state,
             )
