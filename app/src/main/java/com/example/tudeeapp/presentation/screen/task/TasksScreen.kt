@@ -175,6 +175,7 @@ fun TaskContent(
                 )
             }
         }
+
         item {
             DateHeader(
                 date = data.calender.currentMonthYear.localizeNumbers(),
@@ -183,6 +184,7 @@ fun TaskContent(
                 onClickPickDate = { onCLickDatePicker() },
             )
         }
+
         item {
             LaunchedEffect(data.todayIndex) {
                 val targetIndex = (data.todayIndex - 1)
@@ -196,7 +198,9 @@ fun TaskContent(
             }
             LazyRow(
                 state = listState,
-                modifier = Modifier.background(Theme.colors.surfaceColors.surfaceHigh).padding(top = 8.dp, bottom = 8.dp),
+                modifier = Modifier
+                    .background(Theme.colors.surfaceColors.surfaceHigh)
+                    .padding(top = 8.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
@@ -211,6 +215,7 @@ fun TaskContent(
                 }
             }
         }
+
         item {
             val tabs = data.status.map { status ->
                 Tab(
@@ -248,7 +253,7 @@ fun TaskContent(
                 items = data.tasks,
                 key = { task -> task.id },
 
-            ) { task ->
+                ) { task ->
                 val iconResource = toPainter(
                     imageUri = task.category.iconRes,
                     isPredefined = task.category.isPredefined
@@ -260,13 +265,15 @@ fun TaskContent(
                     title = task.title,
                     date = task.createdDate.toString(),
                     subtitle = task.description,
-                    priorityLabel = task.priority.lowercaseName,
+                    priorityLabel = stringResource(task.priority.toStyle().text),
                     priorityIcon = painterResource(task.priority.toStyle().iconRes),
                     priorityColor = task.priority.toStyle().backgroundColor,
                     isDated = false,
                     onClickItem = { onclickTaskItem(task.id) },
                     onDelete = { taskIdToDelete = task.id },
-                    modifier = Modifier.animateItem().padding(vertical = 8.dp, horizontal = 16.dp)
+                    modifier = Modifier
+                        .animateItem()
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
                 if (taskIdToDelete == task.id) {
                     TudeeBottomSheet(
