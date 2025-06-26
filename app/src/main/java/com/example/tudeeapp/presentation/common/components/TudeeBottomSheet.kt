@@ -2,12 +2,19 @@
 
 package com.example.tudeeapp.presentation.common.components
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +23,7 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -23,73 +31,119 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
+import kotlinx.coroutines.launch
 
+@SuppressLint("SuspiciousIndentation")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TudeeBottomSheet(
-    isVisible: Boolean,
+    modifier: Modifier = Modifier,
+    stopBarrierDismiss: Boolean = false,
+    showSheet: Boolean,
     title: String,
     onDismiss: () -> Unit,
     optionalActionButton: @Composable () -> Unit = {},
-    modifier: Modifier = Modifier,
-    isScrollable: Boolean = true,
-    skipPartiallyExpanded: Boolean = true,
-    stickyBottomContent: @Composable ColumnScope.() -> Unit = {},
+    stickyFooterContent: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val scrollModifier =
-        if (isScrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier
+
+
     val bottomSheetState =
-        rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
-
-    LaunchedEffect(isVisible) {
-        when {
-            isVisible -> bottomSheetState.show()
-            else -> bottomSheetState.hide()
-        }
-    }
-
-    if (!isVisible) return
-    ModalBottomSheet(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 162.dp),
-        containerColor = Theme.colors.surfaceColors.surface,
-        onDismissRequest = { onDismiss() },
-        dragHandle = { BottomSheetDefaults.DragHandle() },
-        sheetState = bottomSheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-    ) {
-        Column {
-            Column(
-                modifier = scrollModifier
-                    .weight(weight = 1f, fill = false),
-            ) {
-                Row() {
-                    Text(
-                        text = title,
-                        style = Theme.textStyle.title.large,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    optionalActionButton()
-                    Spacer(modifier = Modifier.width(16.dp))
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+            confirmValueChange = { newValue ->
+                if (stopBarrierDismiss) {
+                    newValue != SheetValue.Hidden
+                } else {
+                    true
                 }
-                content()
             }
-            stickyBottomContent()
+        )
+
+    LaunchedEffect(showSheet) {
+        if (showSheet) {
+            bottomSheetState.show()
+        } else {
+            bottomSheetState.hide()
         }
     }
+    val coroutineScope = rememberCoroutineScope()
+    var currentHeight by remember { mutableStateOf(300.dp) } // Start partially opened
+
+
+    if (!showSheet) return
+        ModalBottomSheet(
+            modifier = modifier
+                .navigationBarsPadding()
+                .fillMaxWidth()
+                .statusBarsPadding(),
+            containerColor = Theme.colors.surfaceColors.surface,
+            onDismissRequest = {
+                onDismiss()
+            },
+            dragHandle = {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .pointerInput(Unit) {
+                            detectVerticalDragGestures { _, dragAmount ->
+                                if (currentHeight >= 100.dp) {
+                                    currentHeight = (currentHeight - dragAmount.toDp()).coerceAtLeast(0.dp)
+                                    if (currentHeight < 100.dp) {
+                                        coroutineScope.launch {
+                                            bottomSheetState.hide()
+                                            onDismiss()
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    BottomSheetDefaults.DragHandle(width = 32.dp)
+                }
+            },
+            sheetState = bottomSheetState,
+            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        ) {
+            Column(
+                Modifier.height(currentHeight)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .then(Modifier.verticalScroll(rememberScrollState()))
+                ) {
+                    Row {
+                        Text(
+                            text = title,
+                            style = Theme.textStyle.title.large,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        optionalActionButton()
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
+                    content()
+                }
+                stickyFooterContent()
+            }
+        }
 }
+
 
 @PreviewLightDark
 @Composable
@@ -97,11 +151,9 @@ private fun TudeeBottomSheetPreview() {
     BasePreview {
         var isSheetOpen by remember { mutableStateOf(true) }
         TudeeBottomSheet(
-            isVisible = isSheetOpen,
+            showSheet = isSheetOpen,
             title = "Sample Title",
-            isScrollable = true,
-            skipPartiallyExpanded = true,
-            onDismiss = { isSheetOpen = true },
+            onDismiss = { isSheetOpen = false },
             content = {
                 Column {
                     repeat(40) {
@@ -113,7 +165,7 @@ private fun TudeeBottomSheetPreview() {
                     }
                 }
             },
-            stickyBottomContent = {
+            stickyFooterContent = {
                 Button(
                     modifier = Modifier.fillMaxWidth(), onClick = { isSheetOpen = false },
                 ) { Text(text = "Close") }

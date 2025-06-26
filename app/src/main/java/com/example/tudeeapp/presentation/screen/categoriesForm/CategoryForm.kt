@@ -53,7 +53,7 @@ fun CategoryForm(
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val listner : CategoryFormInteractionListener = viewModel
+    val listner: CategoryFormInteractionListener = viewModel
     val isEdit = state.categoryId != 0L
     val snackbarHostState = LocalSnackBarState.current
     val context = LocalContext.current
@@ -62,13 +62,13 @@ fun CategoryForm(
 
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
-        state.successMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
-            snackbarHostState.show(message =context.getString(it) , isSuccess = true)
+        state.successMessage?.takeIf { context.getString(it).isNotBlank() }?.let { it ->
+            snackbarHostState.show(message = context.getString(it), isSuccess = true)
             listner.onCancel()
         }
 
-        state.errorMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
-            snackbarHostState.show(message =context.getString(it) , isSuccess = false)
+        state.errorMessage?.takeIf { context.getString(it).isNotBlank() }?.let { it ->
+            snackbarHostState.show(message = context.getString(it), isSuccess = false)
         }
     }
 
@@ -84,7 +84,7 @@ fun CategoryForm(
     }
 
     TudeeBottomSheet(
-        isVisible = showSheet,
+        showSheet = showSheet,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         optionalActionButton = {
             if (isEdit) {
@@ -102,6 +102,13 @@ fun CategoryForm(
         onDismiss = {
             showSheet = false
             listner.onCancel()
+        },
+        stickyFooterContent = {
+            StickyFooterCategoryForm(
+                buttonText = if (isEdit) stringResource(id = R.string.save) else stringResource(id = R.string.add),
+                state = state,
+                interactionListener = listner,
+            )
         }
     ) {
         CategoryFormContent(
@@ -110,13 +117,12 @@ fun CategoryForm(
             onImageClick = {
                 imagePickerLauncher.launch(arrayOf("image/*"))
             },
-            buttonText = if (isEdit) stringResource(id = R.string.save)
-            else stringResource(id = R.string.add),
-        )
+
+            )
     }
     if (showDeleteConfirmation) {
         TudeeBottomSheet(
-            isVisible = true,
+            showSheet = true,
             title = stringResource(id = R.string.delete_category),
             onDismiss = {
                 showDeleteConfirmation = false
@@ -128,7 +134,10 @@ fun CategoryForm(
                 onConfirm = {
                     listner.onDelete()
                     showDeleteConfirmation = false
-                    snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
+                    snackbarHostState.show(
+                        context.getString(R.string.deleted_successfully),
+                        isSuccess = true
+                    )
                 },
                 onDismiss = {
                     showDeleteConfirmation = false
@@ -140,11 +149,26 @@ fun CategoryForm(
 }
 
 @Composable
+private fun StickyFooterCategoryForm(
+    buttonText: String,
+    state: CategoryFormUIState,
+    interactionListener: CategoryFormInteractionListener,
+) {
+
+        CategoriesBottomSheetButtons(
+            state = state,
+            onSubmit = interactionListener::onSubmit,
+            onCancel = interactionListener::onCancel,
+            buttonText = buttonText
+        )
+
+}
+
+@Composable
 fun CategoryFormContent(
     state: CategoryFormUIState,
     interactionListener: CategoryFormInteractionListener,
     onImageClick: () -> Unit,
-    buttonText: String,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -162,7 +186,9 @@ fun CategoryFormContent(
             Text(
                 text = stringResource(id = R.string.categoryImage),
                 style = Theme.textStyle.title.medium,
-                modifier = Modifier.align(Alignment.Start).padding(8.dp),
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(8.dp),
                 color = Theme.colors.text.title,
             )
             Box(
@@ -223,12 +249,6 @@ fun CategoryFormContent(
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
-        CategoriesBottomSheetButtons(
-            state = state,
-            onSubmit = interactionListener::onSubmit,
-            onCancel = interactionListener::onCancel,
-            buttonText = buttonText
-        )
     }
 }
 

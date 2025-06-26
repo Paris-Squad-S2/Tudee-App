@@ -38,11 +38,22 @@ fun TaskDetailsScreen(
     val taskDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TudeeBottomSheet(
-        isVisible = true,
+        showSheet = true,
         title = stringResource(R.string.task_details),
-        onDismiss = viewModel::onDismiss,
+        onDismiss =  viewModel::onDismiss ,
+        stickyFooterContent = {
+            taskDetailsUiState.taskUiState?.let { taskUiState ->
+                if (taskUiState.status != TaskStatus.DONE)
+                StickyFooterTaskDetails(
+                    onStatusChange = { newStatus ->
+                        viewModel.onEditTaskStatus(newStatus)
+                    },
+                    onEditTaskClick = viewModel::onEditTaskClick,
+                    taskUiState = taskUiState,
+                )
+            }
+        },
         content = {
-
             Column(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -63,10 +74,6 @@ fun TaskDetailsScreen(
                             TaskDetailsContent(
                                 taskUiState = taskUiState,
                                 categoryUiState = categoryUiState,
-                                onStatusChange = { newStatus ->
-                                    viewModel.onEditTaskStatus(newStatus)
-                                },
-                                onEditTaskClick = viewModel::onEditTaskClick
                             )
                         }
                     }
@@ -77,11 +84,20 @@ fun TaskDetailsScreen(
 }
 
 @Composable
+private fun StickyFooterTaskDetails(
+    taskUiState: TaskUiState,
+    onStatusChange: (TaskStatus) -> Unit,
+    onEditTaskClick: () -> Unit
+) {
+    Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)) {
+            StatusActionButtons(taskUiState, onEditTaskClick, onStatusChange)
+    }
+}
+
+@Composable
 private fun TaskDetailsContent(
     taskUiState: TaskUiState,
     categoryUiState: CategoryUiState,
-    onStatusChange: (TaskStatus) -> Unit,
-    onEditTaskClick: () -> Unit
 ) {
 
     val painter = toPainter(categoryUiState.isPredefined, categoryUiState.imageUri)
@@ -93,7 +109,7 @@ private fun TaskDetailsContent(
             .fillMaxWidth()
             .background(Theme.colors.surfaceColors.surface)
             .padding()
-            .padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
+            .padding(start = 16.dp, end = 16.dp),
     ) {
         CategoryIcon(painter)
         TaskTitleAndDescription(taskUiState)
@@ -109,8 +125,6 @@ private fun TaskDetailsContent(
                 onClick = {}
             )
         }
-        if (taskUiState.status != TaskStatus.DONE)
-            StatusActionButtons(taskUiState, onEditTaskClick, onStatusChange)
     }
 }
 

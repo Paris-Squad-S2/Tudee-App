@@ -288,11 +288,6 @@ fun TaskContent(
                 )
                 if (taskIdToDelete == task.id) {
                     TudeeBottomSheet(
-                        isVisible = true,
-                        title = LocalContext.current.getString(R.string.delete_task),
-                        isScrollable = true,
-                        skipPartiallyExpanded = true,
-                        onDismiss = { taskIdToDelete = null },
                         content = {
                             val context = LocalContext.current
                             ConfirmationDialogBox(
@@ -304,6 +299,9 @@ fun TaskContent(
                                 },
                                 onDismiss = { taskIdToDelete = null })
                         },
+                        onDismiss = { taskIdToDelete = null },
+                        title = LocalContext.current.getString(R.string.delete_task),
+                        showSheet = true,
                     )
                 }
             }
