@@ -34,6 +34,7 @@ abstract class TudeeDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): TudeeDatabase {
             return Room.databaseBuilder(context, TudeeDatabase::class.java, DATABASE_NAME)
                 .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
+                .setJournalMode(JournalMode.TRUNCATE)
                 .build()
         }
     }
