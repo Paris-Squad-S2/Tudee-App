@@ -62,9 +62,13 @@ fun CategoryForm(
 
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
-        state.successMessage?.let {
+        state.successMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
             snackbarHostState.show(message =context.getString(it) , isSuccess = true)
             listner.onCancel()
+        }
+
+        state.errorMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
+            snackbarHostState.show(message =context.getString(it) , isSuccess = false)
         }
     }
 
