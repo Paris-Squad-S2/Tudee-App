@@ -53,6 +53,7 @@ fun CategoryForm(
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val listner : CategoryFormInteractionListener = viewModel
     val isEdit = state.categoryId != 0L
     val snackbarHostState = LocalSnackBarState.current
     val context = LocalContext.current
@@ -61,9 +62,13 @@ fun CategoryForm(
 
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
-        state.successMessage?.let {
-            snackbarHostState.show(message = context.getString(it), isSuccess = true)
-            viewModel.onCancel()
+        state.successMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
+            snackbarHostState.show(message =context.getString(it) , isSuccess = true)
+            listner.onCancel()
+        }
+
+        state.errorMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
+            snackbarHostState.show(message =context.getString(it) , isSuccess = false)
         }
     }
 
@@ -74,7 +79,7 @@ fun CategoryForm(
             context.contentResolver.takePersistableUriPermission(
                 it, Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
-            viewModel.updateImage(it)
+            listner.onImageSelected(it)
         }
     }
 
@@ -84,89 +89,66 @@ fun CategoryForm(
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         optionalActionButton = {
             if (isEdit) {
-                DeleteButton(
-                    modifier = Modifier.padding(end = 16.dp),
+                TudeeButton(
                     onClick = {
                         showDeleteConfirmation = true
                         showSheet = false
-                    }
+                    },
+                    text = stringResource(R.string.delete),
+                    variant = ButtonVariant.TextButton,
+                    isNegative = true
                 )
             }
         },
         onDismiss = {
             showSheet = false
-            viewModel.onCancel()
-        },
-        stickyFooterContent = {
-            StickyFooterCategoryForm(
-                onCancel = {
-                    showSheet = false
-                    viewModel.onCancel()
-                },
-                onSubmit = {
-                    viewModel.submitCategory()
-                },
-                state = state,
-                buttonText = when {
-                    isEdit -> stringResource(id = R.string.save)
-                    else -> stringResource(id = R.string.add)
-                }
-            )
+            listner.onCancel()
         }
     ) {
         CategoryFormContent(
             state = state,
-            onValueChange = viewModel::updateCategoryName,
+            interactionListener = listner,
             onImageClick = {
                 imagePickerLauncher.launch(arrayOf("image/*"))
             },
         )
     }
-    TudeeDeleteBottomSheet(
-        onDismiss = {
-            showDeleteConfirmation = false
-            showSheet = true
-        },
-        onConfirm = {
-            viewModel.deleteCategory()
-            showDeleteConfirmation = false
-            snackbarHostState.show(
-                context.getString(R.string.deleted_successfully),
-                isSuccess = true
+    if (showDeleteConfirmation) {
+        TudeeBottomSheet(
+            isVisible = true,
+            title = stringResource(id = R.string.delete_category),
+            onDismiss = {
+                showDeleteConfirmation = false
+                showSheet = true
+            }
+        ) {
+            ConfirmationDialogBox(
+                title = R.string.are_you_sure_to_continue,
+                onConfirm = {
+                    listner.onDelete()
+                    showDeleteConfirmation = false
+                    snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
+                },
+                onDismiss = {
+                    showDeleteConfirmation = false
+                    showSheet = true
+                }
             )
-        },
-        showBottomSheet = showDeleteConfirmation,
-        title = stringResource(id = R.string.delete_category)
-    )
-
+        }
+    }
 }
 
 @Composable
 private fun StickyFooterCategoryForm(
     state: CategoryFormUIState,
-    buttonText: String,
-    onCancel: () -> Unit,
-    onSubmit: () -> Unit,
-) {
-    CategoriesBottomSheetButtons(
-        state = state,
-        onSubmit = onSubmit,
-        onCancel = onCancel,
-        buttonText = buttonText
-    )
-}
-
-@Composable
-fun CategoryFormContent(
-    state: CategoryFormUIState,
-    onValueChange: (String) -> Unit,
+    interactionListener: CategoryFormInteractionListener,
     onImageClick: () -> Unit,
 
     ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
             value = state.categoryName,
-            onValueChange = onValueChange,
+            onValueChange = interactionListener::onCategoryNameChanged,
             placeholder = stringResource(id = R.string.categoryTitle),
             leadingIcon = R.drawable.ic_menu_circle,
             modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
@@ -242,18 +224,12 @@ fun CategoryFormContent(
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
+        CategoriesBottomSheetButtons(
+            state = state,
+            onSubmit = interactionListener::onSubmit,
+            onCancel = interactionListener::onCancel,
+            buttonText = buttonText
+        )
     }
 }
 
-@Composable
-fun DeleteButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    TudeeButton(
-        onClick = onClick,
-        text = stringResource(R.string.delete),
-        variant = ButtonVariant.TextButton,
-        isNegative = true
-    )
-}

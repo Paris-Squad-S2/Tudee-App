@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,8 +32,6 @@ fun CategoriesBottomSheetButtons(
             .fillMaxWidth()
             .shadow(
                 elevation = 20.dp,
-                ambientColor = Color(0x14000000),
-                spotColor = Color(0x14000000)
             )
             .background(
                 Theme.colors.surfaceColors.surfaceHigh
@@ -49,7 +46,7 @@ fun CategoriesBottomSheetButtons(
             TudeeButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(bottom = 12.dp),
                 onClick = onSubmit,
                 text = buttonText,
                 variant = ButtonVariant.FilledButton,
