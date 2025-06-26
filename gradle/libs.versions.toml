@@ -19,6 +19,7 @@ espressoCore = "3.6.1"
 kotlinxCoroutinesCore = "1.10.1"
 kotlinxCoroutinesTest = "1.10.1"
 kotlinxDatetime = "0.6.2"
+lottieCompose = "6.0.0"
 mockk = "1.13.5"
 navigationCompose = "2.9.0"
 lifecycleRuntimeKtx = "2.9.1"
@@ -29,7 +30,6 @@ roomKtx = "`2.7.1"
 roomRuntime = "2.7.1"
 serializationJson ="1.6.3"
 composeMaterial = "1.4.1"
-accompanistSystemuicontroller = "0.36.0"
 truth = "1.4.4"
 junitJupiter = "5.8.1"
 turbine = "1.1.0"
@@ -68,10 +68,10 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }

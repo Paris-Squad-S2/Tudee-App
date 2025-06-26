@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.common.extentions.PreviewMultiDevices
 import com.example.tudeeapp.presentation.design_system.theme.Theme
@@ -57,7 +58,7 @@ fun TudeeHomeMessage(
                 Spacer(Modifier.width(8.dp))
                 Icon(
                     painter = painterResource(state.sliderState.iconRes),
-                    contentDescription = "",
+                    contentDescription = stringResource(R.string.your_cute_helper_for_every_task),
                     tint = Color.Unspecified
                 )
             }

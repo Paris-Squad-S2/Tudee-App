@@ -1,7 +1,6 @@
-package com.example.tudeeapp.presentation.screen.taskManagement
+package com.example.tudeeapp.presentation.screen.taskForm
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Task
@@ -10,54 +9,49 @@ import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Destinations
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlin.random.Random
 
-class TaskManagementViewModel(
+class TaskFormViewModel(
     private val taskServices: TaskServices,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<TaskManagementUiState>(TaskManagementUiState(isLoading = true)) {
+) : BaseViewModel<TaskFormUiState>(TaskFormUiState(isLoading = true)) , InteractionListener {
 
     val taskId = savedStateHandle.toRoute<Destinations.TaskManagement>().taskId
     private val selectedDate = savedStateHandle.toRoute<Destinations.TaskManagement>().selectedDate
 
     init {
         _uiState.update {
-            it.copy(
-            isEditMode = taskId != null,
-            selectedDate = selectedDate)
+            it.copy(isEditMode = taskId != null, selectedDate = selectedDate)
         }
         getAllCategories()
     }
 
-    fun onTitleChange(title: String) {
+    override fun onTitleChange(title: String) {
         _uiState.update { it.copy(title = title) }
     }
 
-    fun onDescriptionChange(description: String) {
+    override fun onDescriptionChange(description: String) {
         _uiState.update { it.copy(description = description) }
     }
 
-    fun onDateClicked(isVisible: Boolean) {
+    override fun onDateClicked(isVisible: Boolean) {
         _uiState.update { it.copy(isDatePickerVisible = isVisible) }
     }
 
-    fun onDateSelected(date: LocalDate) {
+    override fun onDateSelected(date: LocalDate) {
         _uiState.update { it.copy(selectedDate = date.toString(), isDatePickerVisible = false) }
     }
 
-    fun onPrioritySelected(priorityUiState: TaskPriorityUiState) {
+    override fun onPrioritySelected(priorityUiState: TaskPriorityUiState) {
         _uiState.update { currentState ->
             currentState.copy(selectedPriority = priorityUiState)
         }
     }
 
-    fun popBackStack() {
-        navigateUp()
-    }
+    override fun popBackStack() { navigateUp() }
 
-    fun onCategorySelected(categoryId: Long) {
+    override fun onCategorySelected(categoryId: Long) {
         _uiState.update { currentState ->
             val isCurrentlySelected = currentState.selectedCategoryId == categoryId
             val updatedCategories = currentState.categories.map { category ->
@@ -70,31 +64,11 @@ class TaskManagementViewModel(
         }
     }
 
-    private fun getAllCategories() {
-        viewModelScope.launch {
-            try {
-                taskServices.getAllCategories().collect { categories ->
-                    _uiState.update {
-                        it.copy(
-                            categories = categories.map { category -> category.toCategoryState() },
-                            isLoading = false
-                        )
-                    }
-                }
-            } catch (_: Exception) {
-                handleException()
-            }
-        }
-        taskId?.let { getTaskById(it) }
-    }
-
-    fun onActionButtonClicked() {
-        viewModelScope.launch {
-            try {
-                _uiState.update { it.copy(isLoading = true) }
-
+    override fun onActionButtonClicked() {
+        launchSafely(
+            onLoading = { _uiState.update { it.copy(isLoading = true) } },
+            onSuccess = {
                 val currentState = _uiState.value
-
                 val task = Task(
                     id = taskId ?: Random.nextLong(1L, Long.MAX_VALUE),
                     title = currentState.title,
@@ -104,21 +78,35 @@ class TaskManagementViewModel(
                     createdDate = LocalDate.parse(currentState.selectedDate),
                     categoryId = currentState.selectedCategoryId ?: 0L
                 )
-
-                if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(
-                    task
-                )
+                if (currentState.isEditMode) taskServices.editTask(task) else taskServices.addTask(task)
                 _uiState.update { it.copy(isLoading = false, isTaskSaved = true) }
+            },
+            onError = { handleException() }
+        )
+    }
 
-            } catch (_: Exception) {
-                handleException()
-            }
-        }
+    private fun getAllCategories() {
+        launchSafely(
+            onLoading = { _uiState.update { it.copy(isLoading = true) } },
+            onSuccess = {
+                taskServices.getAllCategories().collect { categories ->
+                    _uiState.update {
+                        it.copy(
+                            categories = categories.map { category -> category.toCategoryState() },
+                            isLoading = false
+                        )
+                    }
+                }
+                taskId?.let { getTaskById(it) }
+            },
+            onError = { handleException() }
+        )
     }
 
     private fun getTaskById(id: Long) {
-        viewModelScope.launch {
-            try {
+        launchSafely(
+            onLoading = { _uiState.update { it.copy(isLoading = true) } },
+            onSuccess = {
                 taskServices.getTaskById(id).collect { task ->
                     _uiState.update {
                         it.copy(
@@ -134,18 +122,15 @@ class TaskManagementViewModel(
                             })
                     }
                 }
-            } catch (_: Exception) {
-                handleException()
-            }
-        }
+            },
+            onError = { handleException() }
+        )
     }
-
 
     private fun handleException() {
         _uiState.update {
             it.copy(
-                isLoading = false,
-                error = "There was an error processing your request. Please try again later."
+                isLoading = false, error = "There was an error processing your request. Please try again later."
             )
         }
     }
