@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,7 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -40,10 +42,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TudeeBottomSheet(
+    modifier: Modifier = Modifier,
+    stopBarrierDismiss : Boolean = false,
     isVisible: Boolean,
     title: String,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
     headerEnd: @Composable () -> Unit = {},
     isScrollable: Boolean = true,
     skipPartiallyExpanded: Boolean = true,
@@ -56,7 +59,11 @@ fun TudeeBottomSheet(
         rememberModalBottomSheetState(
             skipPartiallyExpanded = skipPartiallyExpanded,
             confirmValueChange = { newValue ->
-                false
+                if (stopBarrierDismiss){
+                    newValue != SheetValue.Hidden
+                } else {
+                    true
+                }
             }
         )
 
@@ -74,10 +81,11 @@ fun TudeeBottomSheet(
     BoxWithConstraints {
         ModalBottomSheet(
             modifier = modifier
+                .navigationBarsPadding()
                 .fillMaxWidth()
                 .statusBarsPadding(),
             containerColor = Theme.colors.surfaceColors.surface,
-            onDismissRequest = { },
+            onDismissRequest = { onDismiss() },
             dragHandle = {
                 BottomSheetDefaults.DragHandle(
                     modifier = Modifier

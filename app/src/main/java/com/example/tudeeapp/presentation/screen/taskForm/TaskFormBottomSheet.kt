@@ -12,11 +12,9 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.screen.taskForm.TaskFormUiState
 import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
 import com.example.tudeeapp.presentation.screen.taskForm.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskForm.components.PriorityRow
-import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
 import com.example.tudeeapp.presentation.screen.taskForm.components.TaskManagementButtons
 import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
@@ -63,6 +61,7 @@ private fun TaskManagementBottomSheetContent(
 ) {
     TudeeBottomSheet(
         isVisible = true,
+        stopBarrierDismiss = true,
         title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
         onDismiss = interactionListener::popBackStack,
         isScrollable = true,
