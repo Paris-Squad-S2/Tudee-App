@@ -1,13 +1,11 @@
 package com.example.tudeeapp.presentation.screen.task
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -16,8 +14,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -79,10 +75,8 @@ fun TasksScreen(viewModel: TasksViewModel = koinViewModel()) {
         onDateSelected = viewModel::onDateSelected,
         onClickDeleteIcon = viewModel::deleteTask,
         onclickTaskItem = { navController.navigate(Destinations.TaskDetails(it)) },
-        scrollState = rememberScrollState()
     )
 }
-
 
 @Composable
 fun TaskScreenContent(
@@ -96,7 +90,6 @@ fun TaskScreenContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
-    scrollState: ScrollState,
 ) {
     TudeeScaffold(
         floatingActionButton = {
@@ -140,7 +133,6 @@ fun TaskScreenContent(
                         onDateSelected,
                         onClickDeleteIcon,
                         onclickTaskItem,
-                        scrollState
                     )
                 }
             }
@@ -159,126 +151,128 @@ fun TaskContent(
     onDateSelected: (selectedDate: LocalDate) -> Unit,
     onClickDeleteIcon: (taskId: Long) -> Unit,
     onclickTaskItem: (id: Long) -> Unit,
-    scrollState: ScrollState
 ) {
     val statusList = TaskStatusUi.entries
-    var isSheetOpen by remember { mutableStateOf(false) }
+    var taskIdToDelete by remember { mutableStateOf<Long?>(null) }
     val showSnackBar = LocalSnackBarState.current
 
-
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Theme.colors.surfaceColors.surfaceHigh)
+            .background(Theme.colors.surfaceColors.surface),
+        contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        if (data.showDatePicker) {
-            TudeeDatePickerDialog(
-                initialDate = data.calender.selectedDate,
-                onDismiss = { onCLickDatePicker() },
-                onSelectDate = { date ->
-                    onDateSelected(date)
+        item {
+            if (data.showDatePicker) {
+                TudeeDatePickerDialog(
+                    initialDate = data.calender.selectedDate,
+                    onDismiss = { onCLickDatePicker() },
+                    onSelectDate = { date ->
+                        onDateSelected(date)
+                    }
+                )
+            }
+        }
+        item {
+            DateHeader(
+                date = data.calender.currentMonthYear,
+                onClickNext = onClickNextMonth,
+                onClickPrevious = onClickPreviousMonth,
+                onClickPickDate = { onCLickDatePicker() },
+            )
+        }
+        item {
+            LaunchedEffect(data.todayIndex) {
+                val targetIndex = (data.todayIndex - 1)
+                    .coerceAtLeast(0)
+                val visibleItems = listState.layoutInfo.visibleItemsInfo
+                    .map { it.index }
+
+                if (targetIndex !in visibleItems) {
+                    listState.animateScrollToItem(targetIndex)
+                }
+            }
+            LazyRow(
+                state = listState,
+                modifier = Modifier.background(Theme.colors.surfaceColors.surfaceHigh).padding(top = 8.dp, bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+                items(data.calender.daysOfMonth) { day ->
+                    DayItem(
+                        isSelected = data.calender.selectedDate.dayOfMonth == day.num,
+                        dayNumber = day.num.toString(),
+                        dayName = day.name,
+                        onClick = { onDateSelected(day.date) },
+                        modifier = Modifier.width(56.dp)
+                    )
+                }
+            }
+        }
+        item {
+            val tabs = data.status.map { status ->
+                Tab(
+                    title = stringResource(id = status.name.stringResId),
+                    count = status.count,
+                    isSelected = status.isSelected
+                )
+            }
+            HorizontalTabs(
+                tabs = tabs,
+                selectedTabIndex = statusList.indexOf(data.selectedStatus),
+                onTabSelected = { index ->
+                    onTabSelected(statusList[index])
                 }
             )
         }
-
-        DateHeader(
-            date = data.calender.currentMonthYear,
-            onClickNext = onClickNextMonth,
-            onClickPrevious = onClickPreviousMonth,
-            onClickPickDate = { onCLickDatePicker() }
-        )
-
-        LaunchedEffect(data.todayIndex) {
-            val targetIndex = (data.todayIndex - 1)
-                .coerceAtLeast(0)
-            val visibleItems = listState.layoutInfo.visibleItemsInfo
-                .map { it.index }
-
-            if (targetIndex !in visibleItems) {
-                listState.animateScrollToItem(targetIndex)
-            }
-        }
-
-        LazyRow(
-            state = listState,
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(data.calender.daysOfMonth) { day ->
-                DayItem(
-                    isSelected = data.calender.selectedDate.dayOfMonth == day.num,
-                    dayNumber = day.num.toString(),
-                    dayName = day.name,
-                    onClick = { onDateSelected(day.date) },
-                    modifier = Modifier.width(56.dp)
-                )
-            }
-        }
-
-        val tabs = data.status.map { status ->
-            Tab(
-                title = stringResource(id = status.name.stringResId),
-                count = status.count,
-                isSelected = status.isSelected
-            )
-        }
-        HorizontalTabs(
-            tabs = tabs,
-            selectedTabIndex = statusList.indexOf(data.selectedStatus),
-            onTabSelected = { index ->
-                onTabSelected(statusList[index])
-            }
-        )
         if (data.tasks.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(scrollState)
-                    .fillMaxSize()
-                    .background(Theme.colors.surfaceColors.surface)
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                EmptyTasksSection(
-                    title = stringResource(R.string.no_tasks_for_today),
+            item {
+                Column(
                     modifier = Modifier
-                )
+                        .fillMaxSize()
+                        .background(Theme.colors.surfaceColors.surface)
+                        .padding(vertical = 32.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    EmptyTasksSection(
+                        title = stringResource(R.string.no_tasks_for_today),
+                        modifier = Modifier
+                    )
+                }
             }
         } else {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .background(Theme.colors.surfaceColors.surface)
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
-            ) {
-                items(data.tasks) { task ->
-                    val iconResource = toPainter(
-                        imageUri = task.category.iconRes,
-                        isPredefined = task.category.isPredefined
-                    )
+            items(
+                items = data.tasks,
+                key = { task -> task.id },
 
-                    TaskItemWithSwipe(
-                        icon = iconResource,
-                        iconColor = Color.Unspecified,
-                        title = task.title,
-                        date = task.createdDate.toString(),
-                        subtitle = task.description,
-                        priorityLabel = task.priority.lowercaseName,
-                        priorityIcon = painterResource(task.priority.toStyle().iconRes),
-                        priorityColor = task.priority.toStyle().backgroundColor,
-                        isDated = false,
-                        onClickItem = { onclickTaskItem(task.id) },
-                        onDelete = { isSheetOpen = true }
-                    )
+            ) { task ->
+                val iconResource = toPainter(
+                    imageUri = task.category.iconRes,
+                    isPredefined = task.category.isPredefined
+                )
+
+                TaskItemWithSwipe(
+                    icon = iconResource,
+                    iconColor = Color.Unspecified,
+                    title = task.title,
+                    date = task.createdDate.toString(),
+                    subtitle = task.description,
+                    priorityLabel = task.priority.lowercaseName,
+                    priorityIcon = painterResource(task.priority.toStyle().iconRes),
+                    priorityColor = task.priority.toStyle().backgroundColor,
+                    isDated = false,
+                    onClickItem = { onclickTaskItem(task.id) },
+                    onDelete = { taskIdToDelete = task.id },
+                    modifier = Modifier.animateItem().padding(vertical = 8.dp, horizontal = 16.dp)
+                )
+                if (taskIdToDelete == task.id) {
                     TudeeBottomSheet(
-                        isVisible = isSheetOpen,
+                        isVisible = true,
                         title = LocalContext.current.getString(R.string.delete_task),
                         isScrollable = true,
                         skipPartiallyExpanded = true,
-                        onDismiss = { isSheetOpen = false },
+                        onDismiss = { taskIdToDelete = null },
                         content = {
                             val context = LocalContext.current
                             ConfirmationDialogBox(
@@ -286,9 +280,9 @@ fun TaskContent(
                                 onConfirm = {
                                     onClickDeleteIcon(task.id)
                                     showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                    isSheetOpen = false
+                                    taskIdToDelete = null
                                 },
-                                onDismiss = { isSheetOpen = false })
+                                onDismiss = { taskIdToDelete = null })
                         },
                     )
                 }
