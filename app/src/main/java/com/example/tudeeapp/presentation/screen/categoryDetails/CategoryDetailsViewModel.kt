@@ -9,12 +9,12 @@ import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-
+import kotlinx.coroutines.flow.combine
 
 class CategoryDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val taskService: TaskServices,
-) : BaseViewModel<CategoryDetailsUiState>(CategoryDetailsUiState()) {
+) : BaseViewModel<CategoryDetailsUiState>(CategoryDetailsUiState()) , CategoryInteractionListener {
 
     private val categoryId: Long =
         savedStateHandle.toRoute<Destinations.CategoryDetails>().categoryId
@@ -32,15 +32,19 @@ class CategoryDetailsViewModel(
                 _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
             },
             onSuccess = {
-                val category = taskService.getCategoryById(categoryId)
-                val tasks = taskService.getAllTasks().first()
-                    .filter { it.categoryId == categoryId }
-
-                _uiState.value = CategoryDetailsUiState(
-                    isLoading = false,
-                    taskUiState = tasks.map { it.toTaskUiState() },
-                    categoryUiState = category.first().toCategoryUiState()
-                )
+                combine(
+                    taskService.getCategoryById(categoryId),
+                    taskService.getAllTasks()
+                ) { category, allTasks ->
+                    val filteredTasks = allTasks.filter { it.categoryId == categoryId }
+                    Pair(category, filteredTasks)
+                }.collect { (category, filteredTasks) ->
+                    _uiState.value = CategoryDetailsUiState(
+                        isLoading = false,
+                        taskUiState = filteredTasks.map { it.toTaskUiState() },
+                        categoryUiState = category.toCategoryUiState()
+                    )
+                }
             },
             onError = { error ->
                 _uiState.value = _uiState.value.copy(
@@ -94,17 +98,17 @@ class CategoryDetailsViewModel(
         _stateFilter.value = status
     }
 
-    fun refreshCategory() {
-        loadCategory(categoryId)
-    }
-
-    fun onClickEditCategory() {
+    override fun onClickEditCategory() {
         uiState.value.categoryUiState?.let {
             navigate(Destinations.CategoryForm(it.id))
         }
     }
 
-    fun onClickBack() {
+    override fun onClickBack(){
         navigateUp()
+    }
+
+    override fun onTaskClick(id: Long) {
+        navigate(Destinations.TaskDetails(id))
     }
 }
