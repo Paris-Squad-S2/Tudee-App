@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
@@ -15,6 +16,7 @@ import com.example.tudeeapp.data.source.local.room.entity.TaskEntity
     entities = [TaskEntity::class, CategoryEntity::class],
     version = 2,
 )
+@TypeConverters(Converters::class)
 abstract class TudeeDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun categoryDao(): CategoryDao
