@@ -38,7 +38,7 @@ fun CategoryGrid(
             horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Start),
             verticalArrangement = Arrangement.spacedBy(25.dp),
         ) {
-            categories.forEach { category ->
+            categories.sortedBy { it.id }.forEach { category ->
                 val painter = if (category.isPredefined)
                     painterResource(category.image.toResDrawables())
                 else

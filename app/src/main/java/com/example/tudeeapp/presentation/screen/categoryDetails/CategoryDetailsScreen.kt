@@ -122,6 +122,7 @@ fun CategoryDetailsContent(
 ) {
     Column(modifier = modifier
         .fillMaxSize()
+        .background(Theme.colors.surfaceColors.surfaceHigh)
         .statusBarsPadding()) {
         TopAppBar(
             onClickBack = onBack,

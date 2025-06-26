@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,9 +32,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.LocalThemeState
+import com.example.tudeeapp.presentation.common.components.AppHeader
 import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
-import com.example.tudeeapp.presentation.common.components.AppHeader
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.common.components.TudeeHomeMessage
 import com.example.tudeeapp.presentation.common.components.TudeeScaffold
@@ -43,6 +44,7 @@ import com.example.tudeeapp.presentation.screen.home.components.OverviewCard
 import com.example.tudeeapp.presentation.screen.home.utils.getLocalizedToday
 import com.example.tudeeapp.presentation.utills.ShowError
 import com.example.tudeeapp.presentation.utills.ShowLoading
+import com.example.tudeeapp.presentation.utills.localizeNumbers
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -50,10 +52,14 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val state by homeViewModel.uiState.collectAsStateWithLifecycle()
     val themeMode = LocalThemeState.current
 
+    LaunchedEffect(Unit) {
+        homeViewModel.getTasks()
+    }
+
     HomeScreenContent(
         state = state,
-        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark,themeMode) },
-        onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick ,
+        onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark, themeMode) },
+        onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick,
         onTasksCountClick = homeViewModel::onTasksCountClick,
         onTaskClick = homeViewModel::onTaskClick,
     )
@@ -110,7 +116,7 @@ fun HomeScreenContent(
                         ShowError(
                             modifier = Modifier
                                 .fillMaxSize(),
-                            errorMessage = state.error.toString()
+                            errorMessage = state.error
                         )
                     }
 
@@ -142,7 +148,8 @@ private fun HomeContent(
         item {
             OverViewSection(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .animateItem(),
                 state = state,
             )
         }
@@ -151,7 +158,8 @@ private fun HomeContent(
             AnimatedVisibility(
                 modifier = Modifier
                     .background(Theme.colors.surfaceColors.surface)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .animateItem(),
                 visible = state.isTasksEmpty,
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -171,6 +179,7 @@ private fun HomeContent(
 
         item {
             AnimatedVisibility(
+                modifier = Modifier.animateItem(),
                 visible = state.inProgressTasks.isNotEmpty(),
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -186,6 +195,7 @@ private fun HomeContent(
 
         item {
             AnimatedVisibility(
+                modifier = Modifier.animateItem(),
                 visible = state.toDoTasks.isNotEmpty(),
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -199,9 +209,9 @@ private fun HomeContent(
             }
         }
 
-
         item {
             AnimatedVisibility(
+                modifier = Modifier.animateItem(),
                 visible = state.doneTasks.isNotEmpty(),
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -219,8 +229,6 @@ private fun HomeContent(
 }
 
 
-
-
 @Composable
 private fun OverViewSection(
     modifier: Modifier = Modifier,
@@ -229,7 +237,7 @@ private fun OverViewSection(
     val todayText = stringResource(id = R.string.date_format_today)
 
     val formattedDate = remember {
-        getLocalizedToday()
+        getLocalizedToday().localizeNumbers()
     }
 
     Column(
@@ -331,5 +339,3 @@ private fun OverViewCardsRow(
         )
     }
 }
-
-
