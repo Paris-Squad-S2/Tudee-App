@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.screen.task.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,15 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import com.example.tudeeapp.presentation.design_system.theme.Theme
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.design_system.theme.TudeeTheme
 
 @Composable
@@ -38,6 +36,7 @@ fun DateHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .background(Theme.colors.surfaceColors.surfaceHigh)
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
@@ -60,7 +59,7 @@ fun DateHeader(
             )
             ArrowIcon(
                 painterResource(R.drawable.ic_bottom_arrow),
-                modifier.padding(start = 8.dp).clickable(onClick = onClickPickDate)
+                Modifier.padding(start = 8.dp).clickable(onClick = onClickPickDate)
             )
         }
         ArrowContainer(
