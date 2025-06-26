@@ -34,10 +34,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CategoriesScreen(viewModel: CategoriesViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    CategoriesContent(
-        state = state,
-        interactionListener = viewModel
-    )
+    CategoriesContent(state = state, interactionListener = viewModel)
 }
 
 @Composable
@@ -49,7 +46,7 @@ fun CategoriesContent(
         floatingActionButton = {
             TudeeButton(
                 modifier = Modifier.size(64.dp),
-                onClick =  interactionListener::onFloatingActionButtonClick,
+                onClick = interactionListener::onFloatingActionButtonClick,
                 icon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_category),
@@ -72,8 +69,7 @@ fun CategoriesContent(
 
                 state.errorMessage != null -> {
                     ShowError(
-                        modifier = Modifier.fillMaxSize(),
-                        errorMessage = state.errorMessage,
+                        modifier = Modifier.fillMaxSize(), errorMessage = state.errorMessage
                     )
                 }
 
@@ -86,8 +82,8 @@ fun CategoriesContent(
                             .background(Theme.colors.surfaceColors.surface),
                         contentPadding = PaddingValues(12.dp)
                     ) {
-                        items(state.categories) {
-                            CategoryListItem(category = it, onClickItem = interactionListener::onCategoryClick)
+                        items(state.categories.sortedBy { it.id }, key = { category -> category.id }) {
+                            CategoryListItem(category = it, modifier = Modifier.animateItem(), onClickItem = interactionListener::onCategoryClick)
                         }
                     }
                 }
@@ -99,7 +95,8 @@ fun CategoriesContent(
 @Composable
 private fun CategoryListItem(
     category: CategoryUIState,
-    onClickItem: (id: Long) -> Unit
+    onClickItem: (id: Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val painter: Painter = toPainter(category.isPredefined, category.imageUri)
 
@@ -108,6 +105,7 @@ private fun CategoryListItem(
         label = category.name,
         count = category.count,
         isSelected = false,
+        modifier = modifier,
         onClick = { onClickItem(category.id) },
         isPredefined = category.isPredefined
     )

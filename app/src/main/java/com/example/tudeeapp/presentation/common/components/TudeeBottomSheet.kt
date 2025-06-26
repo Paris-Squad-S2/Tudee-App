@@ -48,8 +48,8 @@ fun TudeeBottomSheet(
     showSheet: Boolean,
     title: String,
     onDismiss: () -> Unit,
-    headerEnd: @Composable () -> Unit = {},
-    stickyFooterContent: @Composable () -> Unit = {},
+    optionalActionButton: @Composable () -> Unit = {},
+    stickyFooterContent: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
 
@@ -128,7 +128,7 @@ fun TudeeBottomSheet(
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.weight(1f))
-                        headerEnd()
+                        optionalActionButton()
                         Spacer(modifier = Modifier.width(16.dp))
                     }
                     content()

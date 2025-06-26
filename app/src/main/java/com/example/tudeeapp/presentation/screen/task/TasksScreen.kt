@@ -53,6 +53,8 @@ import com.example.tudeeapp.presentation.navigation.LocalNavController
 import com.example.tudeeapp.presentation.screen.task.components.DateHeader
 import com.example.tudeeapp.presentation.utills.ShowError
 import com.example.tudeeapp.presentation.utills.ShowLoading
+import com.example.tudeeapp.presentation.utills.localizeNumbers
+import com.example.tudeeapp.presentation.utills.toLocalizedString
 import com.example.tudeeapp.presentation.utills.toPainter
 import com.example.tudeeapp.presentation.utills.toStyle
 import kotlinx.datetime.LocalDate
@@ -162,7 +164,7 @@ fun TaskContent(
     scrollState: ScrollState
 ) {
     val statusList = TaskStatusUi.entries
-    var isSheetOpen by remember { mutableStateOf(false) }
+    var taskIdToDelete by remember { mutableStateOf<Long?>(null) }
     val showSnackBar = LocalSnackBarState.current
 
 
@@ -182,7 +184,7 @@ fun TaskContent(
         }
 
         DateHeader(
-            date = data.calender.currentMonthYear,
+            date = data.calender.currentMonthYear.localizeNumbers(),
             onClickNext = onClickNextMonth,
             onClickPrevious = onClickPreviousMonth,
             onClickPickDate = { onCLickDatePicker() }
@@ -208,7 +210,7 @@ fun TaskContent(
             items(data.calender.daysOfMonth) { day ->
                 DayItem(
                     isSelected = data.calender.selectedDate.dayOfMonth == day.num,
-                    dayNumber = day.num.toString(),
+                    dayNumber = day.num.toLocalizedString(),
                     dayName = day.name,
                     onClick = { onDateSelected(day.date) },
                     modifier = Modifier.width(56.dp)
@@ -254,7 +256,10 @@ fun TaskContent(
                     .weight(1f),
                 contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
             ) {
-                items(data.tasks) { task ->
+                items(
+                    items = data.tasks,
+                    key = { task -> task.id }
+                ) { task ->
                     val iconResource = toPainter(
                         imageUri = task.category.iconRes,
                         isPredefined = task.category.isPredefined
@@ -271,24 +276,29 @@ fun TaskContent(
                         priorityColor = task.priority.toStyle().backgroundColor,
                         isDated = false,
                         onClickItem = { onclickTaskItem(task.id) },
-                        onDelete = { isSheetOpen = true }
+                        onDelete = { taskIdToDelete = task.id },
+                        modifier = Modifier.animateItem()
                     )
-                    TudeeBottomSheet(
-                        showSheet = isSheetOpen,
-                        title = LocalContext.current.getString(R.string.delete_task),
-                        onDismiss = { isSheetOpen = false },
-                        content = {
-                            val context = LocalContext.current
-                            ConfirmationDialogBox(
-                                title = R.string.are_you_sure_to_continue,
-                                onConfirm = {
-                                    onClickDeleteIcon(task.id)
-                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                    isSheetOpen = false
-                                },
-                                onDismiss = { isSheetOpen = false })
-                        },
-                    )
+                    if (taskIdToDelete == task.id) {
+                        TudeeBottomSheet(
+                            isVisible = true,
+                            title = LocalContext.current.getString(R.string.delete_task),
+                            isScrollable = true,
+                            skipPartiallyExpanded = true,
+                            onDismiss = { taskIdToDelete = null },
+                            content = {
+                                val context = LocalContext.current
+                                ConfirmationDialogBox(
+                                    title = R.string.are_you_sure_to_continue,
+                                    onConfirm = {
+                                        onClickDeleteIcon(task.id)
+                                        showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                        taskIdToDelete = null
+                                    },
+                                    onDismiss = { taskIdToDelete = null })
+                            },
+                        )
+                    }
                 }
             }
         }

@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
 import com.example.tudeeapp.presentation.LocalSnackBarState
@@ -16,6 +17,7 @@ import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormText
 import com.example.tudeeapp.presentation.screen.taskForm.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskForm.components.PriorityRow
 import com.example.tudeeapp.presentation.screen.taskForm.components.TaskManagementButtons
+import com.example.tudeeapp.presentation.utills.localizeNumbers
 import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -29,7 +31,7 @@ fun TaskFormBottomSheet(
 
     TaskManagementBottomSheetContent(
         uiState = uiState,
-        interactionListener  = viewModel,
+        interactionListener = viewModel,
     )
 
     if (uiState.isDatePickerVisible) {
@@ -49,7 +51,7 @@ fun TaskFormBottomSheet(
     LaunchedEffect(uiState.isTaskSaved) {
         if (uiState.isTaskSaved) {
             snackbarHostState.show(message = successMessage, isSuccess = true)
-           viewModel.popBackStack()
+            viewModel.popBackStack()
         }
     }
 }
@@ -80,7 +82,7 @@ private fun TaskManagementBottomSheetContent(
             onDateClicked = { interactionListener.onDateClicked(true) },
             title = uiState.title,
             description = uiState.description,
-            date = uiState.selectedDate,
+            date = uiState.selectedDate.localizeNumbers(),
         )
         PriorityRow(
             modifier = Modifier.padding(16.dp),
