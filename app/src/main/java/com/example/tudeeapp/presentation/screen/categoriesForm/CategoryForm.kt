@@ -37,12 +37,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
+import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
 import com.example.tudeeapp.presentation.common.components.TextField
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.extentions.dashedBorder
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.common.components.TudeeDeleteBottomSheet
 import com.example.tudeeapp.presentation.screen.categoriesForm.components.CategoriesBottomSheetButtons
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -53,7 +53,7 @@ fun CategoryForm(
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val listner : CategoryFormInteractionListener = viewModel
+    val listner: CategoryFormInteractionListener = viewModel
     val isEdit = state.categoryId != 0L
     val snackbarHostState = LocalSnackBarState.current
     val context = LocalContext.current
@@ -62,13 +62,13 @@ fun CategoryForm(
 
 
     LaunchedEffect(state.successMessage, state.errorMessage) {
-        state.successMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
-            snackbarHostState.show(message =context.getString(it) , isSuccess = true)
+        state.successMessage?.takeIf { context.getString(it).isNotBlank() }?.let { it ->
+            snackbarHostState.show(message = context.getString(it), isSuccess = true)
             listner.onCancel()
         }
 
-        state.errorMessage?.takeIf { context.getString(it).isNotBlank()}?.let { it->
-            snackbarHostState.show(message =context.getString(it) , isSuccess = false)
+        state.errorMessage?.takeIf { context.getString(it).isNotBlank() }?.let { it ->
+            snackbarHostState.show(message = context.getString(it), isSuccess = false)
         }
     }
 
@@ -85,7 +85,6 @@ fun CategoryForm(
 
     TudeeBottomSheet(
         showSheet = showSheet,
-        stopBarrierDismiss = true,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         optionalActionButton = {
             if (isEdit) {
@@ -103,6 +102,13 @@ fun CategoryForm(
         onDismiss = {
             showSheet = false
             listner.onCancel()
+        },
+        stickyFooterContent = {
+            StickyFooterCategoryForm(
+                buttonText = if (isEdit) stringResource(id = R.string.save) else stringResource(id = R.string.add),
+                state = state,
+                interactionListener = listner,
+            )
         }
     ) {
         CategoryFormContent(
@@ -111,11 +117,12 @@ fun CategoryForm(
             onImageClick = {
                 imagePickerLauncher.launch(arrayOf("image/*"))
             },
-        )
+
+            )
     }
     if (showDeleteConfirmation) {
         TudeeBottomSheet(
-            isVisible = true,
+            showSheet = true,
             title = stringResource(id = R.string.delete_category),
             onDismiss = {
                 showDeleteConfirmation = false
@@ -127,7 +134,10 @@ fun CategoryForm(
                 onConfirm = {
                     listner.onDelete()
                     showDeleteConfirmation = false
-                    snackbarHostState.show(context.getString(R.string.deleted_successfully), isSuccess = true)
+                    snackbarHostState.show(
+                        context.getString(R.string.deleted_successfully),
+                        isSuccess = true
+                    )
                 },
                 onDismiss = {
                     showDeleteConfirmation = false
@@ -140,11 +150,26 @@ fun CategoryForm(
 
 @Composable
 private fun StickyFooterCategoryForm(
+    buttonText: String,
+    state: CategoryFormUIState,
+    interactionListener: CategoryFormInteractionListener,
+) {
+
+        CategoriesBottomSheetButtons(
+            state = state,
+            onSubmit = interactionListener::onSubmit,
+            onCancel = interactionListener::onCancel,
+            buttonText = buttonText
+        )
+
+}
+
+@Composable
+fun CategoryFormContent(
     state: CategoryFormUIState,
     interactionListener: CategoryFormInteractionListener,
     onImageClick: () -> Unit,
-
-    ) {
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
             value = state.categoryName,
@@ -224,12 +249,6 @@ private fun StickyFooterCategoryForm(
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
-        CategoriesBottomSheetButtons(
-            state = state,
-            onSubmit = interactionListener::onSubmit,
-            onCancel = interactionListener::onCancel,
-            buttonText = buttonText
-        )
     }
 }
 
