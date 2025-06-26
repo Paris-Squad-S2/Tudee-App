@@ -1,6 +1,6 @@
 package com.example.tudeeapp.domain.models
 
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 
 data class Task(
     val id: Long =0,
@@ -8,7 +8,7 @@ data class Task(
     val description: String,
     val priority: TaskPriority,
     val status: TaskStatus,
-    val createdDate: LocalDate,
+    val createdDate: LocalDateTime,
     val categoryId: Long,
 )
 enum class TaskPriority {
