@@ -2,10 +2,8 @@
 
 package com.example.tudeeapp.presentation.common.components
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -45,7 +43,6 @@ import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import kotlinx.coroutines.launch
 
-@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TudeeBottomSheet(
@@ -53,7 +50,7 @@ fun TudeeBottomSheet(
     stopBarrierDismiss: Boolean = false,
     showSheet: Boolean,
     title: String,
-    initialHeight: Dp = 300.dp,
+    initialHeight: Dp = 350.dp,
     onDismiss: () -> Unit,
     optionalActionButton: @Composable () -> Unit = {},
     stickyFooterContent: @Composable ColumnScope.() -> Unit = {},
@@ -81,69 +78,80 @@ fun TudeeBottomSheet(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-    var currentHeight by remember { mutableStateOf(initialHeight) } // Start partially opened
+    val allowedHeights = listOf(280.dp,350.dp, 500.dp, 700.dp, 1000.dp)
 
+    var currentHeight by remember { mutableStateOf(initialHeight) }
+
+    fun findClosestHeight(target: Dp): Dp {
+        if (target < (allowedHeights.minOrNull() ?: return 100.dp)) { return 100.dp }
+        return allowedHeights.minByOrNull { kotlin.math.abs(it.value - target.value) } ?: allowedHeights.first()
+    }
 
     if (!showSheet) return
-        ModalBottomSheet(
-            modifier = modifier
-                .navigationBarsPadding()
-                .fillMaxWidth()
-                .statusBarsPadding(),
-            containerColor = Theme.colors.surfaceColors.surface,
-            onDismissRequest = {
-                onDismiss()
-            },
-            dragHandle = {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .pointerInput(Unit) {
-                            detectVerticalDragGestures { _, dragAmount ->
-                                if (currentHeight >= 100.dp) {
-                                    currentHeight = (currentHeight - dragAmount.toDp()).coerceAtLeast(0.dp)
-                                    if (currentHeight < 100.dp) {
-                                        coroutineScope.launch {
-                                            bottomSheetState.hide()
-                                            onDismiss()
-                                        }
+    ModalBottomSheet(
+        modifier = modifier
+            .navigationBarsPadding()
+            .fillMaxWidth()
+            .statusBarsPadding(),
+        containerColor = Theme.colors.surfaceColors.surface,
+        onDismissRequest = {
+            onDismiss()
+        },
+        dragHandle = {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .pointerInput(Unit) {
+                        detectVerticalDragGestures(
+                            onVerticalDrag = { _, dragAmount ->
+                                val newHeight = currentHeight - dragAmount.toDp()
+                                currentHeight = (newHeight).coerceAtLeast(0.dp)
+                            },
+                            onDragEnd = {
+                                val snapped = findClosestHeight(currentHeight)
+                                currentHeight = snapped
+                                if (currentHeight < (allowedHeights.minOrNull() ?: 100.dp)) {
+                                    coroutineScope.launch {
+                                        bottomSheetState.hide()
+                                        onDismiss()
                                     }
                                 }
                             }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    BottomSheetDefaults.DragHandle(width = 32.dp)
-                }
-            },
-            sheetState = bottomSheetState,
-            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                        )
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                BottomSheetDefaults.DragHandle(width = 32.dp)
+            }
+        },
+        sheetState = bottomSheetState,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+    ) {
+        Column(
+            Modifier.height(currentHeight)
         ) {
             Column(
-                Modifier.height(currentHeight)
+                modifier = Modifier
+                    .weight(1f)
+                    .then(Modifier.verticalScroll(rememberScrollState()))
             ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .then(Modifier.verticalScroll(rememberScrollState()))
-                ) {
-                    Row {
-                        Text(
-                            text = title,
-                            style = Theme.textStyle.title.large,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        optionalActionButton()
-                        Spacer(modifier = Modifier.width(16.dp))
-                    }
-                    content()
+                Row {
+                    Text(
+                        text = title,
+                        style = Theme.textStyle.title.large,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    optionalActionButton()
+                    Spacer(modifier = Modifier.width(16.dp))
                 }
-                stickyFooterContent()
+                content()
             }
+            stickyFooterContent()
         }
+    }
 }
 
 
