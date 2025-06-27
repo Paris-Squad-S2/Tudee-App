@@ -95,14 +95,14 @@ Example:
 
 | Home Screen | Add Task | Task Screen | Category Screen | Add Category |
 |-------------|-------------|-------------|-------------|-------------|
-| <img src="assets/home_screen.png" alt="description" width="150"/> | <img src="assets/add_task_screen.png" alt="description" width="150"/> | <img src="assets/task_screen.png" alt="description" width="150"/> |<img src="assets/category_screen.png" alt="description" width="150"/> |<img src="assets/new_category_screen.png" alt="description" width="150"/> |
+| <img src="assets/home_screen_dark.png" alt="description" width="150"/> | <img src="assets/add_task_screen_dark.png" alt="description" width="150"/> | <img src="assets/task_screen_dark.png" alt="description" width="150"/> |<img src="assets/category_screen_dark.png" alt="description" width="150"/> |<img src="assets/add_category_screen_dark.png" alt="description" width="150"/> |
 
 ---
 🗣️ Arabic Language
 
 | Home Screen | Add Task | Task Screen | Category Screen | Add Category |
 |-------------|-------------|-------------|-------------|-------------|
-| <img src="assets/home_screen_ar.png" alt="description" width="150"/> | <img src="assets/add_task_screen_ar.png" alt="description" width="150"/> | <img src="assets/task_screen_ar.png" alt="description" width="150"/> |<img src="assets/category_screen_ar.png" alt="description" width="150"/> |<img src="assets/add_category_screen_ar.png" alt="description" width="150"/> |
+| <img src="assets/home_screen_ar.png" alt="description" width="150"/> | <img src="assets/add_task_screen_ar.png" alt="description" width="150"/> | <img src="assets/task_screen_ar.png" alt="description" width="150"/> |<img src="assets/category_screen_ar.png" alt="description" width="150"/> |<img src="assets/add_category_ar.png" alt="description" width="150"/> |
 
 ---
 ## 📄 License
