@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
@@ -52,6 +53,7 @@ fun TudeeBottomSheet(
     stopBarrierDismiss: Boolean = false,
     showSheet: Boolean,
     title: String,
+    initialHeight: Dp = 300.dp,
     onDismiss: () -> Unit,
     optionalActionButton: @Composable () -> Unit = {},
     stickyFooterContent: @Composable ColumnScope.() -> Unit = {},
@@ -79,7 +81,7 @@ fun TudeeBottomSheet(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-    var currentHeight by remember { mutableStateOf(300.dp) } // Start partially opened
+    var currentHeight by remember { mutableStateOf(initialHeight) } // Start partially opened
 
 
     if (!showSheet) return

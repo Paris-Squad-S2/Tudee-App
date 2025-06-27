@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,16 +34,18 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.LocalSnackBarState
+import com.example.tudeeapp.presentation.common.components.ButtonVariant
 import com.example.tudeeapp.presentation.common.components.ConfirmationDialogBox
+import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.common.components.HorizontalTabs
 import com.example.tudeeapp.presentation.common.components.Tab
 import com.example.tudeeapp.presentation.common.components.TaskItemWithSwipe
 import com.example.tudeeapp.presentation.common.components.TopAppBar
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
+import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.presentation.mapper.toResDrawables
-import com.example.tudeeapp.presentation.LocalSnackBarState
-import com.example.tudeeapp.presentation.common.components.EmptyTasksSection
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
@@ -148,12 +151,13 @@ fun CategoryDetailsContent(
             }
         )
         val filteredTasks = tasks.filter { it.status == selectedState.name }
-        if (filteredTasks.isEmpty()){
+        if (filteredTasks.isEmpty()) {
 
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(horizontal = 16.dp)
-            ){
+            ) {
                 EmptyTasksSection(
                     title = stringResource(R.string.no_task_for, categoryTitle),
                     description = stringResource(R.string.add_first_task),
@@ -193,19 +197,46 @@ fun CategoryDetailsContent(
                     if (taskIdToDelete == task.id) {
                         TudeeBottomSheet(
                             showSheet = true,
+                            initialHeight = 350.dp,
                             title = LocalContext.current.getString(R.string.delete_task),
                             onDismiss = { taskIdToDelete = null },
                             content = {
-                                val context = LocalContext.current
-
-                                ConfirmationDialogBox(
-                                    title = R.string.are_you_sure_to_continue,
-                                    onConfirm = {
-                                        onClickDeleteIcon(task.id)
-                                        showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                        taskIdToDelete = null
-                                    },
-                                    onDismiss = { taskIdToDelete = null })
+                                ConfirmationDialogBox(title = R.string.are_you_sure_to_continue,)
+                            },
+                            stickyFooterContent = {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Theme.colors.surfaceColors.surfaceHigh)
+                                        .padding(horizontal = 16.dp),
+                                ) {
+                                    val context = LocalContext.current
+                                    TudeeButton(
+                                        onClick = {
+                                            onClickDeleteIcon(task.id)
+                                            showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                            taskIdToDelete = null
+                                        },
+                                        modifier = Modifier
+                                            .padding(top = 12.dp, bottom = 6.dp)
+                                            .fillMaxWidth()
+                                            .height(56.dp),
+                                        text = stringResource(R.string.delete),
+                                        isNegative = true,
+                                        variant = ButtonVariant.FilledButton,
+                                    )
+                                    TudeeButton(
+                                        onClick = {
+                                            taskIdToDelete = null
+                                        },
+                                        modifier = Modifier
+                                            .padding(bottom = 12.dp, top = 6.dp)
+                                            .fillMaxWidth()
+                                            .height(56.dp),
+                                        text = stringResource(R.string.cancel),
+                                        variant = ButtonVariant.OutlinedButton,
+                                    )
+                                }
                             },
                         )
                     }

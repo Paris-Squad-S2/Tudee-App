@@ -26,6 +26,6 @@ class AppPreferences(context: Context) {
         private const val PREFS_NAME = "app_prefs"
         private const val KEY_FIRST_LAUNCH = "first_launch"
         private const val KEY_ONBOARDING_COMPLETED = "onboarding_completed"
-        private const val KEY_DARK_THEME = "dark_theme"
+        private const val KEY_DARK_THEME = "theme"
     }
 }
