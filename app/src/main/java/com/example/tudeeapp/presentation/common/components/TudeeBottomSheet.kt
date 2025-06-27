@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.example.tudeeapp.presentation.common.components
 
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -78,14 +76,8 @@ fun TudeeBottomSheet(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-    val allowedHeights = listOf(280.dp,350.dp, 500.dp, 700.dp, 1000.dp)
-
     var currentHeight by remember { mutableStateOf(initialHeight) }
 
-    fun findClosestHeight(target: Dp): Dp {
-        if (target < (allowedHeights.minOrNull() ?: return 100.dp)) { return 100.dp }
-        return allowedHeights.minByOrNull { kotlin.math.abs(it.value - target.value) } ?: allowedHeights.first()
-    }
 
     if (!showSheet) return
     ModalBottomSheet(
@@ -102,22 +94,18 @@ fun TudeeBottomSheet(
                 Modifier
                     .fillMaxWidth()
                     .pointerInput(Unit) {
-                        detectVerticalDragGestures(
-                            onVerticalDrag = { _, dragAmount ->
-                                val newHeight = currentHeight - dragAmount.toDp()
-                                currentHeight = (newHeight).coerceAtLeast(0.dp)
-                            },
-                            onDragEnd = {
-                                val snapped = findClosestHeight(currentHeight)
-                                currentHeight = snapped
-                                if (currentHeight < (allowedHeights.minOrNull() ?: 100.dp)) {
+                        detectVerticalDragGestures { _, dragAmount ->
+                            if (currentHeight >= 200.dp) {
+                                currentHeight =
+                                    (currentHeight - dragAmount.toDp()).coerceAtLeast(0.dp)
+                                if (currentHeight < 200.dp) {
                                     coroutineScope.launch {
                                         bottomSheetState.hide()
                                         onDismiss()
                                     }
                                 }
                             }
-                        )
+                        }
                     },
                 contentAlignment = Alignment.Center
             ) {
