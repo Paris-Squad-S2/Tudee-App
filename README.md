@@ -64,6 +64,7 @@ Each task is associated with:
 | Language | Kotlin |
 | UI Toolkit | Jetpack Compose |
 | Local Storage | Room Database |
+| architecture | MVVM |
 | Dependency Injection | Koin |
 | Navigation | Navigation Component |
 
