@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TudeeBottomSheet(
     modifier: Modifier = Modifier,
-    stopBarrierDismiss: Boolean = false,
+    stopBarrierDismiss: Boolean = true,
     showSheet: Boolean,
     title: String,
     initialHeight: Dp = 350.dp,

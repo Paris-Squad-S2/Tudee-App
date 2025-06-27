@@ -291,6 +291,7 @@ fun TaskContent(
                 if (taskIdToDelete == task.id) {
                     val context = LocalContext.current
                     TudeeBottomSheet(
+                        stopBarrierDismiss = true,
                         initialHeight = 350.dp,
                         content = {
                             ConfirmationDialogBox(title = R.string.are_you_sure_to_continue,)
