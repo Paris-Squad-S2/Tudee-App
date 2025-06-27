@@ -1,9 +1,7 @@
 package com.example.tudeeapp.presentation.common.extentions
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import com.example.tudeeapp.presentation.screen.home.utils.getToday
 
 fun getCurrentDateString(): String {
-    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
+    return getToday().date.toString()
 }

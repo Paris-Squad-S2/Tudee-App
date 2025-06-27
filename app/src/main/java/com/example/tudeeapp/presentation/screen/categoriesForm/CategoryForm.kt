@@ -85,6 +85,7 @@ fun CategoryForm(
 
     TudeeBottomSheet(
         showSheet = showSheet,
+        stopBarrierDismiss = true,
         title = if (isEdit) stringResource(id = R.string.editCategory) else stringResource(id = R.string.addnewCategory),
         optionalActionButton = {
             if (isEdit) {
@@ -123,26 +124,54 @@ fun CategoryForm(
     if (showDeleteConfirmation) {
         TudeeBottomSheet(
             showSheet = true,
+            stopBarrierDismiss = true,
+            initialHeight = 350.dp,
             title = stringResource(id = R.string.delete_category),
             onDismiss = {
                 showDeleteConfirmation = false
                 showSheet = true
-            }
+            },
+            stickyFooterContent = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Theme.colors.surfaceColors.surfaceHigh)
+                        .padding(horizontal = 16.dp),
+                ) {
+                    TudeeButton(
+                        onClick = {
+                            listner.onDelete()
+                            showDeleteConfirmation = false
+                            snackbarHostState.show(
+                                context.getString(R.string.deleted_successfully),
+                                isSuccess = true
+                            )
+                        },
+                        modifier = Modifier
+                            .padding(top = 12.dp, bottom = 6.dp)
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        text = stringResource(R.string.delete),
+                        isNegative = true,
+                        variant = ButtonVariant.FilledButton,
+                    )
+                    TudeeButton(
+                        onClick = {
+                            showDeleteConfirmation = false
+                            showSheet = true
+                        },
+                        modifier = Modifier
+                            .padding(bottom = 12.dp, top = 6.dp)
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        text = stringResource(R.string.cancel),
+                        variant = ButtonVariant.OutlinedButton,
+                    )
+                }
+            },
         ) {
             ConfirmationDialogBox(
                 title = R.string.are_you_sure_to_continue,
-                onConfirm = {
-                    listner.onDelete()
-                    showDeleteConfirmation = false
-                    snackbarHostState.show(
-                        context.getString(R.string.deleted_successfully),
-                        isSuccess = true
-                    )
-                },
-                onDismiss = {
-                    showDeleteConfirmation = false
-                    showSheet = true
-                }
             )
         }
     }

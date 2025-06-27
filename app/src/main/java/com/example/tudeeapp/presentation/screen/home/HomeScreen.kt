@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,15 +49,13 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
-    val state by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val state by homeViewModel.homeState.collectAsStateWithLifecycle()
     val themeMode = LocalThemeState.current
 
-    LaunchedEffect(Unit) {
-        homeViewModel.getTasks()
-    }
-
+    val isSystemInDarkTheme = isSystemInDarkTheme()
     HomeScreenContent(
         state = state,
+        isSystemInDarkTheme = isSystemInDarkTheme,
         onToggleTheme = { isDark -> homeViewModel.onToggledAction(isDark, themeMode) },
         onFloatingActionButtonClick = homeViewModel::onFloatingActionButtonClick,
         onTasksCountClick = homeViewModel::onTasksCountClick,
@@ -68,6 +66,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    isSystemInDarkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     onFloatingActionButtonClick: () -> Unit,
     onTasksCountClick: (String) -> Unit,
@@ -79,7 +78,11 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .background(Theme.colors.primary)
                     .statusBarsPadding(),
-                isDarkMode = state.isDarkMode,
+                isDarkMode = if (state.isDarkMode == 2) {
+                    isSystemInDarkTheme
+                } else {
+                    state.isDarkMode == 1
+                },
                 onToggleTheme = onToggleTheme,
             )
         },

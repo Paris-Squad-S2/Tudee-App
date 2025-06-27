@@ -12,7 +12,6 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeDatePickerDialog
-import com.example.tudeeapp.presentation.LocalSnackBarState
 import com.example.tudeeapp.presentation.screen.taskForm.components.TaskFormTextFields
 import com.example.tudeeapp.presentation.screen.taskForm.components.CategoryGrid
 import com.example.tudeeapp.presentation.screen.taskForm.components.PriorityRow
@@ -35,8 +34,9 @@ fun TaskFormBottomSheet(
     )
 
     if (uiState.isDatePickerVisible) {
+        val onlyDate = uiState.selectedDate.substringBefore("T")
         TudeeDatePickerDialog(
-            initialDate = LocalDate.parse(uiState.selectedDate),
+            initialDate = LocalDate.parse(onlyDate),
             onDismiss = { viewModel.onDateClicked(false) },
             onSelectDate = { viewModel.onDateSelected(it) }
         )
@@ -76,13 +76,14 @@ private fun TaskManagementBottomSheetContent(
             )
         },
     ) {
+        val onlyDate = uiState.selectedDate.substringBefore("T")
         TaskFormTextFields(
             onTitleChange = interactionListener::onTitleChange,
             onDescriptionChange = interactionListener::onDescriptionChange,
             onDateClicked = { interactionListener.onDateClicked(true) },
             title = uiState.title,
             description = uiState.description,
-            date = uiState.selectedDate.localizeNumbers(),
+            date = onlyDate.localizeNumbers(),
         )
         PriorityRow(
             modifier = Modifier.padding(16.dp),

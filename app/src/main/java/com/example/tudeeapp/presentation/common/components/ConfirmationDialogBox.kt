@@ -24,8 +24,6 @@ fun ConfirmationDialogBox(
     title: Int,
     modifier: Modifier = Modifier,
     image: Painter = painterResource(R.drawable.tudee_img),
-    onDismiss: () -> Unit = {},
-    onConfirm: () -> Unit = {}
 
 ) {
     Column(
@@ -54,33 +52,6 @@ fun ConfirmationDialogBox(
                     .height(100.dp),
                 painter = image,
                 contentDescription = "tudee image",
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Theme.colors.surfaceColors.surfaceHigh)
-                .padding(horizontal = 16.dp),
-        ) {
-            TudeeButton(
-                onClick = onConfirm,
-                modifier = Modifier
-                    .padding(top = 12.dp, bottom = 6.dp)
-                    .fillMaxWidth()
-                    .height(56.dp),
-                text = stringResource(R.string.delete),
-                isNegative = true,
-                variant = ButtonVariant.FilledButton,
-            )
-            TudeeButton(
-                onClick = onDismiss,
-                modifier = Modifier
-                    .padding(bottom = 12.dp, top = 6.dp)
-                    .fillMaxWidth()
-                    .height(56.dp),
-                text = stringResource(R.string.cancel),
-                variant = ButtonVariant.OutlinedButton,
             )
         }
     }
