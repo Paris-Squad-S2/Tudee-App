@@ -65,6 +65,7 @@ Each task is associated with:
 | UI Toolkit | Jetpack Compose |
 | Local Storage | Room Database |
 | architecture | MVVM |
+| unit testing  | Junit 5 & Truth & Mock & Coroutine & Turbine |
 | Dependency Injection | Koin |
 | Navigation | Navigation Component |
 
