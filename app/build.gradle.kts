@@ -146,8 +146,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         html.required.set(true)
     }
 
-    val mainSrc = "$projectDir/src/main/java"
-    val debugTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
+    val classDirTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
         exclude(
             "**/R.class",
             "**/R$*.class",
@@ -159,13 +158,11 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         )
     }
 
-    classDirectories.setFrom(debugTree)
-    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(classDirTree)
+    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
+
     executionData.setFrom(fileTree(buildDir) {
-        include(
-            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
-            "jacoco/testDebugUnitTest.exec"
-        )
+        include("jacoco/testDebugUnitTest.exec")
     })
 }
 
@@ -174,8 +171,7 @@ tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
     group = "Verification"
     description = "Verify code coverage thresholds"
 
-    val mainSrc = "$projectDir/src/main/java"
-    val debugTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
+    val classDirTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
         exclude(
             "**/R.class",
             "**/R$*.class",
@@ -187,13 +183,10 @@ tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
         )
     }
 
-    classDirectories.setFrom(debugTree)
-    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(classDirTree)
+    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
     executionData.setFrom(fileTree(buildDir) {
-        include(
-            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
-            "jacoco/testDebugUnitTest.exec"
-        )
+        include("jacoco/testDebugUnitTest.exec")
     })
 
     violationRules {

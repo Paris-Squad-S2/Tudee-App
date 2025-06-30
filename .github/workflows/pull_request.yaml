@@ -30,5 +30,7 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x gradlew
 
-      - name: Run coverage verification
-        run: ./gradlew testDebugUnitTest jacocoTestCoverageVerification
+      - name: Run tests with coverage
+        run: |
+          ./gradlew clean testDebugUnitTest jacocoTestReport
+          ./gradlew jacocoTestCoverageVerification
