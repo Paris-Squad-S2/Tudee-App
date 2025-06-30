@@ -37,7 +37,7 @@
     <string name="medium">Medium</string>
     <string name="low">Low</string>
     <string name="date_format_today">Today</string>
-    <string name="date_format_medium">%s, %d %s %d</string>
+    <string name="date_format_medium" translatable="false">%s, %d %s %d</string>
     <string name="slider_title_nothing">Nothing on your list…</string>
     <string name="slider_description_nothing">Fill your day with something awesome.</string>
     <string name="slider_title_tadaa">Tadaa!</string>

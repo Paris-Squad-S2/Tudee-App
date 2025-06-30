@@ -37,6 +37,12 @@ android {
             enableUnitTestCoverage = true
         }
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -118,13 +124,16 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 }
 
+val buildDir = layout.buildDirectory.get().asFile
+
 tasks.withType<Test> {
     useJUnitPlatform()
 
-    extensions.configure(JacocoTaskExtension::class.java) {
+    configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
         excludes = listOf("jdk.internal.*")
     }
+    finalizedBy("jacocoTestReport", "jacocoTestCoverageVerification")
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {
@@ -138,7 +147,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
 
     val mainSrc = "$projectDir/src/main/java"
-    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+    val debugTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
         exclude(
             "**/R.class",
             "**/R$*.class",
@@ -153,7 +162,10 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     classDirectories.setFrom(debugTree)
     sourceDirectories.setFrom(files(mainSrc))
     executionData.setFrom(fileTree(buildDir) {
-        include("jacoco/testDebugUnitTest.exec")
+        include(
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+            "jacoco/testDebugUnitTest.exec"
+        )
     })
 }
 
@@ -163,7 +175,7 @@ tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
     description = "Verify code coverage thresholds"
 
     val mainSrc = "$projectDir/src/main/java"
-    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+    val debugTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
         exclude(
             "**/R.class",
             "**/R$*.class",
@@ -178,7 +190,10 @@ tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
     classDirectories.setFrom(debugTree)
     sourceDirectories.setFrom(files(mainSrc))
     executionData.setFrom(fileTree(buildDir) {
-        include("jacoco/testDebugUnitTest.exec")
+        include(
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+            "jacoco/testDebugUnitTest.exec"
+        )
     })
 
     violationRules {

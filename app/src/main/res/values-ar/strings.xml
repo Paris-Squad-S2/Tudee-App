@@ -35,7 +35,6 @@
     <string name="medium">متوسط</string>
     <string name="low">منخفض</string>
     <string name="date_format_today">اليوم</string>
-    <string name="date_format_medium">%s, %d %s %d</string>
     <string name="slider_title_nothing">لا شيء في قائمتك…</string>
     <string name="slider_description_nothing">املأ يومك بشيء رائع.</string>
     <string name="slider_title_tadaa">تا دا!</string>
