@@ -11,9 +11,10 @@ on:
       - 'hotfix/**'
 
 jobs:
-  run-tests:
-    name: Execute tests & Generate coverage report
+  coverage-check:
+    name: Verify Test Coverage
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code
@@ -26,43 +27,8 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Grant execute permission for gradlew
+      - name: Grant gradlew permission
         run: chmod +x gradlew
 
-      - name: Install xmllint (to read coverage XML)
-        run: sudo apt-get install -y libxml2-utils
-
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
-
-      - name: Generate JaCoCo report
-        run: ./gradlew jacocoTestReport
-
-      - name: Check minimum code coverage (80%)
-        run: |
-          echo "Checking JaCoCo line coverage..."
-          FILE="app/build/reports/jacoco/testDebugUnitTest/jacocoTestReport.xml"
-          
-          if [ ! -f "$FILE" ]; then
-            echo "Coverage report not found!"
-            exit 1
-          fi
-          
-          COVERED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" $FILE)
-          MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" $FILE)
-          TOTAL=$((COVERED + MISSED))
-          
-          if [ "$TOTAL" -eq 0 ]; then
-            echo "No lines found in coverage report!"
-            exit 1
-          fi
-          
-          PERCENT=$((100 * COVERED / TOTAL))
-          echo "Line Coverage: $PERCENT%"
-          
-          if [ "$PERCENT" -lt 80 ]; then
-            echo "❌ Code coverage is below 80%."
-            exit 1
-          else
-            echo "✅ Code coverage is above threshold."
-          fi
+      - name: Run coverage verification
+        run: ./gradlew jacocoTestCoverageVerification

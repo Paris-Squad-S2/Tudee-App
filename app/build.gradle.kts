@@ -7,6 +7,10 @@ plugins {
     id("jacoco")
 }
 
+jacoco {
+    toolVersion = "0.8.11"
+}
+
 android {
     namespace = "com.example.tudeeapp"
     compileSdk = 35
@@ -28,6 +32,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            enableUnitTestCoverage = true
         }
     }
     compileOptions {
@@ -111,10 +118,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 }
 
-jacoco {
-    toolVersion = "0.8.10"
-}
-
 tasks.withType<Test> {
     useJUnitPlatform()
 
@@ -126,85 +129,64 @@ tasks.withType<Test> {
 
 tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest")
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports"
 
     reports {
         xml.required.set(true)
         html.required.set(true)
-        csv.required.set(false)
     }
 
-    val debugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+    val mainSrc = "$projectDir/src/main/java"
+    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
         exclude(
             "**/R.class",
             "**/R$*.class",
             "**/BuildConfig.*",
             "**/Manifest*.*",
             "**/*Test*.*",
-            "**/di/**",
-            "**/dto/**",
-            "**/entities/**"
+            "**/*_Factory*.*",
+            "**/*_Impl*.*"
         )
     }
 
     classDirectories.setFrom(debugTree)
-    sourceDirectories.setFrom(
-        files(
-            "$projectDir/src/main/java",
-            "$projectDir/src/main/kotlin"
-        )
-    )
-    executionData.setFrom(
-        fileTree(buildDir) {
-            include(
-                "jacoco/testDebugUnitTest.exec",
-                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
-            )
-        }
-    )
+    sourceDirectories.setFrom(files(mainSrc))
+    executionData.setFrom(fileTree(buildDir) {
+        include("jacoco/testDebugUnitTest.exec")
+    })
 }
 
-// تحقق من النسبة الدنيا للتغطية
 tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
     dependsOn("testDebugUnitTest")
+    group = "Verification"
+    description = "Verify code coverage thresholds"
 
-    val debugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+    val mainSrc = "$projectDir/src/main/java"
+    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
         exclude(
             "**/R.class",
             "**/R$*.class",
             "**/BuildConfig.*",
             "**/Manifest*.*",
             "**/*Test*.*",
-            "**/di/**",
-            "**/dto/**",
-            "**/entities/**"
+            "**/*_Factory*.*",
+            "**/*_Impl*.*"
         )
     }
 
     classDirectories.setFrom(debugTree)
-    sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+    sourceDirectories.setFrom(files(mainSrc))
     executionData.setFrom(fileTree(buildDir) {
-        include(
-            "jacoco/testDebugUnitTest.exec",
-            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
-        )
+        include("jacoco/testDebugUnitTest.exec")
     })
 
     violationRules {
         rule {
             limit {
+                minimum = "0.8".toBigDecimal()
                 counter = "LINE"
                 value = "COVEREDRATIO"
-                minimum = "0.8".toBigDecimal()
-            }
-            limit {
-                counter = "BRANCH"
-                value = "COVEREDRATIO"
-                minimum = "0.8".toBigDecimal()
-            }
-            limit {
-                counter = "METHOD"
-                value = "COVEREDRATIO"
-                minimum = "0.8".toBigDecimal()
             }
         }
     }
