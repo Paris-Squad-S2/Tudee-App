@@ -1,13 +1,11 @@
 package com.example.tudeeapp.presentation.common.components
 
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -19,7 +17,6 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -27,28 +24,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.example.tudeeapp.presentation.common.extentions.BasePreview
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TudeeBottomSheet(
     modifier: Modifier = Modifier,
-    stopBarrierDismiss: Boolean = true,
     showSheet: Boolean,
     title: String,
-    initialHeight: Dp = 350.dp,
     onDismiss: () -> Unit,
     optionalActionButton: @Composable () -> Unit = {},
     stickyFooterContent: @Composable ColumnScope.() -> Unit = {},
@@ -57,16 +47,7 @@ fun TudeeBottomSheet(
 
 
     val bottomSheetState =
-        rememberModalBottomSheetState(
-            skipPartiallyExpanded = true,
-            confirmValueChange = { newValue ->
-                if (stopBarrierDismiss) {
-                    newValue != SheetValue.Hidden
-                } else {
-                    true
-                }
-            }
-        )
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(showSheet) {
         if (showSheet) {
@@ -75,9 +56,6 @@ fun TudeeBottomSheet(
             bottomSheetState.hide()
         }
     }
-    val coroutineScope = rememberCoroutineScope()
-    var currentHeight by remember { mutableStateOf(initialHeight) }
-
 
     if (!showSheet) return
     ModalBottomSheet(
@@ -92,21 +70,7 @@ fun TudeeBottomSheet(
         dragHandle = {
             Box(
                 Modifier
-                    .fillMaxWidth()
-                    .pointerInput(Unit) {
-                        detectVerticalDragGestures { _, dragAmount ->
-                            if (currentHeight >= 200.dp) {
-                                currentHeight =
-                                    (currentHeight - dragAmount.toDp()).coerceAtLeast(0.dp)
-                                if (currentHeight < 200.dp) {
-                                    coroutineScope.launch {
-                                        bottomSheetState.hide()
-                                        onDismiss()
-                                    }
-                                }
-                            }
-                        }
-                    },
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 BottomSheetDefaults.DragHandle(width = 32.dp)
@@ -115,12 +79,10 @@ fun TudeeBottomSheet(
         sheetState = bottomSheetState,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
-        Column(
-            Modifier.height(currentHeight)
-        ) {
+        Column {
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(weight = 1f, fill = false)
                     .then(Modifier.verticalScroll(rememberScrollState()))
             ) {
                 Row {
