@@ -63,7 +63,6 @@ private fun TaskManagementBottomSheetContent(
 ) {
     TudeeBottomSheet(
         showSheet = true,
-        stopBarrierDismiss = true,
         title = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(R.string.add_task),
         onDismiss = interactionListener::popBackStack,
         stickyFooterContent = {
