@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    id("jacoco")
 }
 
 android {
@@ -89,7 +90,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     //Lottie
-    implementation (libs.lottie.compose)
+    implementation(libs.lottie.compose)
 
     // testing
     testImplementation(libs.truth)
@@ -110,6 +111,101 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 }
 
+jacoco {
+    toolVersion = "0.8.10"
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    extensions.configure(JacocoTaskExtension::class.java) {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+
+    val debugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+        exclude(
+            "**/R.class",
+            "**/R$*.class",
+            "**/BuildConfig.*",
+            "**/Manifest*.*",
+            "**/*Test*.*",
+            "**/di/**",
+            "**/dto/**",
+            "**/entities/**"
+        )
+    }
+
+    classDirectories.setFrom(debugTree)
+    sourceDirectories.setFrom(
+        files(
+            "$projectDir/src/main/java",
+            "$projectDir/src/main/kotlin"
+        )
+    )
+    executionData.setFrom(
+        fileTree(buildDir) {
+            include(
+                "jacoco/testDebugUnitTest.exec",
+                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+            )
+        }
+    )
+}
+
+// تحقق من النسبة الدنيا للتغطية
+tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
+    dependsOn("testDebugUnitTest")
+
+    val debugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+        exclude(
+            "**/R.class",
+            "**/R$*.class",
+            "**/BuildConfig.*",
+            "**/Manifest*.*",
+            "**/*Test*.*",
+            "**/di/**",
+            "**/dto/**",
+            "**/entities/**"
+        )
+    }
+
+    classDirectories.setFrom(debugTree)
+    sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+    executionData.setFrom(fileTree(buildDir) {
+        include(
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+        )
+    })
+
+    violationRules {
+        rule {
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.8".toBigDecimal()
+            }
+            limit {
+                counter = "BRANCH"
+                value = "COVEREDRATIO"
+                minimum = "0.8".toBigDecimal()
+            }
+            limit {
+                counter = "METHOD"
+                value = "COVEREDRATIO"
+                minimum = "0.8".toBigDecimal()
+            }
+        }
+    }
 }

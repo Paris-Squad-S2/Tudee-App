@@ -12,7 +12,7 @@ on:
 
 jobs:
   run-tests:
-    name: Excecute tests & Generate coverage report
+    name: Execute tests & Generate coverage report
     runs-on: ubuntu-latest
 
     steps:
@@ -32,8 +32,8 @@ jobs:
       - name: Install xmllint (to read coverage XML)
         run: sudo apt-get install -y libxml2-utils
 
-      - name: Run tests
-        run: ./gradlew test
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
 
       - name: Generate JaCoCo report
         run: ./gradlew jacocoTestReport
@@ -41,7 +41,7 @@ jobs:
       - name: Check minimum code coverage (80%)
         run: |
           echo "Checking JaCoCo line coverage..."
-          FILE="app/build/reports/jacoco/test/jacocoTestReport.xml"
+          FILE="app/build/reports/jacoco/testDebugUnitTest/jacocoTestReport.xml"
           
           if [ ! -f "$FILE" ]; then
             echo "Coverage report not found!"
