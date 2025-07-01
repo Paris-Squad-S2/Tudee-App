@@ -1,3 +1,5 @@
+import kotlin.math.roundToInt
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,10 +7,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
     id("jacoco")
-}
-
-jacoco {
-    toolVersion = "0.8.11"
 }
 
 android {
@@ -33,13 +31,8 @@ android {
                 "proguard-rules.pro"
             )
         }
-        debug {
+        getByName("debug") {
             enableUnitTestCoverage = true
-        }
-    }
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
         }
     }
 
@@ -124,78 +117,106 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 }
 
-val buildDir = layout.buildDirectory.get().asFile
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-
-    configure<JacocoTaskExtension> {
-        isIncludeNoLocationClasses = true
-        excludes = listOf("jdk.internal.*")
-    }
-    finalizedBy("jacocoTestReport", "jacocoTestCoverageVerification")
+jacoco {
+    toolVersion = "0.8.11" // Use latest version
 }
 
-tasks.register<JacocoReport>("jacocoTestReport") {
+tasks.register("jacocoTestReport", JacocoReport::class) {
     dependsOn("testDebugUnitTest")
-    group = "Reporting"
-    description = "Generate Jacoco coverage reports"
 
     reports {
-        xml.required.set(true)
-        html.required.set(true)
+        xml.required = true
+        csv.required = true
+        html.required = true
     }
 
-    val classDirTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
-        exclude(
-            "**/R.class",
-            "**/R$*.class",
-            "**/BuildConfig.*",
-            "**/Manifest*.*",
-            "**/*Test*.*",
-            "**/*_Factory*.*",
-            "**/*_Impl*.*"
-        )
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*",
+        "**/di/**",
+        "**/entities/**",
+        "**/dto/**"
+    )
+
+    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
+        exclude(fileFilter)
+    }
+    val kotlinDebugTree = fileTree("${project.buildDir}/tmp/kotlin-classes/debug") {
+        exclude(fileFilter)
     }
 
-    classDirectories.setFrom(classDirTree)
-    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
-
-    executionData.setFrom(fileTree(buildDir) {
+    sourceDirectories.setFrom(files("${project.projectDir}/src/main/java", "${project.projectDir}/src/main/kotlin"))
+    classDirectories.setFrom(files(debugTree, kotlinDebugTree))
+    executionData.setFrom(fileTree(project.buildDir) {
         include("jacoco/testDebugUnitTest.exec")
     })
 }
 
-tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
-    dependsOn("testDebugUnitTest")
-    group = "Verification"
-    description = "Verify code coverage thresholds"
-
-    val classDirTree = fileTree("$buildDir/tmp/kotlin-classes/debug") {
-        exclude(
-            "**/R.class",
-            "**/R$*.class",
-            "**/BuildConfig.*",
-            "**/Manifest*.*",
-            "**/*Test*.*",
-            "**/*_Factory*.*",
-            "**/*_Impl*.*"
-        )
-    }
-
-    classDirectories.setFrom(classDirTree)
-    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
-    executionData.setFrom(fileTree(buildDir) {
-        include("jacoco/testDebugUnitTest.exec")
-    })
+tasks.register("jacocoTestCoverageVerification", JacocoCoverageVerification::class) {
+    dependsOn("jacocoTestReport")
 
     violationRules {
         rule {
             limit {
                 minimum = "0.8".toBigDecimal()
+            }
+        }
+
+        rule {
+            element = "CLASS"
+            excludes = listOf(
+                "*.di.*",
+                "*.entities.*",
+                "*.dto.*"
+            )
+            limit {
                 counter = "LINE"
                 value = "COVEREDRATIO"
+                minimum = "0.8".toBigDecimal()
+            }
+            limit {
+                counter = "BRANCH"
+                value = "COVEREDRATIO"
+                minimum = "0.8".toBigDecimal()
+            }
+            limit {
+                counter = "METHOD"
+                value = "COVEREDRATIO"
+                minimum = "0.8".toBigDecimal()
             }
         }
     }
+
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*",
+        "**/di/**",
+        "**/entities/**",
+        "**/dto/**"
+    )
+
+    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
+        exclude(fileFilter)
+    }
+    val kotlinDebugTree = fileTree("${project.buildDir}/tmp/kotlin-classes/debug") {
+        exclude(fileFilter)
+    }
+
+    sourceDirectories.setFrom(files("${project.projectDir}/src/main/java", "${project.projectDir}/src/main/kotlin"))
+    classDirectories.setFrom(files(debugTree, kotlinDebugTree))
+    executionData.setFrom(fileTree(project.buildDir) {
+        include("jacoco/testDebugUnitTest.exec")
+    })
+}
+
+tasks.named("check") {
+    dependsOn("jacocoTestCoverageVerification")
 }
