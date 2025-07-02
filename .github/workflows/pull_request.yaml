@@ -1,0 +1,60 @@
+name: run tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'task/**'
+
+jobs:
+  test:
+    name: Run Unit Tests & Generate Coverage Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Grant execute permission to Gradle
+        run: chmod +x ./gradlew
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Generate coverage report
+        run: ./gradlew jacocoTestReport
+
+      - name: Upload JaCoCo HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-html-report
+          path: app/build/reports/jacoco/jacocoTestReport/html
+
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(grep -oPm1 "(?<=<counter type=\"LINE\" missed=\")[^\"]+" app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml)
+          TOTAL=$(grep -oPm1 "(?<=missed=\")[^\"]+" app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml | sed -n 2p)
+          HIT=$(grep -oPm1 "(?<=covered=\")[^\"]+" app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml | sed -n 2p)
+          PERCENT=$((100 * HIT / (HIT + COVERAGE)))
+
+          echo "Coverage: $PERCENT%"
+
+          if [ "$PERCENT" -lt 80 ]; then
+            echo "❌ Test coverage is below 80% ($PERCENT%)"
+            exit 1
+          else
+            echo "✅ Test coverage is sufficient ($PERCENT%)"
+          fi

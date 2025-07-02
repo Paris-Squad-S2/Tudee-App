@@ -1,9 +1,12 @@
+import kotlin.math.roundToInt
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    id("jacoco")
 }
 
 android {
@@ -28,7 +31,11 @@ android {
                 "proguard-rules.pro"
             )
         }
+        getByName("debug") {
+            enableUnitTestCoverage = true
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -89,7 +96,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     //Lottie
-    implementation (libs.lottie.compose)
+    implementation(libs.lottie.compose)
 
     // testing
     testImplementation(libs.truth)
@@ -108,8 +115,57 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    // JUnit 5 API
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.0")
+    testImplementation("io.mockk:mockk:1.13.7")
+}
+
+jacoco {
+    toolVersion = "0.8.11"
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest", "testReleaseUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*"
+    )
+
+    classDirectories.setFrom(
+        fileTree(buildDir.resolve("intermediates/javac/debug/classes")) {
+            exclude(fileFilter)
+        },
+        fileTree(buildDir.resolve("tmp/kotlin-classes/debug")) {
+            exclude(fileFilter)
+        }
+    )
+
+    sourceDirectories.setFrom(
+        files("src/main/java", "src/main/kotlin")
+    )
+
+    executionData.setFrom(
+        fileTree(buildDir) {
+            include("**/*.exec")
+        }
+    )
 }
