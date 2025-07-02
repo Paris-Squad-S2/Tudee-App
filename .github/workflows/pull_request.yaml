@@ -45,16 +45,16 @@ jobs:
 
       - name: Check coverage threshold
         run: |
-          COVERAGE=$(grep -oPm1 "(?<=<counter type=\"LINE\" missed=\")[^\"]+" app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml)
-          TOTAL=$(grep -oPm1 "(?<=missed=\")[^\"]+" app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml | sed -n 2p)
-          HIT=$(grep -oPm1 "(?<=covered=\")[^\"]+" app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml | sed -n 2p)
-          PERCENT=$((100 * HIT / (HIT + COVERAGE)))
-
+          MISSED=$(grep -oPm1 '(?<=<counter type="LINE" missed=")[^"]+' app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml)
+          COVERED=$(grep -oPm1 '(?<=<counter type="LINE" covered=")[^"]+' app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml)
+          TOTAL=$((MISSED + COVERED))
+          PERCENT=$((100 * COVERED / TOTAL))
           echo "Coverage: $PERCENT%"
-
+          
           if [ "$PERCENT" -lt 80 ]; then
             echo "❌ Test coverage is below 80% ($PERCENT%)"
             exit 1
           else
             echo "✅ Test coverage is sufficient ($PERCENT%)"
+            exit 0
           fi
