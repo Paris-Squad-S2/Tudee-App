@@ -55,21 +55,55 @@ jobs:
         working-directory: app/build/reports/jacoco/jacocoTestReport
         run: |
           REPORT=jacocoTestReport.xml
+          echo "--- Debugging coverage threshold ---"
+          echo "Current working directory: $(pwd)"
+          echo "Checking for report file: $REPORT"
+          ls -l "$REPORT" # Verify file existence and permissions right before use
+          
           if [ ! -f "$REPORT" ]; then
             echo "❌ Report not found: $REPORT"
             exit 1
           fi
-
+          
+          echo "Attempting to extract MISSED lines..."
           MISSED=$(grep -oPm1 '(?<=<counter type="LINE" missed=")[^"]+' "$REPORT")
+          if [ -z "$MISSED" ]; then
+            echo "⚠️ Warning: MISSED lines not found or empty. Using 0."
+            MISSED=0
+            # Optional: Print the first few lines of the XML if MISSED is empty to help debug why it wasn't found
+            # head -n 20 "$REPORT"
+          fi
+          echo "Extracted MISSED: '$MISSED'"
+          
+          echo "Attempting to extract COVERED lines..."
           COVERED=$(grep -oPm1 '(?<=<counter type="LINE" covered=")[^"]+' "$REPORT")
-
-          TOTAL=$(( MISSED + COVERED ))
-          PERCENT=$(( 100 * COVERED / TOTAL ))
-
-          echo "➡️ Coverage: $PERCENT% ($COVERED covered, $MISSED missed of $TOTAL)"
-
-          echo "::set-output name=percent::$PERCENT"
-
+          if [ -z "$COVERED" ]; then
+            echo "⚠️ Warning: COVERED lines not found or empty. Using 0."
+            COVERED=0
+          fi
+          echo "Extracted COVERED: '$COVERED'"
+          
+          # Ensure MISSED and COVERED are treated as numbers for arithmetic
+          MISSED_NUM=${MISSED:-0}
+          COVERED_NUM=${COVERED:-0}
+          
+          echo "MISSED_NUM (for arithmetic): $MISSED_NUM"
+          echo "COVERED_NUM (for arithmetic): $COVERED_NUM"
+          
+          TOTAL=$(( MISSED_NUM + COVERED_NUM ))
+          
+          # Handle division by zero if TOTAL is 0 (no lines at all)
+          if [ "$TOTAL" -eq 0 ]; then
+            PERCENT=0
+            echo "➡️ Coverage: 0% (No lines found in report)"
+          else
+            PERCENT=$(( 100 * COVERED_NUM / TOTAL ))
+            echo "➡️ Coverage: $PERCENT% ($COVERED_NUM covered, $MISSED_NUM missed of $TOTAL)"
+          fi
+          
+          # Use GITHUB_OUTPUT for setting outputs (modern approach)
+          echo "percent=$PERCENT" >> "$GITHUB_OUTPUT"
+          
           if [ "$PERCENT" -lt 80 ]; then
             echo "❌ Test coverage is below 80% ($PERCENT%)"
             exit 1
