@@ -28,64 +28,28 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Grant execute permission to Gradle
-        run: chmod +x ./gradlew
-
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
-
-      - name: Generate coverage report
-        run: ./gradlew jacocoTestReport
-
-      - name: Upload JaCoCo HTML coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-html-report
-          path: app/build/reports/jacoco/jacocoTestReport/html
-
-      - name: Debug Jacoco report folder
-        run: |
-          echo "--- Listing reports/jacoco ---"
-          ls -R app/build/reports/jacoco
-          echo "--- Listing XML files ---"
-          find app/build/reports -type f -name '*.xml'
+      - name: Run tests & generate Jacoco report
+        run: ./gradlew testDebugUnitTest jacocoTestReport
 
       - name: Check coverage threshold
         id: coverage
         run: |
-          REPORT="${{ github.workspace }}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-          
-          echo "--- Debugging coverage threshold ---"
-          echo "Checking for report file: $REPORT"
+          REPORT="app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
           if [ ! -f "$REPORT" ]; then
             echo "❌ Report not found: $REPORT"
             exit 1
           fi
-          
-          MISSED=$(grep -oP '(?<=<counter type="LINE" missed=")[0-9]+' "$REPORT" | head -1)
-          COVERED=$(grep -oP '(?<=<counter type="LINE" covered=")[0-9]+' "$REPORT" | head -1)
-          
-          MISSED=${MISSED:-0}
-          COVERED=${COVERED:-0}
-          
-          echo "Extracted MISSED: $MISSED"
-          echo "Extracted COVERED: $COVERED"
-          
+          MISSED=$(grep -oP '(?<=<counter type="LINE" missed=")[0-9]+' "$REPORT" | head -1 || echo 0)
+          COVERED=$(grep -oP '(?<=<counter type="LINE" covered=")[0-9]+' "$REPORT" | head -1 || echo 0)
           TOTAL=$(( MISSED + COVERED ))
           if [ "$TOTAL" -eq 0 ]; then
             PERCENT=0
-            echo "➡️ Coverage: 0% (No lines found in report)"
           else
             PERCENT=$(( 100 * COVERED / TOTAL ))
-            echo "➡️ Coverage: $PERCENT% ($COVERED covered, $MISSED missed of $TOTAL)"
           fi
-          
+          echo "➡️ Coverage: $PERCENT% ($COVERED covered, $MISSED missed)"
           echo "percent=$PERCENT" >> $GITHUB_OUTPUT
-          
           if [ "$PERCENT" -lt 80 ]; then
             echo "❌ Test coverage is below 80% ($PERCENT%)"
             exit 1
-          else
-            echo "✅ Test coverage is sufficient ($PERCENT%)"
-            exit 0
           fi
