@@ -135,7 +135,7 @@ tasks.withType<Test> {
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {
-    dependsOn("testDebugUnitTest")
+    dependsOn("testDebugUnitTest", "testReleaseUnitTest")
 
     reports {
         xml.required.set(true)
@@ -150,26 +150,22 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/*Test*.*"
     )
 
-    val debugTree = fileTree(buildDir.resolve("intermediates/javac/debug/classes")) {
-        exclude(fileFilter)
-    }
+    classDirectories.setFrom(
+        fileTree(buildDir.resolve("intermediates/javac/debug/classes")) {
+            exclude(fileFilter)
+        },
+        fileTree(buildDir.resolve("tmp/kotlin-classes/debug")) {
+            exclude(fileFilter)
+        }
+    )
 
-    val kotlinDebugTree = fileTree(buildDir.resolve("tmp/kotlin-classes/debug")) {
-        exclude(fileFilter)
-    }
-
-
-
-    classDirectories.setFrom(files(debugTree, kotlinDebugTree))
-
-    sourceDirectories.setFrom(files(
-        "$projectDir/src/main/java",
-        "$projectDir/src/main/kotlin"
-    ))
+    sourceDirectories.setFrom(
+        files("src/main/java", "src/main/kotlin")
+    )
 
     executionData.setFrom(
-        fileTree(buildDir).include(
-            "jacoco/testDebugUnitTest.exec"
-        )
+        fileTree(buildDir) {
+            include("**/*.exec")
+        }
     )
 }
