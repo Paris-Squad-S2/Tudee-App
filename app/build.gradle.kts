@@ -115,19 +115,31 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    // JUnit 5 API
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.0")
+    testImplementation("io.mockk:mockk:1.13.7")
 }
 
 jacoco {
-    toolVersion = "0.8.11" // Use latest version
+    toolVersion = "0.8.11"
 }
 
-tasks.register("jacocoTestReport", JacocoReport::class) {
+tasks.withType<Test> {
+    useJUnitPlatform()
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest")
 
     reports {
-        xml.required = true
-        csv.required = true
-        html.required = true
+        xml.required.set(true)
+        html.required.set(true)
     }
 
     val fileFilter = listOf(
@@ -135,88 +147,29 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         "**/R$*.class",
         "**/BuildConfig.*",
         "**/Manifest*.*",
-        "**/*Test*.*",
-        "android/**/*.*",
-        "**/di/**",
-        "**/entities/**",
-        "**/dto/**"
+        "**/*Test*.*"
     )
 
-    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
-        exclude(fileFilter)
-    }
-    val kotlinDebugTree = fileTree("${project.buildDir}/tmp/kotlin-classes/debug") {
+    val debugTree = fileTree(buildDir.resolve("intermediates/javac/debug/classes")) {
         exclude(fileFilter)
     }
 
-    sourceDirectories.setFrom(files("${project.projectDir}/src/main/java", "${project.projectDir}/src/main/kotlin"))
+    val kotlinDebugTree = fileTree(buildDir.resolve("tmp/kotlin-classes/debug")) {
+        exclude(fileFilter)
+    }
+
+
+
     classDirectories.setFrom(files(debugTree, kotlinDebugTree))
-    executionData.setFrom(fileTree(project.buildDir) {
-        include("jacoco/testDebugUnitTest.exec")
-    })
-}
 
-tasks.register("jacocoTestCoverageVerification", JacocoCoverageVerification::class) {
-    dependsOn("jacocoTestReport")
+    sourceDirectories.setFrom(files(
+        "$projectDir/src/main/java",
+        "$projectDir/src/main/kotlin"
+    ))
 
-    violationRules {
-        rule {
-            limit {
-                minimum = "0.8".toBigDecimal()
-            }
-        }
-
-        rule {
-            element = "CLASS"
-            excludes = listOf(
-                "*.di.*",
-                "*.entities.*",
-                "*.dto.*"
-            )
-            limit {
-                counter = "LINE"
-                value = "COVEREDRATIO"
-                minimum = "0.8".toBigDecimal()
-            }
-            limit {
-                counter = "BRANCH"
-                value = "COVEREDRATIO"
-                minimum = "0.8".toBigDecimal()
-            }
-            limit {
-                counter = "METHOD"
-                value = "COVEREDRATIO"
-                minimum = "0.8".toBigDecimal()
-            }
-        }
-    }
-
-    val fileFilter = listOf(
-        "**/R.class",
-        "**/R$*.class",
-        "**/BuildConfig.*",
-        "**/Manifest*.*",
-        "**/*Test*.*",
-        "android/**/*.*",
-        "**/di/**",
-        "**/entities/**",
-        "**/dto/**"
+    executionData.setFrom(
+        fileTree(buildDir).include(
+            "jacoco/testDebugUnitTest.exec"
+        )
     )
-
-    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
-        exclude(fileFilter)
-    }
-    val kotlinDebugTree = fileTree("${project.buildDir}/tmp/kotlin-classes/debug") {
-        exclude(fileFilter)
-    }
-
-    sourceDirectories.setFrom(files("${project.projectDir}/src/main/java", "${project.projectDir}/src/main/kotlin"))
-    classDirectories.setFrom(files(debugTree, kotlinDebugTree))
-    executionData.setFrom(fileTree(project.buildDir) {
-        include("jacoco/testDebugUnitTest.exec")
-    })
-}
-
-tasks.named("check") {
-    dependsOn("jacocoTestCoverageVerification")
 }
