@@ -43,14 +43,32 @@ jobs:
           name: jacoco-html-report
           path: app/build/reports/jacoco/jacocoTestReport/html
 
-      - name: Check coverage threshold
+      - name: Debug Jacoco report folder
         run: |
-          MISSED=$(grep -oPm1 '(?<=<counter type="LINE" missed=")[^"]+' app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml)
-          COVERED=$(grep -oPm1 '(?<=<counter type="LINE" covered=")[^"]+' app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml)
-          TOTAL=$((MISSED + COVERED))
-          PERCENT=$((100 * COVERED / TOTAL))
-          echo "Coverage: $PERCENT%"
-          
+          echo "--- Listing reports/jacoco ---"
+          ls -R app/build/reports/jacoco
+          echo "--- Listing XML files ---"
+          find app/build/reports -type f -name '*.xml'
+
+      - name: Check coverage threshold
+        id: coverage
+        run: |
+          REPORT=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          if [ ! -f "$REPORT" ]; then
+            echo "❌ Report not found: $REPORT"
+            exit 1
+          fi
+
+          MISSED=$(grep -oPm1 '(?<=<counter type="LINE" missed=")[^"]+' "$REPORT")
+          COVERED=$(grep -oPm1 '(?<=<counter type="LINE" covered=")[^"]+' "$REPORT")
+
+          TOTAL=$(( MISSED + COVERED ))
+          PERCENT=$(( 100 * COVERED / TOTAL ))
+
+          echo "➡️ Coverage: $PERCENT% ($COVERED covered, $MISSED missed of $TOTAL)"
+
+          echo "::set-output name=percent::$PERCENT"
+
           if [ "$PERCENT" -lt 80 ]; then
             echo "❌ Test coverage is below 80% ($PERCENT%)"
             exit 1
