@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew jacocoTestReport
 
       - name: Upload JaCoCo HTML coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-html-report
           path: app/build/reports/jacoco/jacocoTestReport/html
