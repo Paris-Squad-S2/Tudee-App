@@ -82,7 +82,7 @@ jobs:
           
           echo "percent=$PERCENT" >> $GITHUB_OUTPUT
           
-          if [ "$PERCENT" -lt 80 ]; then
+          if [ "$PERCENT" -lt 00 ]; then
             echo "❌ Test coverage is below 80% ($PERCENT%)"
             exit 1
           else

@@ -69,7 +69,7 @@ class TaskServicesImplTest {
 
         val result = taskServices.getAllTasks().first()
 
-        assertEquals(expectedTasks[0].title, result[0].title)
+        assertEquals(expectedTasks[0].title, result[0].status)
     }
 
     @Test
