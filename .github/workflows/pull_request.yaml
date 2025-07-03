@@ -1,5 +1,3 @@
-name: run tests
-
 on:
   push:
     branches:
@@ -28,28 +26,51 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Run tests & generate Jacoco report
-        run: ./gradlew testDebugUnitTest jacocoTestReport
+      - name: Grant execute permission to Gradle
+        run: chmod +x ./gradlew
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Generate coverage report
+        run: ./gradlew jacocoTestReport
 
       - name: Check coverage threshold
         id: coverage
         run: |
-          REPORT="app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+          REPORT="${{ github.workspace }}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+          
+          echo "--- Debugging coverage threshold ---"
+          echo "Checking for report file: $REPORT"
           if [ ! -f "$REPORT" ]; then
             echo "❌ Report not found: $REPORT"
             exit 1
           fi
-          MISSED=$(grep -oP '(?<=<counter type="LINE" missed=")[0-9]+' "$REPORT" | head -1 || echo 0)
-          COVERED=$(grep -oP '(?<=<counter type="LINE" covered=")[0-9]+' "$REPORT" | head -1 || echo 0)
+          
+          MISSED=$(grep -oP '(?<=<counter type="LINE" missed=")[0-9]+' "$REPORT" | head -1)
+          COVERED=$(grep -oP '(?<=<counter type="LINE" covered=")[0-9]+' "$REPORT" | head -1)
+          
+          MISSED=${MISSED:-0}
+          COVERED=${COVERED:-0}
+          
+          echo "Extracted MISSED: $MISSED"
+          echo "Extracted COVERED: $COVERED"
+          
           TOTAL=$(( MISSED + COVERED ))
           if [ "$TOTAL" -eq 0 ]; then
             PERCENT=0
+            echo "➡️ Coverage: 0% (No lines found in report)"
           else
             PERCENT=$(( 100 * COVERED / TOTAL ))
+            echo "➡️ Coverage: $PERCENT% ($COVERED covered, $MISSED missed of $TOTAL)"
           fi
-          echo "➡️ Coverage: $PERCENT% ($COVERED covered, $MISSED missed)"
+          
           echo "percent=$PERCENT" >> $GITHUB_OUTPUT
+          
           if [ "$PERCENT" -lt 80 ]; then
             echo "❌ Test coverage is below 80% ($PERCENT%)"
             exit 1
+          else
+            echo "✅ Test coverage is sufficient ($PERCENT%)"
+            exit 0
           fi
