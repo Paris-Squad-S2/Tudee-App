@@ -140,6 +140,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     reports {
         xml.required.set(true)
         html.required.set(true)
+        csv.required.set(true)
     }
 
     val fileFilter = listOf(
@@ -147,7 +148,8 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/R$*.class",
         "**/BuildConfig.*",
         "**/Manifest*.*",
-        "**/*Test*.*"
+        "**/*Test*.*",
+        "**/di/**",
     )
 
     val classDirs = fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug/classes") {
