@@ -167,3 +167,24 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         }
     )
 }
+
+tasks.register<JacocoCoverageVerification>("verifyCoverage") {
+    dependsOn("jacocoTestReport")
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.8".toBigDecimal()
+                counter = "LINE"
+            }
+        }
+    }
+
+    val reportTask = tasks.getByName<JacocoReport>("jacocoTestReport")
+    classDirectories.setFrom(reportTask.classDirectories)
+    sourceDirectories.setFrom(reportTask.sourceDirectories)
+    executionData.setFrom(reportTask.executionData)
+}
+
+tasks.named("check") {
+    dependsOn("verifyCoverage")
+}

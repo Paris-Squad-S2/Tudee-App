@@ -39,37 +39,8 @@ jobs:
       - name: Generate coverage report
         run: ./gradlew jacocoTestReport
 
-      - name: Check coverage threshold
-        id: coverage
-        run: |
-          REPORT="${{ github.workspace }}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-          
-          if [ ! -f "$REPORT" ]; then
-            echo "❌ Report not found: $REPORT"
-            exit 1
-          fi
-          
-          MISSED=$(grep -oP '<counter type="LINE" missed="\K[0-9]+' "$REPORT" | tail -1)
-          COVERED=$(grep -oP '<counter type="LINE" covered="\K[0-9]+' "$REPORT" | tail -1)
-          
-          MISSED=${MISSED:-0}
-          COVERED=${COVERED:-0}
-          TOTAL=$(( MISSED + COVERED ))
-          
-          if [ "$TOTAL" -eq 0 ]; then
-            PERCENT=0
-          else
-            PERCENT=$(( 100 * COVERED / TOTAL ))
-          fi
-          
-          echo "percent=$PERCENT" >> $GITHUB_OUTPUT
-          
-          if [ "$PERCENT" -lt 80 ]; then
-            echo "❌ Test coverage is below 80% ($PERCENT%)"
-            exit 1
-          else
-            echo "✅ Test coverage is sufficient ($PERCENT%)"
-          fi
+      - name: Run tests with coverage verification
+        run: ./gradlew verifyCoverage
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
