@@ -11,6 +11,10 @@ on:
       - 'bugfix/**'
       - 'task/**'
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   run-tests:
     name: Run Unit Tests & Generate Coverage Report
