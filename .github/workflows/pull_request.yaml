@@ -29,8 +29,11 @@ jobs:
       - name: Grant execute permission to Gradle
         run: chmod +x ./gradlew
 
-      - name: Run unit tests & Generate coverage report
-        run: ./gradlew testDebugUnitTest jacocoTestReport
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Generate coverage report
+        run: ./gradlew jacocoTestReport
 
       - name: Check coverage threshold
         id: coverage
