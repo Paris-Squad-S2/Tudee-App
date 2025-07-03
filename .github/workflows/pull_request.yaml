@@ -42,8 +42,8 @@ jobs:
             exit 1
           fi
           
-          MISSED=$(grep -oP '<counter type="LINE" missed="\K[0-9]+' "$REPORT" | tail -1)
-          COVERED=$(grep -oP '<counter type="LINE" covered="\K[0-9]+' "$REPORT" | tail -1)
+          MISSED=$(grep -oP '(?<=<counter type="LINE" missed=")[0-9]+' "$REPORT" | head -1 || echo 0)
+          COVERED=$(grep -oP '(?<=<counter type="LINE" covered=")[0-9]+' "$REPORT" | head -1 || echo 0)
           
           MISSED=${MISSED:-0}
           COVERED=${COVERED:-0}
