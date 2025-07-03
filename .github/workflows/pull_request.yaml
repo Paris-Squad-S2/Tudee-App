@@ -76,8 +76,8 @@ jobs:
         with:
           name: jacoco-coverage-report
           path: |
-            ${{ github.workspace }}/app/build/reports/jacoco/jacocoTestReport
-            ${{ github.workspace }}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+            /app/build/reports/jacoco/jacocoTestReport
+            /app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
 
   analyze-pr:
     name: Analyze PR Code Coverage
