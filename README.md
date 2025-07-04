@@ -80,8 +80,12 @@ Each task is associated with:
 
 ---
 ## 📽️ Videos
+| Theme Switch Animation | Add Task |
+| ---------------------- | -------- |
+| <img src="assets/light_dark_animation.gif" alt="description" width="150"/> | <img src="assets/add_task.gif" alt="description" width="150"/> |
 
 ---
+
 ## 📸 Screenshots
 
 - Home screen
