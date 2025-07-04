@@ -16,16 +16,16 @@ class AppPreferences(context: Context) {
         prefs.edit { putBoolean(KEY_ONBOARDING_COMPLETED, completed) }
     }
 
-    fun isDarkTheme(): Boolean = prefs.getBoolean(KEY_DARK_THEME, false)
+    fun isDarkTheme(): Int = prefs.getInt(KEY_DARK_THEME, 2)
 
     fun setDarkTheme(isDark: Boolean) {
-        prefs.edit { putBoolean(KEY_DARK_THEME, isDark) }
+        prefs.edit { putInt(KEY_DARK_THEME, if (isDark) 1 else 0) }
     }
 
     companion object {
         private const val PREFS_NAME = "app_prefs"
         private const val KEY_FIRST_LAUNCH = "first_launch"
         private const val KEY_ONBOARDING_COMPLETED = "onboarding_completed"
-        private const val KEY_DARK_THEME = "dark_theme"
+        private const val KEY_DARK_THEME = "theme"
     }
 }

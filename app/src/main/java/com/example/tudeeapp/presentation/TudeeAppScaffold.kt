@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -43,8 +44,19 @@ fun TudeeAppScaffold() {
     val snackBarState = remember { SnackBarState() }
     val context = LocalContext.current
     val appPrefs = remember { AppPreferences(context) }
+
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+
     val themeMode = rememberSaveable {
-        mutableStateOf(if (appPrefs.isDarkTheme()) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT)
+        val isDarkTheme = appPrefs.isDarkTheme()
+        val currentTheme = if (isDarkTheme == 1) {
+            TudeeThemeMode.DARK
+        } else if (isDarkTheme == 0) {
+            TudeeThemeMode.LIGHT
+        } else {
+            if (isSystemInDarkTheme) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
+        }
+        mutableStateOf(currentTheme)
     }
 
     val view = LocalView.current
@@ -52,7 +64,14 @@ fun TudeeAppScaffold() {
 
     LaunchedEffect(themeMode.value) {
         val darkIcons = themeMode.value == TudeeThemeMode.LIGHT
-        themeMode.value = if (appPrefs.isDarkTheme()) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
+        val isDarkTheme = appPrefs.isDarkTheme()
+        themeMode.value = if (isDarkTheme == 1) {
+            TudeeThemeMode.DARK
+        } else if (isDarkTheme == 0) {
+            TudeeThemeMode.LIGHT
+        } else {
+            if (isSystemInDarkTheme) TudeeThemeMode.DARK else TudeeThemeMode.LIGHT
+        }
 
         activity?.window?.also { window ->
             WindowInsetsControllerCompat(window, view).apply {

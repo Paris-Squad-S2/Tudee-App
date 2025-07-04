@@ -14,7 +14,7 @@ data class HomeUiState(
     val doneTasks: List<TaskUiState> = emptyList(),
     val isTasksEmpty: Boolean = true,
     val sliderState: SliderUiState = SliderUiState.NothingState,
-    val isDarkMode: Boolean = false,
+    val isDarkMode: Int = 2,
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
     val error: String? = null

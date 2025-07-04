@@ -80,6 +80,7 @@ class TaskServicesImpl(
     override suspend fun deleteCategory(categoryId: Long) {
         try {
             categoryDao.deleteCategory(categoryId)
+            taskDao.deleteTasksByCategoryId(categoryId)
         } catch (_: Exception) {
             throw NoCategoryDeletedException()
         }

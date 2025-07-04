@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -287,17 +289,46 @@ fun TaskContent(
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
                 if (taskIdToDelete == task.id) {
+                    val context = LocalContext.current
                     TudeeBottomSheet(
+                        stopBarrierDismiss = true,
+                        initialHeight = 350.dp,
                         content = {
-                            val context = LocalContext.current
-                            ConfirmationDialogBox(
-                                title = R.string.are_you_sure_to_continue,
-                                onConfirm = {
-                                    onClickDeleteIcon(task.id)
-                                    showSnackBar.show(context.getString(R.string.deleted_task_successfully))
-                                    taskIdToDelete = null
-                                },
-                                onDismiss = { taskIdToDelete = null })
+                            ConfirmationDialogBox(title = R.string.are_you_sure_to_continue,)
+                        },
+                        stickyFooterContent = {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Theme.colors.surfaceColors.surfaceHigh)
+                                    .padding(horizontal = 16.dp),
+                            ) {
+                                TudeeButton(
+                                    onClick = {
+                                        onClickDeleteIcon(task.id)
+                                        showSnackBar.show(context.getString(R.string.deleted_task_successfully))
+                                        taskIdToDelete = null
+                                    },
+                                    modifier = Modifier
+                                        .padding(top = 12.dp, bottom = 6.dp)
+                                        .fillMaxWidth()
+                                        .height(56.dp),
+                                    text = stringResource(R.string.delete),
+                                    isNegative = true,
+                                    variant = ButtonVariant.FilledButton,
+                                )
+                                TudeeButton(
+                                    onClick = {
+                                        taskIdToDelete = null
+                                    },
+                                    modifier = Modifier
+                                        .padding(bottom = 12.dp, top = 6.dp)
+                                        .fillMaxWidth()
+                                        .height(56.dp),
+                                    text = stringResource(R.string.cancel),
+                                    variant = ButtonVariant.OutlinedButton,
+                                )
+                            }
                         },
                         onDismiss = { taskIdToDelete = null },
                         title = LocalContext.current.getString(R.string.delete_task),
