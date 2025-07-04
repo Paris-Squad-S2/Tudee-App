@@ -18,8 +18,15 @@ With its cheerful robot companion, **Tudee** gives you friendly reminders and mo
 
 ![Home](assets/who_is_tudee.png)
 
-## 🎨 Figma Design
-https://www.figma.com/design/Kc0YU5ycMGzo48f0suelUc/Tudee?node-id=0-1&p=f&t=R67j7bPiTzusndXi-0
+## 🎨 Figma UI Design Prototype
+You can explore the full UI prototype of Tudee on Figma using the link below:
+[🔗 Open Tudee on Figma](https://www.figma.com/design/Kc0YU5ycMGzo48f0suelUc/Tudee?node-id=0-1&p=f&t=R67j7bPiTzusndXi-0)
+
+The prototype includes:
+- Light & Dark UI themes
+- Full navigation flow
+- Component designs (buttons, task cards, category chips)
+- Arabic & English UI preview
 
 ---
 
@@ -79,10 +86,10 @@ Each task is associated with:
 - ✅ Android only (for now)
 
 ---
-## 📽️ Videos
-| Theme Switch Animation | Add Task |
-| ---------------------- | -------- |
-| <img src="assets/light_dark_animation.gif" alt="description" width="150"/> | <img src="assets/add_task.gif" alt="description" width="150"/> |
+## 📽️ Gifs
+| Theme Switch Animation | Add Task | Edit Task | Add Category | Edit Category |
+| ---------------------- | -------- | --------- | ------------ | ------------- |
+| <img src="assets/light_dark_animation.gif" alt="description" width="150"/> | <img src="assets/add_task.gif" alt="description" width="150"/> | <img src="assets/edit_task.gif" alt="description" width="150"/> | <img src="assets/add_category.gif" alt="description" width="150"/> | <img src="assets/edit_category.gif" alt="description" width="150"/> |
 
 ---
 
