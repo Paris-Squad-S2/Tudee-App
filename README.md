@@ -18,6 +18,9 @@ With its cheerful robot companion, **Tudee** gives you friendly reminders and mo
 
 ![Home](assets/who_is_tudee.png)
 
+## 🎨 Figma Design
+https://www.figma.com/design/Kc0YU5ycMGzo48f0suelUc/Tudee?node-id=0-1&p=f&t=R67j7bPiTzusndXi-0
+
 ---
 
 ## 🧭 How does Tudee work?
@@ -76,7 +79,9 @@ Each task is associated with:
 - ✅ Android only (for now)
 
 ---
+## 📽️ Videos
 
+---
 ## 📸 Screenshots
 
 - Home screen
