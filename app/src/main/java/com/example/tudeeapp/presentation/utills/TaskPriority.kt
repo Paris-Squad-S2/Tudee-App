@@ -7,7 +7,6 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.tudeeapp.R
 import com.example.tudeeapp.presentation.design_system.theme.Theme
 import com.example.tudeeapp.domain.models.TaskPriority
-import com.example.tudeeapp.presentation.mapper.toResDrawables
 
 enum class TaskPriorityUi {
     High,

@@ -1,7 +1,6 @@
-package com.example.tudeeapp.presentation.mapper
+package com.example.tudeeapp.presentation.utills
 
 import com.example.tudeeapp.R
-import com.example.tudeeapp.data.exception.MappingDrawableException
 
 fun String.toResDrawables(): Int {
     return when (this) {
@@ -22,6 +21,6 @@ fun String.toResDrawables(): Int {
         "R.drawable.budgeting" -> R.drawable.ic_budgeting
         "R.drawable.self_care" -> R.drawable.ic_self_care
         "R.drawable.event" -> R.drawable.ic_event
-        else -> throw MappingDrawableException(this)
+        else -> R.drawable.ic_loading
     }
 }

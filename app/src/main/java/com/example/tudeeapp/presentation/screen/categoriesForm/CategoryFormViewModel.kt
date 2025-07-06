@@ -9,7 +9,7 @@ import com.example.tudeeapp.R
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.presentation.common.extentions.getLastPartAfterSlash
-import com.example.tudeeapp.presentation.mapper.toResDrawables
+import com.example.tudeeapp.presentation.utills.toResDrawables
 import com.example.tudeeapp.presentation.screen.base.BaseViewModel
 import com.example.tudeeapp.presentation.navigation.Destinations
 import kotlinx.coroutines.flow.first

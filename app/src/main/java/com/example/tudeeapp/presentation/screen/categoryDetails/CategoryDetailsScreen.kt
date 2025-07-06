@@ -45,7 +45,7 @@ import com.example.tudeeapp.presentation.common.components.TopAppBar
 import com.example.tudeeapp.presentation.common.components.TudeeBottomSheet
 import com.example.tudeeapp.presentation.common.components.TudeeButton
 import com.example.tudeeapp.presentation.design_system.theme.Theme
-import com.example.tudeeapp.presentation.mapper.toResDrawables
+import com.example.tudeeapp.presentation.utills.toResDrawables
 import com.example.tudeeapp.presentation.utills.toStyle
 import com.example.tudeeapp.presentation.utills.toUi
 import org.koin.compose.viewmodel.koinViewModel
