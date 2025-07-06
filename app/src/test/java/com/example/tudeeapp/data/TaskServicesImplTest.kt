@@ -28,7 +28,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -38,12 +40,11 @@ class TaskServicesImplTest {
     private lateinit var taskServices: TaskServicesImpl
     private val taskDao: TaskDao = mockk(relaxed = true)
     private val categoryDao: CategoryDao = mockk(relaxed = true)
-    private val appPreferences: AppPreferences = mockk()
     private val dataConstant: DataConstant = mockk()
 
     @BeforeEach
     fun setUp() {
-        taskServices = TaskServicesImpl(taskDao, categoryDao, appPreferences, dataConstant)
+        taskServices = TaskServicesImpl(taskDao, categoryDao, dataConstant)
     }
 
     @Test
@@ -163,7 +164,7 @@ class TaskServicesImplTest {
         taskServices.editCategory(
             id = sampleCategory.id,
             title = sampleCategory.title,
-            imageUrl = sampleCategory.imageUrl
+            imageUri = sampleCategory.imageUri
         )
 
         coVerify {
@@ -183,7 +184,7 @@ class TaskServicesImplTest {
             taskServices.editCategory(
                 id = sampleCategory.id,
                 title = sampleCategory.title,
-                imageUrl = sampleCategory.imageUrl
+                imageUri = sampleCategory.imageUri
             )
         }
 
@@ -216,14 +217,14 @@ class TaskServicesImplTest {
         description = "Test Description",
         priority = TaskPriority.HIGH,
         status = TaskStatus.TO_DO,
-        createdDate = LocalDate(2023, 1, 1),
+        createdDate = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()),
         categoryId = 1L
     )
 
     private val sampleCategory = Category(
         id = 1L,
         title = "Sample Category",
-        imageUrl = "R.drawable.ic_sample_image",
+        imageUri = "R.drawable.ic_sample_image",
         isPredefined = false,
         tasksCount = 0
     )
