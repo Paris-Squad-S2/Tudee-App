@@ -41,10 +41,10 @@ class CategoryViewModelTest {
 
         viewModel = CategoriesViewModel(taskServices)
 
-        val state = viewModel.state.value
+        val state = viewModel.uiState.value
         assert(
             state == CategoriesScreenState(
-                isLoading = true,
+                isLoading =false,
                 categories = emptyList(),
                 errorMessage = null
             )
@@ -60,7 +60,7 @@ class CategoryViewModelTest {
         viewModel = CategoriesViewModel(taskServices)
         advanceUntilIdle()
 
-        assertThat(viewModel.state.value.categories).hasSize(2)
+        assertThat(viewModel.uiState.value.categories).hasSize(2)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -71,12 +71,12 @@ class CategoryViewModelTest {
         viewModel = CategoriesViewModel(taskServices)
         advanceUntilIdle()
 
-        val state = viewModel.state.value
+        val state = viewModel.uiState.value
         assert(
             state == CategoriesScreenState(
                 isLoading = false,
                 categories = emptyList(),
-                errorMessage = "There was an error processing your request. Please try again later."
+                errorMessage = "Network error"
             )
         )
     }

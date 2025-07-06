@@ -1,5 +1,6 @@
 package com.example.tudeeapp.presentation.screen.home
 
+import androidx.compose.runtime.mutableStateOf
 import app.cash.turbine.test
 import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.TaskServices
@@ -9,6 +10,7 @@ import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
+import com.example.tudeeapp.presentation.TudeeThemeMode
 import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -23,7 +25,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -46,7 +48,7 @@ class HomeViewModelTest {
 
         coEvery { taskServices.getAllTasks() } returns flowOf(emptyList())
         coEvery { taskServices.getCategoryById(any()) } returns flowOf(createCategory())
-        every { appPreferences.isDarkTheme() } returns false
+        every { appPreferences.isDarkTheme() } returns 2
 
 
         homeViewModel = HomeViewModel(taskServices, appPreferences)
@@ -68,7 +70,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.uiState.test {
+            homeViewModel.homeState.test {
                 val initialState = awaitItem()
 
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -92,20 +94,20 @@ class HomeViewModelTest {
 
             coEvery { appPreferences.setDarkTheme(any()) } returns Unit
 
-            homeViewModel.uiState.test {
+            homeViewModel.homeState.test {
 
                 val initialStateAfterSetup = awaitItem()
-                assertThat(initialStateAfterSetup.isDarkMode).isFalse()
+                assertThat(initialStateAfterSetup.isDarkMode).isEqualTo(2)
 
-                val newDarkModeValue = !initialStateAfterSetup.isDarkMode
+                val newDarkModeValue = initialStateAfterSetup.isDarkMode == 1
+                val themeMode = mutableStateOf<TudeeThemeMode>(TudeeThemeMode.LIGHT)
 
-                homeViewModel.onToggledAction(newDarkModeValue)
+                homeViewModel.onToggledAction(newDarkModeValue , themeMode)
                 advanceUntilIdle()
 
                 val stateAfterToggle = awaitItem()
                 verify(exactly = 1) { appPreferences.setDarkTheme(newDarkModeValue) }
-                Assertions.assertEquals(newDarkModeValue, stateAfterToggle.isDarkMode)
-
+                Assertions.assertEquals(newDarkModeValue, stateAfterToggle.isDarkMode==1)
                 cancelAndConsumeRemainingEvents()
             }
 
@@ -125,7 +127,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.uiState.test {
+            homeViewModel.homeState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -155,7 +157,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.uiState.test {
+            homeViewModel.homeState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -182,7 +184,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.uiState.test {
+            homeViewModel.homeState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -207,7 +209,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.uiState.test {
+            homeViewModel.homeState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.toDoTasks).isEmpty()
@@ -233,7 +235,7 @@ class HomeViewModelTest {
 
             homeViewModel = HomeViewModel(taskServices, appPreferences)
 
-            homeViewModel.uiState.test {
+            homeViewModel.homeState.test {
 
                 val initialState = awaitItem()
                 assertThat(initialState.error).isNull()
@@ -258,7 +260,7 @@ private fun createTask(
     priority: TaskPriority = TaskPriority.LOW,
     status: TaskStatus = TaskStatus.TO_DO,
     categoryId: Long = 2,
-    createdDate: LocalDate = getToday().date
+    createdDate: LocalDateTime = getToday()
 ): Task {
     return Task(id, title, description, priority, status, createdDate, categoryId)
 }
@@ -271,7 +273,7 @@ private fun createCategory(
     return Category(
         id = id,
         title = "Category Name",
-        imageUrl = imageUrl,
+        imageUri = imageUrl,
         isPredefined = isPredefined
     )
 }
