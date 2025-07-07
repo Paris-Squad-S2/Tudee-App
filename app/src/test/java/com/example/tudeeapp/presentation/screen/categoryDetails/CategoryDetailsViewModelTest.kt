@@ -1,26 +1,30 @@
 package com.example.tudeeapp.presentation.screen.categoryDetails
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.example.tudeeapp.domain.TaskServices
 import com.example.tudeeapp.domain.models.Category
 import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Destinations
+import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.*
-import kotlinx.datetime.LocalDate
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import kotlinx.datetime.LocalDateTime
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import androidx.navigation.toRoute
-import io.mockk.mockkStatic
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CategoryDetailsViewModelTest {
@@ -53,11 +57,10 @@ class CategoryDetailsViewModelTest {
 
     @Test
     fun `loadCategory() should update uiState with category and tasks`() = runTest {
-        val category = Category(id = 1, title = "coding", imageUrl = "ic_coding")
+        val category = Category(id = 1, title = "coding", imageUri = "ic_coding")
         val tasks = listOf(
-            Task(1, "Task 1", "desc", TaskPriority.LOW, TaskStatus.TO_DO, LocalDate(2023, 1, 1), 1),
-            Task(2, "Task 2", "desc", TaskPriority.HIGH, TaskStatus.IN_PROGRESS, LocalDate(2023, 1, 2), 1),
-        )
+            Task(1, "Task 1", "desc", TaskPriority.LOW, TaskStatus.TO_DO, LocalDateTime.parse("2023-01-01"+"T"+ getToday().time.toString()), 1),
+            Task(2, "Task 2", "desc", TaskPriority.HIGH, TaskStatus.IN_PROGRESS, LocalDateTime.parse("2023-01-02"+"T"+ getToday().time.toString()), 1),        )
 
         coEvery { taskServices.getCategoryById(categoryId) } returns flowOf(category)
         coEvery { taskServices.getAllTasks() } returns flowOf(tasks)
@@ -75,7 +78,7 @@ class CategoryDetailsViewModelTest {
     fun `deleteTask() should remove task and update state`() = runTest {
         val category = Category(1, "book", "ic_book")
         val tasks = listOf(
-            Task(1, "Task 1", "desc", TaskPriority.MEDIUM, TaskStatus.TO_DO, LocalDate(2023, 1, 1), 1)
+            Task(1, "Task 1", "desc", TaskPriority.MEDIUM, TaskStatus.TO_DO, LocalDateTime.parse("2023-01-01"+"T"+ getToday().time.toString()), 1),
         )
 
         coEvery { taskServices.getCategoryById(categoryId) } returns flowOf(category)
@@ -97,9 +100,9 @@ class CategoryDetailsViewModelTest {
     fun `updateUiStateWithFilters() should refresh tasks correctly`() = runTest {
         val category = Category(1, "the chance", "ic_the_chance")
         val tasks = listOf(
-            Task(1, "Task 1", "desc", TaskPriority.LOW, TaskStatus.TO_DO, LocalDate(2023, 1, 1), 1),
-            Task(2, "Task 2", "desc", TaskPriority.MEDIUM, TaskStatus.IN_PROGRESS, LocalDate(2023, 1, 2), 2) // not same category
-        )
+            Task(1, "Task 1", "desc", TaskPriority.LOW, TaskStatus.TO_DO, LocalDateTime.parse("2023-01-01"+"T"+ getToday().time.toString()), 1),
+            Task(2, "Task 2", "desc", TaskPriority.MEDIUM, TaskStatus.IN_PROGRESS, LocalDateTime.parse("2023-01-02"+"T"+ getToday().time.toString()), 2),        )
+
 
         coEvery { taskServices.getCategoryById(categoryId) } returns flowOf(category)
         coEvery { taskServices.getAllTasks() } returns flowOf(tasks)

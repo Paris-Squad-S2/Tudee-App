@@ -10,6 +10,7 @@ import com.example.tudeeapp.domain.models.Task
 import com.example.tudeeapp.domain.models.TaskPriority
 import com.example.tudeeapp.domain.models.TaskStatus
 import com.example.tudeeapp.presentation.navigation.Destinations
+import com.example.tudeeapp.presentation.screen.home.utils.getToday
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -24,7 +25,9 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -151,13 +154,13 @@ class TaskDetailsViewModelTest {
         description = "Test Description",
         priority = TaskPriority.HIGH,
         status = TaskStatus.TO_DO,
-        createdDate = LocalDate(2023, 1, 1),
+        createdDate =  LocalDateTime.parse("2023-01-01"+"T"+ getToday().time.toString()),
         categoryId = 2L
     )
 
     private val testCategory = Category(
         id = 2L,
         title = "Work",
-        imageUrl = "work_icon"
+        imageUri = "work_icon"
     )
 }

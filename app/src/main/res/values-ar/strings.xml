@@ -65,4 +65,6 @@
     <string name="edited_category_successfully">تم تحديث الفئة</string>
     <string name="skip">تخطى</string>
     <string name="failed_to_load_category">فشل تحميل الفئة</string>
+    <string name="category_deleted_successfully">تم مسح الفئة بنجاح</string>
+
 </resources>

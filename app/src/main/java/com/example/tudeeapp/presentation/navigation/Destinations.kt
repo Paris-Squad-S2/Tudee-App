@@ -46,7 +46,7 @@ sealed interface Destinations : Graph {
     data class CategoryDetails(val categoryId: Long) : Destination
 
     @Serializable
-    data class TaskManagement(val taskId: Long? = null, val selectedDate: String) : Destination
+    data class TaskManagement(val taskId: Long? = null, val selectedDate: String?=null) : Destination
 }
 
 fun NavGraphBuilder.buildTudeeNavGraph() {

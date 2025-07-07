@@ -22,9 +22,11 @@ class TaskFormViewModel(
     val taskId = savedStateHandle.toRoute<Destinations.TaskManagement>().taskId
     private val selectedDate = savedStateHandle.toRoute<Destinations.TaskManagement>().selectedDate
 
+    private val _state = _uiState
+
     init {
         _uiState.update {
-            it.copy(isEditMode = taskId != null, selectedDate = selectedDate)
+            it.copy(isEditMode = taskId != null, selectedDate = selectedDate?:"")
         }
         getAllCategories()
     }

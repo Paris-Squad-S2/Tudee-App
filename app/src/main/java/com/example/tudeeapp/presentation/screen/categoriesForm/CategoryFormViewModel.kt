@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.update
 
 class CategoryFormViewModel(
     val taskServices: TaskServices,
-    savedStateHandle: SavedStateHandle,
+     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<CategoryFormUIState>(CategoryFormUIState()), CategoryFormInteractionListener {
 
     init {
@@ -25,6 +25,8 @@ class CategoryFormViewModel(
             loadCategory(it)
         }
     }
+
+    val _state = _uiState
 
     private fun loadCategory(id: Long) {
         launchSafely(
@@ -123,6 +125,11 @@ class CategoryFormViewModel(
                         .setPopUpTo(Destinations.Category, inclusive = false)
                         .build()
                 )
+                _uiState.update {
+                    it.copy(
+                        successMessage = R.string.category_deleted_successfully
+                    )
+                }
             },
             onError = {
                 _uiState.update { it.copy(errorMessage = R.string.failed_to_delete_category) }
