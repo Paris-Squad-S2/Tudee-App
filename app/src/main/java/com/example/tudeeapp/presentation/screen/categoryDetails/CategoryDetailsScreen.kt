@@ -197,7 +197,6 @@ fun CategoryDetailsContent(
                     if (taskIdToDelete == task.id) {
                         TudeeBottomSheet(
                             showSheet = true,
-                            initialHeight = 350.dp,
                             title = LocalContext.current.getString(R.string.delete_task),
                             onDismiss = { taskIdToDelete = null },
                             content = {
