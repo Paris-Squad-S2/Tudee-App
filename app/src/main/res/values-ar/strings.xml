@@ -35,7 +35,6 @@
     <string name="medium">متوسط</string>
     <string name="low">منخفض</string>
     <string name="date_format_today">اليوم</string>
-    <string name="date_format_medium">%s, %d %s %d</string>
     <string name="slider_title_nothing">لا شيء في قائمتك…</string>
     <string name="slider_description_nothing">املأ يومك بشيء رائع.</string>
     <string name="slider_title_tadaa">تا دا!</string>
@@ -43,7 +42,7 @@
     <string name="slider_title_zero_progress">لا تقدم؟!</string>
     <string name="slider_description_zero_progress">أنت فقط تتصفح، لا تعمل. تيدي تراقبك. عودة إلى العمل!!!</string>
     <string name="slider_title_stay_working">استمر في العمل!</string>
-    <string name="slider_description_stay_working">لقد أكملت %d من أصل %d من المهام. استمر!</string>
+    <string name="slider_description_stay_working">لقد أكملت %1$d من أصل %2$d من المهام. استمر!</string>
     <string name="overview">نظرة عامة</string>
     <string name="move_to_done">نقل إلى تم</string>
     <string name="move_to_in_progress">نقل إلى قيد التنفيذ</string>

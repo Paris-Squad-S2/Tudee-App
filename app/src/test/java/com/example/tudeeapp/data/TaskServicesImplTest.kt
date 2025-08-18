@@ -5,7 +5,6 @@ import com.example.tudeeapp.data.mapper.toCategoryEntity
 import com.example.tudeeapp.data.mapper.toTaskEntity
 import com.example.tudeeapp.data.source.local.room.dao.CategoryDao
 import com.example.tudeeapp.data.source.local.room.dao.TaskDao
-import com.example.tudeeapp.data.source.local.sharedPreferences.AppPreferences
 import com.example.tudeeapp.domain.exception.AddCategoryException
 import com.example.tudeeapp.domain.exception.NoCategoryDeletedException
 import com.example.tudeeapp.domain.exception.NoCategoryEditedException
@@ -28,7 +27,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -38,22 +37,22 @@ class TaskServicesImplTest {
     private lateinit var taskServices: TaskServicesImpl
     private val taskDao: TaskDao = mockk(relaxed = true)
     private val categoryDao: CategoryDao = mockk(relaxed = true)
-    private val appPreferences: AppPreferences = mockk()
     private val dataConstant: DataConstant = mockk()
 
     @BeforeEach
     fun setUp() {
-        taskServices = TaskServicesImpl(taskDao, categoryDao, appPreferences, dataConstant)
+        taskServices = TaskServicesImpl(taskDao, categoryDao, dataConstant)
     }
 
     @Test
-    fun `getCategories should return categories when getAll in CategoryDao called successfully`() = runTest {
-        coEvery { categoryDao.getAllCategories() } returns flowOf(dummyCategoryEntities)
+    fun `getCategories should return categories when getAll in CategoryDao called successfully`() =
+        runTest {
+            coEvery { categoryDao.getAllCategories() } returns flowOf(dummyCategoryEntities)
 
-        val result = taskServices.getAllCategories().first()
+            val result = taskServices.getAllCategories().first()
 
-        assertEquals(expectedCategories[0].title, result[0].title)
-    }
+            assertEquals(expectedCategories[0].title, result[0].title)
+        }
 
     @Test
     fun `getCategories should throw exception when CategoryDao fails`() = runTest {
@@ -77,7 +76,7 @@ class TaskServicesImplTest {
     fun `getTasks should throw exception when TaskDao fails`() = runTest {
         coEvery { taskDao.getAllTasks() } throws Exception()
 
-        assertThrows< Exception > {
+        assertThrows<Exception> {
             taskServices.getAllTasks().toList()
         }
     }
@@ -133,13 +132,14 @@ class TaskServicesImplTest {
     }
 
     @Test
-    fun `addCategory() should add category successfully when valid category is provided`() = runTest {
-        coEvery { categoryDao.insertOrUpdateCategory(any()) } returns Unit
+    fun `addCategory() should add category successfully when valid category is provided`() =
+        runTest {
+            coEvery { categoryDao.insertOrUpdateCategory(any()) } returns Unit
 
-        taskServices.addCategory(sampleCategory)
+            taskServices.addCategory(sampleCategory)
 
-        coVerify { categoryDao.insertOrUpdateCategory(sampleCategory.toCategoryEntity()) }
-    }
+            coVerify { categoryDao.insertOrUpdateCategory(sampleCategory.toCategoryEntity()) }
+        }
 
     @Test
     fun `addCategory() should throw AddCategoryException when category addition fails`() = runTest {
@@ -153,23 +153,24 @@ class TaskServicesImplTest {
     }
 
     @Test
-    fun `editCategory() should update category successfully when valid data is provided`() = runTest {
+    fun `editCategory() should update category successfully when valid data is provided`() =
+        runTest {
 
-        coEvery { categoryDao.getCategoryById(sampleCategory.id) } returns flow {
-            emit(sampleCategory.toCategoryEntity())
+            coEvery { categoryDao.getCategoryById(sampleCategory.id) } returns flow {
+                emit(sampleCategory.toCategoryEntity())
+            }
+            coEvery { categoryDao.insertOrUpdateCategory(any()) } returns Unit
+
+            taskServices.editCategory(
+                id = sampleCategory.id,
+                title = sampleCategory.title,
+                imageUri = sampleCategory.imageUri
+            )
+
+            coVerify {
+                categoryDao.insertOrUpdateCategory(sampleCategory.toCategoryEntity())
+            }
         }
-        coEvery { categoryDao.insertOrUpdateCategory(any()) } returns Unit
-
-        taskServices.editCategory(
-            id = sampleCategory.id,
-            title = sampleCategory.title,
-            imageUrl = sampleCategory.imageUrl
-        )
-
-        coVerify {
-            categoryDao.insertOrUpdateCategory(sampleCategory.toCategoryEntity())
-        }
-    }
 
     @Test
     fun `editCategory() should throw NoCategoryEditedException when update fails`() = runTest {
@@ -183,7 +184,7 @@ class TaskServicesImplTest {
             taskServices.editCategory(
                 id = sampleCategory.id,
                 title = sampleCategory.title,
-                imageUrl = sampleCategory.imageUrl
+                imageUri = sampleCategory.imageUri
             )
         }
 
@@ -191,24 +192,26 @@ class TaskServicesImplTest {
     }
 
     @Test
-    fun `deleteCategory() should delete category successfully when valid category is provided`() = runTest {
-        coEvery { categoryDao.deleteCategory(sampleCategory.id) } returns Unit
+    fun `deleteCategory() should delete category successfully when valid category is provided`() =
+        runTest {
+            coEvery { categoryDao.deleteCategory(sampleCategory.id) } returns Unit
 
-        taskServices.deleteCategory(sampleCategory.id)
-
-        coVerify { categoryDao.deleteCategory(sampleCategory.id) }
-    }
-
-    @Test
-    fun `deleteCategory() should throw NoCategoryDeletedException when category deletion fails`() = runTest {
-        coEvery { categoryDao.deleteCategory(sampleCategory.id) } throws Exception("Database error")
-
-        val exception = assertThrows<NoCategoryDeletedException> {
             taskServices.deleteCategory(sampleCategory.id)
+
+            coVerify { categoryDao.deleteCategory(sampleCategory.id) }
         }
 
-        assertThat(exception).isInstanceOf(NoCategoryDeletedException::class.java)
-    }
+    @Test
+    fun `deleteCategory() should throw NoCategoryDeletedException when category deletion fails`() =
+        runTest {
+            coEvery { categoryDao.deleteCategory(sampleCategory.id) } throws Exception("Database error")
+
+            val exception = assertThrows<NoCategoryDeletedException> {
+                taskServices.deleteCategory(sampleCategory.id)
+            }
+
+            assertThat(exception).isInstanceOf(NoCategoryDeletedException::class.java)
+        }
 
     private val sampleTask = Task(
         id = 1L,
@@ -216,14 +219,22 @@ class TaskServicesImplTest {
         description = "Test Description",
         priority = TaskPriority.HIGH,
         status = TaskStatus.TO_DO,
-        createdDate = LocalDate(2023, 1, 1),
+        createdDate = LocalDateTime(
+            year = 2002,
+            monthNumber = 3,
+            dayOfMonth = 1,
+            hour = 13,
+            minute = 50,
+            second = 13,
+            nanosecond = 1
+        ),
         categoryId = 1L
     )
 
     private val sampleCategory = Category(
         id = 1L,
         title = "Sample Category",
-        imageUrl = "R.drawable.ic_sample_image",
+        imageUri = "R.drawable.ic_sample_image",
         isPredefined = false,
         tasksCount = 0
     )

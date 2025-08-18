@@ -1,0 +1,80 @@
+on:
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+      - development
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'task/**'
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  run-tests:
+    name: Run Unit Tests & Generate Coverage Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Grant execute permission to Gradle
+        run: chmod +x ./gradlew
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Generate coverage report
+        run: ./gradlew jacocoTestReport
+
+      - name: Run tests with coverage verification
+        run: ./gradlew verifyCoverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-report
+          path: |
+            /app/build/reports/jacoco/jacocoTestReport
+            /app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+
+  analyze-pr:
+    name: Analyze PR Code Coverage
+    needs: run-tests
+    if: github.event_name == 'pull_request' && always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download coverage reports
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: jacoco-coverage-report
+          path: app/build/reports/jacoco/
+
+      - name: Add coverage results to PR
+        id: jacoco-pr-comment
+        uses: madrapps/jacoco-report@v1.7.1
+        with:
+          paths: ${{ github.workspace }}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          update-comment: true
+          title: Code Coverage Summary
+          pass-emoji: '✅'
+          fail-emoji: '❌'
